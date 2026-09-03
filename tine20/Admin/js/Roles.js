@@ -244,6 +244,18 @@ Tine.Admin.Roles.Main = {
         rowSelectionModel.on('selectionchange', function(_selectionModel) {
             var rowCount = _selectionModel.getCount();
 
+            if ( Tine.Tinebase.common.hasRight('view', 'Admin', 'roles') ) {
+                if(rowCount < 1) {
+                    // no row selected
+                    this.actions.editRole.setDisabled(true);
+                } else if(rowCount > 1) {
+                    // more than one row selected
+                    this.actions.editRole.setDisabled(true);
+                } else {
+                    // only one row selected
+                    this.actions.editRole.setDisabled(false);
+                }
+            }
             if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles') ) {
                 if(rowCount < 1) {
                     // no row selected

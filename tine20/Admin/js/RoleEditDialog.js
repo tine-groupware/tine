@@ -217,6 +217,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     // check if right is set
                     childData.checked = !!this.getRightId(this.allRights[i].application_id, childData.right);
                     childData.iconCls = "x-tree-node-leaf-checkbox";
+                    childData.disabled = !Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles');
                     var child = new Ext.tree.TreeNode(childData);
                     child.attributes.right = childData.right;
                     
@@ -269,7 +270,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             selectType: 'both',
             selectAnyone: false,
             selectTypeDefault: 'group',
-            showHidden: true
+            showHidden: true,
+            disabled:true
         });
         
         this.initRightsTree();
@@ -290,7 +292,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     name: 'name',
                     anchor: '100%',
                     allowBlank: false,
-                    maxLength: 128
+                    maxLength: 128,
+                    disabled: !Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles'),
                 }, {
                     xtype: 'textarea',
                     name: 'description',
@@ -298,7 +301,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     grow: false,
                     preventScrollbars: false,
                     anchor: '100%',
-                    height: 60
+                    height: 60,
+                    disabled: !Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles'),
                 }]
             }, {
                 xtype: 'tabpanel',
@@ -320,7 +324,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
-        
+
         Ext.Ajax.request({
             scope: this,
             success: this.onRecordLoad,
@@ -377,6 +381,9 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
         
         this.getForm().loadRecord(this.role);
+
+        this.action_saveAndClose.setDisabled(!Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles'));
+
 
         this.loadMask.hide();
     }
