@@ -3,8 +3,14 @@ merge_be:
   stage: merge2
   extends: .abstract.merge
   script:
-    ### 2023.11
-    - merge_merge_upwards 2023.11 2024.11
+    - merge_merge_upwards $TINE_VERSION_LTS $TINE_VERSION_BE
+    - |
+      if [ "${TINE_VERSION_BETA}" != "" ];then
+        merge_merge_upwards $TINE_VERSION_BE $TINE_VERSION_BETA
+        merge_merge_upwards $TINE_VERSION_BETA $TINE_VERSION_NEXT
+      else
+        merge_merge_upwards $TINE_VERSION_BE $TINE_VERSION_NEXT
+      fi
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE_BE == "true"
