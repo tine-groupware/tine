@@ -230,7 +230,9 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
                 $this->_filterGroup->andWrapItself();
             }
             foreach ($this->_options[TMCC::ADD_FILTERS] as $filter) {
-                $this->_filterGroup->addFilter($this->_filterGroup->createFilter($filter));
+                $fo = $this->_filterGroup->createFilter($filter);
+                $fo->isImplicit(true);
+                $this->_filterGroup->addFilter($fo);
             }
         }
 
