@@ -188,12 +188,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * init an explicit filter row
      */
     initExplicit: function() {
-        this.foreignField = this.foreignRefIdField;
         let i18n = new Locale.Gettext();
         i18n.textdomain('Tinebase');
         
         if (this.foreignRecordClass) {
-            this.foreignField = this.foreignRecordClass.getMeta('idPropert<y');
             const foreignApp = Tine.Tinebase.appMgr.get(this.foreignRecordClass.getMeta('appName'));
             if (foreignApp) i18n = foreignApp.i18n;
             this.itemName = this.foreignRecordClass.getMeta('recordName');
@@ -452,6 +450,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     }
                     
                     parentFilters.push(filterData);
+                } else {
+                    // @TODO: server might add explicit filter without implcit flag
+                    //        we could sort out filters not in filterModel as a hack
+                    //        but getting the final filterModel is part of filterToolbar (registry, customfield, old getFilterModel)
                 }
             }, this);
             
