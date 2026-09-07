@@ -97,7 +97,11 @@ for f in $(find /tine20/tine20 -name "setup.xml" -path "*/Setup/setup.xml"); do
 done
 ```
 
-## Step 3: Verify
+## Step 3: Update \Tinebase_Config::TINEBASE_VERSION
+
+This constant also needs to be updated to the new major version {N}.
+
+## Step 4: Verify
 
 ```bash
 # Count update files (should match app count)
