@@ -1851,7 +1851,9 @@ class Setup_Controller
             Tinebase_Scheduler::getInstance()->modlogActive(false);
             Tinebase_Scheduler::getInstance()->useNotes(false);
             // disable previews as license is might not be ready yet
-            Tinebase_FileSystem::getInstance()->setPreviewActive(false);
+            if (Tinebase_Core::isFilesystemAvailable()) {
+                Tinebase_FileSystem::getInstance()->setPreviewActive(false);
+            }
         } else {
             $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
             if ($setupUser && ! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
