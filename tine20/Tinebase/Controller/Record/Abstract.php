@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        this should be splitted into smaller parts!
  */
@@ -3749,7 +3749,7 @@ abstract class Tinebase_Controller_Record_Abstract
                             $record->last_modified_time = $prevRecord->last_modified_time;
                         }
 
-                        if (!empty($prevRecord->diff($record)->diff)) {
+                        if (!empty($prevRecord->diff($record, TMCC::$modLogProperties)->diff)) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                                     . ' Updating dependent record with id = "' . $record->getId()
@@ -3767,7 +3767,7 @@ abstract class Tinebase_Controller_Record_Abstract
                                 $newRecords->addRecord($controller->update($record));
                             }
                         } else {
-                            $newRecords->addRecord($record);
+                            $newRecords->addRecord($prevRecord);
                         }
                     }
                 } else {
