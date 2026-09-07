@@ -706,6 +706,8 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             ]}]}
         ], additionalFilters);
 
+        this.eventStore.baseParams.addFixedCalendars = false;
+
         return this.eventStore.promiseLoad()
             .then(() => {
                 // hide events user has no readGrant (e.g. freebusy only)
