@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  ModelConfiguration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -17,6 +17,17 @@
  */
 
 class Tinebase_ModelConfiguration_Const {
+
+    public static $modLogProperties = [
+        self::FLD_CREATED_BY,
+        self::FLD_CREATION_TIME,
+        self::FLD_LAST_MODIFIED_BY,
+        self::FLD_LAST_MODIFIED_TIME,
+        self::FLD_SEQ,
+        self::FLD_DELETED_BY,
+        self::FLD_DELETED_TIME,
+    ];
+
     public const ADD_FILTERS = 'addFilters';
     public const ALLOW_CAMEL_CASE = 'allowCamelCase';
     public const APPLICATION = 'application';
@@ -118,14 +129,20 @@ class Tinebase_ModelConfiguration_Const {
     public const FLD_ACCOUNT_GRANTS = 'account_grants';
     public const FLD_ALARMS = 'alarms';
     public const FLD_ATTACHMENTS = 'attachments';
+    public const FLD_CREATED_BY = 'created_by';
+    public const FLD_CREATION_TIME = 'creation_time';
     public const FLD_CONTAINER_ID = 'container_id';
+    public const FLD_DELETED_BY = 'deleted_by';
     public const FLD_DELETED_TIME = 'deleted_time';
     public const FLD_GRANTS = 'grants';
     public const FLD_IS_DELETED = 'is_deleted';
+    public const FLD_LAST_MODIFIED_BY = 'last_modified_by';
+    public const FLD_LAST_MODIFIED_TIME = 'last_modified_time';
     public const FLD_LOCALLY_CHANGED = 'locally_changed';
     public const FLD_NOTES = 'notes';
     public const FLD_ORIGINAL_ID = 'original_id';
     public const FLD_RELATIONS = 'relations';
+    public const FLD_SEQ = 'seq';
     public const FLD_TAGS = 'tags';
     public const FLD_XPROPS = 'xprops';
     /**
