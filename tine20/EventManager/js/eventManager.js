@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
+import '../styles/eventManager.scss';
 
 import './EventEditDialog.js';
 import './BookedOptionEditDialog.js';

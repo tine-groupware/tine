@@ -27,5 +27,15 @@ Tine.EventManager.EventGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 });
             };
         }
+
+        const view = this.gridConfig.view;
+        if (view) {
+            const origGetRowClass = view.getRowClass;
+            view.getRowClass = function (record, rowIndex, rowParams, store) {
+                const isTpl = record.get('is_template');
+                const origClass = origGetRowClass ? origGetRowClass.call(this, record, rowIndex, rowParams, store) : '';
+                return [origClass, isTpl ? 'eventmanager-template-row' : ''].filter(Boolean).join(' ');
+            };
+        }
     },
 });
