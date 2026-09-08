@@ -1272,7 +1272,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $subject = $htmlTemplate->renderBlock('subject', $context);
 
         Tinebase_Notification::getInstance()->send(
-            Tinebase_Core::getUser(),
+            null, // if not set, from e.g. notifications@pfarrverwaltung.de
             [$context['contact']],
             $subject,
             $text,
