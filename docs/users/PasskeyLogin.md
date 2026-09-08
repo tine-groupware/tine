@@ -2,6 +2,9 @@
 
 > **NOTE TO ADMIN:**  
 > To use this feature, the `webauthn` mfa-option has to be enabled on the instance.
+> see [OPERATORS/MFA]
+
+[OPERATORS/MFA]: ../operators/MFA/
 
 ## **Description**
 Passkey login is a modern authentication method that replaces traditional passwords with cryptographic key pairs,
@@ -35,3 +38,8 @@ If **passkey-login** is enabled for the **tine** instance:
 `passkeys`. Selecting a stored `passkey` will log the user into their `tine` account automatically.
 
 - Alternatively, users can **click on `Login with Passkey`** on the `Login` page to choose from stored `passkeys` and log in.
+
+## Microsoft Authenticator
+
+... cannot be used for Passkeys. The MS Authenticator App no longer supports "third Party Applications" with Passkeys
+only Microsoft services.
