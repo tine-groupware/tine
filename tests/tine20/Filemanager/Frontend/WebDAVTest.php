@@ -971,8 +971,10 @@ EOS
         $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
         $request->getServer()->set('REMOTE_ADDR',   'localhost');
 
+        Tinebase_Server_WebDAV::$_recreateServer = true;
         $server = new Tinebase_Server_WebDAV();
-        Tinebase_Server_WebDAV::getServer()->sapi = $sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_WebDav_Sabre_SapiMock::$lastReponse = null;
+        Tinebase_Server_WebDAV::getServer()->sapi = new Tinebase_WebDav_Sabre_SapiMock();
         Tinebase_Server_WebDAV::$_recreateServer = false;
         try {
             $server->handle($request);
@@ -981,8 +983,8 @@ EOS
             Tinebase_Core::setUser($this->_originalTestUser);
         }
 
-        $webDavInfo = $sapi::$lastReponse?->getStatus() . ' ' . $sapi::$lastReponse->getStatusText() . PHP_EOL
-        . $sapi::$lastReponse->getBodyAsString();
+        $webDavInfo = Tinebase_WebDav_Sabre_SapiMock::$lastReponse?->getStatus() . ' ' . Tinebase_WebDav_Sabre_SapiMock::$lastReponse?->getStatusText() . PHP_EOL
+        . Tinebase_WebDav_Sabre_SapiMock::$lastReponse?->getBodyAsString();
 
         try {
             $data = @file_get_contents('tine20://Filemanager/folders/shared/unittestdirectory/aTestFile%.test');
