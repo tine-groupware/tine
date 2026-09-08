@@ -44,7 +44,7 @@
                 class="mb-3"
               >
                 <component
-                  :is="contactFieldConfig[fieldName]?.component || 'b-form-input'"
+                  :is="contactFieldConfig[fieldName]?.component || BFormInput"
                   v-model="contactDetails[fieldName]"
                   v-bind="contactFieldConfig[fieldName]?.props?.()"
                   :class="{
@@ -256,6 +256,7 @@ import _ from 'lodash';
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import MarkdownRenderer from './../../../../Tinebase/js/MarkdownRenderer.vue';
+import { BFormInput, BFormSelect } from 'bootstrap-vue-next'; //quick fix todo: find out why createBootstrap does not find these components
 
 const router = useRouter();
 const route = useRoute();
@@ -841,18 +842,9 @@ const hasGroupValidationError = (groupName) => {
 };
 
 const contactFieldConfig = {
-  salutation: {
-    component: 'b-form-select',
-    props: () => ({ options: salutations.value })
-  },
-  bday: {
-    component: 'b-form-input',
-    props: () => ({ type: 'date', max: maxBirthDate.value })
-  },
-  adr_one_countryname: {
-    component: 'b-form-select',
-    props: () => ({ options: countries.value })
-  },
+  salutation: { component: BFormSelect, props: () => ({ options: salutations.value }) },
+  bday: { component: BFormInput, props: () => ({ type: 'date', max: maxBirthDate.value }) },
+  adr_one_countryname: { component: BFormSelect, props: () => ({ options: countries.value }) },
 };
 
 const contactFieldOrder = [
