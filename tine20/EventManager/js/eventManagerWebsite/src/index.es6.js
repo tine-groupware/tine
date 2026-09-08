@@ -15,6 +15,7 @@ import Events from "./Events.vue";
 import Registration from "./Registration.vue";
 
 const routes = [
+  { path: '/', redirect: '/events' },
   {path: '/account/:token?', name: 'account-management', component: AccountManagement, props: true},
   {path: '/contact', name: 'contact', component: Contact, props: true},
   {path: '/event/:id', name: 'event-detail', component: EventDetail, props: true},
