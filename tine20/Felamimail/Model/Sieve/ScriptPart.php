@@ -106,4 +106,31 @@ class Felamimail_Model_Sieve_ScriptPart extends Tinebase_Record_Abstract
 
         parent::runConvertToData();
     }
+
+    /**
+     * @param string|null $content
+     * @return string
+     */
+    public static function getFormattedHTMLBody(?string $content): string
+    {
+        if (empty($content)) {
+            $content = '';
+        }
+        $doc = new DOMDocument('1.0', 'UTF-8');
+        $doc->preserveWhiteSpace = true;
+        $doc->formatOutput = true;
+        $doc->loadHTML(
+            '<?xml version="1.0" encoding="utf-8"?>' . $content,
+            LIBXML_NOERROR |
+            LIBXML_NOWARNING
+        );
+        $xpath = new DOMXPath($doc);
+        $body = $xpath->query('/html/body')->item(0);
+        $bodyNodes = is_object($body) ? $body->childNodes : [];
+        $outputFragments = [];
+        foreach ($bodyNodes as $bodyNode) {
+            $outputFragments[] = $doc->saveXML($bodyNode);
+        }
+        return implode(PHP_EOL, $outputFragments);
+    }
 }
