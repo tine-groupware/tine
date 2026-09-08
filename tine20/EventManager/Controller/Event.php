@@ -666,92 +666,86 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 }
 
                 try {
-                    $decoded = JWT::decode($token, new \Firebase\JWT\Key($key, 'HS256'));
+                    if ($token != 'preview') {
+                        $decoded = JWT::decode($token, new \Firebase\JWT\Key($key, 'HS256'));
+                        $email_registrant = $decoded->email ?? '';
+                        $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($email_registrant);
+                        $dependant_participant = [];
+                        $registrations_data = [];
+                        $registrationIds = [];
+                        $accountOwner = [];
+
+                        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                            EventManager_Model_Register_Contact::class,
+                            [
+                                [
+                                    'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
+                                    'operator' => 'equals',
+                                    'value' => 'participant'
+                                ],
+                            ],
+                        );
+                        $registerContacts = EventManager_Controller_Register_Contact::getInstance()
+                            ->search($filter);
+
+                        foreach ($registerContacts as $registerContact) {
+                            $regId = $registerContact->registration_id;
+                            if (!in_array($regId, $registrationIds)) {
+                                $registrationIds[] = $regId;
+                            }
+                            if (count($accountOwner) === 0 && $registerContact->email === $email_registrant) {
+                                $accountOwner[] = $registerContact->toArray();
+                            }
+                        }
+
+                        foreach ($registrationIds as $registrationId) {
+                            $registration = EventManager_Controller_Registration::getInstance()
+                                ->get($registrationId);
+                            $status = EventManager_Config::getInstance()
+                                ->get(EventManager_Config::REGISTRATION_STATUS)->records
+                                ->getById($registration->{EventManager_Model_Registration::FLD_STATUS});
+                            $registration->{EventManager_Model_Registration::FLD_STATUS} = $status->value;
+                            if (
+                                $registration->{EventManager_Model_Registration::FLD_REGISTRANT}
+                                    ->email === $email_registrant
+                            ) {
+                                $registrations_data[] = $registration->toArray();
+                            }
+                        }
+
+                        if (!empty($contact)) {
+                            if (count($registrations_data) === 0) {
+                                $registrations_data = $contact->toArray();
+                            }
+
+                            $contact = Addressbook_Controller_Contact::getInstance()
+                                ->get($contact->getId()); // necessary to get relations
+                            $dependant_participant = $this->getRelatedContacts($contact);
+                        } else {
+                            $registrant = [
+                                'email' => $email_registrant,
+                            ];
+                            $registrations_data = $registrant;
+                        }
+
+                        if (count($accountOwner) === 0 && !empty($contact)) {
+                            $accountOwner[] = $contact->toArray();
+                        }
+
+                        $response = new \Laminas\Diactoros\Response();
+                        $response->getBody()->write(json_encode([
+                            $accountOwner,
+                            $registrations_data,
+                            $dependant_participant
+                        ]));
+                        return $response;
+                    }
                 } catch (Exception $jwtException) {
+                    // Invalid or expired token
                     $response = new \Laminas\Diactoros\Response('php://memory', 400);
                     $response->getBody()->write(json_encode(['error' => 'Invalid or expired token']));
                     return $response;
                 }
-
-                $email_registrant = $decoded->email ?? '';
-                $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($email_registrant);
-                $dependant_participant = [];
-                $registrations_data = [];
-                $registrationIds = [];
-                $accountOwner = [];
-
-                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                    EventManager_Model_Register_Contact::class,
-                    [
-                        [
-                            'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
-                            'operator' => 'equals',
-                            'value' => 'participant'
-                        ],
-                    ],
-                );
-                $registerContacts = EventManager_Controller_Register_Contact::getInstance()
-                    ->search($filter);
-
-                foreach ($registerContacts as $registerContact) {
-                    $regId = $registerContact->registration_id;
-                    if (!in_array($regId, $registrationIds)) {
-                        $registrationIds[] = $regId;
-                    }
-                    if (count($accountOwner) === 0 && $registerContact->email === $email_registrant) {
-                        $accountOwner[] = $registerContact->toArray();
-                    }
-                }
-
-                foreach ($registrationIds as $registrationId) {
-                    try {
-                        $registration = EventManager_Controller_Registration::getInstance()
-                            ->get($registrationId);
-                    } catch (Tinebase_Exception_NotFound $tenf) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                . ' Registration no longer exists, skipping: ' . $tenf->getMessage());
-                        }
-                        continue;
-                    }
-                    $status = EventManager_Config::getInstance()
-                        ->get(EventManager_Config::REGISTRATION_STATUS)->records
-                        ->getById($registration->{EventManager_Model_Registration::FLD_STATUS});
-                    $registration->{EventManager_Model_Registration::FLD_STATUS} = $status->value;
-                    if (
-                        $registration->{EventManager_Model_Registration::FLD_REGISTRANT}
-                            ->email === $email_registrant
-                    ) {
-                        $registrations_data[] = $registration->toArray();
-                    }
-                }
-
-                if (!empty($contact)) {
-                    if (count($registrations_data) === 0) {
-                        $registrations_data = $contact->toArray();
-                    }
-
-                    $contact = Addressbook_Controller_Contact::getInstance()
-                        ->get($contact->getId()); // necessary to get relations
-                    $dependant_participant = $this->getRelatedContacts($contact);
-                } else {
-                    $registrant = [
-                        'email' => $email_registrant,
-                    ];
-                    $registrations_data = $registrant;
-                }
-
-                if (count($accountOwner) === 0 && !empty($contact)) {
-                    $accountOwner[] = $contact->toArray();
-                }
-
-                $response = new \Laminas\Diactoros\Response();
-                $response->getBody()->write(json_encode([
-                    $accountOwner,
-                    $registrations_data,
-                    $dependant_participant
-                ]));
-                return $response;
             }
             $response = new \Laminas\Diactoros\Response();
             $response->getBody()->write(json_encode([]));
