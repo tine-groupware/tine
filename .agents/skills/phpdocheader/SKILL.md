@@ -26,7 +26,7 @@ example: @subpackage Group
 
 ## license
 
-default: @license https://www.gnu.org/licenses/agpl.html
+default: @license https://www.gnu.org/licenses/agpl-3.0.html
 
 ## copyright
 

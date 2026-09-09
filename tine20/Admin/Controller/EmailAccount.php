@@ -1,12 +1,13 @@
 <?php
+
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     Admin
  * @subpackage  Controller
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2019-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2019-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -381,6 +382,11 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
                 $event = new Admin_Event_DeleteMailingList();
                 $event->listId = $record->user_id;
                 Tinebase_Event::fireEvent($event);
+            } else if ($record->type === Felamimail_Model_Account::TYPE_SYSTEM) {
+                // delete email address on user
+                $user = Admin_Controller_User::getInstance()->get($record->user_id);
+                $user->accountEmailAddress = NULL;
+                Admin_Controller_User::getInstance()->update($user);
             }
         }
     }
