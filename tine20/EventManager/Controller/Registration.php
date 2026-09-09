@@ -1414,8 +1414,17 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $text = $textTemplate->render($context);
         $subject = $htmlTemplate->renderBlock('subject', $context);
 
+        if (!empty(EventManager_Config::EVENT_NOTIFICATION_EMAIL)) {
+            $sender = new Tinebase_Model_FullUser([
+                'accountEmailAddress' => $context['service']->{EventManager_Config::EVENT_NOTIFICATION_EMAIL},
+                'accountFullName' => $context['service']->{EventManager_Config::EVENT_NOTIFICATION_NAME},
+            ], true);
+        } else {
+            $sender = null;
+        }
+
         Tinebase_Notification::getInstance()->send(
-            null, // if not set, from e.g. notifications@pfarrverwaltung.de
+            $sender,
             [$context['contact']],
             $subject,
             $text,

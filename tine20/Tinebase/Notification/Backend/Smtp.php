@@ -29,8 +29,8 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      *
      * @var string
      */
-    protected $_fromName = 'Tine 2.0 notification service';
-    
+    protected $_fromName = '{{ brandingTitle }} notification service';
+
     /**
      * the constructor
      *
@@ -38,6 +38,15 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
     public function __construct()
     {
         $this->_fromAddress = self::getFromAddress();
+        try {
+            $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation());
+            $template = $twig->getEnvironment()->createTemplate($this->_fromName);
+            $this->_fromName = $template->render([
+                'brandingTitle' => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
+            ]);
+        } catch (Exception $e) {
+            $this->_fromName = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE) . ' notification service';
+        }
     }
 
     static function getFromAddress()
