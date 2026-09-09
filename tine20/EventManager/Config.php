@@ -48,6 +48,8 @@ class EventManager_Config extends Tinebase_Config_Abstract
 
     public const EVENT_SHARED_CALENDAR_NAME = 'eventSharedCalendarName';
     public const EVENT_SHARED_CONTAINER_NAME = 'eventSharedContainerName';
+    public const EVENT_NOTIFICATION_EMAIL = 'eventNotificationEmail';
+    public const EVENT_NOTIFICATION_NAME = 'eventNotificationName';
 
 
 
@@ -361,6 +363,22 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::DEFAULT_STR           => 'Allg. Veranstaltungen',
+        ],
+        self::EVENT_NOTIFICATION_EMAIL => [
+            self::LABEL                 => 'Sender email for the notification emails',
+            //_('Sender email for the notification emails')
+            self::DESCRIPTION           => '', //_('')
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+        ],
+        self::EVENT_NOTIFICATION_NAME => [
+            self::LABEL                 => 'Sender name for the notification emails',
+            //_('Sender name for the notification emails')
+            self::DESCRIPTION           => '', //_('')
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
         ],
     ];
 
