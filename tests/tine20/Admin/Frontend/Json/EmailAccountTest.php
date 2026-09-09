@@ -4,8 +4,9 @@
  * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Admin
- * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @subpackage  Frontend/Json
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -1107,5 +1108,34 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         self::assertNotNull($result);
 
         $this->_uit->deleteEmailAccounts($account->getId());
+    }
+
+    /**
+     * Verifies that deleting a system email account clears the user's accountEmailAddress.
+     */
+    public function testDeleteSystemEmailAccountClearsUserEmailAddress(): void
+    {
+        $this->_testNeedsTransaction();
+        $this->_uit = $this->_json;
+
+        $user = $this->_createUserWithEmailAccount();
+        $emailAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        self::assertNotNull($emailAccount, 'system account should exist for user');
+        self::assertEquals(Felamimail_Model_Account::TYPE_SYSTEM, $emailAccount->type);
+
+        // verify user has an email address set
+        $updatedUser = Admin_Controller_User::getInstance()->get($user->getId());
+        self::assertNotEmpty($updatedUser->accountEmailAddress, 'user should have accountEmailAddress set before deletion');
+
+        // delete the system email account
+        $this->_uit->deleteEmailAccounts($emailAccount->getId());
+
+        // verify user's email address is now empty/null
+        $updatedUserAfterDelete = Admin_Controller_User::getInstance()->get($user->getId());
+        self::assertEmpty($updatedUserAfterDelete->accountEmailAddress, 'user accountEmailAddress should be cleared when system email account is deleted');
+
+        // verify the system account is gone
+        $systemAccountAfterDelete = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        self::assertNull($systemAccountAfterDelete, 'system account should be deleted');
     }
 }
