@@ -15,7 +15,7 @@ Tine.Sales.Einvoice_XRechnungOverwriteEditDialog = Ext.extend(Tine.widgets.dialo
             if (valueField.constructor.superclass.validateValue.apply(valueField, arguments)) {
                 const element = this.getForm().findField('xrechnung_element').selectedRecord;
                 const action = this.getForm().findField('action').getValue();
-                if (action === 'static' && element.get('type') === 'date' && (!value.match(/^\d{4}-\d{2}-\d{2}$/) || !Ext.isDate(Date.parseDate(value, 'Y-m-d', true)))) {
+                if (action === 'static' && element?.get('type') === 'date' && (!value.match(/^\d{4}-\d{2}-\d{2}$/) || !Ext.isDate(Date.parseDate(value, 'Y-m-d', true)))) {
                     const text = this.app.i18n._('Please enter a valid date in the format YYYY-MM-DD')
                     valueField.markInvalid(text);
                     return false;
