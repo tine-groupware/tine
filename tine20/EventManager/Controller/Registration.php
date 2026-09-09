@@ -190,13 +190,30 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     {
         $assertAclUsage = $this->assertPublicUsage();
         try {
-            $contact = Addressbook_Controller_Contact::getInstance()
-                ->get($_record->{EventManager_Model_Registration::FLD_PARTICIPANT}
-                    ->{EventManager_Model_Register_Contact::FLD_ORIGINAL_ID});
+            $participant = $_record->{EventManager_Model_Registration::FLD_PARTICIPANT};
+
+            $originalId = null;
+            if ($participant && !empty($participant->{EventManager_Model_Register_Contact::FLD_ORIGINAL_ID})) {
+                $originalId = $participant->{EventManager_Model_Register_Contact::FLD_ORIGINAL_ID};
+            }
+
+            $contact = null;
+            if (!empty($originalId)) {
+                try {
+                    $contact = Addressbook_Controller_Contact::getInstance()->get($originalId);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' No linked Addressbook contact yet, falling back to email-only contact: '
+                            . $tenf->getMessage());
+                    }
+                    $contact = null;
+                }
+            }
 
             if (!$contact) {
                 $contact = new Addressbook_Model_Contact([
-                    'email' => $_record->{EventManager_Model_Registration::FLD_PARTICIPANT}->email,
+                    'email' => $participant->email ?? '',
                 ]);
             }
 
@@ -764,143 +781,12 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
         try {
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
+            $registration = $this->_processRegistration($request, $event_id, false);
             $response = new \Laminas\Diactoros\Response();
-            $participant = $this->getOrCreateRegisterContact($request['contactDetails'], 'participant');
-
-            $isSelfRegistration = true;
-            if ($request['contactDetails']['id'] !== $request['registrantDetails']['id']){
-                foreach ($request['registrantDetails'] as $value) {
-                    if (!empty(trim($value))) {
-                        $isSelfRegistration = false;
-                        break;
-                    }
-                }
-            }
-
-            if ($isSelfRegistration) {
-                $registrant = $this->getOrCreateRegisterContact($request['contactDetails'], 'registrant');
-            } else {
-                $registrant = $this->getOrCreateRegisterContact($request['registrantDetails'], 'registrant');
-            }
-
-            //participant replies:
-            $options = $request['replies'];
-            $booked_options = [];
-            foreach ($options as $option_id => $reply) {
-                $option = EventManager_Controller_Option::getInstance()->get($option_id);
-                if (
-                    $option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS}
-                    === EventManager_Model_CheckboxOption::class
-                ) {
-                    $selection_config = new EventManager_Model_Selections_Checkbox([
-                        'booked' => boolval($reply),
-                    ], true);
-                    $booked_options[] = new EventManager_Model_BookedOption([
-                        'event_id' => $request['eventId'],
-                        'option' => $option->getId(),
-                        'selection_config' => $selection_config,
-                        'selection_config_class' => EventManager_Model_Selections_Checkbox::class,
-                    ], true);
-                } elseif (
-                    $option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS}
-                    === EventManager_Model_TextInputOption::class
-                ) {
-                    $selection_config = new EventManager_Model_Selections_TextInput([
-                        'response' => $reply,
-                    ], true);
-                    $booked_options[] = new EventManager_Model_BookedOption([
-                        'event_id' => $request['eventId'],
-                        'option' => $option->getId(),
-                        'selection_config' => $selection_config,
-                        'selection_config_class' => EventManager_Model_Selections_TextInput::class,
-                    ], true);
-                } elseif (
-                    $option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS}
-                    === EventManager_Model_FileOption::class
-                ) {
-                    if (
-                        isset(
-                            $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
-                                ->{EventManager_Model_FileOption::FLD_FILE_ACKNOWLEDGMENT}
-                        )
-                        && $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
-                            ->{EventManager_Model_FileOption::FLD_FILE_ACKNOWLEDGMENT}
-                    ) {
-                        $selection_config = new EventManager_Model_Selections_File([
-                            'file_acknowledgement' => boolval($reply),
-                        ], true);
-                        $booked_options[] = new EventManager_Model_BookedOption([
-                            'event_id' => $request['eventId'],
-                            'option' => $option->getId(),
-                            'selection_config' => $selection_config,
-                            'selection_config_class' => EventManager_Model_Selections_File::class,
-                        ], true);
-                    }
-                }
-            }
-
-            $default_values = $this->getDefaultRegistrationKeyFields();
-
-            if ($participant->registration_id) {
-                $registration = $this->get($participant->registration_id);
-
-                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                    EventManager_Model_Register_Contact::class,
-                    [
-                        [
-                            'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
-                            'operator' => 'equals',
-                            'value' => $registration->getId()
-                        ],
-                    ],
-                );
-                $regs = EventManager_Controller_Register_Contact::getInstance()
-                    ->search($filter);
-
-                if (!empty($regs)) {
-                    if ($registration->{EventManager_Model_Registration::FLD_STATUS} === '3') {
-                        $registration->{EventManager_Model_Registration::FLD_STATUS} = $default_values['status'];
-                    }
-                    $booked_options = $this->keepFilesAfterUpdate($registration, $booked_options);
-                    $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = $booked_options;
-
-                    if ($participant->getId() !== $registrant->getId()) {
-                        $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = true;
-                    } else {
-                        $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = false;
-                    }
-                    foreach ($regs as $reg) {
-                        if ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'participant') {
-                            $registration->{EventManager_Model_Registration::FLD_PARTICIPANT} = $reg;
-                        } elseif ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'registrant') {
-                            $registration->{EventManager_Model_Registration::FLD_REGISTRANT} = $reg;
-                        }
-                    }
-                    $registration = $this->updateRegisterContact(
-                        $registration,
-                        $request['contactDetails'],
-                        $request['registrantDetails'],
-                        $isSelfRegistration
-                    );
-                    $registration = $this->update($registration);
-                }
-            } else {
-                $has_registrant = ($participant->getId() !== $registrant->getId());
-                $registration = new EventManager_Model_Registration([
-                    'event_id' => EventManager_Controller_Event::getInstance()->get($event_id),
-                    'participant' => $participant,
-                    'registrant' => $registrant,
-                    'function' => $default_values['function'],
-                    'source' => $default_values['source'],
-                    'status' => $default_values['status'],
-                    'booked_options' => $booked_options,
-                    'description' => '',
-                    'has_registrant' => $has_registrant,
-                ], true);
-                $registration = $this->create($registration);
-            }
-
             $response->getBody()->write(json_encode($registration->toArray()));
+        } catch (Tasks_Exception_UnexpectedValue $uev) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 422);
+            $response->getBody()->write(json_encode(['error' => 'parent_consent_required']));
         } catch (Tinebase_Exception_Record_Validation $terv) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);
             $response->getBody()->write(json_encode($terv->getMessage()));
@@ -913,6 +799,263 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         } catch (Tinebase_Exception_ConcurrencyConflict $tecc) {
             $response = new \Laminas\Diactoros\Response('php://memory', 409);
             $response->getBody()->write(json_encode($tecc->getMessage()));
+        } finally {
+            $assertAclUsage();
+        }
+        return $response;
+    }
+
+    private function _processRegistration(array $request, $event_id, bool $parentConsentGiven)
+    {
+        $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+        $participant = $this->getOrCreateRegisterContact($request['contactDetails'], 'participant');
+        $isUpdatingExistingRegistration = !empty($participant->registration_id);
+
+        if (
+            !$isUpdatingExistingRegistration
+            && !$parentConsentGiven
+            && $this->isParticipantUnderage($request['contactDetails'])
+        ) {
+            throw new Tasks_Exception_UnexpectedValue(
+                $translate->_('Parent or guardian consent is required for participants under 16.')
+            );
+        }
+
+        $isSelfRegistration = true;
+        if ($request['contactDetails']['id'] !== $request['registrantDetails']['id']) {
+            foreach ($request['registrantDetails'] as $value) {
+                if (!empty(trim($value))) {
+                    $isSelfRegistration = false;
+                    break;
+                }
+            }
+        }
+
+        if ($isSelfRegistration) {
+            $registrant = $this->getOrCreateRegisterContact($request['contactDetails'], 'registrant');
+        } else {
+            $registrant = $this->getOrCreateRegisterContact($request['registrantDetails'], 'registrant');
+        }
+
+        //participant replies:
+        $options = $request['replies'];
+        $booked_options = [];
+        foreach ($options as $option_id => $reply) {
+            $option = EventManager_Controller_Option::getInstance()->get($option_id);
+            if (
+                $option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS}
+                === EventManager_Model_CheckboxOption::class
+            ) {
+                $selection_config = new EventManager_Model_Selections_Checkbox([
+                    'booked' => boolval($reply),
+                ], true);
+                $booked_options[] = new EventManager_Model_BookedOption([
+                    'event_id' => $request['eventId'],
+                    'option' => $option->getId(),
+                    'selection_config' => $selection_config,
+                    'selection_config_class' => EventManager_Model_Selections_Checkbox::class,
+                ], true);
+            } elseif (
+                $option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS}
+                === EventManager_Model_TextInputOption::class
+            ) {
+                $selection_config = new EventManager_Model_Selections_TextInput([
+                    'response' => $reply,
+                ], true);
+                $booked_options[] = new EventManager_Model_BookedOption([
+                    'event_id' => $request['eventId'],
+                    'option' => $option->getId(),
+                    'selection_config' => $selection_config,
+                    'selection_config_class' => EventManager_Model_Selections_TextInput::class,
+                ], true);
+            } elseif (
+                $option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS}
+                === EventManager_Model_FileOption::class
+            ) {
+                if (
+                    isset(
+                        $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                            ->{EventManager_Model_FileOption::FLD_FILE_ACKNOWLEDGMENT}
+                    )
+                    && $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                        ->{EventManager_Model_FileOption::FLD_FILE_ACKNOWLEDGMENT}
+                ) {
+                    $selection_config = new EventManager_Model_Selections_File([
+                        'file_acknowledgement' => boolval($reply),
+                    ], true);
+                    $booked_options[] = new EventManager_Model_BookedOption([
+                        'event_id' => $request['eventId'],
+                        'option' => $option->getId(),
+                        'selection_config' => $selection_config,
+                        'selection_config_class' => EventManager_Model_Selections_File::class,
+                    ], true);
+                }
+            }
+        }
+
+        $default_values = $this->getDefaultRegistrationKeyFields();
+
+        if ($participant->registration_id) {
+            $registration = $this->get($participant->registration_id);
+
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                EventManager_Model_Register_Contact::class,
+                [
+                    [
+                        'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
+                        'operator' => 'equals',
+                        'value' => $registration->getId()
+                    ],
+                ],
+            );
+            $regs = EventManager_Controller_Register_Contact::getInstance()
+                ->search($filter);
+
+            if (!empty($regs)) {
+                if ($registration->{EventManager_Model_Registration::FLD_STATUS} === '3') {
+                    $registration->{EventManager_Model_Registration::FLD_STATUS} = $default_values['status'];
+                }
+                $booked_options = $this->keepFilesAfterUpdate($registration, $booked_options);
+                $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = $booked_options;
+
+                if ($participant->getId() !== $registrant->getId()) {
+                    $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = true;
+                } else {
+                    $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = false;
+                }
+                foreach ($regs as $reg) {
+                    if ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'participant') {
+                        $registration->{EventManager_Model_Registration::FLD_PARTICIPANT} = $reg;
+                    } elseif ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'registrant') {
+                        $registration->{EventManager_Model_Registration::FLD_REGISTRANT} = $reg;
+                    }
+                }
+                $registration = $this->updateRegisterContact(
+                    $registration,
+                    $request['contactDetails'],
+                    $request['registrantDetails'],
+                    $isSelfRegistration
+                );
+                $registration = $this->update($registration);
+            }
+        } else {
+            $has_registrant = ($participant->getId() !== $registrant->getId());
+            $registration = new EventManager_Model_Registration([
+                'event_id' => EventManager_Controller_Event::getInstance()->get($event_id),
+                'participant' => $participant,
+                'registrant' => $registrant,
+                'function' => $default_values['function'],
+                'source' => $default_values['source'],
+                'status' => $default_values['status'],
+                'booked_options' => $booked_options,
+                'description' => '',
+                'has_registrant' => $has_registrant,
+            ], true);
+            $registration = $this->create($registration);
+        }
+        return $registration;
+    }
+
+    public function publicApiPostParentConsentRequest($event_id): \Laminas\Diactoros\Response
+    {
+        $assertAclUsage = $this->assertPublicUsage();
+        try {
+            $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
+            $parentEmail = trim((string)($request['parentEmail'] ?? ''));
+
+            if (!$parentEmail || !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $parentEmail)) {
+                throw new Tinebase_Exception_SystemGeneric('A valid parent/guardian email is required');
+            }
+            if (!$this->isParticipantUnderage($request['contactDetails'] ?? [])) {
+                throw new Tinebase_Exception_SystemGeneric('Parent consent is not required for this participant');
+            }
+            if (!$key = EventManager_Config::getInstance()->{EventManager_Config::JWT_SECRET}) {
+                throw new Tinebase_Exception_SystemGeneric('EventManager JWT key is not configured');
+            }
+
+            $pendingId = Tinebase_Record_Abstract::generateUID();
+            $ttl = 7 * 24 * 60 * 60;
+
+            Tinebase_Core::getCache()->save(
+                json_encode([
+                    'eventId' => $request['eventId'],
+                    'contactDetails' => $request['contactDetails'],
+                    'replies' => $request['replies'],
+                    'registrantDetails' => $request['registrantDetails'],
+                    'isAlreadyRegistered' => $request['isAlreadyRegistered'] ?? false,
+                ]),
+                'EventManagerParentConsent_' . $pendingId,
+                ['eventmanager', 'parentConsent'],
+                $ttl
+            );
+
+            $token = JWT::encode([
+                'eventId' => $event_id,
+                'parentEmail' => $parentEmail,
+                'pendingId' => $pendingId,
+                'exp' => time() + $ttl,
+            ], $key, 'HS256');
+
+            $event = EventManager_Controller_Event::getInstance()->get($event_id);
+            $eventName = EventManager_Controller_Event::getInstance()->getEventName($event);
+            $participantName = trim(
+                ($request['contactDetails']['n_given'] ?? '') . ' ' . ($request['contactDetails']['n_family'] ?? '')
+            );
+
+            $this->_sendMessageWithTemplate('SendParentConsentEmail', [
+                'link' => Tinebase_Core::getUrl() . '/EventManager/registration/parentConsent/confirm/' . $token,
+                'contact' => new Addressbook_Model_Contact(['email' => $parentEmail]),
+                'email' => $parentEmail,
+                'event' => $event,
+                'eventName' => $eventName,
+                'participantName' => $participantName,
+            ]);
+
+            $response = new \Laminas\Diactoros\Response();
+            $response->getBody()->write(json_encode(['success' => true]));
+        } catch (Exception $e) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 400);
+            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
+        } finally {
+            $assertAclUsage();
+        }
+        return $response;
+    }
+
+    public function publicApiGetParentConsentConfirm($token): \Laminas\Diactoros\Response
+    {
+        $assertAclUsage = $this->assertPublicUsage();
+        try {
+            $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+            if (!$key = EventManager_Config::getInstance()->{EventManager_Config::JWT_SECRET}) {
+                throw new Tinebase_Exception_SystemGeneric('EventManager JWT key is not configured');
+            }
+            $decoded = JWT::decode($token, new \Firebase\JWT\Key($key, 'HS256'));
+
+            $cacheKey = 'EventManagerParentConsent_' . $decoded->pendingId;
+            $cached = Tinebase_Core::getCache()->load($cacheKey);
+
+            if ($cached === false) {
+                throw new Tinebase_Exception_SystemGeneric($translate->_('This confirmation link is invalid or has expired.'));
+            }
+
+            $registrationRequest = json_decode($cached, true);
+
+            $this->_processRegistration($registrationRequest, $decoded->eventId, true);
+
+            Tinebase_Core::getCache()->remove($cacheKey);
+
+            $html = '<h1>' . htmlspecialchars(
+                $translate->_('Thank you! Consent confirmed and registration completed.The participant will receive a confirmation email.')
+            ) . '</h1>';
+            $response = new \Laminas\Diactoros\Response('php://memory', 200, ['Content-Type' => 'text/html']);
+            $response->getBody()->write($html);
+        } catch (Exception $e) {
+            $html = '<h1>' . htmlspecialchars(
+                $translate->_('This confirmation link is invalid or has expired.')
+            ) . '</h1>';
+            $response = new \Laminas\Diactoros\Response('php://memory', 400, ['Content-Type' => 'text/html']);
+            $response->getBody()->write($html);
         } finally {
             $assertAclUsage();
         }
@@ -1289,5 +1432,20 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $confirmed = EventManager_Config::getInstance()
             ->get(EventManager_Config::REGISTRATION_STATUS)->records->getById('1');
         return ['function' => $attendee, 'source' => $online, 'status' => $confirmed];
+    }
+
+    public function isParticipantUnderage(array $contactDetails): bool
+    {
+        $bday = $contactDetails['bday'] ?? null;
+        if (empty($bday)) {
+            return false;
+        }
+        try {
+            $birthDate = new DateTime($bday);
+        } catch (Exception $e) {
+            return false;
+        }
+        $age = (new DateTime('today'))->diff($birthDate)->y;
+        return $age < 16;
     }
 }
