@@ -90,6 +90,19 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $this->assertEquals('Test', $certData['organization'], 'organization mismatch');
     }
 
+    public function testBrokenLicense()
+    {
+        try {
+            $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/V-12345_broken.pem'));
+            self::fail('Invalid license string exception expected');
+        } catch (Tinebase_Exception $te) {
+            self::assertStringContainsString('Invalid license string', $te->getMessage());
+        }
+        $tfj = new Tinebase_Frontend_Json();
+        $registry = $tfj->getRegistryData();
+        $this->assertEquals(Tinebase_License::STATUS_NO_LICENSE_AVAILABLE, $registry['licenseStatus']);
+    }
+
     public function testLicensePropertiesV123456()
     {
         $this->_uit->setLicenseFile(dirname(__FILE__) . '/V-123456.pem');
