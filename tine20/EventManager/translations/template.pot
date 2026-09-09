@@ -202,6 +202,9 @@ msgstr ""
 msgid "EVENT SHARED CALENDAR NAME"
 msgstr ""
 
+msgid "EVENT SHARED CONTAINER NAME"
+msgstr ""
+
 msgid "Session"
 msgstr ""
 
@@ -241,10 +244,20 @@ msgstr ""
 msgid "All Events in Event Manager"
 msgstr ""
 
-msgid "Sign Up"
-msgstr ""
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Event Information"
+msgstr ""
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "The event should end after the start date"
 msgstr ""
 
 msgid "Event Options"
@@ -312,11 +325,6 @@ msgstr ""
 
 msgid "Please select an event"
 msgstr ""
-
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
 
 msgid "Date"
 msgstr ""
@@ -829,11 +837,6 @@ msgstr ""
 msgid "GENDER_Registration"
 msgstr ""
 
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "This participant has been registered by another person"
 msgstr ""
 
@@ -998,7 +1001,4 @@ msgid "The registration date for the event %1$s is overdue. We add you to our wa
 msgstr ""
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
-msgstr ""
-
-msgid "The event should end after the start date"
 msgstr ""
