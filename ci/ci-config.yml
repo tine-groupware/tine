@@ -45,7 +45,7 @@ variables:
   PHP_VERSION: "8.5"
 
   # "Codename for build"
-  CODENAME: "TBA"
+  CODENAME: "Jante"
 
   # "Try to reuse source images" 
   REUSE_IMAGES: "true"
