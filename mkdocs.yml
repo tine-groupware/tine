@@ -29,6 +29,8 @@ extra_css:
 extra_javascript:
   - assets/theme-param.js
 
+use_directory_urls: false
+
 #nav:
 #  - 'User Guide': 'user-guide.md'
 #  - 'tine Admins': 'user-guide.md'
