@@ -116,6 +116,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     let domainValidation = Tine.Tinebase.common.checkEmailDomain(value);
 
                                     if (!hasManageInternalDomainGrant && domainValidation.isInternalDomain) {
+                                        this.form.findField('email').setDisabled(true);
                                         return this.app.i18n._('You do not have the grant to manage mailing list with internal domain');
                                     }
 
