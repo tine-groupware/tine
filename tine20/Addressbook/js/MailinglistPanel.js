@@ -58,6 +58,8 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
                 const domainValidation = Tine.Tinebase.common.checkEmailDomain(value);
 
                 if (!hasManageInternalDomainGrant && domainValidation.isInternalDomain) {
+                    this.isMailinglistCheckbox.setDisabled(true);
+                    this.emailField.setDisabled(true);
                     return this.app.i18n._('You do not have the grant to enter internal domain');
                 }
 
