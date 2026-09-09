@@ -99,7 +99,7 @@
                         :type="option.option_config.only_numbers ? 'number' : 'text'"
                         :maxlength="!option.option_config.only_numbers && option.option_config.max_characters ? option.option_config.max_characters : undefined"
                         :class="{'required-field-error': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}"
-                        @input="handleTextInputChange(option, $event)"
+                        @input="handleTextInputChange(option, $event.target.value)"
                       ></b-form-input>
                       <small v-if="option.option_config.multiple_lines && option.option_config.max_characters" class="text-muted">
                         {{getCharacterCount(option.id)}} / {{option.option_config.max_characters}} {{formatMessage('characters')}}
@@ -197,7 +197,7 @@
                     class="mb-3"
                   >
                     <component
-                      :is="contactFieldConfig[fieldName]?.component || 'b-form-input'"
+                      :is="contactFieldConfig[fieldName]?.component || BFormInput"
                       v-model="registrantDetails[fieldName]"
                       v-bind="contactFieldConfig[fieldName]?.props?.()"
                       :class="{
