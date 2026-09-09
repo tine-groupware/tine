@@ -22,6 +22,8 @@ theme:
   features:
     - content.code.copy
 
+use_directory_urls: false
+
 #nav:
 #  - 'User Guide': 'user-guide.md'
 #  - 'tine Admins': 'user-guide.md'
