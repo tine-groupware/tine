@@ -272,6 +272,7 @@ msgstr "изпълни"
         shell_exec('cd ' . $extraTranslationsDir . ' && msgfmt -o de_DE.mo de_DE.po');
 
         Tinebase_Core::getCache()->clean();
+        Tinebase_Translation::clearTranslationCache();
 
         // test the translation
         $translation = Tinebase_Translation::getTranslation('Addressbook', new Zend_Locale('de_DE'));

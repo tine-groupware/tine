@@ -386,6 +386,11 @@ class Tinebase_Translation
         
         return $translate;
     }
+
+    public static function clearTranslationCache(): void
+    {
+        self::$_applicationTranslations = [];
+    }
     
     /**
      * Returns collection of all javascript translations data for requested language

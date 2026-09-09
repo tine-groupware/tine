@@ -49,6 +49,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->server = new \Sabre\DAV\Server($this->_getWebDAVTree());
         $this->server->debugExceptions = true;
 
+        Tinebase_WebDav_Sabre_SapiMock::$lastResponse = null;
         $this->server->sapi = new Tinebase_WebDav_Sabre_SapiMock();
         $this->server->httpResponse = $this->response = new Tinebase_WebDav_Sabre_ResponseMock();
 
@@ -969,9 +970,10 @@ EOS
         $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
         $request->getServer()->set('REMOTE_ADDR',   'localhost');
 
-        Tinebase_Server_WebDAV::$_recreateServer = true;
+        Tinebase_Config::getInstance()->{Tinebase_Config::RATE_LIMITS} = [];
+        unset(Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class});
+
         $server = new Tinebase_Server_WebDAV();
-        Tinebase_WebDav_Sabre_SapiMock::$lastReponse = null;
         Tinebase_Server_WebDAV::getServer()->sapi = new Tinebase_WebDav_Sabre_SapiMock();
         Tinebase_Server_WebDAV::$_recreateServer = false;
         try {
@@ -981,8 +983,9 @@ EOS
             Tinebase_Core::setUser($this->_originalTestUser);
         }
 
-        $webDavInfo = Tinebase_WebDav_Sabre_SapiMock::$lastReponse?->getStatus() . ' ' . Tinebase_WebDav_Sabre_SapiMock::$lastReponse?->getStatusText() . PHP_EOL
-        . Tinebase_WebDav_Sabre_SapiMock::$lastReponse?->getBodyAsString();
+        $this->assertNotNull($lastResponse = Tinebase_WebDav_Sabre_SapiMock::$lastResponse);
+        $webDavInfo = $lastResponse->getStatus() . ' ' . $lastResponse->getStatusText() . PHP_EOL
+            . $lastResponse->getBodyAsString();
 
         try {
             $data = @file_get_contents('tine20://Filemanager/folders/shared/unittestdirectory/aTestFile%.test');

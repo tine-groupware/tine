@@ -51,7 +51,7 @@ class Tinebase_WebDav_IssueTest extends TestCase
 
 
         $request = Tinebase_Http_Request::fromString(
-           "MKCOL /remote.php/dav/files/" . $this->_originalTestUser->accountLoginName . "/test HTTP/1.1\r\n"
+           "MKCOL /remote.php/dav/files/" . $this->_originalTestUser->accountLoginName . "/testCreateFileOnPersonalCreatesWebDavIssue HTTP/1.1\r\n"
             //"POST /webdav/" . $this->_originalTestUser->accountLoginName . "/ HTTP/1.1\r\n"
             . "Host: localhost\r\n"
             . "User-Agent: TestClient\r\n"
@@ -235,6 +235,7 @@ class Tinebase_WebDav_IssueTest extends TestCase
         $oldUser = Tinebase_Core::getUser();
         /** @var Tinebase_Model_FullUser $sclever */
         $sclever = $this->_personas['sclever'];
+        Admin_Controller_User::getInstance()->setAccountPassword($sclever, $credentials['password'], $credentials['password']);
         $fileManagerAppId = Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId();
 
         // Remove MANAGE_SHARED_FOLDERS right from all roles for sclever
