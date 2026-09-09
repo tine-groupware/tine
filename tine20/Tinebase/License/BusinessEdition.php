@@ -187,6 +187,10 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
         if (empty($licenseString)) {
             throw new Tinebase_Exception('Empty license string');
         } else {
+            $data = openssl_x509_parse($licenseString);
+            if (!$data) {
+                throw new Tinebase_Exception('Invalid license string');
+            }
             $licenseFile = $fs->fopen($licensePath, 'w');
             if ($licenseFile !== false) {
                 $this->reset();
