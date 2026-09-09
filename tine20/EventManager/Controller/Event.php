@@ -707,7 +707,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                     foreach ($registrationIds as $registrationId) {
                         try {
                             $registration = EventManager_Controller_Registration::getInstance()
-                            ->get($registrationId);
+                                ->get($registrationId);
                         } catch (Tinebase_Exception_NotFound $tenf) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
