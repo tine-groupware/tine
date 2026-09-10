@@ -130,6 +130,7 @@
   ansible.builtin.shell: docker compose exec --user tine20 web sh -c "php /usr/share/tine20/setup.php --config=/etc/tine20 --update"
   args:
     chdir: "{{ tinedockercompose_path }}"
+  run_once: true
   when:
     - tinedockercompose_tine_run_update|bool
 
