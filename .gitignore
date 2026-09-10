@@ -1,4 +1,8 @@
-.idea
+# Only include PHPStorm code style settings
+.idea/*
+!.idea/codeStyles/
+!.idea/codeStyles/**
+
 .buildpath
 .externalToolBuilders
 .project
