@@ -2,11 +2,10 @@
 
 > **NOTE TO ADMIN:**  
 > To use this feature, the `webauthn` mfa-option has to be enabled on the instance.
-> see [OPERATORS/MFA]
-
-[OPERATORS/MFA]: ../operators/MFA/
+> see [OPERATORS/MFA](../operators/MFA.md)
 
 ## **Description**
+
 Passkey login is a modern authentication method that replaces traditional passwords with cryptographic key pairs,
 providing secure and seamless access to websites, apps, and devices.
 
@@ -14,8 +13,8 @@ providing secure and seamless access to websites, apps, and devices.
 
 > **NOTE:**  
 > You can store passkeys on your device, password manager, or physical security-key. However, the process is __different
-> for each operating system and may not be available on all systems__.  
-> 
+> for each operating system and may not be available on all systems__.
+>
 > Most **chrome-based browsers** allow storing passkey on a **physical security-key**.
 
 To use this feature, a user must first **set up a `WebAuthn/FIDO2` device** by following these steps:
@@ -37,7 +36,8 @@ If **passkey-login** is enabled for the **{{ branding.title }}** instance:
 - **Clicking the "Username"** field on the `Login` page will display **autofill options**, showing stored **passwords** and
 `passkeys`. Selecting a stored `passkey` will log the user into their `{{ branding.title }}` account automatically.
 
-- Alternatively, users can **click on `Login with Passkey`** on the `Login` page to choose from stored `passkeys` and log in.
+- Alternatively, users can **click on `Login with Passkey`** on the `Login` page to choose from stored `passkeys` and
+  log in.
 
 ## Microsoft Authenticator
 

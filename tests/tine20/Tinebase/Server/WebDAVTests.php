@@ -570,6 +570,7 @@ EOS
     public function testRateLimit()
     {
         $oldConfigs = Tinebase_Config::getInstance()->get(Tinebase_Config::RATE_LIMITS)->toArray();
+        $raii = new Tinebase_RAII(fn() => Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $oldConfigs));
         $configs = $oldConfigs;
         $configs[Tinebase_Config::RATE_LIMITS_FRONTENDS][Tinebase_Server_WebDAV::class] = [
             [
@@ -580,8 +581,8 @@ EOS
         ];
         Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $configs);
         $result = $this->testServer(true);
+        $this->assertNotNull($result);
         $result = $this->testServer(true);
         self::assertNull($result);
-        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $oldConfigs);
     }
 }

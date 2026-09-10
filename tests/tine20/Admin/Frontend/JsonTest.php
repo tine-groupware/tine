@@ -1469,9 +1469,10 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
      */
     public function testSearchSchedulerTasks()
     {
+        unset(Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class});
         Tinebase_Core::getCache()->clean();
         $smd = Tinebase_Frontend_Http::getServiceMap();
-        self::assertArrayHasKey('services', $smd, 'SMD should have services');
+        self::assertArrayHasKey('services', $smd, 'SMD should have services: ' . print_r(array_keys($smd), true));
         self::assertArrayHasKey('Admin.searchSchedulerTasks', $smd['services'], 'Admin.searchSchedulerTasks should be in SMD');
 
         $filter = [['field' => "query", 'operator' => "contains", 'value' => '']];
