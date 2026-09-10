@@ -12,7 +12,7 @@
 class Tinebase_WebDav_Sabre_SapiMock extends \Sabre\HTTP\Sapi
 {
     public static $sent = 0;
-    public static ?\Sabre\HTTP\ResponseInterface $lastReponse = null;
+    public static ?\Sabre\HTTP\ResponseInterface $lastResponse = null;
 
     /**
      * Overriding this so nothing is ever echo'd.
@@ -20,6 +20,6 @@ class Tinebase_WebDav_Sabre_SapiMock extends \Sabre\HTTP\Sapi
     public static function sendResponse(\Sabre\HTTP\ResponseInterface $response)
     {
         ++self::$sent;
-        self::$lastReponse = $response;
+        self::$lastResponse = $response;
     }
 }
