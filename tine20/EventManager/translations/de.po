@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-08-25 12:21+0200\n"
+"PO-Revision-Date: 2026-09-10 13:00+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -209,6 +209,12 @@ msgstr "NAME DES GEMEINSAMEN VERANSTALTUNGSKALENDERS"
 msgid "EVENT SHARED CONTAINER NAME"
 msgstr ""
 
+msgid "Sender email for the notification emails"
+msgstr ""
+
+msgid "Sender name for the notification emails"
+msgstr ""
+
 msgid "Session"
 msgstr "Sitzung"
 
@@ -266,6 +272,9 @@ msgstr "Die Veranstaltung sollte nach dem Startdatum enden"
 
 msgid "Event Options"
 msgstr "Eventoptionen"
+
+msgid "Ungrouped"
+msgstr "Ungruppiert"
 
 msgid "Search Participant"
 msgstr "Suche nach Teilnehmern"
