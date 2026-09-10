@@ -205,6 +205,12 @@ msgstr "EVENT SHARED CALENDAR NAME"
 msgid "EVENT SHARED CONTAINER NAME"
 msgstr "EVENT SHARED CONTAINER NAME"
 
+msgid "Sender email for the notification emails"
+msgstr "Sender email for the notification emails"
+
+msgid "Sender name for the notification emails"
+msgstr "Sender name for the notification emails"
+
 msgid "Session"
 msgstr "Session"
 
@@ -262,6 +268,9 @@ msgstr "The event should end after the start date"
 
 msgid "Event Options"
 msgstr "Event Options"
+
+msgid "Ungrouped"
+msgstr "Ungrouped"
 
 msgid "Search Participant"
 msgstr "Search Participant"

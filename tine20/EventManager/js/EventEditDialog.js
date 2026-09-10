@@ -77,12 +77,6 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.supr().onRecordLoad.apply(this, arguments);
     },
 
-    _applyGroupSortKey: function (record) {
-        const group = record.get('group') || '';
-        const sorting = record.get('sorting') || 0;
-        record.data.groupSortKey = group + '_' + String(sorting).padStart(8, '0');
-    },
-
     getFormItems: function () {
         const me = this;
         const fieldManager = _.bind(
@@ -215,15 +209,17 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }),
                                 view: new Ext.grid.GroupingView({
                                     showGroupName: false,
+                                    groupTextTpl: `{[values.rs[0].data.group || ${JSON.stringify(this.app.i18n._('Ungrouped'))}]}`
                                 }),
                                 listeners: {
                                     afterrender: function (grid) {
                                         const store = grid.store;
-                                        const applyKeys = () => store.each(r => me._applyGroupSortKey(r));
-                                        store.on('load', applyKeys);
-                                        store.on('add', (s, recs) => recs.forEach(r => me._applyGroupSortKey(r)));
-                                        store.on('update', (s, r) => me._applyGroupSortKey(r));
-                                        applyKeys();
+                                        const resort = () => store.sort('sorting', 'ASC');
+
+                                        store.on('load', resort);
+                                        store.on('add', resort);
+                                        store.on('update', resort);
+                                        resort();
 
                                         const cm = grid.getColumnModel();
                                         const colIndex = cm.findColumnIndex('name_option');
