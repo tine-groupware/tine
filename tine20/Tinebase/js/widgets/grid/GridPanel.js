@@ -757,12 +757,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (_.find(columns, {dataIndex: 'type'})) {
                 const typeCol = _.find(columns, {dataIndex: 'type'});
                 _.remove(columns, typeCol);
+                Object.assign(typeCol, {forceIndex: 0, prio: 100});
                 columns.unshift(typeCol);
             }
             
             if (_.find(columns, {dataIndex: 'attachments'})) {
                 var attachCol = _.find(columns, {dataIndex: 'attachments'});
                 _.remove(columns, attachCol);
+                Object.assign(attachCol, {forceIndex: 0, prio: 200})
                 columns.unshift(attachCol);
             }
             
@@ -770,6 +772,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 var imgCol = _.find(columns, {dataIndex: field.key});
                 if (imgCol) {
                     _.remove(columns, imgCol);
+                    Object.assign(imgCol, {forceIndex: 0, prio: 300})
                     columns.unshift(imgCol);
                 }
             });
