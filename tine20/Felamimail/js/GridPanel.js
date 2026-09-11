@@ -650,9 +650,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getColumns: function(){
         const columns = [
-            { id: 'id', header: this.app.i18n._("Id"), hidden: true },
-            { id: 'content_type', dataIndex: 'has_attachment', renderer: this.attachmentRenderer },
-            { id: 'flags', header: this.app.i18n._("Flags"), align: 'center', renderer: this.flagRenderer },
+            { id: 'id', header: this.app.i18n._("Id"), hidden: true, forceIndex: 0 },
+            { id: 'content_type', dataIndex: 'has_attachment', renderer: this.attachmentRenderer, forceIndex: 1 },
+            { id: 'flags', header: this.app.i18n._("Flags"), align: 'center', renderer: this.flagRenderer, forceIndex: 2 },
             { id: 'tags', header: this.app.i18n._("Tags"), align: 'center', renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
             { id: 'subject', header: this.app.i18n._("Subject") },
             { id: 'from_email', header: this.app.i18n._("From (Email)") },

@@ -1241,7 +1241,7 @@ viewConfig: {
         const isStateIdChanged = !!(!this.latestGridStateId && currentGridStateId)
             || !!((this.latestGridStateId && currentGridStateId) && (this.latestGridStateId !== currentGridStateId));
         this.latestGridStateId = currentGridStateId;
-        
+
         if (isStateIdChanged) {
             if (this.grid) {
                 this.grid.stateId = this.latestGridStateId;
@@ -1260,13 +1260,14 @@ viewConfig: {
             cm.config.forEach((col, idx) => {
                 col.initialConfig = col.initialConfig || {... col};
                 col.index = idx;
-                const refConfig = currentGridState?.columns?.[idx] ?? col.initialConfig;
+                const relIdx = _.findIndex(currentGridState?.columns, (c) => { return col.id === c.id; })
+                const refConfig = currentGridState?.columns?.[relIdx] ?? col.initialConfig;
                 // set custom field
                 col.useManualWidth = refConfig.useManualWidth ?? false;
                 
                 // reset grid state if stateId changed, make sure column config is based on current stateId
                 cm.setColumnWidth(col.index, refConfig?.width ?? this.grid.minColumnWidth, true);
-                let hidden = refConfig?.hidden ?? false;
+                let hidden = ((!col.hasOwnProperty('hidable') || col.hidable) && refConfig?.hidden) ?? false;
                 if (mode.level > -1) {
                     if (mode.name === 'oneColumn') {
                         hidden = col.id !== 'responsive';
