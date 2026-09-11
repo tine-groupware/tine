@@ -26,6 +26,7 @@ if (Ext.isTouchDevice) {
         });
 
         if (!hasCheckboxSelModel && !this.skipAutoCheckboxSelection) {
+            Object.assign(sm, {forceIndex: 0, prio: 1000, hideable: false, hidden: false});
             cols.unshift(sm);
         }
     });

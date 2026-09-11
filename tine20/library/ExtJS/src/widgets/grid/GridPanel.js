@@ -681,6 +681,13 @@ function(grid, rowIndex, columnIndex, e) {
                     c.width = s.width;
                 }
             }
+            _.forEachRight( _.sortBy(_.filter(cm.columns, c => c.hasOwnProperty('forceIndex')), ['forceIndex', 'prio', 'id']), c => {
+                oldIndex = cm.getIndexById(c.id);
+                if (oldIndex !== c.forceIndex) {
+                    cm.moveColumn(oldIndex, c.forceIndex, suppressEvent);
+                }
+            })
+
         }
         if(store){
             s = state.sort;
