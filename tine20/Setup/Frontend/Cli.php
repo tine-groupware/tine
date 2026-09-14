@@ -1237,9 +1237,9 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 try {
                     $app = Tinebase_Core::getApplicationInstance($application->name, '', true);
                     if (true === $enable) {
-                        $app->goIntoMaintenanceMode(/*$flags*/);
+                        $app->goIntoMaintenanceMode($flags);
                     } else {
-                        $app->leaveMaintenanceMode(/*$flags*/);
+                        $app->leaveMaintenanceMode($flags);
                     }
                 } catch (Exception $e) {
                     $enabledApplications->removeById($application->id);
