@@ -33,6 +33,16 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         if (typeField?.getValue()) {
             this.updateTypeDescription(typeField.getValue());
         }
+
+        const displayField = this.form.findField('display');
+        if (displayField?.getValue()) {
+            this.updateDisplayTrigger(displayField, displayField.getValue());
+        }
+
+        const requiredField = this.form.findField('option_required');
+        if (requiredField?.getValue()) {
+            this.updateOptionRequiredTrigger(requiredField, requiredField.getValue());
+        }
     },
 
     afterRender: function () {
@@ -79,79 +89,80 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     setupDisplayTrigger: function () {
         const displayField = this.form.findField('display');
         displayField.on('select', function () {
+            this.updateDisplayTrigger(displayField, displayField.getValue());
+        }, this);
+    },
 
-            if (!displayField.plugins) {
-                displayField.plugins = [];
+    updateDisplayTrigger: function (field, value) {
+        if (!field.plugins) {
+            field.plugins = [];
+        }
+
+        for (let i = field.plugins.length - 1; i >= 0; i--) {
+            if (field.plugins[i] instanceof FieldTriggerPlugin) {
+                field.plugins.splice(i, 1);
             }
+        }
 
-            if (displayField.plugins.length > 0) {
-                for (let i = displayField.plugins.length - 1; i >= 0; i--) {
-                    const plugin = displayField.plugins[i];
-                    if (plugin instanceof FieldTriggerPlugin) {
-                        displayField.plugins.splice(i, 1);
-                    }
+        const fieldWrap = field.wrap ? field.wrap.dom : (field.el ? field.el.up('.x-form-field-wrap')?.dom : null);
+        const actionEditTrigger = fieldWrap?.querySelector('.x-form-trigger.action_edit');
+
+        if (actionEditTrigger) {
+            actionEditTrigger.remove();
+        }
+
+        if (value === "2") {
+            const triggerPlugin = new FieldTriggerPlugin({
+                triggerClass: 'action_edit',
+                qtip: this.app.i18n._('Edit Rules'),
+                onTriggerClick: () => {
+                    Tine.EventManager.OptionRelationEditDialog.openWindow({ record: this.record });
                 }
-            }
-            // remove the action_edit image
-            const actionEditTrigger = document.querySelector('.x-form-trigger.action_edit');
-            if (actionEditTrigger) {
-                actionEditTrigger.remove();
-            }
-
-            if (displayField.getValue() === "2") {
-                const triggerPlugin = new FieldTriggerPlugin({
-                    triggerClass: 'action_edit',
-                    qtip: this.app.i18n._('Edit Rules'),
-                    onTriggerClick: () => {
-                        Tine.EventManager.OptionRelationEditDialog.openWindow({
-                            record: this.record,
-                        });
-                    }
-                });
-
-                displayField.plugins.push(triggerPlugin);
-                triggerPlugin.init(displayField);
-            }
-        },this);
+            });
+            field.plugins.push(triggerPlugin);
+            triggerPlugin.init(field);
+        }
     },
 
     setupOptionRequiredTrigger: function () {
         const requiredField = this.form.findField('option_required');
         requiredField.on('select', function () {
+            this.updateOptionRequiredTrigger(requiredField, requiredField.getValue());
+        }, this);
+    },
 
-            if (!requiredField.plugins) {
-                requiredField.plugins = [];
+    updateOptionRequiredTrigger: function (field, value) {
+        if (!field.plugins) {
+            field.plugins = [];
+        }
+
+        for (let i = field.plugins.length - 1; i >= 0; i--) {
+            if (field.plugins[i] instanceof FieldTriggerPlugin) {
+                field.plugins.splice(i, 1);
             }
+        }
 
-            if (requiredField.plugins.length > 0) {
-                for (let i = requiredField.plugins.length - 1; i >= 0; i--) {
-                    const plugin = requiredField.plugins[i];
-                    if (plugin instanceof FieldTriggerPlugin) {
-                        requiredField.plugins.splice(i, 1);
-                    }
+        const fieldWrap = field.wrap ? field.wrap.dom : (field.el ? field.el.up('.x-form-field-wrap')?.dom : null);
+        const actionEditTrigger = fieldWrap?.querySelector('.x-form-trigger.action_edit');
+
+        if (actionEditTrigger) {
+            actionEditTrigger.remove();
+        }
+
+        if (value === "3") {
+            const triggerPlugin = new FieldTriggerPlugin({
+                triggerClass: 'action_edit',
+                qtip: this.app.i18n._('Edit Rules'),
+                onTriggerClick: () => {
+                    Tine.EventManager.OptionRelationEditDialog.openWindow({
+                        record: this.record,
+                    });
                 }
-            }
-            // remove the action_edit image
-            const actionEditTrigger = document.querySelector('.x-form-trigger.action_edit');
-            if (actionEditTrigger) {
-                actionEditTrigger.remove();
-            }
+            });
 
-            if (requiredField.getValue() === "3") {
-                const triggerPlugin = new FieldTriggerPlugin({
-                    triggerClass: 'action_edit',
-                    qtip: this.app.i18n._('Edit Rules'),
-                    onTriggerClick: () => {
-                        Tine.EventManager.OptionRelationEditDialog.openWindow({
-                            record: this.record,
-                        });
-                    }
-                });
-
-                requiredField.plugins.push(triggerPlugin);
-                triggerPlugin.init(requiredField);
-            }
-        },this);
+            field.plugins.push(triggerPlugin);
+            triggerPlugin.init(field);
+        }
     },
 
     getFormItems: function () {

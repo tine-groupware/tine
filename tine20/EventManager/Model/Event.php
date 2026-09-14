@@ -280,6 +280,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                         EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS,
                         EventManager_Model_Option::FLD_OPTION_CONFIG,
                         EventManager_Model_Option::FLD_SORTING,
+                        EventManager_Model_Option::FLD_OPTION_REQUIRED,
                     ],
                 ],
                 self::CONFIG            => [
