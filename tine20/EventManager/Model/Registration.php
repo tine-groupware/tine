@@ -151,7 +151,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
             self::FLD_SOURCE        => [
                 self::TYPE              => self::TYPE_KEY_FIELD,
                 self::LABEL             => 'Source', // _('Source')
-                self::DEFAULT_VAL       => 1,
+                self::DEFAULT_VAL       => 2,
                 self::NAME              => EventManager_Config::REGISTRATION_SOURCE,
                 self::NULLABLE          => true,
             ],
