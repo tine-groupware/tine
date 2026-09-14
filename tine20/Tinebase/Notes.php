@@ -575,7 +575,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             if (is_array($value)) $value = $value['id'] ?? '';
                             try {
                                 $valueString = $controller->get($value, null, false, true)->getTitle();
-                            } catch (Tinebase_Exception_ProgramFlow $tepf) {
+                            } catch (Tinebase_Exception_ProgramFlow | Tinebase_Exception_InvalidArgument $tepf) {
                                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                                         . ' ' . $tepf->getMessage());
