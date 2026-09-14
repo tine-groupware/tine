@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -76,8 +76,10 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      * @var boolean|null
      */
     protected $_maintenanceMode = null;
+    protected static ?array $_maintenanceModeFlags = null;
 
     public const APP_STATE_MAINTENANCE = 'maintenance';
+    public const APP_STATE_MAINTENANCE_FLAGS = 'maintenanceFlags';
 
 
     public function setRequestContext(array $context)
@@ -449,11 +451,15 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
     /**
      * enable Maintenance Mode
      */
-    public function goIntoMaintenanceMode()
+    public function goIntoMaintenanceMode(array $flags)
     {
         $raii = Tinebase_RAII::getTransactionManagerRAII();
 
         Tinebase_Application::getInstance()->setApplicationState($this->_applicationName, self::APP_STATE_MAINTENANCE, '1');
+        if (Tinebase_Config::APP_NAME === $this->_applicationName) {
+            Tinebase_Application::getInstance()->setApplicationState($this->_applicationName, self::APP_STATE_MAINTENANCE_FLAGS, json_encode($flags));
+            static::$_maintenanceModeFlags = $flags;
+        }
         $this->_maintenanceMode = true;
 
         $raii->release();
@@ -473,14 +479,27 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         return $this->_maintenanceMode;
     }
 
+    public static function hasMaintenanceModeFlag(string $flag)
+    {
+        if (null === static::$_maintenanceModeFlags) {
+            static::$_maintenanceModeFlags = json_decode((string)Tinebase_Application::getInstance()
+                    ->getApplicationState(Tinebase_Config::APP_NAME, self::APP_STATE_MAINTENANCE_FLAGS), true) ?? [];
+        }
+        return in_array($flag, static::$_maintenanceModeFlags);
+    }
+
     /**
      * disable Maintenance Mode
      */
-    public function leaveMaintenanceMode()
+    public function leaveMaintenanceMode(array $flags)
     {
         $raii = Tinebase_RAII::getTransactionManagerRAII();
 
         Tinebase_Application::getInstance()->setApplicationState($this->_applicationName, self::APP_STATE_MAINTENANCE, '0');
+        if (Tinebase_Config::APP_NAME === $this->_applicationName) {
+            Tinebase_Application::getInstance()->setApplicationState($this->_applicationName, self::APP_STATE_MAINTENANCE_FLAGS, '');
+            static::$_maintenanceModeFlags = null;
+        }
         $this->_maintenanceMode = false;
 
         $raii->release();

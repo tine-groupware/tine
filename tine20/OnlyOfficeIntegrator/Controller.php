@@ -1114,11 +1114,11 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                 Tinebase_FileSystem::FOLDER_TYPE_RECORDS) . '/revisionChanges';
     }
 
-    public function goIntoMaintenanceMode()
+    public function goIntoMaintenanceMode(array $flags)
     {
         $raii = Tinebase_RAII::getTransactionManagerRAII();
 
-        parent::goIntoMaintenanceMode();
+        parent::goIntoMaintenanceMode($flags);
 
         $accessTokens = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search();
         $keys = array_unique($accessTokens->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY});

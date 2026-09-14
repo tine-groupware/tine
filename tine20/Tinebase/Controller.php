@@ -1230,7 +1230,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             $routeCollector->post('/authPAM/validate', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicPostAuthPAMvalidate', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE_CALLBACK => [Tinebase_Controller::class, 'ignoreSSOpamMaintenanceMode'],
             ]))->toArray());
 
             $routeCollector->get('/metrics[/{apiKey}]', (new Tinebase_Expressive_RouteHandler(
@@ -1358,6 +1359,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             Tinebase_Exception::log($e);
         }
         return (new \Laminas\Diactoros\Response(status: 500));
+    }
+
+    public static function ignoreSSOpamMaintenanceMode(): bool
+    {
+        return static::hasMaintenanceModeFlag(Tinebase_Config::MAINTENANCE_MODE_FLAG_ALLOW_SSO_PAM);
     }
 
     public function publicPostAuthPAMvalidate(): \Psr\Http\Message\ResponseInterface
@@ -2315,9 +2321,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * enable Maintenance Mode
      */
-    public function goIntoMaintenanceMode()
+    public function goIntoMaintenanceMode(array $flags)
     {
-        parent::goIntoMaintenanceMode();
+        parent::goIntoMaintenanceMode($flags);
         Tinebase_Session::deleteSessions();
     }
 

@@ -54,23 +54,28 @@ class SSO_Controller extends Tinebase_Controller_Event
             ]))->toArray());
             $routeCollector->addRoute(['GET', 'POST'], '/oauth2/authorize', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicAuthorize', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE_CALLBACK => [Tinebase_Controller::class, 'ignoreSSOpamMaintenanceMode'],
             ]))->toArray());
             $routeCollector->addRoute(['GET', 'POST'], '/oauth2/token', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicToken', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE_CALLBACK => [Tinebase_Controller::class, 'ignoreSSOpamMaintenanceMode'],
             ]))->toArray());
             $routeCollector->addRoute(['POST'], '/oauth2/device/auth', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicOAuthDeviceAuth', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE_CALLBACK => [Tinebase_Controller::class, 'ignoreSSOpamMaintenanceMode'],
             ]))->toArray());
             $routeCollector->addRoute(['GET', 'POST'], '/oauth2/device/user[/{userCode}]', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicOAuthDeviceUser', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE_CALLBACK => [Tinebase_Controller::class, 'ignoreSSOpamMaintenanceMode'],
             ]))->toArray());
             $routeCollector->addRoute(['POST'], '/oauth2/device/userlogin[/{userCode}]', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicOAuthDeviceUserLogin', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE_CALLBACK => [Tinebase_Controller::class, 'ignoreSSOpamMaintenanceMode'],
             ]))->toArray());
             $routeCollector->post('/oauth2/register', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicRegister', [
@@ -82,7 +87,8 @@ class SSO_Controller extends Tinebase_Controller_Event
             ]))->toArray());
             $routeCollector->get('/openidconnect/userinfo', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicOIUserInfo', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE_CALLBACK => [Tinebase_Controller::class, 'ignoreSSOpamMaintenanceMode'],
             ]))->toArray());
             $routeCollector->get('/saml2/idpmetadata', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicSaml2IdPMetaData', [
