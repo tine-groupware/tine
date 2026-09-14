@@ -506,7 +506,7 @@ const visibleOptionsByGroup = computed(() => {
   return sortedGroups.map(group => ({
     ...group,
     options: group.options.filter(option => isOptionVisible(option))
-  }));
+  })).filter(group => group.options.length > 0);
 });
 
 const formatBirthday = (bday) => {
