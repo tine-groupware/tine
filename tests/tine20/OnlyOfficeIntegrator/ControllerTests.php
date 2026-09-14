@@ -1013,7 +1013,7 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
 
     public function testIsInMaintenanceMode()
     {
-        OnlyOfficeIntegrator_Controller::getInstance()->goIntoMaintenanceMode();
+        OnlyOfficeIntegrator_Controller::getInstance()->goIntoMaintenanceMode([]);
         static::assertTrue($this->_uit->isInMaintenanceMode(),'still have alive tokens after set to MaintenanceMode');
     }
 }

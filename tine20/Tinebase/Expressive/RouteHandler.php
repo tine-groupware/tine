@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Expressive
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -23,7 +23,9 @@
  */
 class Tinebase_Expressive_RouteHandler
 {
+    // only public routes can ignore the maintenance mode
     public const IGNORE_MAINTENANCE_MODE = 'ignoreMaintenanceMode';
+    public const IGNORE_MAINTENANCE_MODE_CALLBACK = 'ignoreMaintenanceModeCB';
     public const IS_PUBLIC = 'isPublic';
     public const PUBLIC_USER_ROLES = 'publicUserRoles';
     public const UNAUTHORIZED_REDIRECT_LOGIN = 'unauthRedirectLogin';
@@ -43,6 +45,9 @@ class Tinebase_Expressive_RouteHandler
     protected $_vars = null;
 
     protected $_ignoreMaintenanceMode = false;
+
+    /** @var ?callable $_ignoreMaintenanceModeCallBack */
+    protected $_ignoreMaintenanceModeCallBack = null;
     protected $_isPublic = false;
     protected $_publicUserRoles = null;
     protected $_publicUserRolesIds = null;
@@ -66,6 +71,9 @@ class Tinebase_Expressive_RouteHandler
     {
         if (isset($_options[self::IGNORE_MAINTENANCE_MODE])) {
             $this->_ignoreMaintenanceMode = (bool) $_options[self::IGNORE_MAINTENANCE_MODE];
+        }
+        if (isset($_options[self::IGNORE_MAINTENANCE_MODE_CALLBACK]) && is_array($_options[self::IGNORE_MAINTENANCE_MODE_CALLBACK])) {
+            $this->_ignoreMaintenanceModeCallBack = $_options[self::IGNORE_MAINTENANCE_MODE_CALLBACK];
         }
         if (isset($_options[self::IS_PUBLIC])) {
             $this->_isPublic = (bool) $_options[self::IS_PUBLIC];
@@ -112,9 +120,12 @@ class Tinebase_Expressive_RouteHandler
             if (null !== $this->_publicUserRoles) {
                 $result[self::PUBLIC_USER_ROLES] = $this->_publicUserRoles;
             }
-        }
-        if (false !== $this->_ignoreMaintenanceMode) {
-            $result[self::IGNORE_MAINTENANCE_MODE] = $this->_isPublic;
+            if (false !== $this->_ignoreMaintenanceMode) {
+                $result[self::IGNORE_MAINTENANCE_MODE] = $this->_ignoreMaintenanceMode; // only public routes can ignore maintenance mode
+            }
+            if (is_array($this->_ignoreMaintenanceModeCallBack)) {
+                $result[self::IGNORE_MAINTENANCE_MODE_CALLBACK] = $this->_ignoreMaintenanceModeCallBack;
+            }
         }
         if (!empty($this->_pipeInjectData)) {
             $result[self::PIPE_INJECT] = $this->_pipeInjectData;
@@ -152,7 +163,7 @@ class Tinebase_Expressive_RouteHandler
 
     public function ignoreMaintenanceMode(): bool
     {
-        return $this->_ignoreMaintenanceMode;
+        return $this->_ignoreMaintenanceMode ?: (is_callable($this->_ignoreMaintenanceModeCallBack) ? call_user_func($this->_ignoreMaintenanceModeCallBack) : false);
     }
 
     /**

@@ -25,7 +25,7 @@ class OnlyOfficeIntegrator_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     public function goIntoMaintenanceMode($opt)
     {
-        OnlyOfficeIntegrator_Controller::getInstance()->goIntoMaintenanceMode();
+        OnlyOfficeIntegrator_Controller::getInstance()->goIntoMaintenanceMode([]);
         do {
             if (OnlyOfficeIntegrator_Controller::getInstance()->isInMaintenanceMode()) {
                 break;
@@ -38,7 +38,7 @@ class OnlyOfficeIntegrator_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     public function leaveMaintenanceMode($opt)
     {
-        OnlyOfficeIntegrator_Controller::getInstance()->leaveMaintenanceMode();
+        OnlyOfficeIntegrator_Controller::getInstance()->leaveMaintenanceMode([]);
         return 0;
     }
 }
