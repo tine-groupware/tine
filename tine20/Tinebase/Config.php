@@ -817,6 +817,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public const MAINTENANCE_MODE_FLAG_SKIP_APPS = 'skipApps';
     public const MAINTENANCE_MODE_FLAG_ONLY_APPS = 'onlyApps';
     public const MAINTENANCE_MODE_FLAG_ALLOW_ADMIN_LOGIN = 'allowAdminLogin';
+    public const MAINTENANCE_MODE_FLAG_ALLOW_SSO_PAM = 'allowSsoPam';
     public const MAINTENANCE_MODE_HEALTH_CHECK = 'maintenanceModeHealthCheck';
 
     /**
