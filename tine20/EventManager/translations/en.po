@@ -670,6 +670,9 @@ msgstr "Go to Homepage"
 msgid "Go to Event Details page"
 msgstr "Go to Event Details page"
 
+msgid "Go to Preview Registration"
+msgstr "Go to Preview Registration"
+
 msgid "GENDER_Appointment"
 msgstr "GENDER_Appointment"
 

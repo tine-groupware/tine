@@ -30,6 +30,16 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('EventManager'), Tine.Tinebase.A
             return;
         }
         const event = selections[0].get('id');
+        const url = window.location.href;
+        window.open(url.replace('#/EventManager', `/EventManager/view/event/${event}`));
+    }
+
+    const callRegistrationPage = async function (item) {
+        const selections = this.mainScreen.EventGridPanel.selectionModel.selections.items ?? []
+        if (selections.length === 0 || selections.length > 1) {
+            return;
+        }
+        const event = selections[0].get('id');
         const dummyToken = 'preview';
         // todo add event id when pastoral url is the correct url
         /*if (pastoralUrl) {
@@ -61,12 +71,28 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('EventManager'), Tine.Tinebase.A
         handler: callDetailsPage.createDelegate(app),
     }
 
+    const actionRegistrationPageConfig = {
+        app: app,
+        allowMultiple: false,
+        iconCls: 'action_next',
+        text: app.i18n._('Go to Preview Registration'),
+        actionUpdater(action, grants, records) {
+            let enabled = records.length === 1
+            action.setDisabled(!enabled)
+            action.baseAction.setDisabled(!enabled)
+        },
+        handler: callRegistrationPage.createDelegate(app),
+    }
+
     const actionHomepage = new Ext.Action(actionHomepageConfig);
     const actionDetailsPage = new Ext.Action(actionDetailsPageConfig);
+    const actionRegistrationPage = new Ext.Action(actionRegistrationPageConfig);
     const mediumBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
 
     Ext.ux.ItemRegistry.registerItem(`EventManager-Event-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(actionHomepage), mediumBtnStyle), 50)
     Ext.ux.ItemRegistry.registerItem(`EventManager-Event-GridPanel-ContextMenu`, actionHomepage, 5)
     Ext.ux.ItemRegistry.registerItem(`EventManager-Event-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(actionDetailsPage), mediumBtnStyle), 60)
     Ext.ux.ItemRegistry.registerItem(`EventManager-Event-GridPanel-ContextMenu`, actionDetailsPage, 6)
+    Ext.ux.ItemRegistry.registerItem(`EventManager-Event-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(actionRegistrationPage), mediumBtnStyle), 70)
+    Ext.ux.ItemRegistry.registerItem(`EventManager-Event-GridPanel-ContextMenu`, actionRegistrationPage, 7)
 });
