@@ -218,6 +218,7 @@ class Calendar_Export_DocTest extends Calendar_TestCase
 
         $export->generate();
         $filename = $export->getDownloadFilename('a', 'b');
-        static::assertSame('Test_KW"'  .  date("W") . '".docx', $filename);
+        $weekNumber = Tinebase_DateTime::now()->format('W');
+        static::assertSame('Test_KW"' .  $weekNumber . '".docx', $filename);
     }
 }
