@@ -365,7 +365,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 if (false === ($blPipe = $this->_getBLPipe($contract->working_time_scheme))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ .
                             '::' . __LINE__ . 'employees ' . $employee->getId() . ' ' . $employee->getTitle() .
-                            ' contract has no valid working time scheme for dailyreporting at ' .
+                            ' Contract has no valid working time scheme for daily reporting at ' .
                             $this->_currentDate->toString());
 
                     if (isset($existingReports[$dateStr])) {
@@ -429,7 +429,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 Tinebase_Exception::log($e);
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' Could not create daily wt report for employee ' . $employee->getTitle()
-                    . ' (Date: '. $this->_currentDate->toString());
+                    . ' (Date: '. $this->_currentDate->toString() . ')');
                 $this->_reportResult['errors'] += 1;
 
                 if (isset($existingReports[$dateStr])) {

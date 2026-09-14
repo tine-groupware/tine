@@ -113,7 +113,9 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
                     $timeSlot->start = clone $lastSlot->end;
                     if ($timeSlot->start->isLater($timeSlot->end)) {
                         throw new Tinebase_Exception_BL(
-                            'Timesheets must not overlap (start later than end)!' . $infoString);
+                            'Timesheets must not overlap (start later than end)!'
+                                . ' start: ' . $timeSlot->start->format('Y-m-d H:i')
+                                . ' end: ' . $timeSlot->end->format('Y-m-d H:i'));
                     }
                 }
             }
