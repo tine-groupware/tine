@@ -221,6 +221,12 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         store.on('update', resort);
                                         resort();
 
+                                        store.on('load', function () {
+                                            (function () {
+                                                grid.findParentByType('window')?.doLayout(true);
+                                            }).defer(10);
+                                        });
+
                                         const cm = grid.getColumnModel();
                                         const colIndex = cm.findColumnIndex('name_option');
                                         if (colIndex !== -1) {
