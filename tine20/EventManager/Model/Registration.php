@@ -8,8 +8,8 @@ declare(strict_types=1);
  * @package     EventManager
  * @subpackage  Model
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (https://www.metaways.de)
- * @author      Paul Mehrer <p.mehrer@metaways.de> Tonia Wulff <t.leuschel@metaways.de>
+ * @copyright   Copyright (c) 2020-2026 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Paul Mehrer <p.mehrer@metaways.de> Tonia Wulff <t.wulff@metaways.de>
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -34,7 +34,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
     public const FLD_REASON_WAITING = 'reason_waiting_list';
     public const FLD_BOOKED_OPTIONS = 'booked_options';
     public const FLD_DESCRIPTION = 'description';
-
+    public const FLD_REGISTRATION_DATE = 'registration_date';
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
@@ -198,6 +198,14 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_TEXT,
                 self::LENGTH                => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_MEDIUMTEXT,
                 self::NULLABLE              => true,
+                self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
+            ],
+            self::FLD_REGISTRATION_DATE => [
+                self::TYPE                  => self::TYPE_DATE,
+                self::LABEL                 => 'Registration date',
+                // _('Registration date')
+                self::NULLABLE              => true,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
             ],
         ]

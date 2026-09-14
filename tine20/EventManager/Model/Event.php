@@ -306,6 +306,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                         EventManager_Model_Registration::FLD_SOURCE,
                         EventManager_Model_Registration::FLD_BOOKED_OPTIONS,
                         EventManager_Model_Registration::FLD_DESCRIPTION,
+                        EventManager_Model_Registration::FLD_REGISTRATION_DATE,
                     ],
                 ],
                 self::CONFIG                => [

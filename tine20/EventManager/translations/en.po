@@ -867,6 +867,9 @@ msgstr "Reason waiting list"
 msgid "Booked options"
 msgstr "Booked options"
 
+msgid "Registration date"
+msgstr "Registration date"
+
 msgid "GENDER_Selection"
 msgstr "GENDER_Selection"
 
