@@ -291,6 +291,31 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 columnWidth: 1,
                                 listeners: {
                                     scope: this,
+                                    render: function (combo) {
+                                        combo.store.filter = function (field, value) {
+                                            value = Ext.isEmpty(value) ? '' : String(value).toLowerCase();
+
+                                            this.clearFilter(true);
+                                            if (value) {
+                                                this.filterBy(function (record) {
+                                                    const given  = (record.get('n_given')  || '').toLowerCase();
+                                                    const family = (record.get('n_family') || '').toLowerCase();
+                                                    const fileas = (record.get('n_fileas') || '').toLowerCase();
+                                                    return given.indexOf(value) !== -1
+                                                        || family.indexOf(value) !== -1
+                                                        || fileas.indexOf(value) !== -1;
+                                                });
+                                            }
+                                        };
+
+                                        const originalDoQuery = combo.doQuery;
+                                        combo.doQuery = function (q, forceAll) {
+                                            if (Ext.isEmpty(q)) {
+                                                forceAll = true;
+                                            }
+                                            originalDoQuery.call(this, q, forceAll);
+                                        };
+                                    },
                                     select: function (combo, record) {
                                         const grid = this.form.findField('registrations');
                                         const idx = grid.store.findBy(function (r) {
@@ -378,6 +403,32 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                                 });
                                             }
                                         });
+
+                                        const originalSort = grid.store.sort;
+                                        grid.store.sort = function (fieldName, dir) {
+                                            if (fieldName !== 'participant') {
+                                                return originalSort.call(this, fieldName, dir);
+                                            }
+
+                                            dir = dir || (
+                                                this.sortInfo && this.sortInfo.field === fieldName && this.sortInfo.direction === 'ASC'
+                                                    ? 'DESC' : 'ASC'
+                                            );
+                                            this.sortInfo = { field: fieldName, direction: dir };
+
+                                            const getKey = (record) => {
+                                                const participant = record.get ? record.get('participant') : record.data?.participant;
+                                                return (_.get(participant, 'n_fileas') || _.get(participant, 'n_family') || '').toLowerCase();
+                                            };
+
+                                            this.data.sort(dir, function (a, b) {
+                                                const ak = getKey(a);
+                                                const bk = getKey(b);
+                                                return ak > bk ? 1 : (ak < bk ? -1 : 0);
+                                            });
+
+                                            this.fireEvent('datachanged', this);
+                                        };
 
                                         const syncParticipantStore = () => {
                                             const participants = grid.store.getRange()
