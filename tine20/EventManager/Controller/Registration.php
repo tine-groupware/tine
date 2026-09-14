@@ -270,6 +270,11 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
      */
     public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
+        $registrationDate = $_record->{EventManager_Model_Registration::FLD_REGISTRATION_DATE};
+        if (empty($registrationDate)) {
+            $_record->{EventManager_Model_Registration::FLD_REGISTRATION_DATE} = Tinebase_DateTime::now();
+        }
+
         try {
             $participantOriginalId = $_record->participant->original_id;
             $registrantOriginalId = $_record->registrant->original_id;
@@ -950,6 +955,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 'booked_options' => $booked_options,
                 'description' => '',
                 'has_registrant' => $has_registrant,
+                'registration_date' => Tinebase_DateTime::now(),
             ], true);
             $registration = $this->create($registration);
         }

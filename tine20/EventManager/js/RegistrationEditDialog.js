@@ -19,6 +19,9 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
     },
 
     onBeforeRender: function () {
+        if (this.record.data.registration_date === '') {
+            this.record.set('registration_date', new Date());
+        }
         this.setSelectionConfigClassListener();
         this.showReasonWaitingList();
     },

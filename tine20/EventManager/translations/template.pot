@@ -867,6 +867,9 @@ msgstr ""
 msgid "Booked options"
 msgstr ""
 
+msgid "Registration date"
+msgstr ""
+
 msgid "GENDER_Selection"
 msgstr ""
 
