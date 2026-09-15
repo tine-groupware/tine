@@ -223,7 +223,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 $method = strtoupper((string) $this->_request->getMethod());
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType . ' requestMethod: ' . $method);
 
-                if ($contentType && (str_starts_with($contentType, 'text/') || str_ends_with($contentType, '/xml'))) {
+                if ($contentType && (str_starts_with($contentType, 'text') || str_starts_with($contentType, 'application/xml'))) {
                     $content = stream_get_contents($this->_body, 10 * 1024 * 1024);
                     rewind($this->_body);
 
