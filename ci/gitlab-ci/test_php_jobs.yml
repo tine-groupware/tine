@@ -467,13 +467,39 @@ php-unit-update-tests:
     - if: $PHP_UNIT_UPDATE_TESTS == "false"
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-update-tests/
-    # update test should only be stated on the ls branch
+    # update test should only be stated on the lts branch
     - if: $CI_COMMIT_BRANCH != $TINE_VERSION_LTS
       when: never
     - if: $PHP_UNIT_UPDATE_TESTS == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_UPDATE_TESTS_MERGE_REQUEST == "true"
+    - if: $PIPELINE_TYPE =~ /update-tests/
+
+
+php-unit-update-tests-merge-request:
+  extends: .php-unit-update-tests
+  script:
+    - !reference [.lib, script]
+    - |
+      git fetch --unshallow || true
+      cd tine20
+    - |
+      log "installing ${CI_MERGE_REQUEST_DIFF_BASE_SHA}"
+      git checkout ${CI_MERGE_REQUEST_DIFF_BASE_SHA}
+      test_composer_install
+      log install
+      tine20_install
+    - |
+      log "updating to ${CI_COMMIT_SHA}"
+      git checkout ${CI_COMMIT_SHA}
+      git describe
+      test_composer_install
+      log update
+      su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
+  rules:
+    - if: $PHP_UNIT_UPDATE_TESTS_MERGE_REQUEST == "false"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-update-tests-merge-request/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_UPDATE_TESTS_MERGE_REQUEST != "false"
       changes:
         paths:
-          - "**/*.php"
-          - "tine20/composer.*"
-    - if: $PIPELINE_TYPE =~ /update-tests/
+          - "tine20/*/Model/**/*"
+          - "tine20/*/Setup/Update/**/*"
