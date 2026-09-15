@@ -1,12 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
+ *
  * @package     Admin
  * @subpackage  Frontend
- * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (https://www.metaways.de)
- * 
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -1054,7 +1054,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * usage: Admin.removeObsoleteAccounts [-v] [-d]
+     * usage: Admin.removeObsoleteAccounts [-v] [-d] [-- group=GROUPNAME]
      *
      * finds and removes obsolete accounts
      *      - no timesheets
@@ -1063,16 +1063,33 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @param Zend_Console_Getopt $opts
      * @return int
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AreaLocked
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_Confirmation
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_NotDefined
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
     public function removeObsoleteAccounts(Zend_Console_Getopt $opts): int
     {
-        // TODO use RAII
-        if (Tinebase_Application::getInstance()->isInstalled(Timetracker_Config::APP_NAME)) {
-            Timetracker_Controller_Timesheet::getInstance()->doContainerACLChecks(false);
+        $args = $this->_parseArgs($opts);
+        $groupId = null;
+        if (isset($args['group']) && $args['group']) {
+            $group = Tinebase_Group::getInstance()->getGroupByName($args['group']);
+            $groupId = $group->getId();
+            if ($opts->v) {
+                echo "Filtering by group: {$args['group']} (ID: $groupId)\n";
+            }
         }
-        if (Tinebase_Application::getInstance()->isInstalled(HumanResources_Config::APP_NAME)) {
-            HumanResources_Controller_Employee::getInstance()->doContainerACLChecks(false);
-        }
+
+        $oldTSAcl = Timetracker_Controller_Timesheet::getInstance()->doContainerACLChecks(false);
+        $oldEmployeeAcl = HumanResources_Controller_Employee::getInstance()->doContainerACLChecks(false);
+        $raii = new Tinebase_RAII(function () use ($oldTSAcl, $oldEmployeeAcl) {
+            Timetracker_Controller_Timesheet::getInstance()->doContainerACLChecks($oldTSAcl);
+            HumanResources_Controller_Employee::getInstance()->doContainerACLChecks($oldEmployeeAcl);
+        });
 
         $obsoleteUsers = new Tinebase_Record_RecordSet(Tinebase_Model_FullUser::class);
         foreach (Tinebase_User::getInstance()->getUsersIds() as $userId) {
@@ -1085,6 +1102,16 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     echo "  Skipping system user\n";
                 }
                 continue;
+            }
+
+            if ($groupId !== null) {
+                $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($user);
+                if (!in_array($groupId, $groupMemberships)) {
+                    if ($opts->v) {
+                        echo "  User is not a member of group '{$args['group']}', skipping\n";
+                    }
+                    continue;
+                }
             }
 
             if (Tinebase_Application::getInstance()->isInstalled(HumanResources_Config::APP_NAME)) {
@@ -1114,13 +1141,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             // TODO check last login?
         }
 
-        // TODO use RAII
-        if (Tinebase_Application::getInstance()->isInstalled(Timetracker_Config::APP_NAME)) {
-            Timetracker_Controller_Timesheet::getInstance()->doContainerACLChecks(true);
-        }
-        if (Tinebase_Application::getInstance()->isInstalled(HumanResources_Config::APP_NAME)) {
-            HumanResources_Controller_Employee::getInstance()->doContainerACLChecks(true);
-        }
+        unset($raii);
 
         if (count($obsoleteUsers) > 0) {
             if ($opts->v) {
