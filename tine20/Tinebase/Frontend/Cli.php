@@ -1314,7 +1314,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         . ';lastDurationUpdate=' . ($now - $lastDurationUpdate) . ';';
                 } catch (Exception $e) {
                     $message = 'QUEUE FAIL: ' . $e::class . ' - ' . $e->getMessage();
-                    $message .= ' - https://tine-docu.s3web.rz1.metaways.net/operators/howto/tine20AdminQueue/';
+                    $message .= ' - https://docs.tine-groupware.de/be/operators/howto/tine20AdminQueue.html';
                     $result = 2;
                 }
 
