@@ -1,12 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     Felamimail
  * @subpackage  Controller
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl-3.0.html
+ * @copyright   Copyright (c) 2011-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use PHPMailer\DKIMValidator\Validator;
@@ -388,24 +388,68 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      * set custom flag by parsing message DKIM
      *
      * @param Felamimail_Model_Message|array $_message
+     * @param array $headers
      */
-    public function setSenderFlag(Felamimail_Model_Message|array &$_message, $headers)
+    public function setSenderFlag(Felamimail_Model_Message|array &$_message, array $headers)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' setting sender flag...');
+                . ' Setting sender flag...');
         }
 
-        $flag = null;
+        $flag = $this->_getDkimSenderFlag($_message, $headers);
 
+        if (!$flag) {
+            $flag = $this->_getDefaultSenderFlag($headers);
+        }
+
+        $flags = isset($_message['flags']) ? $_message['flags']: [];
+
+        if ($flag && is_array($flags) && ! in_array($flag, $flags)) {
+            if (isset($_message['id'])) {
+                $this->addFlags($_message['id'], $flag);
+            }
+            $flags[] = $flag;
+            self::$_allowedFlags[$flag] = $flag;
+            $_message['flags'] = $flags;
+        }
+    }
+
+    protected function _getDefaultSenderFlag(array $headers): ?string
+    {
         if (isset($headers['user-agent'])) {
             $title = Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE};
             foreach((array) $headers['user-agent'] as $userAgent) {
-                if (strpos($userAgent, $title) !== false && strpos($userAgent, "tine") !== false) {
-                    $flag = 'Tine20';
+                if (str_contains($userAgent, $title) && str_contains($userAgent, "tine")) {
+                    return 'Tine20';
                 }
             }
         }
+
+        return null;
+    }
+
+    /**
+     * result is cached if != null
+     *
+     * @param Felamimail_Model_Message|array $_message
+     * @param array $headers
+     * @return string|null
+     */
+    protected function _getDkimSenderFlag(Felamimail_Model_Message|array $_message, array $headers): ?string
+    {
+        $messageId = isset($_message['message_id']) ? $_message['message_id'] : $_message['id'];
+        $cache = Tinebase_Core::getCache();
+        $cacheId = Tinebase_Helper::convertCacheId('_getDkimSenderFlag' . $_message['account_id'] . '_'
+            . $messageId);
+        if ($cache->test($cacheId)) {
+            $cachedFlag = $cache->load($cacheId);
+            if ($cachedFlag !== null) {
+                return $cachedFlag;
+            }
+        }
+
+        $flag = null;
 
         try {
             $mailAsString = $this->getMessageRawContent($_message);
@@ -436,27 +480,29 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         } catch (Throwable $t) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                    . ' exception: ' . $t->getMessage());
+                    . ' ' . $t->getMessage());
             }
         }
 
-        if (isset($headers['dkim-signature'])) {
-            $flag = $this->_getDkimFlag((array) $headers['dkim-signature']);
+        if (!$flag && isset($headers['dkim-signature'])) {
+            $flag = $this->_getDkimFlagFromSignature((array) $headers['dkim-signature']);
         }
 
-        $flags = isset($_message['flags']) ? $_message['flags']: array();
-
-        if ($flag && is_array($flags) && ! in_array($flag, $flags)) {
-            if (isset($_message['id'])) {
-                $this->addFlags($_message['id'], $flag);
+        if ($flag !== null) {
+            try {
+                $cache->save($flag, $cacheId, ['dkim'], specificLifetime: 3600);
+            } catch (Zend_Cache_Exception $zce) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' ' . $zce->getMessage());
+                }
             }
-            $flags[] = $flag;
-            self::$_allowedFlags[$flag] = $flag;
-            $_message['flags'] = $flags;
         }
+
+        return $flag;
     }
 
-    protected function _getDkimFlag(array $dkimHeaders): ?string
+    protected function _getDkimFlagFromSignature(array $dkimHeaders): ?string
     {
         $result = null;
         foreach ($dkimHeaders as $dkimHeader) {
