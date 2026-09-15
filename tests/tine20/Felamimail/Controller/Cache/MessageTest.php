@@ -133,6 +133,8 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         if ($this->_instances !== NULL) {
             Tinebase_Controller_Instance::getInstance()->delete($this->_instances);
         }
+
+        Tinebase_Core::getCache()->clean('matchingTag', tags: ['dkim']);
     }
     
     /**
@@ -618,7 +620,6 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         $this->_testNeedsTransaction();
         $this->_customInstanceFlagsHelper();
 
-        $inbox = $this->_emailTestClass->getFolder('INBOX');
         $message = $this->_emailTestClass->messageTestHelper('test_dkim.eml');
         $filter = array(array(
             'field' => 'messageuid', 'operator' => 'in', 'value' => array($message->messageuid)
