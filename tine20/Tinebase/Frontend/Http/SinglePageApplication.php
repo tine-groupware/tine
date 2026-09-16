@@ -144,7 +144,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
 //        $header['Content-Security-Policy'] = "default-src 'self' 'unsafe-inline'; script-src $scriptSrc; frame-ancestors $frameAncestors";
 
         // set Strict-Transport-Security; used only when served over HTTPS
-        $headers['Strict-Transport-Security'] = 'max-age=16070400';
+        $header['Strict-Transport-Security'] = 'max-age=16070400';
 
         // cache mainscreen for one day in production
         $maxAge = ! defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE != 'DEVELOPMENT' ? 86400 : -10000;
