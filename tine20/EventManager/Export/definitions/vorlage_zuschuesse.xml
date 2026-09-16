@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>EventManager_Model_Event</model>
+    <name>Zuschüsse</name>
+    <type>export</type>
+    <favorite>true</favorite>
+    <order>300</order>
+    <scope>multi</scope>
+    <plugin>EventManager_Export_Document</plugin>
+    <template>tine20:///Tinebase/folders/shared/export/templates/EventManager/vorlage_zuschuesse.docx</template>
+    <label>Zuschüsse</label>
+    <description>Export für Zuschüsse</description>
+    <exportFilename>Vorlage_Zuschuesse.docx</exportFilename>
+</config>
