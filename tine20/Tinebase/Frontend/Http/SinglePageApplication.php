@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     Tinebase
- * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @license     https://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2018-2026 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 class Tinebase_Frontend_Http_SinglePageApplication {
 
@@ -96,8 +96,11 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         /** @var \Psr\Http\Message\ServerRequestInterface $request */
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
         $requestPath = $request->getUri()->getPath();
+        $requestPath = preg_replace('/(?:setup|index)\.php/i', '', $requestPath);
         $requestPath = rtrim($requestPath, '/');
+
         $depth = substr_count(preg_replace('/^\//', '', $requestPath), '/');
+
         if ($depth > 0) {
             $result = str_repeat('../', $depth);
         }
@@ -111,6 +114,15 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         if ($result) {
             // finally remove duplicate slashes
             $result = str_replace('//', '/', $result);
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__
+                . ' requestPath: ' . $requestPath
+                . ' | depth: ' . $depth
+                . ' | result: ' . $result
+            );
         }
 
         return $result;
