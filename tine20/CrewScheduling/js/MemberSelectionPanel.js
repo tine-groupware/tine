@@ -143,7 +143,7 @@ Tine.CrewScheduling.MemberSelectionPanel = Ext.extend(Ext.Panel, {
         regExp = new RegExp(search,'gi');
 
         this.store.filterBy(function(member) {
-            return !! _.get(member, 'data.user_id.n_fileas', '').match(regExp) &&
+            return !! member.getTitle().match(regExp) &&
                 (filterCells.length ?
                     _.get(member, 'data.user_id.possibleUsages', []).containsAny(filterCells) :
                     true);

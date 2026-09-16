@@ -28,6 +28,7 @@ import PollGridDialog from './Poll/GridDialog';
 import './Poll/SchedulingRoleField';
 import {getRoleTypesKey} from "./Model/eventRoleConfig";
 import EventFilterDialog from "./EventFilterDialog";
+import Attendee from "Calendar/Model/Attendee";
 
 require('./MemberSelectionPanel');
 require('./EventMembersGrid');
@@ -194,7 +195,10 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                     csTokenId = sourceEl ? Ext.fly(sourceEl).getAttribute('tine-cs-token-id') : null,
                     [cal_event_id, user_type, user_id, role] = csTokenId ? csTokenId.split(';') : [],
                     dragRecord = user_id ? me.memberSelectionPanel.store.getById(`${user_type}-${user_id}`) : null,
-                    partners = me.memberSelectionPanel.getPartners(dragRecord),
+                    partnerIds = _.map(_.get(dragRecord, 'data.user_id.partners', []), 'id'),
+                    partners = _.filter(v.store.data.items, function(member) {
+                        return _.indexOf(partnerIds, Attendee.getRecord(member).getUserId()) >= 0;
+                    }),
                     isPartnerSelect = !! e.getTarget('.cs-partners'),
                     eventMemberTokenIds = cal_event_id ? _.compact(_.uniq(_.concat(me.membersGrid.selectedTokens, csTokenId))) : [],
                     selected = eventMemberTokenIds.length ? _.compact(eventMemberTokenIds.map(memberTokenId => {
@@ -214,7 +218,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                 return selected.length ? {
                     ddel: ddEl,
                     sourceEl,
-                    repairXY: Ext.fly(sourceEl)?.getXY(),
+                    repairXY: Ext.fly(sourceEl).getXY(),
                     sourceStore: v.store,
                     selected,
                     eventMemberTokenIds
@@ -234,14 +238,8 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             }
         });
 
-        this.on('dragStart', (p, data) => {
-            this.membersGrid.maskDropCells(data.selected);
-        });
-        this.memberSelectionPanel.on('selectionchange', (v, selIds) => {
-            selIds.length ?
-                this.membersGrid.maskDropCells(v.getSelectedRecords()) :
-                this.membersGrid.unmaskDropCells();
-        })
+        this.on('dragStart', this.membersGrid.onDragStart, this.membersGrid);
+        this.on('dragEnd', this.membersGrid.onDragEnd, this.membersGrid);
 
     },
 
@@ -485,7 +483,8 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                 const cellId = `${event.id}:${roleId}`
                 const selected = cellIds.indexOf(cellId) >= 0
                 const possibleAttendee = _.reduce(this.csMembersStore.data.items, (a, member) => {
-                    return a.concat(member.data.user_id.possibleUsages.indexOf(cellId) >=0 && !_.find(currentAttendee, { user_id: { id: member.data.user_id.id } }) ? member : [])
+                    const memberId = Attendee.getRecord(member).getUserId();
+                    return a.concat(member.data.user_id.possibleUsages.indexOf(cellId) >=0 && !_.find(currentAttendee, a => Attendee.getRecord(a).getUserId() === memberId) ? member : [])
                 }, [])
 
                 const fillingProbability = _.reduce(possibleAttendee, (a, member) => {
@@ -852,6 +851,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                 // map: member -> csRoles, days, favorites
                 await async.forEach(this.csMembersStore.data.items, async (attendee) => {
                     const member = attendee.get('user_id');
+                    const memberId = attendee.getUserId();
 
                     member.count = _.get(memberCounts, 'user/' + member.id, 0);
 
@@ -865,7 +865,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                     member.roles = _.reduce(this.csRolesStore.data.items, (accu, role) => {
                         // NOTE: member is capable if he's capable for one of the types
                         _.forEach(capableContactsMaps[role.id], (capableMembers, typeId) => {
-                            if (capableMembers.indexOf(member.id) >= 0) {
+                            if (capableMembers.indexOf(memberId) >= 0) {
                                 accu.push(role);
                                 return false;
                             }
@@ -983,7 +983,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
 
             await async.forEach(event.get('attendee'), async (attendeeData) => {
                 // NOTE: we need to work with the members from memberStore to have the computed stuff
-                const compoundId = `${attendeeData.user_type}-${attendeeData.user_id.id}`
+                const compoundId = `${attendeeData.user_type}-${Attendee.getRecord(attendeeData).getUserId()}`
                 const attendee = this.csMembersStore.getById(compoundId)
                 if (! attendee) return;
 

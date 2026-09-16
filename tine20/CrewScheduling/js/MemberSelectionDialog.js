@@ -5,6 +5,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import Attendee from "Calendar/Model/Attendee";
+
 Ext.ns('Tine.CrewScheduling');
 
 require('./MemberToken');
@@ -58,7 +60,7 @@ Tine.CrewScheduling.MemberSelectionDialog = Ext.extend(Ext.Panel, {
             attendee = event.get('attendee'),
             role = mainScreen.csRolesStore.getById(roleId),
             roleAttendee = _.map(_.filter(attendee, {role: role.get('key')}), function(attendee) {
-                return _.get(mainScreen.memberSelectionPanel.store.getById('user-' + attendee.user_id.id), 'data') || attendee;
+                return _.get(mainScreen.memberSelectionPanel.store.getById('user-' + Attendee.getRecord(attendee).getUserId()), 'data') || attendee;
             }),
             asHelper = Tine.Calendar.Model.Attender.getAttendeeStore,
             roleAttendeeSignatures = _.map(roleAttendee, asHelper.getSignature),
@@ -123,7 +125,7 @@ Tine.CrewScheduling.MemberSelectionDialog = Ext.extend(Ext.Panel, {
 
         if (action == 'add') {
             current = _.find(this.possibleAttendee, function(attendee) {
-                return _.get(attendee, 'user_id.id') == userId;
+                return Attendee.getRecord(attendee).getUserId() === userId;
             });
 
             _.set(current, 'user_id.count', _.get(current, 'user_id.count', 0) + 1);
@@ -131,7 +133,7 @@ Tine.CrewScheduling.MemberSelectionDialog = Ext.extend(Ext.Panel, {
             this.roleAttendee.push(current);
         } else {
             current = _.find(this.roleAttendee, function(attendee) {
-                return _.get(attendee, 'user_id.id') == userId;
+                return Attendee.getRecord(attendee).getUserId() === userId;
             });
 
             _.set(current, 'user_id.count', _.get(current, 'user_id.count', 0) - 1);
@@ -160,7 +162,7 @@ Tine.CrewScheduling.MemberSelectionDialog = Ext.extend(Ext.Panel, {
 
         mainScreen.membersGrid.removeMembers(toRemove);
         mainScreen.membersGrid.addMembersToCell(cellId, _.map(toAdd, function(attendee) {
-            return mainScreen.memberSelectionPanel.store.getById('user-' + attendee.user_id.id);
+            return mainScreen.memberSelectionPanel.store.getById('user-' + Attendee.getRecord(attendee).getUserId());
         }));
 
         this.fireEvent('apply', this);

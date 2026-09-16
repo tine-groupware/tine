@@ -44,7 +44,7 @@ const plugin = {
                 if (r.id && String(r.id).match(/^new-/)) return '';
                 return new HTMLProxy(new Promise(async (resolve) => {
                     Promise.all(_.map(v, async (attendeeRole) => {
-                        _.set(r, 'data.user_id.pollReplies', _.get(await pollReplyMap, r.data.user_id.id, {}))
+                        _.set(r, 'data.user_id.pollReplies', _.get(await pollReplyMap, r.getUserId(), {}))
                         const baseValidation = await attendeeValidation.validateBasics(r, gridPanel.record, attendeeRole);
                         const validationResult = attendeeValidation.mergeValidation(baseValidation, await attendeeValidation.validateEventRoleConfigCapability(r, gridPanel.record, attendeeRole));
                         const title = await Tine.Tinebase.data.Record.setFromJson(attendeeRole.role, 'CrewScheduling.SchedulingRole').getTitle().asString();
@@ -141,7 +141,7 @@ const plugin = {
                         const role = _.get(o.record.get('crewscheduling_roles'), idx)
 
                         Promise.resolve().then(async () => {
-                            _.set(o.record, 'data.user_id.pollReplies', _.get(await pollReplyMap, o.record.data.user_id.id, {}))
+                            _.set(o.record, 'data.user_id.pollReplies', _.get(await pollReplyMap, o.record.getUserId(), {}))
                             const validationResult = await attendeeValidation.validateBasics(o.record, gridPanel.record, role);
                             attendeeValidation.mergeValidation(validationResult, await attendeeValidation.validateEventRoleConfigCapability(o.record, gridPanel.record, role));
                             Ext.Msg.show({
@@ -190,7 +190,7 @@ const plugin = {
                 const event = gridPanel.record
                 const attendee = o.record // attendee _not_ member from csMemberStore!
                 let options = await async.reduce( await eRC.getFromEvent(event), [], async (memo, eventRoleConfig) => {
-                    _.set(attendee, 'data.user_id.pollReplies', _.get(await pollReplyMap, attendee.data.user_id.id, {}))
+                    _.set(attendee, 'data.user_id.pollReplies', _.get(await pollReplyMap, attendee.getUserId(), {}))
                     const baseValidation = await attendeeValidation.validateBasics(attendee, event, eventRoleConfig)
                     return memo.concat(baseValidation.isValid && (await attendeeValidation.validateEventRoleConfigCapability(attendee, event, eventRoleConfig)).isValid ? {
                         eventId: event.id, eventRoleConfig,

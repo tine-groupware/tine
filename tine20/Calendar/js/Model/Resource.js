@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import { get, assign, set } from 'lodash';
 import Record from 'data/Record'
 
 /**
@@ -47,9 +48,8 @@ const Resource = Record.create(Record.genericFields.concat([
 
     initData: function() {
         if (Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources')) {
-            const account_grants = _.get(this, this.grantsPath, {});
-
-            _.assign(account_grants, {
+            const account_grants =get(this, this.grantsPath, {});
+            assign(account_grants, {
                 'resourceInviteGrant': true,
                 'resourceReadGrant': true,
                 'resourceEditGrant': true,
@@ -57,7 +57,7 @@ const Resource = Record.create(Record.genericFields.concat([
                 'resourceSyncGrant': true,
                 'resourceAdminGrant': true
             });
-            _.set(this, this.grantsPath, account_grants);
+            set(this, this.grantsPath, account_grants);
         }
     }
 });
