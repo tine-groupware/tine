@@ -1,12 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Calendar
  * @subpackage  Controller
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2010-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -339,6 +339,19 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
 
         $this->_fromiTIP($_event, new Calendar_Model_Event(array(), TRUE));
+        
+        // Handle missing dtstart/dtend from ActiveSync clients
+        if (!$_event->dtstart && !$_event->dtend) {
+            throw new Tinebase_Exception_Record_Validation('dtstart and dtend are required for event creation');
+        }
+        
+        if (!$_event->dtend && $_event->dtstart) {
+            $_event->dtend = $_event->dtstart->getClone()->addHour(1);
+        }
+        
+        if (!$_event->dtstart && $_event->dtend) {
+            $_event->dtstart = $_event->dtend->getClone()->subHour(1);
+        }
         
         $exceptions = $_event->exdate;
         $_event->exdate = NULL;
