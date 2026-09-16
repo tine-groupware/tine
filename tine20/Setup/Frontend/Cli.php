@@ -786,11 +786,9 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         echo 'Version: "' . TINE20_CODENAME . '" ' . TINE20_PACKAGESTRING . ' (Build: ' . TINE20_BUILDTYPE . ")\n";
-        if (Tinebase_Core::inMaintenanceModeAll()) {
-            echo 'Maintenance Mode : ALL' . PHP_EOL;
-        } elseif (Tinebase_Core::inMaintenanceMode()) {
-            echo 'Maintenance Mode : ON' . PHP_EOL;
-        }
+
+        $this->_echoMaintenanceModeInfo();
+
         echo "Currently installed applications:\n";
         $applications->sort('name');
         foreach ($applications as $application) {
@@ -810,6 +808,25 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return 0;
     }
 
+    protected function _echoMaintenanceModeInfo(): void
+    {
+        if (Tinebase_Core::inMaintenanceModeAll()) {
+            echo 'Maintenance mode: ALL' . PHP_EOL;
+        } elseif (Tinebase_Core::inMaintenanceMode()) {
+            echo 'Maintenance mode: ON' . PHP_EOL;
+        }
+        foreach ([
+            Tinebase_Config::MAINTENANCE_MODE_FLAG_SKIP_APPS,
+            Tinebase_Config::MAINTENANCE_MODE_FLAG_ONLY_APPS,
+            Tinebase_Config::MAINTENANCE_MODE_FLAG_ALLOW_ADMIN_LOGIN,
+            Tinebase_Config::MAINTENANCE_MODE_FLAG_ALLOW_SSO_PAM,
+        ] as $flag) {
+            if (Tinebase_Controller::hasMaintenanceModeFlag($flag)) {
+                echo 'Maintenance mode flag active: ' . $flag . PHP_EOL;
+            }
+        }
+    }
+
     /**
      * import accounts from ldap
      *
@@ -817,7 +834,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     protected function _importAccounts(Zend_Console_Getopt $_opts)
     {
-        // disable timelimit during import of user accounts
+        // disable time limit during import of user accounts
         Setup_Core::setExecutionLifeTime(0);
 
         // import groups
