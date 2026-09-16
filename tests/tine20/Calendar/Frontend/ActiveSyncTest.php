@@ -1,10 +1,10 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Calendar
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2010-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -1745,5 +1745,73 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
     public function testConcurrentUpdateMeetingResponse()
     {
         $this->testConcurrentUpdateV2(true);
+    }
+
+    /**
+     * Test creating an event without an end date (EndTime element missing from XML).
+     * This simulates what some ActiveSync clients send for events without a defined end.
+     */
+    public function testCreateEventWithoutEndTime(): void
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+
+        $now = Tinebase_DateTime::now();
+        $thisYear = $now->format('Y');
+        $xmlString = '<?xml version="1.0" encoding="utf-8"?>
+        <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+        <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Calendar="uri:Calendar">
+            <Collections>
+                <Collection>
+                    <Class>Calendar</Class>
+                    <SyncKey>1</SyncKey>
+                    <CollectionId>calendar-root</CollectionId>
+                    <DeletesAsMoves/>
+                    <GetChanges/>
+                    <WindowSize>50</WindowSize>
+                    <Options>
+                        <FilterType>4</FilterType>
+                        <AirSyncBase:BodyPreference>
+                            <AirSyncBase:Type>1</AirSyncBase:Type>
+                        </AirSyncBase:BodyPreference>
+                    </Options>
+                    <Commands>
+                        <Add>
+                            <ClientId>1073741901</ClientId>
+                            <ApplicationData>
+                                <Calendar:Timezone>xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Calendar:Timezone>
+                                <Calendar:AllDayEvent>0</Calendar:AllDayEvent>
+                                <Calendar:BusyStatus>2</Calendar:BusyStatus>
+                                <Calendar:DtStamp>' . $now->format('Ymd\THis\Z') . '</Calendar:DtStamp>
+                                <Calendar:Subject>No End Time Event</Calendar:Subject>
+                                <Calendar:MeetingStatus>0</Calendar:MeetingStatus>
+                                <Calendar:OrganizerName>' . Tinebase_Core::getUser()->accountDisplayName . '</Calendar:OrganizerName>
+                                <Calendar:OrganizerEmail>' . Tinebase_Core::getUser()->accountEmailAddress . '</Calendar:OrganizerEmail>
+                                <Calendar:BusyStatus>2</Calendar:BusyStatus>
+                                <Calendar:StartTime>' . $now->format('Ymd') . 'T090000Z</Calendar:StartTime>
+                                <Calendar:UID>' . Tinebase_Record_Abstract::generateUID() . '</Calendar:UID>
+                                <Calendar:Sensitivity>0</Calendar:Sensitivity>
+                                <Body xmlns="uri:AirSyncBase">
+                                    <Type>1</Type>
+                                    <Data>Event without end time</Data>
+                                </Body>
+                            </ApplicationData>
+                        </Add>
+                    </Commands>
+                </Collection>
+            </Collections>
+        </Sync>';
+
+        $xml = new SimpleXMLElement($xmlString);
+        $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Add[0]->ApplicationData);
+
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+
+        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+
+        $this->assertEquals('No End Time Event', $syncrotonEvent->subject);
+        $this->assertTrue($syncrotonEvent->startTime instanceof DateTime);
+        $this->assertTrue($syncrotonEvent->endTime instanceof DateTime, 'Event without EndTime should have a valid end time');
     }
 }
