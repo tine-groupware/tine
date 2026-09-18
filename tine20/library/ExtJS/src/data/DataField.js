@@ -5,7 +5,7 @@
  * http://www.extjs.com/license
  */
 
-const { apply, isDate, isNumber } = require("Ext/core/core/Ext");
+const { apply, isDate, isNumber, isArray } = require("Ext/core/core/Ext");
 const SortTypes = require("Ext/data/SortTypes");
 const isObject = require("lodash/isObject");
 // const { parseDate } = require('Ext/util/Date');
@@ -111,13 +111,17 @@ const Field = function(config){
                     return parsed ? new Date(parsed) : null;
                 };
                 cv = function(v) {
-                    var d = c1(v);
-                    if (isDate(d)) {
-                        d.toJSON = function() {
-                            return this.format(config.dateFormat || 'Y-m-d H:i:s');
+                    const da = (isArray(v) ? v : [v]).reduce((a, s) => {
+                        var d = c1(s);
+                        if (isDate(d)) {
+                            d.toJSON = function() {
+                                return this.format(config.dateFormat || 'Y-m-d H:i:s');
+                            }
                         }
-                    }
-                    return d;
+                        return a.concat(d);
+
+                    }, []);
+                    return da.length === 1 ? da[0] : da;
                 };
                 break;
             default:
