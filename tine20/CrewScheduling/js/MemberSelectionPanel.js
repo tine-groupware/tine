@@ -75,7 +75,29 @@ Tine.CrewScheduling.MemberSelectionPanel = Ext.extend(Ext.Panel, {
         });
         this.items = [this.dataView];
 
+        this.relayEvents(this.dataView, ['selectionchange']);
+        this.dataView.on('beforeclick', (v, idx, n, e) => {
+            if (this.dataView.isSelected(n) && !e.getTarget('.cs-partners')) {
+                this.dataView.clearSelections();
+                return false;
+            }
+        });
+        this.dataView.on('click', (v, idx, n, e) => {
+            if (e.getTarget('.cs-partners')) {
+                _.each(this.getPartners(this.dataView.getRecord(n)), (partner) => {
+                    this.dataView.select(this.store.indexOf(partner), true);
+                });
+            }
+        });
+
         Tine.CrewScheduling.MemberSelectionPanel.superclass.initComponent.call(this);
+    },
+
+    getPartners(member) {
+        const partnerIds = _.map(_.get(member, 'data.user_id.partners', []), 'id');
+        return _.filter(this.store.data.items, function(candidate) {
+            return _.indexOf(partnerIds, _.get(candidate, 'data.user_id.id')) >= 0;
+        });
     },
 
     updateMemberCounts: function(memberCounts) {
@@ -133,6 +155,6 @@ Tine.CrewScheduling.MemberSelectionPanel = Ext.extend(Ext.Panel, {
     onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
         Tine.CrewScheduling.MemberSelectionPanel.superclass.onResize.apply(this, arguments);
 
-        this.filterField.setWidth(adjWidth-23);
+        this.filterField.setWidth(adjWidth-43);
     }
 });
