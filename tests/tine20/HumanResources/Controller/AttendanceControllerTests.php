@@ -517,7 +517,8 @@ class HumanResources_Controller_AttendanceControllerTests extends HumanResources
         $ts = $ts->getFirstRecord();
         $ts->notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Timetracker_Model_Timesheet::class, $ts->getId());
         $t = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME);
-        $localHour = (int)$dt->getClone()->setTimezone(Tinebase_Core::getUserTimezone())->format('H');
+        $scleverTimezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $this->_personas['sclever']->getId());
+        $localHour = (int)$dt->getClone()->setTimezone($scleverTimezone)->format('H');
         $this->assertSame(6, $ts->notes->count());
         $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock in: %1$s'), $localHour . ':03:10')));
         $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock pause: %1$s'), $localHour . ':03:11')));
