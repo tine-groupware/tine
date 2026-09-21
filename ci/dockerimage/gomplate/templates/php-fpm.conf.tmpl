@@ -5,7 +5,14 @@ error_log = /dev/stderr
 user = tine20
 group = tine20
 
+{{ if (ne (getenv "TINE20_PREFERSOCKETS" "") "") }}
+listen = /run/php-fpm.sock
+listen.owner = tine20
+listen.group = tine20
+listen.mode  = 0766
+{{ else }}
 listen = 127.0.0.1:9000
+{{ end }}
 
 ;listen.backlog = 511
 
