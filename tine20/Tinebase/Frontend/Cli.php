@@ -1414,11 +1414,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $message = 'LICENSE FAIL | status=' . $licenseStatus . ';;;;';
         } else {
             $maxUsersMessage = 'maxusers=' . Tinebase_License::getInstance()->getMaxUsers();
+            $activeUsersMessage = 'licenseusers=' . Tinebase_User::getInstance()->countNonSystemUsers();
             $remainingDays = Tinebase_License::getInstance()->getLicenseExpireEstimate();
             $remainingDaysMessage = 'remainingDays=' . $remainingDays;
             $features = Tinebase_License::getInstance()->getFeatures();
             $featuresMessage = $features ? 'features=' . implode(',', $features) : '';
-            $infos = $maxUsersMessage . ';' . $remainingDaysMessage . ';' . $featuresMessage . ';;';
+            $infos = $maxUsersMessage . ';' . $activeUsersMessage . ';' . $remainingDaysMessage . ';' . $featuresMessage . ';';
             if ($remainingDays < 7) {
                 $result = 1;
                 $message = 'LICENSE WARN: only a few days remaining | ' . $infos;

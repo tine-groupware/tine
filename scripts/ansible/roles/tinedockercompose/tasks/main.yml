@@ -1,7 +1,9 @@
 ---
 
-# TODO
-#- name: include role dockercomposeinstall
+- ansible.builtin.include_role:
+    name: dockercomposeinstall
+  tags:
+    - basesetup
 
 - name: Log into private registry
   docker_login:
@@ -12,6 +14,8 @@
     - tinedockercompose_registry_url is defined
     - tinedockercompose_registry_username is defined
     - tinedockercompose_registry_password is defined
+  tags:
+    - basesetup
 
 - name: Add the user tine20 with a specific uid and a primary group of tine20
   ansible.builtin.user:
@@ -21,11 +25,15 @@
   when:
     - tinedockercompose_addtineuser is defined
     - tinedockercompose_addtineuser|bool
+  tags:
+    - basesetup
 
 - name: check if db dir already exist
   stat:
     path: "{{ tinedockercompose_db_path }}"
   register: dbdir
+  tags:
+    - basesetup
 
 - name: create db directory
   file:
@@ -41,6 +49,8 @@
     - not dbdir.stat.exists
     - tinedockercompose_db_service|bool
     - tinedockercompose_createdirs|bool
+  tags:
+    - basesetup
 
 - name: create basic directories
   file:
@@ -55,6 +65,8 @@
   become: true
   when:
     - tinedockercompose_createdirs|bool
+  tags:
+    - basesetup
 
 - name: create basic tine directories (owned by tine20 user)
   file:
@@ -72,6 +84,8 @@
     - tinedockercompose_createdirs|bool
     - tinedockercompose_addtineuser is defined
     - tinedockercompose_addtineuser|bool
+  tags:
+    - basesetup
 
 - name: deploy docker-compose.yml
   template:
