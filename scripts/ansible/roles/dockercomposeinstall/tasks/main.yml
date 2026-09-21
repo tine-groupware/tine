@@ -9,15 +9,31 @@
     state: latest
     update_cache: true
 
-- name: Add Docker GPG apt Key
+- name: Add Docker GPG apt Key (Ubuntu)
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
+  when: ansible_facts["distribution"] == 'Ubuntu'
 
-- name: Add Docker Repository
+# FIXME https://peateasea.de/avoiding-ansible-apt-key-on-debian/
+#- name: Add Docker GPG apt Key (Debian)
+#  apt_key:
+#    url: https://download.docker.com/linux/debian/gpg
+#    state: present
+#  when: ansible_facts["distribution"] == 'Debian'
+
+- name: Add Docker Repository (Ubuntu)
   apt_repository:
-    repo: deb https://download.docker.com/linux/ubuntu jammy stable
+    repo: deb https://download.docker.com/linux/ubuntu resolute stable
     state: present
+  when: ansible_facts["distribution"] == 'Ubuntu'
+
+# FIXME Either apt-key or gpg binary is required, but neither could be found.The apt-key CLI has been deprecated and removed in modern Debian and derivatives, you might want to use "deb822_repository" instead.
+#- name: Add Docker Repository (Debian)
+#  apt_repository:
+#    repo: deb https://download.docker.com/linux/debian trixie stable
+#    state: present
+#  when: ansible_facts["distribution"] == 'Debian'
 
 - name: Update apt and install docker-ce
   apt:
@@ -27,5 +43,6 @@
       - containerd.io
       - docker-buildx-plugin
       - docker-compose-plugin
+      - python3-docker
     state: latest
     update_cache: true
