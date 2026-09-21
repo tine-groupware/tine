@@ -453,29 +453,40 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
 
         try {
             $mailAsString = $this->getMessageRawContent($_message);
-            $dkimValidator = new Validator($mailAsString);
+            $maxDkimMessageSize = 20 * 1024 * 1024;
+            $messageSize = strlen($mailAsString);
 
-            if ($dkimValidator->validateBoolean()) {
-                [, $domain] = explode('@', $_message->from_email, 2);
-                $trustedMailDomains = Tinebase_Controller_Instance::getInstance()->getTrustedMailDomains();
+            //todo: we should use a stream to replace the line breaks:
+            if ($messageSize > $maxDkimMessageSize) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Mail domains: ' . print_r($trustedMailDomains, true));
+                        . ' Skip DkimValidation for message larger than 20mb: ' . $messageSize);
                 }
+            } else {
+                $dkimValidator = new Validator($mailAsString);
 
-                foreach ($trustedMailDomains as $server => $data) {
-                    if (preg_match("/^$server$/", $domain)) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                . ' Found domain (looking for ' . $domain . '): ' . $server);
-                        }
-                        $flag = $data['id'];
+                if ($dkimValidator->validateBoolean()) {
+                    [, $domain] = explode('@', $_message->from_email, 2);
+                    $trustedMailDomains = Tinebase_Controller_Instance::getInstance()->getTrustedMailDomains();
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Mail domains: ' . print_r($trustedMailDomains, true));
                     }
+
+                    foreach ($trustedMailDomains as $server => $data) {
+                        if (preg_match("/^$server$/", $domain)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                    . ' Found domain (looking for ' . $domain . '): ' . $server);
+                            }
+                            $flag = $data['id'];
+                        }
+                    }
+                } else if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    $validationResult = $dkimValidator->validate();
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' DKIM validation failed: ' . print_r($validationResult, true));
                 }
-            } else if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                $validationResult = $dkimValidator->validate();
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' DKIM validation failed: ' . print_r($validationResult, true));
             }
         } catch (Throwable $t) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
