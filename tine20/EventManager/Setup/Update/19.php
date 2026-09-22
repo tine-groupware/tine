@@ -21,6 +21,7 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
     protected const RELEASE019_UPDATE005 = __CLASS__ . '::update005';
     protected const RELEASE019_UPDATE006 = __CLASS__ . '::update006';
     protected const RELEASE019_UPDATE007 = __CLASS__ . '::update007';
+    protected const RELEASE019_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -57,6 +58,10 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
             self::RELEASE019_UPDATE007          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update007',
+            ],
+            self::RELEASE019_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
     ];
@@ -181,5 +186,20 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.7', self::RELEASE019_UPDATE007);
+    }
+
+    public function update008()
+    {
+        Setup_SchemaTool::updateSchema([
+            EventManager_Model_Event::class,
+        ]);
+
+        try {
+            EventManager_Setup_EventTemplates::getInstance()->createTemplates();
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
+
+        $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.8', self::RELEASE019_UPDATE008);
     }
 }

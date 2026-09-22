@@ -47,6 +47,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
 
     public const FLD_CONTAINER_ID = 'container_id';
     public const FLD_IMAGES = 'images';
+    public const FLD_IS_TEMPLATE = 'is_template';
 
     const MODEL_NAME_PART = 'Event';
     const TABLE_NAME = 'eventmanager_event';
@@ -63,6 +64,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
         self::CONTAINER_PROPERTY        => self::FLD_CONTAINER_ID,
         self::CONTAINER_NAME            => 'Area of responsibility',
         self::CONTAINERS_NAME           => 'Area of responsibilities', // ngettext('Area of responsibility', 'Area of responsibilities', n)
+        self::HAS_PERSONAL_CONTAINER    => false,
         self::TITLE_PROPERTY            => 'name',
         self::HAS_RELATIONS             => true,
         self::HAS_CUSTOM_FIELDS         => true,
@@ -398,6 +400,12 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::UI_CONFIG     => [
                     self::DISABLED                      => true,
                 ],
+            ],
+            self::FLD_IS_TEMPLATE => [
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
+                self::LABEL                         => 'Is Template',
+                // _('Is Template')
             ],
         ]
     ];
