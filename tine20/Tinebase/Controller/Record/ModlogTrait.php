@@ -64,7 +64,7 @@ trait Tinebase_Controller_Record_ModlogTrait
             throw new Tinebase_Exception_InvalidArgument('record object expected');
         }
 
-        $this->_notifyBroadcastHub($_newRecord, $_oldRecord, $notNullRecord);
+        $this->_notifyBroadcastHub($_newRecord, $_oldRecord);
 
         if (! $notNullRecord->has('created_by') || $this->_omitModLog === TRUE) {
             return null;
@@ -80,8 +80,7 @@ trait Tinebase_Controller_Record_ModlogTrait
     }
 
     protected function _notifyBroadcastHub(?Tinebase_Record_Interface $_newRecord,
-                                           ?Tinebase_Record_Interface $_oldRecord,
-                                           Tinebase_Record_Interface $notNullRecord): void
+                                           ?Tinebase_Record_Interface $_oldRecord): void
     {
         $bchub = Tinebase_BroadcastHub::getInstance();
         if (!$bchub->isActive()) {
@@ -90,24 +89,29 @@ trait Tinebase_Controller_Record_ModlogTrait
 
         $verb = null;
         $cId = null;
+        $id = null;
+        $class = null;
         if (null === $_newRecord && $_oldRecord && $_oldRecord->notifyBroadcastHub()) {
             $verb = 'delete';
-            $cId = $notNullRecord->getContainerId();
-        } elseif ($_newRecord) {
-            if (null === $_oldRecord && $_newRecord->notifyBroadcastHub()) {
+            $cId = $_oldRecord->getContainerId();
+            $id = $_oldRecord->getId();
+            $class = $_oldRecord::class;
+        } elseif ($_newRecord && $_newRecord->notifyBroadcastHub()) {
+            $id = $_newRecord->getId();
+            $class = $_newRecord::class;
+            if (null === $_oldRecord) {
                 $verb = 'create';
-                $cId = $notNullRecord->getContainerId();
+                $cId = $_newRecord->getContainerId();
             } elseif ($_newRecord->is_deleted && $_oldRecord && !$_oldRecord->is_deleted) {
                 $verb = 'delete';
-                $cId = $notNullRecord->getContainerId();
-            } elseif ($_newRecord->notifyBroadcastHub() || $_oldRecord && $_oldRecord->notifyBroadcastHub()) {
+                $cId = $_newRecord->getContainerId();
+            } else {
                 $verb = 'update';
                 $cId = $_oldRecord->getContainerId();
             }
         }
-        $id = $notNullRecord->getId();
         if (null !== $verb) {
-            $bchub->pushAfterCommit($verb, $notNullRecord::class, $id, $cId);
+            $bchub->pushAfterCommit($verb, $class, $id, $cId);
         }
     }
 

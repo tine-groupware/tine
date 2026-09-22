@@ -48,6 +48,7 @@ class Timetracker_Model_TimeaccountFavorite extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        self::FLD_PURGE_DATE    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
 
         // model specific fields
         'account_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => false),

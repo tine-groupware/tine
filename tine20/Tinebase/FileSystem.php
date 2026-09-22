@@ -2375,6 +2375,9 @@ class Tinebase_FileSystem implements
                     $this->_fileObjectBackend->update($object);
                 }
                 $treeNode = $this->_getTreeNodeBackend()->update($deletedNode);
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' Reusing dir node ' . $treeNode->name);
             } else {
 
                 if (null === $parentNode) {
@@ -2416,6 +2419,9 @@ class Tinebase_FileSystem implements
                         $parentNode->{Tinebase_Model_Tree_Node::XPROPS_REVISION} : null
                 ));
                 $treeNode = $this->_getTreeNodeBackend()->create($treeNode);
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' Creating new dir node ' . $treeNode->name);
 
                 $this->_checkQuotaAndRegisterRefLog($treeNode, 0, 0);
             }
@@ -2521,9 +2527,8 @@ class Tinebase_FileSystem implements
                         $parentNode->pin_protected_node,
                 ));
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                    Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-                        ' ' . print_r($treeNode->toArray(), true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_name);
                 }
 
                 $treeNode = $this->_getTreeNodeBackend()->create($treeNode);
@@ -5600,7 +5605,7 @@ class Tinebase_FileSystem implements
         return true;
     }
 
-    public function purgeTreeNodes(array $where): int
+    public function purgeTreeNodes(array $where, bool $repairTree = true): int
     {
         $this->repairTreeIsDeletedState();
 

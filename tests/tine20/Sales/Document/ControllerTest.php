@@ -365,6 +365,88 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertSame(1, $invoice->{Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY}->filter(Sales_Model_Document_DispatchHistory::FLD_TYPE, Sales_Model_Document_DispatchHistory::DH_TYPE_FAIL)->count());
     }
 
+    public function testPurge(): void
+    {
+        $customer = $this->_createCustomer();
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->postal,
+        ]));
+
+        $customer = Sales_Controller_Document_Customer::getInstance()->get($invoice->getIdFromProperty(Sales_Model_Document_Invoice::FLD_CUSTOMER_ID));
+        $this->assertCount(0, $customer->notes);
+        $this->assertCount(0, $customer->tags);
+        $this->assertCount(0, $customer->attachments);
+        $this->assertCount(0, $invoice->relations);
+
+        $path = Tinebase_FileSystem::getInstance()->getPathOfNode(
+            Filemanager_Controller_Node::getInstance()->createNodes('/shared/test', Tinebase_Model_Tree_FileObject::TYPE_FOLDER)->getFirstRecord(), true);
+        file_put_contents('tine20://' . $path . '/test.txt', 'unittest');
+
+        $invoice->{Sales_Model_Document_Invoice::FLD_CUSTOMER_ID}->attachments = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, [
+            Tinebase_FileSystem::getInstance()->stat($path . '/test.txt'),
+        ]);
+        $invoice->{Sales_Model_Document_Invoice::FLD_CUSTOMER_ID}->notes = new Tinebase_Record_RecordSet(Tinebase_Model_Note::class, [
+            new Tinebase_Model_Note([
+                Tinebase_Model_Note::FLD_NOTE => 'unittest note',
+                Tinebase_Model_Note::FLD_NOTE_TYPE_ID => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
+            ], true),
+        ]);
+        $invoice->{Sales_Model_Document_Invoice::FLD_CUSTOMER_ID}->tags = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class, [
+            new Tinebase_Model_Tag([
+                'type' => Tinebase_Model_Tag::TYPE_SHARED,
+                'name' => 'unittest tag',
+            ], true),
+        ]);
+        $invoice->relations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class, [
+            new Tinebase_Model_Relation([
+                'related_id' => $invoice->getId(),
+                'related_model' => Sales_Model_Document_Invoice::class,
+                'related_backend' => 'Sql',
+                'type' => 'A',
+                'related_degree' => 'sibling',
+            ], true),
+        ]);
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $customer = Sales_Controller_Document_Customer::getInstance()->get($invoice->getIdFromProperty(Sales_Model_Document_Invoice::FLD_CUSTOMER_ID));
+        $this->assertCount(1, $customer->notes);
+        $this->assertCount(1, $customer->tags);
+        $this->assertCount(1, $customer->attachments);
+        $this->assertCount(1, $invoice->relations);
+        $db = Tinebase_Core::getDb();
+        $this->assertSame(1, $db->select()->from(SQL_TABLE_PREFIX . 'notes', [new Zend_Db_Expr('count(*)')])
+            ->where($db->quoteInto('id = ?', $customer->notes->getFirstRecord()->getId()))
+            ->query()->fetchColumn());
+        $this->assertSame(1, $db->select()->from(SQL_TABLE_PREFIX . 'tagging', [new Zend_Db_Expr('count(*)')])
+            ->where($db->quoteInto('record_id = ?', $customer->getId()))
+            ->query()->fetchColumn());
+        $this->assertSame(1, $db->select()->from(SQL_TABLE_PREFIX . 'tree_nodes', [new Zend_Db_Expr('count(*)')])
+            ->where($db->quoteInto('id = ?', $customer->attachments->getFirstRecord()->getId()))
+            ->query()->fetchColumn());
+        $this->assertSame(1, $db->select()->from(SQL_TABLE_PREFIX . 'relations', [new Zend_Db_Expr('count(*)')])
+            ->where($db->quoteInto('rel_id = ?', $invoice->relations->getFirstRecord()->getId()))
+            ->query()->fetchColumn());
+
+        Sales_Controller_Document_Invoice::getInstance()->setRequestContext([Sales_Controller_Document_Invoice::RC_PURGE_DATE => Sales_Controller_Document_Invoice::RC_PURGE_DATE_NOW]);
+        Sales_Controller_Document_Invoice::getInstance()->delete([$invoice->getId()]);
+        Sales_Controller_Document_Invoice::destroyInstance();
+
+        $this->assertSame(0, $db->select()->from(SQL_TABLE_PREFIX . 'notes', [new Zend_Db_Expr('count(*)')])
+            ->where($db->quoteInto('id = ?', $customer->notes->getFirstRecord()->getId()))
+            ->query()->fetchColumn());
+        /*$this->assertSame(0, $db->select()->from(SQL_TABLE_PREFIX . 'tagging', [new Zend_Db_Expr('count(*)')])
+            ->where($db->quoteInto('record_id = ?', $customer->getId()))
+            ->query()->fetchColumn());*/
+        $this->assertSame(0, $db->select()->from(SQL_TABLE_PREFIX . 'tree_nodes', [new Zend_Db_Expr('count(*)')])
+            ->where($db->quoteInto('id = ?', $customer->attachments->getFirstRecord()->getId()))
+            ->query()->fetchColumn());
+        $this->assertSame(0, $db->select()->from(SQL_TABLE_PREFIX . 'relations', [new Zend_Db_Expr('count(*)')])
+            ->where($db->quoteInto('rel_id = ?', $invoice->relations->getFirstRecord()->getId()))
+            ->query()->fetchColumn());
+    }
+
     public function testAttachmentNames(): void
     {
         $customer = $this->_createCustomer();

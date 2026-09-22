@@ -33,8 +33,6 @@
  * @property string $record_backend
  * @property Tinebase_DateTime $modification_time
  * @property string $modification_account
- * @property string $modified_attribute
- * @property string $old_value
  * @property string $new_value
  * @property string $seq
  * @property string $request_id
@@ -66,8 +64,6 @@ class Tinebase_Model_ModificationLog extends Tinebase_Record_Abstract
         'record_backend'       => array('presence' => 'required', 'allowEmpty' => false),
         'modification_time'    => array('presence' => 'required', 'allowEmpty' => false),
         'modification_account' => array('presence' => 'required', 'allowEmpty' => false,),
-        'modified_attribute'   => array('allowEmpty' => true),
-        'old_value'            => array('allowEmpty' => true),
         'new_value'            => array('allowEmpty' => true),
         'seq'                  => array('allowEmpty' => true),
         'client'               => array('allowEmpty' => true),

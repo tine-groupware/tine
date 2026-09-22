@@ -55,7 +55,7 @@
         </table>
         <table>
             <name>sales_product_agg</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -140,6 +140,11 @@
                     <type>datetime</type>
                 </field>
                 <field>
+                    <name>purge_date</name>
+                    <type>date</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>seq</name>
                     <type>integer</type>
                     <notnull>true</notnull>
@@ -172,7 +177,7 @@
         </table>
         <table>
             <name>sales_orderconf</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -204,7 +209,7 @@
                 <field>
                     <name>creation_time</name>
                     <type>datetime</type>
-                </field> 
+                </field>
                 <field>
                     <name>last_modified_by</name>
                     <type>text</type>
@@ -227,6 +232,11 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>purge_date</name>
+                    <type>date</type>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>seq</name>
@@ -252,7 +262,7 @@
         </table>
         <table>
             <name>sales_offers</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -284,7 +294,7 @@
                 <field>
                     <name>creation_time</name>
                     <type>datetime</type>
-                </field> 
+                </field>
                 <field>
                     <name>last_modified_by</name>
                     <type>text</type>
@@ -307,6 +317,11 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>purge_date</name>
+                    <type>date</type>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>seq</name>

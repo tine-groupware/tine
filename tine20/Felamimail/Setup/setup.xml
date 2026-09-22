@@ -7,7 +7,7 @@
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>33</version>
+            <version>34</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -261,6 +261,11 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>purge_date</name>
+                    <type>date</type>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>seq</name>

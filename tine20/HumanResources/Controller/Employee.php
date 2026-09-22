@@ -240,16 +240,25 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
      * delete linked objects (notes, relations, ...) of record
      *
      * @param Tinebase_Record_Interface $_record
+     * @param bool $_purgeNow
      */
-    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record, bool $_purgeNow = false)
     {
         // use textfilter for employee_id 
         // delete accounts
+        $oldRequestContext = HumanResources_Controller_Account::getInstance()->getRequestContext() ?? [];
         $filter = new HumanResources_Model_AccountFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getId())));
-        HumanResources_Controller_Account::getInstance()->deleteByFilter($filter);
+        if ($_purgeNow) {
+            HumanResources_Controller_Account::getInstance()->setRequestContext(array_merge($oldRequestContext, [self::RC_PURGE_DATE => self::RC_PURGE_DATE_NOW]));
+        }
+        try {
+            HumanResources_Controller_Account::getInstance()->deleteByFilter($filter);
+        } finally {
+            HumanResources_Controller_Account::getInstance()->setRequestContext($oldRequestContext);
+        }
         
-        parent::_deleteLinkedObjects($_record);
+        parent::_deleteLinkedObjects($_record, $_purgeNow);
     }
 
     /**

@@ -1041,6 +1041,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
         if (! $modelClassConfiguration) {
             throw new Tinebase_Exception('The model class configuration must be submitted!');
         }
+        if (strlen($recordClass) > 64) {
+            throw new Tinebase_Exception_Record_DefinitionFailure('model class name length limited to 64 characters');
+        }
         /** @var Tinebase_Record_Interface $recordClass */
         $recordClass::inheritModelConfigHook($modelClassConfiguration);
 
@@ -1395,6 +1398,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'useGlobalTranslation' => TRUE,
                 self::DEFAULT_VAL => 0
+            ];
+            $this->_fields[self::FLD_PURGE_DATE]         = [
+                self::TYPE    => self::TYPE_DATE,
+                self::SYSTEM => true,
+                self::NULLABLE => true,
+                self::SHY => true,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ];
 
         } elseif ($this->_hasNotes) {

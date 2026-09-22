@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,43 +17,17 @@
  */
 class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
 {
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Admin_Controller_AccessLog
-     */
-    private static $_instance = NULL;
+    /** @use Tinebase_Controller_SingletonTrait<Admin_Controller_AccessLog> */
+    use Tinebase_Controller_SingletonTrait;
     
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() 
+    protected function __construct()
     {
-        $this->_applicationName = 'Admin';
-    }
-
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() 
-    {
-    }
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Admin_Controller_AccessLog
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Admin_Controller_AccessLog;
-        }
-        
-        return self::$_instance;
+        $this->_applicationName = Admin_Config::APP_NAME;
     }
     
     /**
