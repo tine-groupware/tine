@@ -50,6 +50,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
     public const EVENT_SHARED_CONTAINER_NAME = 'eventSharedContainerName';
     public const EVENT_NOTIFICATION_EMAIL = 'eventNotificationEmail';
     public const EVENT_NOTIFICATION_NAME = 'eventNotificationName';
+    public const EVENT_TEMPLATES_CONTAINER_NAME = 'eventTemplatesContainerName';
 
 
 
@@ -379,6 +380,15 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::TYPE                  => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
+        ],
+        self::EVENT_TEMPLATES_CONTAINER_NAME => [
+            self::LABEL                 => 'EVENT_TEMPLATES_CONTAINER_NAME',
+            //_('EVENT_TEMPLATES_CONTAINER_NAME')
+            self::DESCRIPTION           => '', //_('')
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => 'Vorlagen',
         ],
     ];
 

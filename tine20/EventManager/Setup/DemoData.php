@@ -68,8 +68,18 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     public static function hasBeenRun()
     {
-        $c = EventManager_Controller_Event::getInstance();
-        return $c->getAll()->count() > 1;
+        $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            EventManager_Model_Event::class,
+            [
+                [
+                    'field' => EventManager_Model_Event::FLD_IS_TEMPLATE,
+                    'operator' => 'equals',
+                    'value' => false
+                ],
+            ],
+        );
+        $events = EventManager_Controller_Event::getInstance()->searchCount($filter);
+        return $events > 1;
     }
 
     /**
@@ -102,35 +112,19 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _onCreate()
     {
-        $this->_createSharedEventContainer();
         $this->_createEvents();
         $this->_createCustomfields();
     }
 
-    protected function _createSharedEventContainer()
-    {
-        try {
-            $calendarName = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_SHARED_CALENDAR_NAME);
-            Tinebase_Container::getInstance()->getContainerByName(
-                Calendar_Model_Event::class,
-                $calendarName,
-                Tinebase_Model_Container::TYPE_SHARED,
-            );
-        } catch (Tinebase_Exception_NotFound $e) {
-            $container = new Tinebase_Model_Container([
-                'name'              => $calendarName,
-                'type'              => Tinebase_Model_Container::TYPE_SHARED,
-                'owner_id'          => Tinebase_Core::getUser(),
-                'backend'           => 'Sql',
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName(Calendar_Config::APP_NAME)->getId(),
-                'model'             => Calendar_Model_Event::class
-            ]);
-            Tinebase_Container::getInstance()->addContainer($container);
-        }
-    }
-
     protected function _createEvents()
     {
+        $containerName = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_SHARED_CONTAINER_NAME);
+        $container = Tinebase_Container::getInstance()->getContainerByName(
+            EventManager_Model_Event::class,
+            $containerName,
+            Tinebase_Model_Container::TYPE_SHARED,
+        );
+
         $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Tinebase_Model_EvaluationDimensionItem::class,
             [
@@ -206,9 +200,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ];
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
             EventManager_Model_Event::FLD_NAME                          => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Familienexerzitien 2027'
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Familienexerzitien 2027'
             ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-20 17:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-24 13:00:00"),
@@ -251,8 +246,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Wir laden Sie herzlich zu unseren Familienexerzitien im Erzbistum Hamburg ein!
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Wir laden Sie herzlich zu unseren Familienexerzitien im Erzbistum Hamburg ein!
                 HIER EINIGE STICHWORTE, WAS SIE ERWARTET
                 Die Familienexerzitien richten sich an alle Familien – Eltern mit Kindern, Ein-Eltern-Familien, Patchworkfamilien und 
                 Kinder mit ihren Großeltern oder Pat_innen –, die sich eine Auszeit vom Alltag nehmen möchten, um Zeit füreinander und für den eigenen Glauben zu finden.
@@ -312,9 +307,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         // event 2
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
             EventManager_Model_Event::FLD_NAME                          => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Ausbildungskurs für Gottesdienstbeauftragte',
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Ausbildungskurs für Gottesdienstbeauftragte',
             ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-09-16 13:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-09-18 13:00:00"),
@@ -332,8 +328,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Das gottesdienstliche Leben hat seit dem II. Vatikanischen Konzil eine grundlegende Veränderung erfahren - mit ihr auch die Rolle der Gläubigen, da das Konzil eine volle, bewusste und tätige Teilnahme an den liturgischen Feiern unterstützt, wie sie das Wesen der Liturgie selbst verlangt und zu der das christliche Volk - kraft der Taufe - berechtigt und verpflichtet ist. (SC 14)
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Das gottesdienstliche Leben hat seit dem II. Vatikanischen Konzil eine grundlegende Veränderung erfahren - mit ihr auch die Rolle der Gläubigen, da das Konzil eine volle, bewusste und tätige Teilnahme an den liturgischen Feiern unterstützt, wie sie das Wesen der Liturgie selbst verlangt und zu der das christliche Volk - kraft der Taufe - berechtigt und verpflichtet ist. (SC 14)
 
                 Anmeldung:
                 
@@ -359,9 +355,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
             EventManager_Model_Event::FLD_NAME                          => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Modul 1'
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Modul 1'
             ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-17 18:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-18 18:00:00"),
@@ -379,8 +376,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'folgt.'
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'folgt.'
             ]],
         ]));
 
@@ -395,9 +392,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
             EventManager_Model_Event::FLD_NAME                          => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Modul 2'
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Modul 2'
             ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-07 18:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-09 18:00:00"),
@@ -414,8 +412,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'folgt.',
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'folgt.',
             ]],
         ]));
 
@@ -429,9 +427,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
             EventManager_Model_Event::FLD_NAME                          => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Modul 3'
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Modul 3'
             ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-17 15:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-18 16:00:00"),
@@ -448,16 +447,17 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'folgt.'
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'folgt.'
             ]],
         ]));
 
         // event 6
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
             EventManager_Model_Event::FLD_NAME                          => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Gesänge für die Advents- und Weihnachtszeit'
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Gesänge für die Advents- und Weihnachtszeit'
             ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-08 10:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-08 17:00:00"),
@@ -475,8 +475,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'In der Messfeier gibt es vielfältige Einsatzmöglichkeiten für eine Kantorin / einen Kantor bzw. eine kl. Ansingegruppe / Schola.
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'In der Messfeier gibt es vielfältige Einsatzmöglichkeiten für eine Kantorin / einen Kantor bzw. eine kl. Ansingegruppe / Schola.
                 Für die Advents- und Weihnachtszeit werden Wechselgesänge aus dem Gebet- und Gesangbuch GOTTESLOB erarbeitet und Gestaltungsmöglichkeiten aus dem 
                 - Münchener Kantorale, 
                 - den Freiburger Kantorenbüchern, 
@@ -487,9 +487,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         // event 7
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
             EventManager_Model_Event::FLD_NAME                          => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Eingeladen zum Fest des Glaubens'
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Eingeladen zum Fest des Glaubens'
             ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-20 19:30:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-20 21:30:00"),
@@ -507,8 +508,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Herzliche Einladung zu einem nächsten Online-Abend zum Thema "Familiengottesdienste".
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Herzliche Einladung zu einem nächsten Online-Abend zum Thema "Familiengottesdienste".
                 Heute im Mittelpunkt: der Eröffnungsteil. Was kann man da eigentlich machen - was darf ich und welche Ideen gibt es dazu? 
                 Eine Veranstaltung des Netzwerks "Kindergottesdienst katholisch" 
                 www.kindergottesdienst-katholisch.de'
@@ -517,9 +518,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         // event 8
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
             EventManager_Model_Event::FLD_NAME                          => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Religiöse Vielfalt in der Kita religionssensibel begegnen'
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Religiöse Vielfalt in der Kita religionssensibel begegnen'
             ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-08 00:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-08 23:45:00"),
@@ -537,8 +539,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Unsere katholischen Kitas sind in der heutigen Zeit in vielen Bereichen heterogen.
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Unsere katholischen Kitas sind in der heutigen Zeit in vielen Bereichen heterogen.
                 Uns begegnen Familien in verschiedenen Beziehungsformen, aus unterschiedlichen Milieus und aus unterschiedlichen Religionen.
                 
                 Dieser Selbstlernkurs soll besonders für den letzten Punkt sensibilisieren. Die große Frage dabei ist:
@@ -554,9 +556,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         // event 9
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
             EventManager_Model_Event::FLD_NAME                          => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Katholisch werden'
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'Katholisch werden'
             ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-13 09:30:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-16 19:30:00"),
@@ -669,8 +672,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 ],
             ],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => '„Katholisch werden“ ist eine offene Veranstaltung für alle, die sich für den katholischen Glauben interessieren, Fragen zur Kirche haben oder darüber nachdenken, selbst den Schritt in die katholische Gemeinschaft zu gehen. In einer einladenden und respektvollen Atmosphäre bieten wir Raum für Gespräche, Begegnungen und ehrliche Fragen.
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => '„Katholisch werden“ ist eine offene Veranstaltung für alle, die sich für den katholischen Glauben interessieren, Fragen zur Kirche haben oder darüber nachdenken, selbst den Schritt in die katholische Gemeinschaft zu gehen. In einer einladenden und respektvollen Atmosphäre bieten wir Raum für Gespräche, Begegnungen und ehrliche Fragen.
 
                 Gemeinsam mit Seelsorgerinnen und Seelsorgern, Katechumenatsbegleiterinnen und Menschen, die den Weg des Glaubens bereits gegangen sind, sprechen wir über Themen wie:
                 
@@ -768,11 +771,20 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ]);
     }
 
-    protected function setOptionConfigTextDemoData($text): EventManager_Model_TextOption
+    protected function setOptionConfigTextDemoData($text = ''): EventManager_Model_TextOption
     {
         return new EventManager_Model_TextOption([
             'text' => $text,
         ]);
+    }
+
+    protected function setOptionsRuleConfigDemoData($triggerOptionId, $criteria, $value = ''): array
+    {
+        return [
+            EventManager_Model_OptionsRule::FLD_REF_OPTION_FIELD => $triggerOptionId,
+            EventManager_Model_OptionsRule::FLD_CRITERIA         => $criteria,
+            EventManager_Model_OptionsRule::FLD_VALUE            => $value,
+        ];
     }
 
     protected function _createCustomfields()

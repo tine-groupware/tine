@@ -77,6 +77,80 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.supr().onRecordLoad.apply(this, arguments);
     },
 
+    onAfterRecordLoad: function () {
+        this.supr().onAfterRecordLoad.apply(this, arguments);
+
+        const hasContainer = this.record.id && Ext.isObject(this.record.get('container_id')) && this.record.get('container_id').id;
+
+        if (!hasContainer) {
+            const container = Tine.EventManager.registry.get('eventSharedContainerName');
+            const field = this.form.findField('container_id');
+            if (field && container) {
+                field.setValue(container);
+            }
+        }
+
+        if (this.templateAlert) {
+            this.templateAlert.setVisible(!this.isNewRecord() && !!this.record.get('is_template'));
+        }
+    },
+
+    checkStates: function () {
+        this.supr().checkStates.apply(this, arguments);
+        if (this.templateAlert) {
+            this.templateAlert.setVisible(!this.isNewRecord() && !!this.record.get('is_template'));
+        }
+        this.toggleTemplateLockedFields();
+    },
+
+    toggleTemplateLockedFields: function () {
+        const isTemplate = !!this.form.findField('is_template')?.getValue();
+        const templateLockedFields = ['start', 'end', 'status', 'fee', 'registration_possible_until'];
+
+        templateLockedFields.forEach(name => {
+            const field = this.form.findField(name);
+            if (field) {
+                field.setDisabled(isTemplate);
+            }
+        });
+    },
+
+    onCreateEventFromTemplate: async function () {
+        const me = this;
+        const mask = new Ext.LoadMask(this.getEl(), {
+            msg: this.app.i18n._('Creating new event from template...')
+        });
+        mask.show();
+
+        try {
+            // persist = false
+            const recordData = await Tine.EventManager.copyEvent(this.record.id, false);
+
+            recordData.is_template = false;
+            recordData.registrations = [];
+            recordData.booked_places = 0;
+            recordData.available_places = recordData.total_places;
+            recordData.name[0]['text'] = recordData.name[0]['text'].replace(recordData.name[0]['text'], recordData.name[0]['text'] + me.app.i18n._(' (Copy)'));
+
+            const newRecord = new Tine.EventManager.Model.Event(
+                recordData,
+                Tine.Tinebase.data.Record.generateUID()
+            );
+            newRecord.phantom = true;
+
+            Tine.EventManager.EventEditDialog.openWindow({
+                record: newRecord
+            });
+        } catch (e) {
+            Ext.MessageBox.alert(
+                this.app.i18n._('Failed'),
+                this.app.i18n._('Could not create event from template.')
+            );
+        } finally {
+            mask.hide();
+        }
+    },
+
     getFormItems: function () {
         const me = this;
         const fieldManager = _.bind(
@@ -126,6 +200,31 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 xtype: 'columnform',
                                 autoHeight: true,
                                 items: [
+                                    [(() => {
+                                        return [{
+                                            xtype: 'v-alert',
+                                            variant: 'info',
+                                            columnWidth: 1,
+                                            hidden: true,
+                                            label: '<a href="#">' + me.app.i18n._('This event is a template. Click here to create a new event based on it.') + '</a>',
+                                            listeners: {
+                                                scope: me,
+                                                render: function (cmp) {
+                                                    me.templateAlert = cmp;
+                                                    cmp.getEl().on('click', function (e) {
+                                                        e.stopEvent();
+                                                        if (!e.getTarget('a')) {
+                                                            return;
+                                                        }
+                                                        me.onCreateEventFromTemplate();
+                                                    });
+                                                }
+                                            }
+                                        }]
+                                    })()],
+                                    [
+                                        fieldManager('is_template'),
+                                    ],
                                     [
                                         fieldManager('name'),
                                         fieldManager('subheading'),

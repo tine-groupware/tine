@@ -47,4 +47,25 @@ class EventManager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $this->_applicationName = EventManager_Config::APP_NAME;
     }
+
+    public function getRegistryData()
+    {
+        $registryData = parent::getRegistryData();
+
+        try {
+            $eventContainerName = EventManager_Config::getInstance()
+                ->get(EventManager_Config::EVENT_SHARED_CONTAINER_NAME);
+            $container = EventManager_Setup_Initialize::_getOrCreateSharedEventContainer($eventContainerName);
+
+            $container->account_grants = Tinebase_Container::getInstance()
+                ->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())
+                ->toArray();
+
+            $registryData[EventManager_Config::EVENT_SHARED_CONTAINER_NAME] = $container->toArray();
+        } catch (Tinebase_Exception_NotFound $e) {
+            // container not initialized yet. Leave unset, frontend falls back
+        }
+
+        return $registryData;
+    }
 }
