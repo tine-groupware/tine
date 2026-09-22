@@ -583,8 +583,12 @@ class EventManager_ControllerTest extends TestCase
         $event_type = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_TYPE)->records->getById('1');
         $event_status = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_STATUS)->records->getById('1');
 
+        $eventContainerName = EventManager_Config::getInstance()
+            ->get(EventManager_Config::EVENT_SHARED_CONTAINER_NAME);
+        $container_id = EventManager_Setup_Initialize::_getOrCreateSharedEventContainer($eventContainerName)->getId();
+
         return new EventManager_Model_Event([
-            'container_id'                  => $this->_getEventSharedContainer()->getId(),
+            'container_id'                  => $container_id,
             'name'                          => [[
                 GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
                 GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'phpunit event'
@@ -843,15 +847,5 @@ class EventManager_ControllerTest extends TestCase
             ]);
             Tinebase_Container::getInstance()->addContainer($container);
         }
-    }
-
-    protected function _getEventSharedContainer()
-    {
-        $containerName = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_SHARED_CONTAINER_NAME);
-        return Tinebase_Container::getInstance()->getContainerByName(
-            EventManager_Model_Event::class,
-            $containerName,
-            Tinebase_Model_Container::TYPE_SHARED,
-        );
     }
 }
