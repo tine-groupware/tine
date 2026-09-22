@@ -279,8 +279,13 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         }
         $ivLength = openssl_cipher_iv_length(self::CIPHER_ALGORITHM);
 
-        if (strlen($encryptedData) < $ivLength)
-        {
+        if (strlen($encryptedData) < $ivLength) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__
+                    . ' ' . strlen($encryptedData)  . '<' . $ivLength
+                );
+            }
             return false;
         }
 
@@ -322,8 +327,14 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         if (false === ($jsonEncodedData = static::decryptData($_cache->cache, $_cache->key))
             || ! Tinebase_Helper::is_json(trim($jsonEncodedData)))
         {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                __METHOD__ . '::' . __LINE__ . ' lets try to decode it with the old algorithm, if successful, persist again if this is a persistent cache');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__
+                    . ' Lets try to decode it with the old algorithm.'
+                    . ' If successful, persist again if this is a persistent cache.'
+                    . ' openssl_error_string: ' . openssl_error_string()
+                );
+            }
 
             if (false !== ($jsonEncodedData = openssl_decrypt(
                     base64_decode($_cache->cache), 'AES-128-CBC',
@@ -333,9 +344,12 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
                 ))) {
                 $persistAgain = true;
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                    __METHOD__ . '::' . __LINE__ . ' decryption failed');
-                throw new Tinebase_Exception_NotFound('decryption failed: ' . openssl_error_string());
+                $errorMessage = 'Decryption failed: ' . openssl_error_string();
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $errorMessage);
+                }
+                throw new Tinebase_Exception_NotFound($errorMessage);
             }
         }
 
