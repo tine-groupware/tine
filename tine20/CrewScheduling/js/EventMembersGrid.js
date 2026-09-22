@@ -267,10 +267,12 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
         return e.getTarget('.cs-members');
     },
 
-    onDragStart: function(selectionPanel, data) {
+    maskDropCells: function(selected) {
         var _ = window.lodash,
             me = this,
-            possibleUsagesSum = _.union(_.concat.apply(_, _.map(data.selected, 'data.user_id.possibleUsages', [])));
+            possibleUsagesSum = _.union(_.concat.apply(_, _.map(selected, 'data.user_id.possibleUsages', [])));
+
+        this.unmaskDropCells();
 
         // mask invalid cells
         _.each(me.getEl().query('.cs-members-cell'), function (el) {
@@ -279,12 +281,26 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
                 Ext.fly(el.parentElement.parentElement).setOpacity(0.2);
             }
             const [eventId, roleId] = el.id.split(':');
-            const statusSum = PollReply.getCombinedStatus.apply({}, _.compact(_.map(data.selected, attendee => {return _.get(attendee, `data.user_id.pollReplies.${PollReply.getEventRef(me.store.getById(eventId))}.${roleId}.status`)})))
+            const statusSum = PollReply.getCombinedStatus.apply({}, _.compact(_.map(selected, attendee => {return _.get(attendee, `data.user_id.pollReplies.${PollReply.getEventRef(me.store.getById(eventId))}.${roleId}.status`)})))
             if (statusSum !== 'NEEDS-ACTION') {
                 Ext.fly(el.firstChild).setStyle('background-color', `var(--cs-poll-${statusSum.toLowerCase()})`);
                 Ext.fly(el.firstChild).addClass(`${statusSum}-black`);
             }
         });
+    },
+
+    unmaskDropCells: function() {
+        var _ = window.lodash,
+            me = this;
+
+        _.each(me.getEl().query('.cs-members-cell'), this.unmaskDropCell, this);
+    },
+
+    unmaskDropCell: function (el) {
+        Ext.fly(el.parentElement.parentElement).removeClass('cs-member-cell-disabled');
+        Ext.fly(el.parentElement.parentElement).setOpacity(1);
+        Ext.fly(el.firstChild).setStyle('background-color', 'transparent');
+        Ext.fly(el.firstChild).removeClass(['IMPOSSIBLE-black', 'NEEDS_ACTION-black', 'TENTATIVE-black', 'ACCEPTED-black', 'DECLINED-black']);
     },
 
     onNodeEnter: function(target, dd, e, data) {
@@ -402,19 +418,12 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
                 return false;
             } finally {
                 dd.proxy.el.setZIndex(ddProxyZIndex);
+
+                _.delay(() => {
+                    this.maskDropCells(data.selected);
+                    this.unmaskDropCell(document.getElementById(targetCellId));
+                }, 10)
             }
-        });
-    },
-
-    onDragEnd: function(selectionPanel, data) {
-        var _ = window.lodash,
-            me = this;
-
-        _.each(me.getEl().query('.cs-members-cell'), function (el) {
-            Ext.fly(el.parentElement.parentElement).removeClass('cs-member-cell-disabled');
-            Ext.fly(el.parentElement.parentElement).setOpacity(1);
-            Ext.fly(el.firstChild).setStyle('background-color', 'transparent');
-            Ext.fly(el.firstChild).removeClass(['IMPOSSIBLE-black', 'NEEDS_ACTION-black', 'TENTATIVE-black', 'ACCEPTED-black', 'DECLINED-black']);
         });
     },
 
