@@ -83,7 +83,6 @@ Notes:
 | Admin | `Admin/Frontend/Json.php` | `getUser` |
 | Admin | `Admin/Frontend/Json.php` | `getUsers` |
 | Admin | `Admin/Frontend/Json.php` | `resetPassword` |
-| Admin | `Admin/Frontend/Json.php` | `revealEmailAccountPassword` |
 | Admin | `Admin/Frontend/Json.php` | `saveConfig` |
 | Admin | `Admin/Frontend/Json.php` | `saveContainer` |
 | Admin | `Admin/Frontend/Json.php` | `saveCustomfield` |

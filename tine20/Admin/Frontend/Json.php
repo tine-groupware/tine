@@ -2144,32 +2144,4 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         unset($raii);
         return $result;
     }
-
-    /**
-     * reveal email account password
-     *
-     * @param string $accountId
-     * @return array
-     * @throws Felamimail_Exception
-     * @throws Tinebase_Exception
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_NotFound
-     */
-    public function revealEmailAccountPassword(string $accountId): array
-    {
-        if (! $accountId) {
-            return [];
-        }
-
-        Admin_Controller_EmailAccount::getInstance()->checkRight(Admin_Acl_Rights::MANAGE_EMAILACCOUNTS);
-        $fmailaccount = Felamimail_Controller_Account::getInstance()->get($accountId);
-        $imapConfig = $fmailaccount->getImapConfig();
-        
-        Tinebase_Notes::getInstance()->addSystemNote($fmailaccount, Tinebase_Core::getUser(),
-            Tinebase_Model_Note::SYSTEM_NOTE_REVEAL_PASSWORD, $fmailaccount, 'Sql', 'Felamimail_Model_Account');
-        
-        return [
-            'password'=> $imapConfig['password']
-        ];
-    }
 }

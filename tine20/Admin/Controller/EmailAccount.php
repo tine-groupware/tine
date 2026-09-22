@@ -631,4 +631,21 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         Addressbook_Controller_List::getInstance()->doContainerACLChecks($acl);
         return $list;
     }
+
+    /**
+     * @todo support smtp password
+     *
+     * @param Felamimail_Model_Account $account
+     * @param string $field
+     * @return string
+     * @throws Felamimail_Exception
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function revealPassword(Felamimail_Model_Account $account, string $field = 'password'): string
+    {
+        Admin_Controller_EmailAccount::getInstance()->checkRight(Admin_Acl_Rights::MANAGE_EMAILACCOUNTS);
+        $imapConfig = $account->getImapConfig();
+        return $imapConfig['password'];
+    }
 }
