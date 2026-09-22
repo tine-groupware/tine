@@ -154,17 +154,19 @@ class Calendar_Frontend_iMIP
     }
     
     /**
-     * check precondtions
+     * check preconditions
      *
      * @throws Calendar_Exception_iMIP
      * 
      * @todo add iMIP record to exception when it extends the Data exception
      */
-    protected function _checkPreconditions(Calendar_Model_iMIP $_iMIP, Calendar_Model_Event $_event, bool $_throwException = false, null|string|Calendar_Model_Attender $_status = null): bool
+    protected function _checkPreconditions(Calendar_Model_iMIP $_iMIP,
+                                           Calendar_Model_Event $_event,
+                                           bool $_throwException = false,
+                                           null|string|Calendar_Model_Attender $_status = null): bool
     {
         $key = $_event->getRecurIdOrUid();
         $method = $_iMIP->method ? ucfirst(strtolower($_iMIP->method)) : 'MISSINGMETHOD';
-
 
         if ($_iMIP->preconditionsChecked[$key] ?? false) {
             if (empty($_iMIP->preconditions[$key] ?? []) || !$_throwException) {
@@ -172,13 +174,14 @@ class Calendar_Frontend_iMIP
             } else {
                 $precondition = $_iMIP->preconditions[$key];
                 // imap process request as non attendee should be possible
-                if ($_status instanceof Calendar_Model_Attender && $method === 'Request' && isset($precondition[Calendar_Model_iMIP::PRECONDITION_ATTENDEE])) {
+                if ($_status instanceof Calendar_Model_Attender && $method === 'Request'
+                    && isset($precondition[Calendar_Model_iMIP::PRECONDITION_ATTENDEE])) {
                     return true;
                 }
-                throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions)));
+                throw new Calendar_Exception_iMIP('iMIP preconditions failed: '
+                    . implode(', ', array_keys($_iMIP->preconditions)));
             }
         }
-
 
         $preconditionMethodName  = '_check'     . $method . 'Preconditions';
         if (method_exists($this, $preconditionMethodName)) {
@@ -194,7 +197,8 @@ class Calendar_Frontend_iMIP
         $_iMIP->xprops('preconditionsChecked')[$key] = true;
         
         if ($_throwException && ! $preconditionCheckSuccessful) {
-            throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions[$key])));
+            throw new Calendar_Exception_iMIP('iMIP preconditions failed: '
+                . implode(', ', array_keys($_iMIP->preconditions[$key])));
         }
         
         return $preconditionCheckSuccessful;
