@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-09-14 15:47+0200\n"
+"PO-Revision-Date: 2026-09-22 17:19+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -207,13 +207,13 @@ msgid "EVENT SHARED CALENDAR NAME"
 msgstr "NAME DES GEMEINSAMEN VERANSTALTUNGSKALENDERS"
 
 msgid "EVENT SHARED CONTAINER NAME"
-msgstr ""
+msgstr "NAME DES GEMEINSAMEN CONTAINERS FÜR EVENTS"
 
 msgid "Sender email for the notification emails"
-msgstr ""
+msgstr "Absender-E-Mail Adresse für die Benachrichtigungs-E-Mails"
 
 msgid "Sender name for the notification emails"
-msgstr ""
+msgstr "Absendername für die Benachrichtigungs-E-Mails"
 
 msgid "Session"
 msgstr "Sitzung"
@@ -618,23 +618,23 @@ msgstr "Informationen zu Ihrer Anmeldung"
 msgid "Missing Participants"
 msgstr "Fehlende Teilnehmende"
 
+msgid "Currently there are no participants confirmed in this event"
+msgstr "Derzeit sind noch keine Teilnehmer für diese Veranstaltung bestätigt."
+
 msgid "Currently there are no participants signed for this event"
 msgstr "Derzeit sind keine Teilnehmende für diese Veranstaltung angemeldet."
 
 msgid "Notify Participants"
 msgstr "Teilnehmende benachrichtigen"
 
-msgid "Attendee"
-msgstr "Teilnehmende"
+msgid "All Confirmed Participants"
+msgstr "Alle bestätigten Teilnehmende"
 
-msgid "Moderator"
-msgstr "Moderator*in"
+msgid "Currently there are no confirmed participants"
+msgstr "Derzeit gibt es keine bestätigten Teilnehmer."
 
-msgid "Employee"
-msgstr "Mitarbeiter*in"
-
-msgid "All"
-msgstr "Alle"
+msgid "All Selected Participants"
+msgstr "Alle ausgewählten Teilnehmer"
 
 msgid "A simple text option that displays a fixed text to the participant in the registration form."
 msgstr "Eine einfache Textoption, die dem Teilnehmende im Anmeldeformular einen festen Text anzeigt."
@@ -871,6 +871,9 @@ msgstr "Wartelistegrund"
 msgid "Booked options"
 msgstr "Gebuchte Optionen"
 
+msgid "Registration date"
+msgstr "Anmeldedatum"
+
 msgid "GENDER_Selection"
 msgstr "female"
 
@@ -1018,3 +1021,4 @@ msgstr "Die Anmeldefrist für die Veranstaltung %1$s ist abgelaufen. Wir setzen 
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
+

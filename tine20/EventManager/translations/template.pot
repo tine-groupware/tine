@@ -614,22 +614,22 @@ msgstr ""
 msgid "Missing Participants"
 msgstr ""
 
+msgid "Currently there are no participants confirmed in this event"
+msgstr ""
+
 msgid "Currently there are no participants signed for this event"
 msgstr ""
 
 msgid "Notify Participants"
 msgstr ""
 
-msgid "Attendee"
+msgid "All Confirmed Participants"
 msgstr ""
 
-msgid "Moderator"
+msgid "Currently there are no confirmed participants"
 msgstr ""
 
-msgid "Employee"
-msgstr ""
-
-msgid "All"
+msgid "All Selected Participants"
 msgstr ""
 
 msgid "A simple text option that displays a fixed text to the participant in the registration form."
