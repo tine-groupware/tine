@@ -340,7 +340,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         // special handling/hack for filemanager
         const relation = this.getSelectionModel().getSelected();
         const record = this.getRelatedRecord(relation);
-        if(record.constructor.getPhpClassName() === 'Filemanager_Model_Node') {
+        if (record && record.constructor.getPhpClassName() === 'Filemanager_Model_Node') {
             const nodeGrid = this.getNodeGrid();
             switch (record.get('type')) {
                 case 'file':
