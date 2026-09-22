@@ -70,14 +70,22 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
      *
      * @param Tinebase_Record_Interface $_record
      */
-    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record, bool $_purgeNow = false)
     {
         // delete linked timesheets
         $timesheets = Timetracker_Controller_Timesheet::getInstance()->getTimesheetsByTimeaccountId($_record->getId());
-        Timetracker_Controller_Timesheet::getInstance()->delete($timesheets->getArrayOfIds());
+        $oldRequestContext = Timetracker_Controller_Timesheet::getInstance()->getRequestContext() ?? [];
+        if ($_purgeNow) {
+            Timetracker_Controller_Timesheet::getInstance()->setRequestContext(array_merge($oldRequestContext, [self::RC_PURGE_DATE => self::RC_PURGE_DATE_NOW]));
+        }
+        try {
+            Timetracker_Controller_Timesheet::getInstance()->delete($timesheets->getArrayOfIds());
+        } finally {
+            Timetracker_Controller_Timesheet::getInstance()->setRequestContext($oldRequestContext);
+        }
         
         // delete other linked objects
-        parent::_deleteLinkedObjects($_record);
+        parent::_deleteLinkedObjects($_record, $_purgeNow);
     }
 
     /**

@@ -139,6 +139,7 @@ class Tinebase_ModelConfiguration_Const {
     public const FLD_DELETED_TIME = 'deleted_time';
     public const FLD_GRANTS = 'grants';
     public const FLD_IS_DELETED = 'is_deleted';
+    public const FLD_PURGE_DATE = 'purge_date';
     public const FLD_LAST_MODIFIED_BY = 'last_modified_by';
     public const FLD_LAST_MODIFIED_TIME = 'last_modified_time';
     public const FLD_LOCALLY_CHANGED = 'locally_changed';

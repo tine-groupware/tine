@@ -357,16 +357,18 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      * delete linked objects (notes, relations, ...) of record
      *
      * @param Tinebase_Record_Interface $_record
+     * @param bool $_purgeNow
      */
-    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record, bool $_purgeNow = false)
     {
         try {
+            // TODO !!!! implement purge
             Tinebase_Container::getInstance()->deleteContainer($_record->container_id, true);
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Exception::log($tenf, false, $_record->toArray());
         }
 
-        return parent::_deleteLinkedObjects($_record);
+        return parent::_deleteLinkedObjects($_record, $_purgeNow);
     }
 
     /**

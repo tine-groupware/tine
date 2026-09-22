@@ -128,9 +128,10 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     public function testPurgeDeletedRecordsAddressbook()
     {
+        $this->_testNeedsTransaction();
         $opts = $this->_getOpts('addressbook');
         $deletedRecord = $this->_addAndDeleteContact();
-        
+
         $result = $this->_cli->purgeDeletedRecords($opts);
         self::assertEquals(0, $result);
 
@@ -247,6 +248,7 @@ class Tinebase_Frontend_CliTest extends TestCase
             self::markTestSkipped('FIXME: this currently fails with enabled previews - might be some locking issue in the test setup');
         }
 
+        $this->_testNeedsTransaction();
         Tinebase_Lock::clearLocks();
 
         $scheduler = Tinebase_Core::getScheduler();

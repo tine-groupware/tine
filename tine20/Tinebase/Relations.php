@@ -110,7 +110,8 @@ class Tinebase_Relations implements Tinebase_Controller_Interface
                                  $_relationData,
                                  $_ignoreACL = false,
                                  $_inspectRelated = false,
-                                 $_doCreateUpdateCheck = false)
+                                 $_doCreateUpdateCheck = false,
+                                 bool $_purgeNow = false)
     {
         if ($_relationData instanceof Tinebase_Record_RecordSet) {
             $relations = $_relationData;
@@ -151,7 +152,7 @@ class Tinebase_Relations implements Tinebase_Controller_Interface
         
         // break relations
         foreach ($toDel as $relationId) {
-            $this->_backend->breakRelation($relationId);
+            $this->_backend->breakRelation($relationId, $_purgeNow);
         }
         
         // add new relations

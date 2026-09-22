@@ -81,10 +81,14 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
                 'record_backend' => 'TestBackend',
                 'modification_time' => $this->_cloner($now)->addDay(-2),
                 'modification_account' => 7,
-                'modified_attribute' => 'FirstTestAttribute',
-                'old_value' => 'Hamburg',
-                'new_value' => 'Bremen',
-                'client' => 'unittest'
+                'new_value' => json_encode((new Tinebase_Model_Diff([
+                        'id' => $this->_recordIds[0],
+                        'model' => 'TestType',
+                        'diff' => ['FirstTestAttribute' => 'Bremen'],
+                        'oldData' => ['FirstTestAttribute' => 'Hamburg'],
+                ]))->toArray()),
+                'client' => 'unittest',
+                'seq' => 0,
             ),
             array(
                 'application_id' => $tinebaseApp,
@@ -93,10 +97,14 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
                 'record_backend' => 'TestBackend',
                 'modification_time' => $this->_cloner($now)->addDay(-1),
                 'modification_account' => 7,
-                'modified_attribute' => 'FirstTestAttribute',
-                'old_value' => 'Bremen',
-                'new_value' => 'Frankfurt',
-                'client' => 'unittest'
+                'new_value' => json_encode((new Tinebase_Model_Diff([
+                    'id' => $this->_recordIds[0],
+                    'model' => 'TestType',
+                    'diff' => ['FirstTestAttribute' => 'Frankfurt'],
+                    'oldData' => ['FirstTestAttribute' => 'Bremen'],
+                ]))->toArray()),
+                'client' => 'unittest',
+                'seq' => 0,
             ),
             array(
                 'application_id' => $tinebaseApp,
@@ -105,10 +113,14 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
                 'record_backend' => 'TestBackend',
                 'modification_time' => $this->_cloner($now),
                 'modification_account' => 7,
-                'modified_attribute' => 'FirstTestAttribute',
-                'old_value' => 'Frankfurt',
-                'new_value' => 'Stuttgart',
-                'client' => 'unittest'
+                'new_value' => json_encode((new Tinebase_Model_Diff([
+                    'id' => $this->_recordIds[0],
+                    'model' => 'TestType',
+                    'diff' => ['FirstTestAttribute' => 'Stuttgart'],
+                    'oldData' => ['FirstTestAttribute' => 'Frankfurt'],
+                ]))->toArray()),
+                'client' => 'unittest',
+                'seq' => 0,
             ),
             array(
                 'application_id' => $tinebaseApp,
@@ -117,10 +129,14 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
                 'record_backend' => 'TestBackend',
                 'modification_time' => $this->_cloner($now)->addDay(-2),
                 'modification_account' => 7,
-                'modified_attribute' => 'SecondTestAttribute',
-                'old_value' => 'Deutschland',
-                'new_value' => 'Östereich',
-                'client' => 'unittest'
+                'new_value' => json_encode((new Tinebase_Model_Diff([
+                    'id' => $this->_recordIds[0],
+                    'model' => 'TestType',
+                    'diff' => ['SecondTestAttribute' => 'Östereich'],
+                    'oldData' => ['SecondTestAttribute' => 'Deutschland'],
+                ]))->toArray()),
+                'client' => 'unittest',
+                'seq' => 0,
             ),
             array(
                 'application_id' => $tinebaseApp,
@@ -129,10 +145,14 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
                 'record_backend' => 'TestBackend',
                 'modification_time' => $this->_cloner($now)->addDay(-1)->addSecond(1),
                 'modification_account' => 7,
-                'modified_attribute' => 'SecondTestAttribute',
-                'old_value' => 'Östereich',
-                'new_value' => 'Schweitz',
-                'client' => 'unittest'
+                'new_value' => json_encode((new Tinebase_Model_Diff([
+                    'id' => $this->_recordIds[0],
+                    'model' => 'TestType',
+                    'diff' => ['SecondTestAttribute' => 'Schweiz'],
+                    'oldData' => ['SecondTestAttribute' => 'Östereich'],
+                ]))->toArray()),
+                'client' => 'unittest',
+                'seq' => 0,
             ),
             array(
                 'application_id' => $tinebaseApp->getId(),
@@ -141,10 +161,14 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
                 'record_backend' => 'TestBackend',
                 'modification_time' => $this->_cloner($now),
                 'modification_account' => 7,
-                'modified_attribute' => 'SecondTestAttribute',
-                'old_value' => 'Schweitz',
-                'new_value' => 'Italien',
-                'client' => 'unittest'
+                'new_value' => json_encode((new Tinebase_Model_Diff([
+                    'id' => $this->_recordIds[0],
+                    'model' => 'TestType',
+                    'diff' => ['SecondTestAttribute' => 'Italien'],
+                    'oldData' => ['SecondTestAttribute' => 'Schweiz'],
+                ]))->toArray()),
+                'client' => 'unittest',
+                'seq' => 0,
             )), true, false);
 
         foreach ($this->_logEntries as $logEntry) {
@@ -298,7 +322,7 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
             array('field' => 'change_type',         'operator' => 'not',    'value' => Tinebase_Timemachine_ModificationLog::CREATED)
         ));
 
-        $result = $this->_modLogClass->undo($filter, true);
+        $result = $this->_modLogClass->undo($filter);
         $this->assertEquals(2, $result['totalcount'], 'did not get 2 undone modlog: ' . print_r($result, TRUE));
 
         // check record after undo
@@ -1277,22 +1301,5 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         $this->assertTrue($notFound, 'delete did not work...');
         
         $this->assertEquals(0, $modifications->count(), 'not all modifications processed');
-    }
-
-    public function testClearTableModLog()
-    {
-        //create modlog
-        $contact = Addressbook_Controller_Contact::getInstance()->get(Tinebase_Core::getUser()->contact_id);
-        $contact->adr_one_street = 'Teststrasse';
-        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
-
-        $modLogsBefore = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications("Addressbook", $contact->getId());
-        
-        $result = Tinebase_Timemachine_ModificationLog::getInstance()->clearTable(Tinebase_DateTime::now());
-        $this->assertGreaterThan(0, $result);
-        
-        $modLogsAfter = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications("Addressbook", $contact->getId());
-        $this->assertGreaterThan(count($modLogsAfter), count($modLogsBefore)); 
-        $this->assertEquals(0, count($modLogsAfter), print_r($modLogsAfter->toArray(), true));
     }
 }

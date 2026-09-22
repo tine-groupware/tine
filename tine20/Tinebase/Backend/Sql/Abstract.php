@@ -5,13 +5,15 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about removing the appendForeignRecord* functions
  * @todo        use const for type (set in constructor)
  * @todo        move custom fields handling to controller?
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * Abstract class for a Tine 2.0 sql backend
@@ -1489,6 +1491,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_tablePrefix . $this->_tableName, $this->_db);
         if (isset($schema['deleted_time'])) {
             $data['deleted_time'] = new Zend_Db_Expr('NOW()');
+        }
+        if (isset($schema[TMCC::FLD_PURGE_DATE])) {
+            $data[TMCC::FLD_PURGE_DATE] = Tinebase_Timemachine_ModificationLog::getPurgeDate()->toString();
         }
         if (isset($schema['deleted_by'])) {
             $data['deleted_by'] = is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : Tinebase_Core::getUser();

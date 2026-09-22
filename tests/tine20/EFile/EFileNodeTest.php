@@ -14,7 +14,6 @@ class EFile_EFileNodeTest extends TestCase
     {
         parent::setUp();
 
-        Tinebase_FileSystem::getInstance()->resetBackends();
         Tinebase_Core::clearAppInstanceCache();
         EFile_Controller::registerTreeNodeHooks();
         Tinebase_FileSystem::getInstance()->clearStatCache();

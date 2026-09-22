@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>SimpleFAQ</name>
-    <version>19.0</version>
+    <version>19.1</version>
     <order>62</order>
     <status>enabled</status>
     <depends>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>simple_faq</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -71,6 +71,11 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
+                </field>
+                <field>
+                    <name>purge_date</name>
+                    <type>date</type>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>seq</name>

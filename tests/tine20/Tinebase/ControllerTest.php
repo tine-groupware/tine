@@ -490,6 +490,8 @@ class Tinebase_ControllerTest extends TestCase
 
     public function testRemoveObsoleteData()
     {
+        $this->_testNeedsTransaction();
+
         $result = $this->_instance->removeObsoleteData();
         self::assertTrue($result);
 

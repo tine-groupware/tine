@@ -2384,8 +2384,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     }
 
     /**
-     * remove all deleted/obsolete data before $beforeDate from $tables (no tables given: from all tables)
-     * - also removes modlog, obsolete customfields, relations, notes and more
+     * removes all deleted/obsolete data before $beforeDate from $tables (no tables given: from all tables)
+     * removes all data marked for purging ignoring given beforeDate
+     *
+     * daily scheduler
+     * tb cli
      *
      * @param Tinebase_DateTime|null $beforeDate
      * @param array $tables
@@ -2411,6 +2414,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $this->_purgeTables($beforeDate, $orderedTables);
 
         Tinebase_Container::getInstance()->clearContainerContent();
+        Tinebase_Timemachine_ModificationLog::getInstance()->purgeOrphans();
 
         if ($doEverything) {
             // TODO optimize & activate again
@@ -2456,7 +2460,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $where = array(
             $db->quoteInto($db->quoteIdentifier('deleted_time') . ' < ?', $beforeDayString)
         );
-        $where[] = $db->quoteInto($db->quoteIdentifier('is_deleted') . ' = ?', 1);
+        $where[] = $isDeletedWhere = $db->quoteInto($db->quoteIdentifier('is_deleted') . ' = ?', 1);
+        $where[] = ($quotedPurgeDate = $db->quoteIdentifier('purge_date')) . ' IS NULL';
+
+        $purgeDateWhere = [
+            $isDeletedWhere,
+            $quotedPurgeDate . ' <> "1970-01-01 00:00:00"',
+            $quotedPurgeDate . ' IS NOT NULL',
+            $quotedPurgeDate . ' <= CURDATE()',
+        ];
 
         foreach ($orderedTables as $table) {
             try {
@@ -2474,9 +2486,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $deleteCount = 0;
             try {
                 if ($table === 'tree_nodes') {
-                    $deleteCount = Tinebase_FileSystem::getInstance()->purgeTreeNodes($where);
+                    $deleteCount += Tinebase_FileSystem::getInstance()->purgeTreeNodes($where);
+                    $deleteCount += Tinebase_FileSystem::getInstance()->purgeTreeNodes($purgeDateWhere, false);
                 } else {
-                    $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+                    $deleteCount += Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+                    $deleteCount += Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $purgeDateWhere);
                 }
             } catch (Zend_Db_Statement_Exception $zdse) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__

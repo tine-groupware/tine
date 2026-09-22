@@ -543,10 +543,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * delete linked objects (notes, relations, attachments, alarms) of record
      *
      * @param Felamimail_Model_Account $_record
+     * @param bool $_purgeNow
      */
-    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record, bool $_purgeNow = false)
     {
-        parent::_deleteLinkedObjects($_record);
+        parent::_deleteLinkedObjects($_record, $_purgeNow);
 
         if ($_record->type === Felamimail_Model_Account::TYPE_ADB_LIST 
             || $_record->type === Felamimail_Model_Account::TYPE_SHARED_INTERNAL 

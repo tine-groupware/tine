@@ -829,7 +829,7 @@ class Tinebase_Scheduler_Task
         self::_addTaskIfItDoesNotExist(
             Tinebase_Controller::class,
             'removeObsoleteData',
-            self::TASK_TYPE_MONTHLY,
+            self::TASK_TYPE_DAILY,
             $scheduler
         );
     }

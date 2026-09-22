@@ -491,12 +491,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             if ($_mods instanceof Tinebase_Record_RecordSet && count($_mods) > 0) {
                 $noteText .= ' | ' .$translate->_('Changed fields:');
                 foreach ($_mods as $mod) {
-                    $modifiedAttribute = $mod->modified_attribute;
-                    if (empty($modifiedAttribute)) {
-                        $noteText.= ' ' . $this->_getSystemNoteChangeText($mod, $translate);
-                    } else {
-                        $noteText .= ' ' . $translate->_($mod->modified_attribute) . ' (' . $this->_getSystemNoteChangeText($mod) . ')';
-                    }
+                    $noteText.= ' ' . $this->_getSystemNoteChangeText($mod, $translate);
                 }
             } else if (is_string($_mods)) {
                 $noteText = $_mods;
@@ -531,113 +526,81 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @throws Tinebase_Exception_Record_Validation
      * @throws Zend_Json_Exception
      */
-    protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification,
-                                                ?Zend_Translate $translate = null): string
+    protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification, ?Zend_Translate $translate = null): string
     {
         $recordProperties = [];
         /** @var Tinebase_Record_Interface $model */
         if (($model = $modification->record_type) && ($mc = $model::getConfiguration())) {
             $recordProperties = $mc->recordFields;
         }
-        $modifiedAttribute = $modification->modified_attribute;
 
-        // new ModificationLog implementation
-        if (empty($modifiedAttribute)) {
-            $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-            $return = '';
-            foreach ($diff->diff as $attribute => $value) {
+        $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+        $return = '';
+        foreach ($diff->diff as $attribute => $value) {
+            if (is_array($value) && isset($value['model']) && isset($value['added'])) {
+                $tmpDiff = new Tinebase_Record_RecordSetDiff($value);
+                $return .= ' ' . $translate->_($attribute) . ' (' . $tmpDiff->getTranslatedDiffText() . ')';
+            } else {
+                $oldData = $diff->oldData ? $diff->oldData[$attribute] : null;
 
-                if (is_array($value) && isset($value['model']) && isset($value['added'])) {
-                    $tmpDiff = new Tinebase_Record_RecordSetDiff($value);
-                    $return .= ' ' . $translate->_($attribute) . ' (' . $tmpDiff->getTranslatedDiffText() . ')';
-                } else {
-                    $oldData = $diff->oldData ? $diff->oldData[$attribute] : null;
-
-                    if (isset($recordProperties[$attribute]) && ($oldData || $value) &&
-                            isset($recordProperties[$attribute]['config']['controllerClassName']) && ($controller =
-                            $recordProperties[$attribute]['config']['controllerClassName']::getInstance()) &&
-                            method_exists($controller, 'get')) {
-                        if ($oldData) {
-                            if (is_array($oldData)) $oldData = $oldData['id'] ?? '';
-                            try {
-                                $oldDataString = $controller->get($oldData, null, false, true)->getTitle();
-                            } catch (Tinebase_Exception_ProgramFlow $tepf) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                        . ' ' . $tepf->getMessage());
-                                }
-                                $oldDataString = $oldData;
-                            }
-                        } else {
-                            $oldDataString = '';
-                        }
-                        if ($value) {
-                            if (is_array($value)) $value = $value['id'] ?? '';
-                            try {
-                                $valueString = $controller->get($value, null, false, true)->getTitle();
-                            } catch (Tinebase_Exception_ProgramFlow | Tinebase_Exception_InvalidArgument $tepf) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                        . ' ' . $tepf->getMessage());
-                                }
-                                $valueString = $value;
-                            }
-                        } else {
-                            $valueString = '';
-                        }
-                    } else {
-                        if (is_array($oldData)) {
-                            $oldDataString = '';
-                            foreach ($oldData as $key => $val) {
-                                if (is_object($val)) {
-                                    $val = $val->toArray();
-                                }
-                                $oldDataString .= ' ' . $key . ': ' . (is_array($val) ? ($val['id'] ?? print_r($val,
-                                        true)) : $val);
-                            }
-                        } else {
+                if (isset($recordProperties[$attribute]) && ($oldData || $value) &&
+                        isset($recordProperties[$attribute]['config']['controllerClassName']) && ($controller =
+                        $recordProperties[$attribute]['config']['controllerClassName']::getInstance()) &&
+                        method_exists($controller, 'get')) {
+                    if ($oldData) {
+                        if (is_array($oldData)) $oldData = $oldData['id'] ?? '';
+                        try {
+                            $oldDataString = $controller->get($oldData, null, false, true)->getTitle();
+                        } catch (Tinebase_Exception_NotFound|Tinebase_Exception_AccessDenied) {
                             $oldDataString = $oldData;
                         }
-                        if (is_array($value)) {
-                            $valueString = '';
-                            foreach ($value as $key => $val) {
-                                if (is_object($val)) {
-                                    $val = $val->toArray();
-                                }
-                                $valueString .= ' ' . $key . ': ' . (is_array($val) ? ($val['id'] ?? print_r($val,
-                                        true)) : $val);
-                            }
-                        } else {
+                    } else {
+                        $oldDataString = '';
+                    }
+                    if ($value) {
+                        if (is_array($value)) $value = $value['id'] ?? '';
+                        try {
+                            $valueString = $controller->get($value, null, false, true)->getTitle();
+                        } catch(Tinebase_Exception_NotFound|Tinebase_Exception_AccessDenied) {
                             $valueString = $value;
                         }
+                    } else {
+                        $valueString = '';
                     }
-
-                    if (null !== $oldDataString || (null !== $valueString && '' !== $valueString)) {
-                        $return .= ' ' . $translate->_($attribute) . ' (' . $oldDataString . ' -> ' . $valueString . ')';
+                } else {
+                    if (is_array($oldData)) {
+                        $oldDataString = '';
+                        foreach ($oldData as $key => $val) {
+                            if (is_object($val)) {
+                                $val = $val->toArray();
+                            }
+                            $oldDataString .= ' ' . $key . ': ' . (is_array($val) ? ($val['id'] ?? print_r($val,
+                                    true)) : $val);
+                        }
+                    } else {
+                        $oldDataString = $oldData;
+                    }
+                    if (is_array($value)) {
+                        $valueString = '';
+                        foreach ($value as $key => $val) {
+                            if (is_object($val)) {
+                                $val = $val->toArray();
+                            }
+                            $valueString .= ' ' . $key . ': ' . (is_array($val) ? ($val['id'] ?? print_r($val,
+                                    true)) : $val);
+                        }
+                    } else {
+                        $valueString = $value;
                     }
                 }
-            }
 
-            return $return;
-
-        // old ModificationLog implementation
-        } else {
-            // check if $modification->new_value is json string and record set diff
-            // @see 0008546: When edit event, history show "code" ...
-            if (Tinebase_Helper::is_json($modification->new_value)) {
-                $newValueArray = Zend_Json::decode($modification->new_value);
-                if ((isset($newValueArray['model']) || array_key_exists('model', $newValueArray)) && (isset($newValueArray['added']) || array_key_exists('added', $newValueArray))) {
-                    $diff = new Tinebase_Record_RecordSetDiff($newValueArray);
-
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' fetching translated text for diff: ' . print_r($diff->toArray(), true));
-
-                    return $diff->getTranslatedDiffText();
+                if (null !== $oldDataString || (null !== $valueString && '' !== $valueString)) {
+                    $return .= ' ' . $translate->_($attribute) . ' (' . $oldDataString . ' -> ' . $valueString . ')';
                 }
             }
-
-            return $modification->old_value . ' -> ' . $modification->new_value;
         }
+
+        return $return;
     }
     
     /**
@@ -704,13 +667,17 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param  string $_backend   backend of record
      * @param  string $_id        id of record
      */
-    public function deleteNotesOfRecord($_model, $_backend, $_id)
+    public function deleteNotesOfRecord($_model, $_backend, $_id, bool $_purgeNow = false)
     {
         $backend = ucfirst(strtolower($_backend));
         
         $notes = $this->getNotesOfRecord($_model, $_id, $backend);
 
-        $this->deleteNotes($notes);
+        if ($_purgeNow) {
+            $this->purgeNotes($notes->getArrayOfIds());
+        } else {
+            $this->deleteNotes($notes);
+        }
     }
     
     /**
@@ -973,6 +940,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function purgeNotes(array $_ids)
     {
+        if (empty($_ids)) return 0;
         return $this->_db->delete(SQL_TABLE_PREFIX . 'notes', $this->_db->quoteInto('id IN (?)', $_ids));
     }
 
