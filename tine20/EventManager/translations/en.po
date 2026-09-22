@@ -614,23 +614,23 @@ msgstr "Information regarding your involvement"
 msgid "Missing Participants"
 msgstr "Missing Participants"
 
+msgid "Currently there are no participants confirmed in this event"
+msgstr "Currently there are no participants confirmed in this event"
+
 msgid "Currently there are no participants signed for this event"
 msgstr "Currently there are no participants signed for this event"
 
 msgid "Notify Participants"
 msgstr "Notify Participants"
 
-msgid "Attendee"
-msgstr "Attendee"
+msgid "All Confirmed Participants"
+msgstr "All Confirmed Participants"
 
-msgid "Moderator"
-msgstr "Moderator"
+msgid "Currently there are no confirmed participants"
+msgstr "Currently there are no confirmed participants"
 
-msgid "Employee"
-msgstr "Employee"
-
-msgid "All"
-msgstr "All"
+msgid "All Selected Participants"
+msgstr "All Selected Participants"
 
 msgid "A simple text option that displays a fixed text to the participant in the registration form."
 msgstr "A simple text option that displays a fixed text to the participant in the registration form."
