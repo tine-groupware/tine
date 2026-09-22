@@ -121,7 +121,9 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
             this.setValue = (value) => {
                 this.value = value;
                 this.afterIsRendered().then(() => {
-                    this.setRawValue(this.locked ? this.hiddenPasswordChr.repeat(this.record?.id ? 8 : this.value.length) : this.value);
+                    this.setRawValue(this.locked ? this.hiddenPasswordChr.repeat(
+                        this.record?.id ? 8 : this.value?.length) : this.value
+                    );
                 });
             }
         }

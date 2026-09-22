@@ -2083,32 +2083,41 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function revealPassword(string $model, string $recordId, string $field): array
+    public function revealPassword(string $model, string $recordId, string $field = 'password'): array
     {
+        if (empty($recordId)) {
+            return [];
+        }
+
         $controller = Tinebase_Core::getApplicationInstance($model);
         if (!$controller instanceof Tinebase_Controller_Record_Abstract) {
             throw new Tinebase_Exception_InvalidArgument('Model not supported');
         }
 
         $record = $controller->get($recordId);
+        if (method_exists($controller, 'revealPassword')) {
+            $password = $controller->revealPassword($record, $field);
+        } else {
+            $config = $record::getConfiguration();
+            $fields = $config->getFields();
 
-        $config = $record::getConfiguration();
-        $fields = $config->getFields();
+            if (!isset($fields[$field])) {
+                throw new Tinebase_Exception_InvalidArgument(
+                    "Field '{$field}' does not exist on model "
+                    . $record::class
+                );
+            }
 
-        if (!isset($fields[$field])) {
-            throw new Tinebase_Exception_InvalidArgument("Field '{$field}' does not exist on model "
-                . $record::class);
-        }
+            if (($fields[$field]['type'] ?? null) !== 'password') {
+                throw new Tinebase_Exception_InvalidArgument("Field '{$field}' is not a password field");
+            }
 
-        if (($fields[$field]['type'] ?? null) !== 'password') {
-            throw new Tinebase_Exception_InvalidArgument("Field '{$field}' is not a password field");
-        }
-
-        try {
-            $password = $record->getPasswordFromProperty($field);
-        } catch (Tinebase_Exception $te) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
-            $password = null;
+            try {
+                $password = $record->getPasswordFromProperty($field);
+            } catch (Tinebase_Exception $te) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+                $password = null;
+            }
         }
 
         if ($password) {

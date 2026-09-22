@@ -1042,7 +1042,8 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         $fmailaccount = Felamimail_Controller_Account::getInstance()->get($account['id']);
         $imapConfig = $fmailaccount->getImapConfig();
 
-        $result = $this->_json->revealEmailAccountPassword($account->getId());
+        $json = new Tinebase_Frontend_Json();
+        $result = $json->revealPassword('Admin_Model_EmailAccount', $account->getId(), 'password');
         self::assertEquals($result['password'], $imapConfig['password'], 'reveal password failed');
 
         $records = Tinebase_Notes::getInstance()->searchNotes(new Tinebase_Model_NoteFilter([
@@ -1054,7 +1055,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         self::assertCount(1, $records, 'reveal password failed');
 
         // test again with empty param
-        $result = $this->_json->revealEmailAccountPassword('');
+        $result = $json->revealPassword('Admin_Model_EmailAccount', '');
         self::assertEmpty($result);
     }
 
