@@ -3094,7 +3094,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 ! Calendar_Controller_Alarm::hasUpdates($_event, $event)
             ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "no status change -> do nothing");
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " no status change -> do nothing");
                 return $updatedAttender;
             }
             
