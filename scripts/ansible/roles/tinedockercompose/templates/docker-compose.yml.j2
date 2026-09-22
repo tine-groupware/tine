@@ -190,7 +190,7 @@ services:
 {% endif %}
 {% if tinedockercompose_traefik_host is defined %}
   traefik:
-    image: "traefik:v2.6"
+    image: "traefik:v3.6"
     restart: always
     container_name: "traefik"
     command:
