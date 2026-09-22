@@ -713,7 +713,6 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
-     * @throws Zend_Db_Statement_Exception
      */
     public function iMIPProcess(array $iMIP, null|string|array $status = null): array
     {
@@ -726,13 +725,24 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         try {
             $iMIPFrontend->process($iMIPMessage, $status);
         } catch (Felamimail_Exception_IMAPMessageNotFound $feimmnf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' ' . print_r($iMIPMessage->toArray(), true));
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                __METHOD__ . '::' . __LINE__ . ' ' . $feimmnf->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . print_r($iMIPMessage->toArray(), true));
+            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $feimmnf->getMessage());
+            }
             throw new Tinebase_Exception_NotFound('Could not find message on IMAP server.');
+        } catch (Calendar_Exception_iMIP $cei) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $cei->getMessage());
+            }
+            $translate = Tinebase_Translation::getTranslation(Calendar_Config::APP_NAME);
+            throw new Tinebase_Exception_SystemGeneric($translate->_('Could not process iMIP-Event'));
         }
-        
+
         return $this->iMIPPrepare($iMIPMessage, $status);
     }
 
