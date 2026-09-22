@@ -166,17 +166,21 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
     public function getEventTemplateContainer()
     {
-        $containerName = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_TEMPLATES_CONTAINER_NAME);
-        return Tinebase_Container::getInstance()->getContainerByName(
-            EventManager_Model_Event::class,
-            $containerName,
-            Tinebase_Model_Container::TYPE_SHARED,
-        );
+        try {
+            $containerName = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_TEMPLATES_CONTAINER_NAME);
+            return Tinebase_Container::getInstance()->getContainerByName(
+                EventManager_Model_Event::class,
+                $containerName,
+                Tinebase_Model_Container::TYPE_SHARED,
+            );
+        } catch (Tinebase_Exception_NotFound $e) {
+            return null;
+        }
     }
 
     protected function _createCalendarEvent ($updatedRecord, $_record, $is_appointment = false, $appointments = [])
     {
-        if ($updatedRecord->container_id === $this->getEventTemplateContainer()->getId()) {
+        if ($updatedRecord->{EventManager_Model_Event::FLD_IS_TEMPLATE}) {
             return;
         }
 
