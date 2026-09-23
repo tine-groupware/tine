@@ -209,7 +209,7 @@ class Tinebase_Helper
      */
     public static function convertCacheId($_cacheId) 
     {
-        return preg_replace('/[^a-z^A-Z^0-9^_]/', '', $_cacheId);
+        return preg_replace('/[^a-zA-Z0-9_]/', '', $_cacheId);
     }
     
     /**
