@@ -1189,7 +1189,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             if (null !== $replicationUser) {
                 $replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER);
                 if (empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
-                    $password = Tinebase_Record_Abstract::generateUID(12);
+                    $password = Tinebase_User_PasswordPolicy::generatePolicyConformPassword();
                 }
                 $userBackend->setPassword($replicationUser, $password);
             }
