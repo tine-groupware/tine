@@ -280,9 +280,8 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        if (!empty($_record->email)) {
-            $internalDomainOnly = !$_record->isExternalAccount();
-            Tinebase_EmailUser::checkAllowedDomain($_record->email, true, _internalDomainOnly: $internalDomainOnly);
+        if (!empty($_record->email) && !$_record->isExternalAccount()) {
+            Tinebase_EmailUser::checkAllowedDomain($_record->email, true, _internalDomainOnly: true);
         }
         parent::_inspectBeforeCreate($_record);
     }
