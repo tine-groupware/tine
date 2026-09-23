@@ -277,11 +277,9 @@ abstract class Felamimail_TestCase extends TestCase
      *
      * @param string $_subject
      * @param string $_folderName
-     * @param bool $_doAssertions
-     * @param bool $_searchSubstring If true, match subject as a substring (partial match). If false, require exact match.
-     * @return array
+     * @return string|null|array message data
      */
-    protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX', $_doAssertions = true, $_searchSubstring = false)
+    protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX', $_doAssertions = true)
     {
         // give server some time to send and receive messages
         sleep(1);
@@ -290,15 +288,8 @@ abstract class Felamimail_TestCase extends TestCase
 
         $message = [];
         foreach ($result['results'] as $mail) {
-            if ($_searchSubstring) {
-                if (str_contains($mail['subject'], $_subject)) {
-                    $message = $mail;
-                    break;
-                }
-            } else {
-                if ($mail['subject'] == $_subject) {
-                    $message = $mail;
-                }
+            if ($mail['subject'] == $_subject) {
+                $message = $mail;
             }
         }
         if ($_doAssertions) {

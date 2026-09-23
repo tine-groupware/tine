@@ -1,9 +1,8 @@
 <?php
 /**
- * tine Groupware - https://www.tine-groupware.de/
+ * tine Groupware
  *
  * @package     Felamimail
- * @subpackage  Frontend
  * @license     https://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
@@ -2483,38 +2482,33 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $this->assertStringContainsString($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
     }
 
-    protected function _activateSieveNotification(string $email): void
-    {
-        $this->_setTestScriptname();
-        $this->_account->sieve_notification_email = $email;
-        $this->_account->sieve_notification_move = false;
-        Felamimail_Controller_Account::getInstance()->update($this->_account);
-    }
-
     /**
      * @group nogitlabciad
      */
     public function testSieveEmailNotification()
     {
-        $this->_activateSieveNotification($this->_account->email);
+        $this->_setTestScriptname();
+
+        $this->_account->sieve_notification_email = 'test@test.de';
+        $this->_account->sieve_notification_move = false;
+        Felamimail_Controller_Account::getInstance()->update($this->_account);
+
         $script = new Felamimail_Sieve_Backend_Sql($this->_account->getId());
         $scriptParts = $script->getScriptParts();
-        $script = $script->getSieve();
-
+        
         static::assertGreaterThan(0, $scriptParts->count(), 'at least 1 script part expected. script: '
-            . $script . ' parts: '
+            . $script->getSieve() . ' parts: '
             . print_r($scriptParts->toArray(), true)
         );
-
+        
         foreach ($scriptParts as $scriptPart) {
-            $requires = [];
             if ($scriptPart['type'] === Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION) {
                 $requires = ['"enotify"', '"variables"', '"copy"', '"body"'];
             }
             
             if ($scriptPart['type'] === Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION) {
                 $requires = ['"fileinto"', '"mailbox"'];
-                static::assertStringContainsString($this->_account->email, $script);
+                static::assertStringContainsString('test@test.de', $script->getSieve());
             }
 
             static::assertTrue(count(array_intersect($requires, $scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES))) === sizeof($requires),
@@ -2527,33 +2521,17 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
      */
     public function testSieveEmailNotificationMultiple()
     {
-        $this->_activateSieveNotification('test@test.de,test2@test.de');
+        $this->_setTestScriptname();
+
+        $this->_account->sieve_notification_email = 'test@test.de,test2@test.de';
+        $this->_account->sieve_notification_move = false;
+        Felamimail_Controller_Account::getInstance()->update($this->_account);
+
         $script = new Felamimail_Sieve_Backend_Sql($this->_account->getId());
         
         static::assertStringContainsString('test@test.de', $script->getSieve());
         static::assertStringContainsString('test2@test.de', $script->getSieve());
         static::assertStringContainsString(':from "noreply@mail.test"', $script->getSieve());
-    }
-
-    /**
-     * @group nogitlabciad
-     */
-    public function testSieveEmailNotificationSendMail()
-    {
-        $this->_activateSieveNotification($this->_account->email);
-        
-        // send a test email to trigger the sieve notification script
-        $messageToSend = $this->_getMessageData();
-        $this->_json->saveMessage($messageToSend);
-        
-        // check that notification is received in INBOX
-        $translate = Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME);
-        $subject = str_replace('%1$s.', '', $translate->_('You have new mail from: %1$s.'));
-        $notificationMessage = $this->_searchForMessageBySubject($subject, _searchSubstring: true);
-        $this->assertNotEmpty($notificationMessage, 'Sieve notification email should be delivered to INBOX');
-
-        $messageComplete = $this->_json->getMessage($notificationMessage['id']);
-        $this->assertStringContainsString('E-Mail Link', $messageComplete['body'], 'Sieve notification email should use twig template');
     }
 
     /**
@@ -2614,15 +2592,13 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $this->_json->saveAccount($this->_account->toArray());
 
         $this->_foldersToClear[] = 'INBOX';
-        $messageToSend = $this->_getMessageData(_subject: 'reply-to-test');
+        $messageToSend = $this->_getMessageData();
         $this->_json->saveMessage($messageToSend);
         $message = $this->_searchForMessageBySubject($messageToSend['subject']);
 
         $complete = $this->_json->getMessage($message['id']);
-        $this->assertTrue(isset($complete['headers']['reply-to']), 'reply-to header missing: '
-            . print_r($complete['headers'], true));
-        $this->assertEquals('"' . $complete['from_name'] . '" <noreply@tine20.org>',
-            $complete['headers']['reply-to']);
+        $this->assertTrue(isset($complete['headers']['reply-to']), print_r($complete, true));
+        $this->assertEquals('"' . $complete['from_name'] . '" <noreply@tine20.org>', $complete['headers']['reply-to']);
     }
 
     /**

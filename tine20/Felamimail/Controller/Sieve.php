@@ -808,12 +808,14 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $this->setNotificationScripts($_accountId, $scriptParts);
             return;
         }
-
+        
         $fileSystem = Tinebase_FileSystem::getInstance();
-
+        $translate = Tinebase_Translation::getTranslation('Felamimail');
+        $locale = Tinebase_Core::getLocale();
+        $subject = $translate->_('You have new mail from ', $locale);
         if (empty($adminBounceEmail = Felamimail_Config::getInstance()->
-            {Felamimail_Config::SIEVE_ADMIN_BOUNCE_NOTIFICATION_EMAIL}) ||
-            !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $adminBounceEmail)) {
+                {Felamimail_Config::SIEVE_ADMIN_BOUNCE_NOTIFICATION_EMAIL}) ||
+                !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $adminBounceEmail)) {
             $defaultAdminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
             $members = Tinebase_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId());
             foreach ($members as $memberId) {
@@ -835,48 +837,16 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         }
 
         $notificationEmailAddress = Tinebase_Notification_Backend_Smtp::getNotificationAddress();
-
-        // placeholder that survives rawurlencode() untouched (letters/digits/underscore only)
-        $msgidToken = 'SIEVE_MSGID_TOKEN';
-
-        $twig = new Tinebase_Twig(new Zend_Locale(), Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME));
-        $template = $twig->load(Felamimail_Config::APP_NAME . '/views/emails/notification.html.twig');
-        $context = [
-            'from'  => $notificationEmailAddress,
-            'link'  => Tinebase_Core::getUrl() . '#/Felamimail/#MessageGrid/Filter/[... message-id=' . $msgidToken . ']'
-        ];
-        $subject = $template->renderBlock('subject', $context);
-        $htmlBody = $template->renderBlock('body', $context);
-
-        // build a plaintext fallback + sanitized HTML part, msgidToken still literal in both
-        $plaintextReason   = Felamimail_Message::convertContentType(Zend_Mime::TYPE_HTML, Zend_Mime::TYPE_TEXT, $htmlBody);
-        $formattedHTMLBody = Felamimail_Model_Sieve_ScriptPart::getFormattedHTMLBody($htmlBody);
-
-        $boundary = '=_SieveNotification_' . bin2hex(random_bytes(16));
-        $multipartBody = sprintf(
-            "--%1\$s\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n%2\$s\r\n\r\n"
-            . "--%1\$s\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n%3\$s\r\n\r\n"
-            . "--%1\$s--",
-            $boundary,
-            $plaintextReason,
-            $formattedHTMLBody
-        );
-
-        // encode once - identical for every recipient
-        $encodedBody = rawurlencode($multipartBody);
-        $encodedBody = str_replace($msgidToken, '${msgid}', $encodedBody);
-
-        // outer Content-Type goes on the mailto URI as a header= param, not inside the body
-        $mailtoContentTypeHeader = rawurlencode('multipart/alternative; boundary=' . $boundary);
-
-        $fromQualifier = '';
+        if(!($notificationEmailAddress)) {
+            $notificationEmailAddress = '';
+        }
         if($notificationEmailAddress !== '' && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $notificationEmailAddress)) {
-            $fromQualifier = ':from "' . $notificationEmailAddress . '" ';
+            $notificationEmailAddress = ':from "' . $notificationEmailAddress . '"' . "\n\t\t";
         }
 
         /** @var Tinebase_Model_Tree_Node $sieveNode */
         foreach ($fileSystem->getTreeNodeChildren(Felamimail_Config::getInstance()->
-        get(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID)) as $sieveNode) {
+                get(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID)) as $sieveNode) {
             if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $sieveNode->type) {
                 continue;
             }
@@ -889,9 +859,8 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $notifyScript = '';
             $redirectScript = '';
             $emails = explode(',', $_email);
-
+            
             foreach ($emails as $email) {
-                $email = trim($email);
                 if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $email)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
@@ -899,12 +868,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                     }
                     continue;
                 }
-
-                $notifyScript .= "\n\t" . 'notify ' . $fromQualifier
-                    . ':message "' . $subject . '${from}: ${subject}"' . "\n\t\t"
-                    . '"mailto:' . $email
-                    . '?body=' . $encodedBody
-                    . '&header=Content-Type:' . $mailtoContentTypeHeader . '";' . "\n";
+                $notifyScript .= "\n\t" . 'notify ' . $notificationEmailAddress . ':message "' . $subject. '${from}: ${subject}"' . "\n\t\t" . '"mailto:' . $email .'?body=${message}";' . "\n";
                 $redirectScript .= "\n\t" . 'redirect :copy "' . $email . '";';
             }
 
@@ -1113,9 +1077,6 @@ if header :contains "Return-Path" "<>" {
     }
     if header :matches "From" "*" {
         set "from" "${1}";
-    }
-    if header :matches "Message-ID" "*" {
-        set :encodeurl "msgid" "${1}";
     }
     set :encodeurl "message" "TRANSLATE_SUBJECT${from}: ${subject}";
 
