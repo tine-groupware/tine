@@ -3,7 +3,7 @@ entry_points_sources := $(shell echo lib/entry_points/*.sh)
 
 lib.yml: $(scripts_sources) $(entry_points_sources) makefile
 	printf "# This file is generated!\n" > lib.yml
-	printf "# source: ci/gitlab-ci/script\n" >> lib.yml
+	printf "# source: ci/gitlab-ci/lib/scripts\n" >> lib.yml
 	printf "# build: ci/gitlab-ci && make lib.yml\n\n" >> lib.yml
 	printf ".lib:\n" >> lib.yml;
 	printf "  script:\n" >> lib.yml;
