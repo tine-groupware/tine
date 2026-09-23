@@ -126,7 +126,9 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
             return;
         }
 
-        $container = EventManager_Controller_Event::getInstance()->getEventTemplateContainer();
+        $eventContainerName = EventManager_Config::getInstance()
+            ->get(EventManager_Config::EVENT_TEMPLATES_CONTAINER_NAME);
+        $container_id = EventManager_Setup_Initialize::_getOrCreateSharedEventContainer($eventContainerName)->getId();
 
         $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Tinebase_Model_EvaluationDimensionItem::class,
@@ -182,7 +184,7 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
 
         // template 1
         $template1 = EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container_id,
             EventManager_Model_Event::FLD_NAME                          => [[
                 EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
                 EventManager_Model_EventLocalization::FLD_TEXT => 'Erstkommunion'
@@ -312,7 +314,7 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
 
         // template 2
         $template2 = EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container_id,
             EventManager_Model_Event::FLD_NAME                          => [[
                 EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
                 EventManager_Model_EventLocalization::FLD_TEXT => 'Kinderbibeltag'
@@ -401,7 +403,7 @@ Wir freuen uns, dass Du beim Kinderbibeltag dabei sein möchtest!'
 
         // template 3
         $template3 = EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
+            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container_id,
             EventManager_Model_Event::FLD_NAME                          => [[
                 EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
                 EventManager_Model_EventLocalization::FLD_TEXT => 'Zeltlager'
