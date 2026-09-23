@@ -440,8 +440,8 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
     {
         $messageId = isset($_message['message_id']) ? $_message['message_id'] : $_message['id'];
         $cache = Tinebase_Core::getCache();
-        $cacheId = Tinebase_Helper::convertCacheId('_getDkimSenderFlag' . $_message['account_id'] . '_'
-            . $messageId);
+        $cacheId = Tinebase_Helper::convertCacheId(substr('_getDkimSenderFlag' . $_message['account_id'] . '_'
+            . $messageId, 0, 255));
         if ($cache->test($cacheId)) {
             $cachedFlag = $cache->load($cacheId);
             if ($cachedFlag !== null) {
