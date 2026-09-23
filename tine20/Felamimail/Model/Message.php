@@ -462,7 +462,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      * @param array $_headers
      * @return void
      */
-    public function parseHeaders(array $_headers)
+    public function parseHeaders(array $_headers): void
     {
         // remove duplicate headers (which can't be set twice in real life)
         foreach (array('date', 'from', 'subject', 'sender') as $field) {
@@ -472,9 +472,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         }
 
         if (isset($_headers['subject'])) {
-            // @see 0008644: error when sending mail with note (wrong charset)
-            // @todo might be removed in the future - but check if database supports utf8mb4 first
-            $this->subject = Tinebase_Core::filterInputForDatabase(Felamimail_Message::convertText($_headers['subject']));
+            $subject = $_headers['subject'];
+            if (preg_match('/=\?[^?]+\?[BbQq]\?[^?]*\?=/', $subject)) {
+                $subject = iconv_mime_decode($subject, 2);
+            }
+            $this->subject = Tinebase_Core::filterInputForDatabase($subject);
         } else {
             $this->subject = null;
         }
@@ -501,13 +503,18 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                     $value = Felamimail_Message::convertAddresses($_headers[$field]);
                     switch ($field) {
                         case 'from':
-                            $this->from_email = (isset($value[0]) && (isset($value[0]['email']) || array_key_exists('email', $value[0]))) ? $value[0]['email'] : '';
-                            $this->from_name = (isset($value[0]) && (isset($value[0]['name']) || array_key_exists('name', $value[0])) && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
+                            $this->from_email = (isset($value[0]) && (isset($value[0]['email'])
+                                    || array_key_exists('email', $value[0]))) ? $value[0]['email'] : '';
+                            $this->from_name = (isset($value[0]) && (isset($value[0]['name'])
+                                    || array_key_exists('name', $value[0]))
+                                && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
                             break;
                             
                         case 'sender':
-                            $this->sender = (isset($value[0]) && (isset($value[0]['email']) || array_key_exists('email', $value[0]))) ? '<' . $value[0]['email'] . '>' : '';
-                            if ((isset($value[0]) && (isset($value[0]['name']) || array_key_exists('name', $value[0])) && ! empty($value[0]['name']))) {
+                            $this->sender = (isset($value[0]) && (isset($value[0]['email'])
+                                    || array_key_exists('email', $value[0]))) ? '<' . $value[0]['email'] . '>' : '';
+                            if ((isset($value[0]) && (isset($value[0]['name'])
+                                    || array_key_exists('name', $value[0])) && ! empty($value[0]['name']))) {
                                 $this->sender = '"' . $value[0]['name'] . '" ' . $this->sender;
                             }
                             break;
