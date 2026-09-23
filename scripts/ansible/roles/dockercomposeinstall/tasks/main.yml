@@ -8,6 +8,7 @@
       - gnupg
     state: latest
     update_cache: true
+  when: ansible_facts["os_family"] == 'Debian'
 
 - name: Add Docker GPG apt Key (Ubuntu)
   apt_key:
@@ -46,3 +47,4 @@
       - python3-docker
     state: latest
     update_cache: true
+  when: ansible_facts["os_family"] == 'Debian'
