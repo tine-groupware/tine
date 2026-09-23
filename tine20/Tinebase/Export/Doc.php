@@ -174,16 +174,17 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     }
 
     /**
-     * @param $_name
+     * @param string $_name
      */
     protected function _endDataSource($_name)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ending datasource ' . $_name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Ending datasource ' . $_name);
+        }
 
         $data = '';
 
         if (false === $this->_skip) {
-
             $this->_unwrapProcessors();
 
             /** @var Tinebase_Export_Richtext_TemplateProcessor $processor */
@@ -193,8 +194,10 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
         $this->_lastGroupValue = null;
         $this->_skip = false;
-        $this->_currentProcessor = $this->_docTemplate;
-        $this->_docTemplate->setValue('DATASOURCE_' . $_name, $data);
+        if ($this->_docTemplate) {
+            $this->_currentProcessor = $this->_docTemplate;
+            $this->_docTemplate->setValue('DATASOURCE_' . $_name, $data);
+        }
     }
 
     protected function _unwrapProcessors()
@@ -428,7 +431,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
             }
             if (($record = reset($recordSet)) instanceof Tinebase_Record_Interface) {
                 if (null !== $disallowedKeys) {
-                    $realRecordSet = new Tinebase_Record_RecordSet($record::class);
+                    $realRecordSet = new Tinebase_Record_RecordSet(get_class($record));
                     foreach($recordSet as $key => $value) {
                         if (in_array($key, $disallowedKeys)) {
                             continue;
@@ -437,7 +440,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                     }
                     $recordSet = $realRecordSet;
                 } else {
-                    $recordSet = new Tinebase_Record_RecordSet($record::class, $recordSet);
+                    $recordSet = new Tinebase_Record_RecordSet(get_class($record), $recordSet);
                 }
             } else {
                 $realRecordSet = new Tinebase_Record_RecordSet(Tinebase_Record_Generic::class, array());
