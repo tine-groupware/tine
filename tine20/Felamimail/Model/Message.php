@@ -460,7 +460,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
             Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
         }
     }
-    
+
+    public static function isMimeEncoded(string $string): bool
+    {
+        return (bool) preg_match('/=\?[^?]+\?[BbQq]\?[^?]*\?=/', $string);
+    }
+
     /**
      * parse headers and set 'date', 'from', 'to', 'cc', 'bcc', 'subject', 'sender' fields
      * 
@@ -478,7 +483,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
 
         if (isset($_headers['subject'])) {
             $subject = $_headers['subject'];
-            if (preg_match('/=\?[^?]+\?[BbQq]\?[^?]*\?=/', $subject)) {
+            if (self::isMimeEncoded($subject)) {
                 $subject = iconv_mime_decode($subject, 2);
             }
             $this->subject = Tinebase_Core::filterInputForDatabase($subject);
