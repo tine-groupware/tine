@@ -847,12 +847,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Purifying removed ' . ($bodyCharCountBefore - $bodyCharCountAfter) . ' / ' . $bodyCharCountBefore . ' characters.');
-                if ($_message->text_partid && $bodyCharCountAfter < $bodyCharCountBefore / 10) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' Purify may have removed (more than 9/10) too many chars, using alternative text message part.');
-                    $result = $this->_getAndDecodeMessageBody($_message, $_message->text_partid, Zend_Mime::TYPE_TEXT, $_account);
-                    return Felamimail_Message::convertContentType(Zend_Mime::TYPE_TEXT, Zend_Mime::TYPE_HTML, $result);
-                }
             } else {
                 // only needed without html purifier (@see Felamimail_HTMLPurifier_AttrTransform_AValidator)
                 $body = Felamimail_Message::replaceTargets($body);
