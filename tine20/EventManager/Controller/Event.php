@@ -600,6 +600,8 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
             );
 
             $eventArray['country_list'] = Tinebase_Translation::getCountryList()['results'];
+            $eventArray['guardian_required_age'] = (int) EventManager_Config::getInstance()
+                ->get(EventManager_Config::GUARDIAN_REQUIRED_AGE);
 
             if (!empty($eventArray['options'])) {
                 foreach ($eventArray['options'] as &$option) {
@@ -608,6 +610,9 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                     }
                 }
             }
+
+            $eventArray['registration_communication_preference'] = EventManager_Config::getInstance()
+                ->get(EventManager_Config::REGISTRATION_COMMUNICATION_PREFERENCE)->toArray()['records'];
 
             $response->getBody()->write(json_encode($eventArray));
         } catch (Tinebase_Exception_NotFound $tenf) {

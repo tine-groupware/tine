@@ -51,6 +51,8 @@ class EventManager_Config extends Tinebase_Config_Abstract
     public const EVENT_NOTIFICATION_EMAIL = 'eventNotificationEmail';
     public const EVENT_NOTIFICATION_NAME = 'eventNotificationName';
     public const EVENT_TEMPLATES_CONTAINER_NAME = 'eventTemplatesContainerName';
+    public const GUARDIAN_REQUIRED_AGE = 'guardianRequiredAge';
+    public const REGISTRATION_COMMUNICATION_PREFERENCE = 'eventCommunicationPreference';
 
 
 
@@ -80,7 +82,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ]
         ],
-
         self::EVENT_STATUS => [
             self::LABEL                 => 'Status', //_('Status')
             self::DESCRIPTION           => '', //_('')
@@ -97,7 +98,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ]
         ],
-
         self::REGISTRATION_FUNCTION => [
             self::LABEL                 => 'Function', //_('Function')
             self::DESCRIPTION           => '', //_('')
@@ -113,7 +113,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ]
         ],
-
         self::REGISTRATION_SOURCE => [
             self::LABEL                 => 'Source', //_('Source')
             self::DESCRIPTION           => '', //_('')
@@ -128,7 +127,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ]
         ],
-
         self::REGISTRATION_STATUS => [
             self::LABEL                 => 'Status', //_('Status')
             self::DESCRIPTION           => '', //_('')
@@ -144,7 +142,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ]
         ],
-
         self::REGISTRATION_WAITING_LIST => [
             self::LABEL                 => 'Reason Waiting List', //_('Reason Waiting List')
             self::DESCRIPTION           => '', //_('')
@@ -160,7 +157,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 3
             ]
         ],
-
         self::APPOINTMENT_STATUS => [
             self::LABEL                 => 'Status', //_('Status')
             self::DESCRIPTION           => '', //_('')
@@ -176,7 +172,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ]
         ],
-
         self::OPTION_LEVEL => [
             self::LABEL                 => 'Level', //_('Level')
             self::DESCRIPTION           => '', //_('')
@@ -195,7 +190,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ]
         ],
-
         self::OPTION_REQUIRED_TYPE => [
             self::LABEL                 => 'Option Required Type', //_('Option Required Type')
             self::DESCRIPTION           => 'List of all option required type available',
@@ -212,7 +206,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ],
         ],
-
         self::DISPLAY_TYPE => [
             self::LABEL                 => 'Display Type', //_('Display Type')
             self::DESCRIPTION           => 'List of all display type available',
@@ -228,7 +221,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ],
         ],
-
         self::RULE_TYPE => [
             self::LABEL                 => 'Rule Type', //_('Rule Type')
             self::DESCRIPTION           => 'List of all rule type available', //_('List of all rule type available')
@@ -245,7 +237,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ],
         ],
-
         self::CRITERIA_TYPE => [
             self::LABEL                 => 'Criteria Type', //_('Criteria Type')
             self::DESCRIPTION           => 'List of all criteria type available',
@@ -265,7 +256,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ],
         ],
-
         self::DEFAULT_CONTACT_EVENT_CONTAINER => [
             self::LABEL                 => 'Default Container for Contacts of an Event',
                                         //_('Default Container for Contacts of an Event')
@@ -275,7 +265,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
         ],
-
         self::ALLOWED_FILE_TYPE => [
             self::LABEL                 => 'Allowed file type', //_('Allowed file type')
             self::DESCRIPTION           => '', //_('')
@@ -286,7 +275,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 '.pdf', '.doc' ,'.docx', '.png', '.jpeg', '.txt', '.html', '.htm', '.jpg', '.csv', '.xlsx', '.xls'
             ],
         ],
-
         self::EVENT_FOLDER_FILEMANAGER_PATH => [
             self::LABEL                 => 'Event Folder FileManager Path', //_('Event Folder FileManager Path')
             self::DESCRIPTION           => '', //_('')
@@ -294,7 +282,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
         ],
-
         self::JWT_SECRET => [
             self::LABEL                 => 'EventManager registration secret string',
                                         //_('EventManager registration secret string')
@@ -389,6 +376,31 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::DEFAULT_STR           => 'Vorlagen',
+        ],
+        self::GUARDIAN_REQUIRED_AGE => [
+            self::LABEL                 => 'Guardian required age',
+            //_('Guardian required age')
+            self::DESCRIPTION           => '', //_('')
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => 16,
+        ],
+        self::REGISTRATION_COMMUNICATION_PREFERENCE => [
+            self::LABEL                 => 'Communication Preference', //_('Communication Preference')
+            self::DESCRIPTION           => '', //_('')
+            self::TYPE                 => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR               => [
+                self::RECORDS  => [
+                    ['id' => 1,      'value' => 'Participant E-mail'], //_('Participant E-mail')
+                    ['id' => 2,      'value' => 'Registrant E-mail'], //_('Registrant E-mail')
+                    ['id' => 3,      'value' => 'Participant E-mail, Registrant E-mail in CC'],
+                    //_('Participant E-mail, Registrant E-mail in CC')
+                ],
+                self::DEFAULT_STR => 1
+            ]
         ],
     ];
 

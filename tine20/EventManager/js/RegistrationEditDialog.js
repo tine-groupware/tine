@@ -37,6 +37,11 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
             } else {
                 registrantField.hide();
             }
+            const purgeDateField = this.form.findField('purge_date');
+            if (purgeDateField) {
+                purgeDateField.hide();
+                this.doLayout();
+            }
         }).defer(100, this);
 
         this.setStatusListener();
