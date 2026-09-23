@@ -47,38 +47,6 @@ class Felamimail_Message extends Zend_Mail_Message
         parent::__construct($params);
     }
     
-
-    /**
-     * convert text
-     *
-     * @param string $_string
-     * @param boolean $_isHeader (if not, use base64 decode)
-     * @param integer $_ellipsis use substring (0 ... value) if value is > 0
-     * @return string
-     * 
-     * @todo make it work for message body (use table for quoted printables?)
-     */
-    public static function convertText($_string, $_isHeader = TRUE, $_ellipsis = 0)
-    {
-        $string = (string)$_string;
-        if (preg_match('/=?[\d,\w,-]*?[q,Q,b,B]?.*?=/', $string)) {
-            $string = preg_replace_callback('/(=[1-9,a-f]{2})/', function ($matches) { 
-                return strtoupper($matches[1]);
-            }, $string);
-            if ($_isHeader) {
-                $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
-                $string = iconv_mime_decode($string, 2);
-            }
-        }
-        
-        if ($_ellipsis > 0 && strlen($string) > $_ellipsis) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' String to long, cutting it to ' . $_ellipsis . ' chars.');
-            $string = substr($string, 0, $_ellipsis);
-        }
-        
-        return $string;
-    }
-    
     /**
      * convert date from sent/received
      *
