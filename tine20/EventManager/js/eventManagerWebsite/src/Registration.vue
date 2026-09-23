@@ -74,6 +74,44 @@
           </b-collapse>
         </b-col>
       </b-row>
+
+      <b-row>
+        <div v-if="isRegistrant">
+          <b-row>
+            <b-col>
+              <h4
+                v-b-toggle.collapse-3
+                @click="isCollapsedRegistrant = !isCollapsedRegistrant"
+                class="mb-4 collapsible-header section-heading"
+              >
+                {{formatMessage('Registrant Information:')}} <span class="chevron" :class="{ 'rotated': !isCollapsedRegistrant }">▼</span>
+              </h4>
+              <b-collapse visible id="collapse-3">
+                <template v-for="fieldName in visibleRegistrantContactFields" :key="fieldName">
+                  <b-form-group
+                    label-cols-sm="4"
+                    label-cols-lg="3"
+                    content-cols-sm
+                    content-cols-lg="7"
+                    :label="registrationRegistrantContactFields[fieldName].label + (requiredRegistrantContactFields.includes(fieldName) ? ' *' : '')"
+                    class="mb-3"
+                  >
+                    <component
+                      :is="contactFieldConfig[fieldName]?.component || BFormInput"
+                      v-model="registrantDetails[fieldName]"
+                      v-bind="contactFieldConfig[fieldName]?.props?.()"
+                      :class="{
+                    'required-field-error': requiredRegistrantContactFields.includes(fieldName) && validationErrors.includes(fieldName)
+                  }"
+                    />
+                  </b-form-group>
+                </template>
+              </b-collapse>
+            </b-col>
+          </b-row>
+        </div>
+      </b-row>
+
       <b-row>
         <b-col v-if="eventDetails.options?.length">
           <h4
@@ -193,41 +231,6 @@
             </div>
           </b-collapse>
         </b-col>
-
-        <div v-if="isRegistrant">
-          <b-row>
-            <b-col>
-              <h4
-                v-b-toggle.collapse-3
-                @click="isCollapsedRegistrant = !isCollapsedRegistrant"
-                class="mb-4 collapsible-header section-heading"
-              >
-                {{formatMessage('Registrant Information:')}} <span class="chevron" :class="{ 'rotated': !isCollapsedRegistrant }">▼</span>
-              </h4>
-              <b-collapse visible id="collapse-3">
-                <template v-for="fieldName in visibleRegistrantContactFields" :key="fieldName">
-                  <b-form-group
-                    label-cols-sm="4"
-                    label-cols-lg="3"
-                    content-cols-sm
-                    content-cols-lg="7"
-                    :label="registrationRegistrantContactFields[fieldName].label + (requiredRegistrantContactFields.includes(fieldName) ? ' *' : '')"
-                    class="mb-3"
-                  >
-                    <component
-                      :is="contactFieldConfig[fieldName]?.component || BFormInput"
-                      v-model="registrantDetails[fieldName]"
-                      v-bind="contactFieldConfig[fieldName]?.props?.()"
-                      :class="{
-                    'required-field-error': requiredRegistrantContactFields.includes(fieldName) && validationErrors.includes(fieldName)
-                  }"
-                    />
-                  </b-form-group>
-                </template>
-              </b-collapse>
-            </b-col>
-          </b-row>
-        </div>
 
         <div :class="{ 'required-field-error-container': validationErrors.includes('consent') }">
           <b-form-checkbox v-model="hasConsent">
