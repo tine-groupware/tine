@@ -79,7 +79,7 @@ Use 'docker compose up' to fetch the latest docker image.
 Use this command to update tine:
 
 ```
-docker exec --user tine20 tine-docker_web_1 sh -c "php /usr/share/tine20/setup.php --config=/etc/tine20 --update"
+docker exec --user tine20 tine-docker_web_1 sh -c "php /usr/share/tine20/setup.php --update"
 ```
 
 If you see this error during the update:
@@ -87,6 +87,15 @@ If you see this error during the update:
     "Tinebase_Exception -> waited for Action Queue to become empty for more than 300 sec"
 
 You should check why there are still jobs in the ActionQueue and/or run the update with `skipQueueCheck=1`. 
+
+
+Sometimes, the worker process becomes unstable after an update. If that happens, this command helps:
+
+```
+docker exec tine-docker_web_1 sh -c "supervisorctl restart worker"
+```
+
+You should run this, if you are updating to a new major version.
 
 ## SSL / Reverse Proxy
 

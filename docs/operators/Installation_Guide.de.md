@@ -79,7 +79,7 @@ Zum Updaten von tine selbst verwendet man folgenden Befehl (ggf. muss der Name d
 kann man ihn z.B. mit 'docker ps'):
 
 ```
-docker exec --user tine20 tine-docker_web_1 sh -c "php /usr/share/tine20/setup.php --config=/etc/tine20 --update"
+docker exec --user tine20 tine-docker_web_1 sh -c "php /usr/share/tine20/setup.php --update"
 ```
 
 Falls dieser Fehler erscheint:
@@ -87,6 +87,14 @@ Falls dieser Fehler erscheint:
     "Tinebase_Exception -> waited for Action Queue to become empty for more than 300 sec"
 
 Sollte geprüft werden, ob noch Jobs in der Queue sind und/oder man startet das Update mit dem Schalter `skipQueueCheck=1`.
+
+Manchmal kommt der Worker im Container bei einem Update aus dem Tritt. Dann hilft dieser Befehl:
+
+```
+docker exec tine-docker_web_1 sh -c "supervisorctl restart worker"
+```
+
+Es empfiehlt sich, das nach einem Major-Update in jedem Fall einmal auszuführen (oder den Container neu zu Starten).
 
 ## SSL / Reverse Proxy
 
