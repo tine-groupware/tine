@@ -222,8 +222,8 @@ class EventManager_Setup_Initialize extends Setup_Initialize
         ]);
 
         try {
-            $def = Tinebase_ImportExportDefinition::getInstance()->getByName('tinebase_import_costcenter_csv');
-            $importer = Tinebase_Import_Csv_Generic::createFromDefinition($def);
+            $def = Tinebase_ImportExportDefinition::getInstance()->getByName('tinebase_import_editem_csv');
+            $importer = Tinebase_Import_EDItem::createFromDefinition($def);
             $importer->importFile(__DIR__ . '/DemoData/files/costcenter.csv');
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Exception::log($tenf);

@@ -22,6 +22,7 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
     protected const RELEASE019_UPDATE006 = __CLASS__ . '::update006';
     protected const RELEASE019_UPDATE007 = __CLASS__ . '::update007';
     protected const RELEASE019_UPDATE008 = __CLASS__ . '::update008';
+    protected const RELEASE019_UPDATE009 = __CLASS__ . '::update009';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -62,6 +63,10 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
             self::RELEASE019_UPDATE008          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update008',
+            ],
+            self::RELEASE019_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ],
     ];
@@ -201,5 +206,16 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.8', self::RELEASE019_UPDATE008);
+    }
+
+    public function update009()
+    {
+        try {
+            EventManager_Setup_Initialize::initializeCostCenterCostBearer();
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
+
+        $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.9', self::RELEASE019_UPDATE009);
     }
 }
