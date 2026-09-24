@@ -1,5 +1,5 @@
 # This file is generated!
-# source: ci/gitlab-ci/script
+# source: ci/gitlab-ci/lib/scripts
 # build: ci/gitlab-ci && make lib.yml
 
 .lib:
@@ -1124,11 +1124,10 @@
           previous_tag="$(git describe --abbrev=0 --tags HEAD~1 2> /dev/null || git fetch --unshallow --quiet && git describe --abbrev=0 --tags HEAD~1)" # if describe fails unshallow repo and try again
       
           echo '# Releasenotes'
-          echo '## Updating from Community Edition'
-          echo 'If you update to this version from an older Community Edition (like https://github.com/tine20/tine20/releases/tag/2023.12.1), you might have to check the number of activated users. Without an activation key, this version only supports 5 enabled users.'
           echo '# Changelog'
           ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/changelog.sh "$tag" "$previous_tag"
       }
+
 
     - |
       # lib/scripts/test.sh
@@ -1231,9 +1230,9 @@
           pushd ${TINE20ROOT}/tine20
           # trigger customapploader plugin, to create links
           rm -rf vendor/metaways
-          # needed von 2025.11 to 2026.11, needs to be removed
+          # TODO needed from 2025.11 to 2026.11, needs to be removed later
           rm -rf vendor/simplesamlphp
-          COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress
+          COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest
           popd
       
           # Store cache, but not for custom apps. composer.lock contains commit specific data. Therefor the cache will be never reused.
@@ -1419,7 +1418,9 @@
           helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
       
           if helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml status; then
-              helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy
+              if ! helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy; then
+                  helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy --set flags.noHooks=true
+              fi
           fi
       
           test_cloud_teardown_database
@@ -2604,11 +2605,10 @@
             previous_tag="$(git describe --abbrev=0 --tags HEAD~1 2> /dev/null || git fetch --unshallow --quiet && git describe --abbrev=0 --tags HEAD~1)" # if describe fails unshallow repo and try again
         
             echo '# Releasenotes'
-            echo '## Updating from Community Edition'
-            echo 'If you update to this version from an older Community Edition (like https://github.com/tine20/tine20/releases/tag/2023.12.1), you might have to check the number of activated users. Without an activation key, this version only supports 5 enabled users.'
             echo '# Changelog'
             ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/changelog.sh "$tag" "$previous_tag"
         }
+
 
         # lib/scripts/test.sh
         test_prepare_working_dir() {
@@ -2710,6 +2710,8 @@
             pushd ${TINE20ROOT}/tine20
             # trigger customapploader plugin, to create links
             rm -rf vendor/metaways
+            # TODO needed from 2025.11 to 2026.11, needs to be removed later
+            rm -rf vendor/simplesamlphp
             COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest
             popd
         
@@ -2895,7 +2897,9 @@
             helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
         
             if helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml status; then
-                helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy
+                if ! helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy; then
+                    helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy --set flags.noHooks=true
+                fi
             fi
         
             test_cloud_teardown_database
@@ -4089,11 +4093,10 @@
             previous_tag="$(git describe --abbrev=0 --tags HEAD~1 2> /dev/null || git fetch --unshallow --quiet && git describe --abbrev=0 --tags HEAD~1)" # if describe fails unshallow repo and try again
         
             echo '# Releasenotes'
-            echo '## Updating from Community Edition'
-            echo 'If you update to this version from an older Community Edition (like https://github.com/tine20/tine20/releases/tag/2023.12.1), you might have to check the number of activated users. Without an activation key, this version only supports 5 enabled users.'
             echo '# Changelog'
             ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/changelog.sh "$tag" "$previous_tag"
         }
+
 
         # lib/scripts/test.sh
         test_prepare_working_dir() {
@@ -4195,9 +4198,9 @@
             pushd ${TINE20ROOT}/tine20
             # trigger customapploader plugin, to create links
             rm -rf vendor/metaways
-            # needed von 2025.11 to 2026.11, needs to be removed
+            # TODO needed from 2025.11 to 2026.11, needs to be removed later
             rm -rf vendor/simplesamlphp
-            COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress
+            COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest
             popd
         
             # Store cache, but not for custom apps. composer.lock contains commit specific data. Therefor the cache will be never reused.
@@ -4382,7 +4385,9 @@
             helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
         
             if helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml status; then
-                helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy
+                if ! helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy; then
+                    helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy --set flags.noHooks=true
+                fi
             fi
         
             test_cloud_teardown_database
@@ -5612,11 +5617,10 @@
             previous_tag="$(git describe --abbrev=0 --tags HEAD~1 2> /dev/null || git fetch --unshallow --quiet && git describe --abbrev=0 --tags HEAD~1)" # if describe fails unshallow repo and try again
         
             echo '# Releasenotes'
-            echo '## Updating from Community Edition'
-            echo 'If you update to this version from an older Community Edition (like https://github.com/tine20/tine20/releases/tag/2023.12.1), you might have to check the number of activated users. Without an activation key, this version only supports 5 enabled users.'
             echo '# Changelog'
             ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/changelog.sh "$tag" "$previous_tag"
         }
+
 
         # lib/scripts/test.sh
         test_prepare_working_dir() {
@@ -5718,6 +5722,8 @@
             pushd ${TINE20ROOT}/tine20
             # trigger customapploader plugin, to create links
             rm -rf vendor/metaways
+            # TODO needed from 2025.11 to 2026.11, needs to be removed later
+            rm -rf vendor/simplesamlphp
             COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest
             popd
         
@@ -5903,7 +5909,9 @@
             helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
         
             if helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml status; then
-                helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy
+                if ! helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy; then
+                    helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy --set flags.noHooks=true
+                fi
             fi
         
             test_cloud_teardown_database

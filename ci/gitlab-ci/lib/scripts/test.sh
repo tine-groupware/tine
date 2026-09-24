@@ -97,7 +97,9 @@ test_composer_install() {
     pushd ${TINE20ROOT}/tine20
     # trigger customapploader plugin, to create links
     rm -rf vendor/metaways
-    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress
+    # TODO needed from 2025.11 to 2026.11, needs to be removed later
+    rm -rf vendor/simplesamlphp
+    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest
     popd
 
     # Store cache, but not for custom apps. composer.lock contains commit specific data. Therefor the cache will be never reused.
