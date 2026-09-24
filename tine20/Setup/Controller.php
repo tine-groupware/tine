@@ -1,12 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     Setup
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        move $this->_db calls to backend class
  */
@@ -3023,6 +3023,7 @@ class Setup_Controller
                 'structTables'      => $structTables,
                 'novalidate'        => isset($options['novalidate']) && $options['novalidate'],
                 'skipComments'      => isset($options['skipComments']) && $options['skipComments'],
+                'configExcludeKeys' => $this->normalizeConfigExcludeKeys($options['configExcludeKeys'] ?? []),
             );
 
             Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using options: ' . print_r($backupOptions, true));
@@ -3100,6 +3101,37 @@ class Setup_Controller
         }
 
         return array_merge($tables, $this->_getNonXmlStructOnlyTables());
+    }
+
+    /**
+     * normalize the config keys that should be excluded from the config backup
+     *
+     * accepts an array of keys or a comma separated string (as passed from the cli).
+     * only alphanumerics, underscores and dashes are kept, anything else (e.g. quotes,
+     * parentheses or other sql/shell metacharacters) is stripped to prevent injection.
+     *
+     * @param array|string $configExcludeKeys
+     * @return array
+     */
+    protected function normalizeConfigExcludeKeys($configExcludeKeys): array
+    {
+        if (is_string($configExcludeKeys)) {
+            $configExcludeKeys = explode(',', $configExcludeKeys);
+        }
+
+        if (! is_array($configExcludeKeys)) {
+            return [];
+        }
+
+        $keys = array_map(static function ($key) {
+            return preg_replace('/[^a-zA-Z0-9_\-]/', '', (string) $key);
+        }, $configExcludeKeys);
+
+        $keys = array_filter($keys, static function ($key) {
+            return $key !== '';
+        });
+
+        return array_values(array_unique($keys));
     }
 
     /**
