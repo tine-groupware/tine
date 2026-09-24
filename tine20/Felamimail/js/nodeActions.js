@@ -269,6 +269,7 @@ Tine.Felamimail.nodeActions.EmptyFolderAction = {
                     ],
 
                     handler: async function (option) {
+                        if (option === 'cancel') return;
                         const deleteSubfolders = option === 'all';
 
                         selectedNode.getUI().addClass("x-tree-node-loading");
