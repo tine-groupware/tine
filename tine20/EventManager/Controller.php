@@ -109,6 +109,16 @@ class EventManager_Controller extends Tinebase_Controller_Event
                 'publicApiGetParentConsentConfirm',
                 [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
             ))->toArray());
+            $routeCollector->get('/registration/parentConsent/data/{token}', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Registration::class,
+                'publicApiGetParentConsentData',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());
+            $routeCollector->post('/registration/parentConsent/confirm/{token}', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Registration::class,
+                'publicApiPostParentConsentConfirm',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());
             $routeCollector->post(
                 '/deregistration/{event_id}/{token}[/{registration_id}]',
                 (new Tinebase_Expressive_RouteHandler(

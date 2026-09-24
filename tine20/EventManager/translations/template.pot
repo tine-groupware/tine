@@ -211,6 +211,24 @@ msgstr ""
 msgid "Sender name for the notification emails"
 msgstr ""
 
+msgid "EVENT_TEMPLATES_CONTAINER_NAME"
+msgstr ""
+
+msgid "Guardian required age"
+msgstr ""
+
+msgid "Communication Preference"
+msgstr ""
+
+msgid "Participant E-mail"
+msgstr ""
+
+msgid "Registrant E-mail"
+msgstr ""
+
+msgid "Participant E-mail, Registrant E-mail in CC"
+msgstr ""
+
 msgid "Session"
 msgstr ""
 
@@ -232,13 +250,14 @@ msgstr ""
 msgid "Deregistered"
 msgstr ""
 
-msgid "Parent or guardian consent is required for participants under 16."
+msgid "Minors must be registered by a legal guardian!"
+msgstr ""
+
+#, python-format, php-format
+msgid "Parent or guardian consent is required for participants under %d."
 msgstr ""
 
 msgid "This confirmation link is invalid or has expired."
-msgstr ""
-
-msgid "Thank you! Consent confirmed and registration completed.The participant will receive a confirmation email."
 msgstr ""
 
 msgid "Export Events"
@@ -250,12 +269,27 @@ msgstr ""
 msgid "All Events in Event Manager"
 msgstr ""
 
+msgid "Creating new event from template..."
+msgstr ""
+
+msgid " (Copy)"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Could not create event from template."
+msgstr ""
+
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] ""
 msgstr[1] ""
 
 msgid "Event Information"
+msgstr ""
+
+msgid "This event is a template. Click here to create a new event based on it."
 msgstr ""
 
 msgid "Registration"
@@ -443,13 +477,20 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
+msgid "Please review the participant's details and complete the registration as the legal guardian."
+msgstr ""
+
 msgid "I am completing the registration form for another person"
 msgstr ""
 
-msgid "Participant Information:"
+#, python-brace-format
+msgid "This participant is under {age}. We will email the parent/guardian a consent link before the registration is completed."
 msgstr ""
 
-msgid "This participant is under 16. We will email the parent/guardian a consent link before the registration is completed."
+msgid "I (Registrant)"
+msgstr ""
+
+msgid "I am the legal guardian"
 msgstr ""
 
 msgid "Event Information:"
@@ -473,7 +514,11 @@ msgstr ""
 msgid "Delete file"
 msgstr ""
 
-msgid "Registrant Information:"
+msgid "Communication preference"
+msgstr ""
+
+#, python-brace-format
+msgid "For participants under {age}, the communication setting is set automatically."
 msgstr ""
 
 msgid "I consent to the processing and storage of the data I have entered for the purpose of organizing the event."
@@ -494,7 +539,14 @@ msgstr ""
 msgid "Person"
 msgstr ""
 
-msgid "participant"
+msgid "I (Participant)"
+msgstr ""
+
+msgid "Same email address not permitted"
+msgstr ""
+
+#, python-brace-format
+msgid "The participant and the person registering must not use the same email address. The participant's email address has been removed and the communication setting has been set to \"{setting}\"."
 msgstr ""
 
 msgid "Registration for"
@@ -513,6 +565,9 @@ msgid "Please enter a valid email address."
 msgstr ""
 
 msgid "Please fill all required fields."
+msgstr ""
+
+msgid "Legal guardian required"
 msgstr ""
 
 msgid "The registration date for"
@@ -542,7 +597,7 @@ msgstr ""
 msgid "Parent/Guardian consent required"
 msgstr ""
 
-msgid "Since the participant is under 16, we've sent an email to the parent/guardian to confirm consent. The registration will be completed automatically once they confirm."
+msgid "We have sent an email to the parent/guardian. They will review the details and complete the registration."
 msgstr ""
 
 msgid "Could not send the parent/guardian consent request. Please try again."
@@ -771,6 +826,9 @@ msgstr ""
 msgid "Images"
 msgstr ""
 
+msgid "Is Template"
+msgstr ""
+
 msgid "EventManager_File"
 msgid_plural "EventManager_Files"
 msgstr[0] ""
@@ -870,6 +928,9 @@ msgstr ""
 msgid "Registration date"
 msgstr ""
 
+msgid "The registrant is the legal guardian of the participant"
+msgstr ""
+
 msgid "GENDER_Selection"
 msgstr ""
 
@@ -940,6 +1001,12 @@ msgstr ""
 msgid "EventManager"
 msgstr ""
 
+msgid "Templates"
+msgstr ""
+
+msgid "All templates for events"
+msgstr ""
+
 msgid "Arial"
 msgstr ""
 
@@ -950,6 +1017,9 @@ msgid "Select a Person"
 msgstr ""
 
 msgid "Parent/Guardian email"
+msgstr ""
+
+msgid "Further communication through"
 msgstr ""
 
 msgid "Confirmation E-mail"
@@ -982,16 +1052,13 @@ msgstr ""
 msgid "would like to register for the following event, and has indicated that you are their parent or legal guardian:"
 msgstr ""
 
-msgid "Since the participant is under 16 years old, we need your consent before the registration can be completed. To confirm your consent and finish the registration, please click the button below."
+msgid "Since the participant is under 16 years old, we need your consent before the registration can be completed. Please review the details and complete the registration as legal guardian."
 msgstr ""
 
-msgid "Confirm consent and complete registration"
+msgid "Complete registration"
 msgstr ""
 
 msgid "If you did not expect this email, or do not wish to give consent, you can simply ignore this message — no registration will be completed and no further action is required."
-msgstr ""
-
-msgid "Since the participant is under 16 years old, we need your consent before the registration can be completed. To confirm your consent and finish the registration, please click the link below."
 msgstr ""
 
 msgid "Confirm your E-mail"
