@@ -14,7 +14,7 @@ name: cost center items
 
 files:
   #$app,$model,$definition,$file
-  - Tinebase/EvaluationDimensionItem/tinebase_import_editem_csv/kostenstellen_ebhh.csv
+  - Tinebase/EvaluationDimensionItem/tinebase_import_editem_csv/costcenter.csv
 
 # this set could contain other sets:
 # sets:
