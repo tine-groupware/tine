@@ -116,6 +116,44 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
         unset($_definition[self::FIELDS][self::FLD_PAYMENT_TERMS]);
         unset($_definition[self::FIELDS][self::FLD_SERVICE_PERIOD_START]);
         unset($_definition[self::FIELDS][self::FLD_SERVICE_PERIOD_END]);
+
+        $_definition[self::UI_CONFIG] = [
+            self::UI_CONFIG_LAYOUT_SMALL => [
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_CUSTOMER_ID,
+                Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY,
+                self::FLD_DELIVERY_STATUS,
+            ],
+            self::UI_CONFIG_LAYOUT_MEDIUM => [
+                self::FLD_ATTACHMENTS,
+                self::FLD_TAGS,
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_DOCUMENT_DATE,
+                self::FLD_DELIVERY_STATUS,
+                self::FLD_CUSTOMER_ID,
+                self::FLD_RECIPIENT_ID,
+                self::FLD_CONTRACT_ID,
+                self::FLD_DOCUMENT_TITLE,
+                Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY,
+                self::FLD_EVAL_DIM_COST_CENTER,
+            ],
+            self::UI_CONFIG_LAYOUT_BIG => [
+                self::FLD_ATTACHMENTS,
+                self::FLD_TAGS,
+                self::FLD_DESCRIPTION,
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_DOCUMENT_DATE,
+                self::FLD_DELIVERY_STATUS,
+                self::FLD_REVERSAL,
+                self::FLD_CUSTOMER_ID,
+                self::FLD_RECIPIENT_ID,
+                self::FLD_CONTRACT_ID,
+                self::FLD_DOCUMENT_TITLE,
+                Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY,
+                self::FLD_EVAL_DIM_COST_CENTER,
+                self::FLD_DOCUMENT_LANGUAGE,
+            ],
+        ];
     }
 
     protected static string $_statusField = self::FLD_DELIVERY_STATUS;
