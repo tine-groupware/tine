@@ -289,7 +289,9 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
                             $applicationId = $application ? $application->getId() : Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId();
                             break;
                         } catch (Exception $e) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $e);
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $e);
+                            }
                         }
                     }
                 }
@@ -511,14 +513,23 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             'auth_token IS NOT NULL AND auth_token NOT LIKE "sha1_%"'
         );
 
-        foreach ($this->_db->query('SELECT `key_id`, `account_id`, `key`, `routes`, `ttl` FROM ' . SQL_TABLE_PREFIX . 'jwt_access_routes WHERE `is_deleted` = 0 AND (`ttl` IS NULL OR `ttl` > NOW())')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
-            Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
-                Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $row['account_id'],
-                Tinebase_Model_AppPassword::FLD_JWT_KEY_ID => $row['key_id'],
-                Tinebase_Model_AppPassword::FLD_JWT_PRIVAT_KEY => $row['key'],
-                Tinebase_Model_AppPassword::FLD_CHANNELS => array_fill_keys(json_decode($row['routes'], true), true),
-                Tinebase_Model_AppPassword::FLD_VALID_UNTIL => $row['ttl'] ?? Tinebase_DateTime::now()->addYear(100),
-            ]));
+        $tableName = SQL_TABLE_PREFIX . 'jwt_access_routes';
+        $jwtAccessRoutesSchema = Tinebase_Db_Table::getTableDescriptionFromCache($tableName, $this->_db);
+        if (array_key_exists('ttl', $jwtAccessRoutesSchema)) {
+            foreach ($this->_db->query('SELECT `key_id`, `account_id`, `key`, `routes`, `ttl` FROM ' . $tableName
+                . ' WHERE `is_deleted` = 0 AND (`ttl` IS NULL OR `ttl` > NOW())')->fetchAll(Zend_Db::FETCH_ASSOC) as $row
+            ) {
+                Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
+                    Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $row['account_id'],
+                    Tinebase_Model_AppPassword::FLD_JWT_KEY_ID => $row['key_id'],
+                    Tinebase_Model_AppPassword::FLD_JWT_PRIVAT_KEY => $row['key'],
+                    Tinebase_Model_AppPassword::FLD_CHANNELS => array_fill_keys(json_decode($row['routes'], true), true),
+                    Tinebase_Model_AppPassword::FLD_VALID_UNTIL => $row['ttl'] ?? Tinebase_DateTime::now()->addYear(100),
+                ]));
+            }
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Could not transfer records from jwt_access_routes - schema is missing ttl field');
         }
 
         $this->dropTable('jsw_access_routes');
