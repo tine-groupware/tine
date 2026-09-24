@@ -35,6 +35,8 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
     public const FLD_BOOKED_OPTIONS = 'booked_options';
     public const FLD_DESCRIPTION = 'description';
     public const FLD_REGISTRATION_DATE = 'registration_date';
+    public const FLD_COMMUNICATION_PREFERENCE = 'communication_preference';
+    public const FLD_REGISTRANT_IS_LEGAL_GUARDIAN = 'registrant_is_legal_guardian';
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
@@ -207,6 +209,20 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                 self::NULLABLE              => true,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
+            ],
+            self::FLD_COMMUNICATION_PREFERENCE        => [
+                self::TYPE              => self::TYPE_KEY_FIELD,
+                self::LABEL             => 'Communication Preference', // _('Communication Preference')
+                self::DEFAULT_VAL       => 1,
+                self::NAME              => EventManager_Config::REGISTRATION_COMMUNICATION_PREFERENCE,
+                self::NULLABLE          => true,
+            ],
+            self::FLD_REGISTRANT_IS_LEGAL_GUARDIAN     => [
+                self::LABEL                 => 'The registrant is the legal guardian of the participant',
+                // _('The registrant is the legal guardian of the participant')
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => false,
+                self::NULLABLE              => true,
             ],
         ]
     ];

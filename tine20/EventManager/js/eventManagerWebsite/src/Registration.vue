@@ -19,7 +19,14 @@
       </b-row>
 
       <div class="registrant-section">
-        <b-form-checkbox v-if="shouldShowRegistrantCheckbox" v-model="isRegistrant">
+        <div v-if="isGuardianConsentFlow" class="alert alert-info">
+          {{ formatMessage('Please review the participant\'s details and complete the registration as the legal guardian.') }}
+        </div>
+        <b-form-checkbox
+          v-if="shouldShowRegistrantCheckbox"
+          v-model="isRegistrant"
+          :disabled="isGuardianConsentFlow"
+        >
           {{ formatMessage('I am completing the registration form for another person') }}
         </b-form-checkbox>
       </div>
@@ -31,7 +38,7 @@
             @click="isCollapsedParticipant = !isCollapsedParticipant"
             class="mb-4 collapsible-header section-heading"
           >
-            {{formatMessage('Participant Information:')}} <span class="chevron" :class="{ 'rotated': !isCollapsedParticipant }">▼</span>
+            {{ participantSectionTitle }} <span class="chevron" :class="{ 'rotated': !isCollapsedParticipant }">▼</span>
           </h4>
           <b-collapse visible id="collapse-1">
             <template v-for="fieldName in visibleParticipantContactFields" :key="fieldName">
@@ -39,7 +46,7 @@
                 label-cols-sm="4"
                 label-cols-lg="3"
                 content-cols-sm
-                content-cols-lg="7"
+                content-cols-lg="8"
                 :label="getParticipantFieldLabel(fieldName)"
                 class="mb-3"
               >
@@ -47,18 +54,19 @@
                   :is="contactFieldConfig[fieldName]?.component || BFormInput"
                   v-model="contactDetails[fieldName]"
                   v-bind="contactFieldConfig[fieldName]?.props?.()"
+                  @change="fieldName === 'email' && checkSameEmailAsRegistrant()"
                   :class="{
-                    'required-field-error': requiredParticipantContactFields.includes(fieldName) && validationErrors.includes(fieldName)
+                    'required-field-error': effectiveRequiredParticipantFields.includes(fieldName) && validationErrors.includes(fieldName)
                   }"
                 />
               </b-form-group>
             </template>
             <b-form-group
-              v-if="isParticipantUnderage && !isAlreadyRegistered"
+              v-if="showParentEmailField"
               label-cols-sm="4"
               label-cols-lg="3"
               content-cols-sm
-              content-cols-lg="7"
+              content-cols-lg="8"
               :label="formatMessage('Parent/Guardian email') + ' *'"
               class="mb-3"
             >
@@ -68,7 +76,7 @@
                 :class="{ 'required-field-error': validationErrors.includes('parentEmail') }"
               />
               <small class="text-muted">
-                {{ formatMessage('This participant is under 16. We will email the parent/guardian a consent link before the registration is completed.') }}
+                {{ formatMessage('This participant is under {age}. We will email the parent/guardian a consent link before the registration is completed.', { age: guardianRequiredAge }) }}
               </small>
             </b-form-group>
           </b-collapse>
@@ -84,25 +92,42 @@
                 @click="isCollapsedRegistrant = !isCollapsedRegistrant"
                 class="mb-4 collapsible-header section-heading"
               >
-                {{formatMessage('Registrant Information:')}} <span class="chevron" :class="{ 'rotated': !isCollapsedRegistrant }">▼</span>
+                {{ formatMessage('I (Registrant)') }} <span class="chevron" :class="{ 'rotated': !isCollapsedRegistrant }">▼</span>
               </h4>
               <b-collapse visible id="collapse-3">
+                <div
+                  v-if="mustBeGuardian"
+                  class="mb-4"
+                  :class="{ 'required-field-error-container': validationErrors.includes('legalGuardian') }"
+                >
+                  <b-form-checkbox
+                    :key="guardianCheckboxKey"
+                    :model-value="isLegalGuardian"
+                    @update:model-value="onLegalGuardianChange"
+                  >
+                    {{ formatMessage('I am the legal guardian') }}
+                  </b-form-checkbox>
+                </div>
+
                 <template v-for="fieldName in visibleRegistrantContactFields" :key="fieldName">
                   <b-form-group
                     label-cols-sm="4"
                     label-cols-lg="3"
                     content-cols-sm
-                    content-cols-lg="7"
-                    :label="registrationRegistrantContactFields[fieldName].label + (requiredRegistrantContactFields.includes(fieldName) ? ' *' : '')"
+                    content-cols-lg="8"
+                    :label="registrationRegistrantContactFields[fieldName].label + (effectiveRequiredRegistrantFields.includes(fieldName) ? ' *' : '')"
                     class="mb-3"
                   >
                     <component
                       :is="contactFieldConfig[fieldName]?.component || BFormInput"
                       v-model="registrantDetails[fieldName]"
                       v-bind="contactFieldConfig[fieldName]?.props?.()"
+                      :readonly="fieldName === 'email' && isGuardianConsentFlow"
+                      @change="fieldName === 'email' && checkSameEmailAsRegistrant()"
                       :class="{
-                    'required-field-error': requiredRegistrantContactFields.includes(fieldName) && validationErrors.includes(fieldName)
-                  }"
+                        'required-field-error': effectiveRequiredRegistrantFields.includes(fieldName)
+                        && validationErrors.includes('registrant.' + fieldName)
+                      }"
                     />
                   </b-form-group>
                 </template>
@@ -138,7 +163,7 @@
                       label-cols-sm="4"
                       label-cols-lg="3"
                       content-cols-sm
-                      content-cols-lg="7"
+                      content-cols-lg="8"
                       :label="`${option.name_option}`"
                       class="mb-4"
                     >
@@ -232,6 +257,29 @@
           </b-collapse>
         </b-col>
 
+        <div v-if="isRegistrant" class="mt-3">
+          <h6 class="option-group">{{ formatMessage('Communication preference') }}</h6>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="8"
+            :label="formatMessage('Further communication through') + ' *'"
+            class="mb-3"
+          >
+            <BFormSelect
+              :model-value="communicationPreference"
+              @update:model-value="onCommunicationPreferenceChange"
+              :options="communicationPreferenceOptions"
+              :disabled="isParticipantUnderage"
+              :class="{ 'required-field-error': validationErrors.includes('communicationPreference') }"
+            />
+            <small v-if="isParticipantUnderage" class="text-muted">
+              {{ formatMessage('For participants under {age}, the communication setting is set automatically.', { age: guardianRequiredAge }) }}
+            </small>
+          </b-form-group>
+        </div>
+
         <div :class="{ 'required-field-error-container': validationErrors.includes('consent') }">
           <b-form-checkbox v-model="hasConsent">
             {{ formatMessage('I consent to the processing and storage of the data I have entered for the purpose of organizing the event.') }}
@@ -318,7 +366,12 @@ const registrationId = ref(null);
 const isPreview = ref(false);
 const hasConsent = ref(false);
 const parentEmail = ref('');
+const guardianRequiredAge = ref(16);
+const isLegalGuardian = ref(false);
 const isSendingParentConsent = ref(false);
+const consentToken = ref(null);
+const communicationPreferenceRecords = ref([]);
+const communicationPreference = ref(null);
 
 // Data from backend
 const dependantParticipants = ref(null);
@@ -328,6 +381,9 @@ const registrationParticipantContactFields = ref([]);
 const requiredParticipantContactFields = ref([]);
 const registrationRegistrantContactFields = ref([]);
 const requiredRegistrantContactFields = ref([]);
+
+const toBool = (v) => v === true || v === 1 || v === '1' || v === 'true';
+const isGuardianConsentFlow = computed(() => !!consentToken.value);
 
 const eventDetails = ref({
   name: "",
@@ -351,6 +407,17 @@ const eventDetails = ref({
   contactFields: [],
 });
 
+const communicationPreferenceOptions = computed(() =>
+  communicationPreferenceRecords.value.map(record => {
+    const value = String(record.id);
+    return {
+      value,
+      text: formatMessage(record.value),
+      disabled: value !== COMMUNICATION_PREFERENCE.REGISTRANT && !participantHasEmail.value,
+    };
+  })
+);
+
 const calculateAge = (bday) => {
   if (!bday) return null;
   const birthDate = new Date(bday);
@@ -365,16 +432,42 @@ const calculateAge = (bday) => {
 };
 
 const participantAge = computed(() => calculateAge(contactDetails.value.bday));
+
 const isParticipantUnderage = computed(
-  () => participantAge.value !== null && participantAge.value < 16
+  () => participantAge.value !== null && participantAge.value < guardianRequiredAge.value
+);
+
+const mustBeGuardian = computed(() => isRegistrant.value && isParticipantUnderage.value);
+
+const showParentEmailField = computed(
+  () => isParticipantUnderage.value && !isRegistrant.value && !isAlreadyRegistered.value
+);
+
+const effectiveRequiredParticipantFields = computed(() => {
+  const required = requiredParticipantContactFields.value || [];
+  const withoutEmail = required.filter(f => f !== 'email');
+
+  if (isRegistrant.value && registrantHasEmail.value) {
+    return withoutEmail;
+  }
+
+  return visibleParticipantContactFields.value.includes('email')
+    ? [...withoutEmail, 'email']
+    : withoutEmail;
+});
+
+const effectiveRequiredRegistrantFields = computed(() =>
+  _.uniq([...(requiredRegistrantContactFields.value || []), 'email'])
+);
+
+const participantSectionTitle = computed(() =>
+  isRegistrant.value ? formatMessage('Participant') : formatMessage('I (Participant)')
 );
 
 const getParticipantFieldLabel = (fieldName) => {
   const baseLabel = registrationParticipantContactFields.value[fieldName].label;
-  const participantSuffix = isRegistrant.value ? ` (${formatMessage('participant')})` : '';
-  const requiredSuffix = requiredParticipantContactFields.value.includes(fieldName) ? '*' : '';
-
-  return `${baseLabel}${participantSuffix}${requiredSuffix}`;
+  const requiredSuffix = effectiveRequiredParticipantFields.value.includes(fieldName) ? ' *' : '';
+  return `${baseLabel}${requiredSuffix}`;
 };
 
 const emptyFieldsFrom = (fieldsRef) => {
@@ -392,6 +485,85 @@ const emptyRegistrantDetails = () => emptyFieldsFrom(registrationRegistrantConta
 
 const contactDetails = ref(emptyContactDetails());
 const registrantDetails = ref(emptyRegistrantDetails());
+
+const COMMUNICATION_PREFERENCE = {
+  PARTICIPANT: '1',
+  REGISTRANT: '2',
+  PARTICIPANT_CC_REGISTRANT: '3',
+};
+
+const communicationPreferenceTouched = ref(false);
+
+const participantHasEmail = computed(
+  () => !!(contactDetails.value.email || '').trim()
+);
+
+const registrantHasEmail = computed(
+  () => !!(registrantDetails.value.email || '').trim()
+);
+
+const defaultCommunicationPreference = computed(() =>
+  participantHasEmail.value
+    ? COMMUNICATION_PREFERENCE.PARTICIPANT_CC_REGISTRANT
+    : COMMUNICATION_PREFERENCE.REGISTRANT
+);
+
+
+watch(
+  [defaultCommunicationPreference, isRegistrant, isParticipantUnderage],
+  ([def]) => {
+    if (
+      isParticipantUnderage.value
+      || !communicationPreferenceTouched.value
+      || !participantHasEmail.value
+    ) {
+      communicationPreference.value = def;
+    }
+  },
+  { immediate: true }
+);
+
+const onCommunicationPreferenceChange = (value) => {
+  if (isParticipantUnderage.value) {
+    return;
+  }
+  communicationPreference.value = value;
+  communicationPreferenceTouched.value = true;
+};
+
+const normalizeEmail = (value) => (value || '').trim().toLowerCase();
+
+const checkSameEmailAsRegistrant = () => {
+  if (!isRegistrant.value) {
+    return false;
+  }
+
+  const participantEmail = normalizeEmail(contactDetails.value.email);
+  const registrantEmailValue = normalizeEmail(registrantDetails.value.email);
+
+  if (!participantEmail || participantEmail !== registrantEmailValue) {
+    return false;
+  }
+
+  contactDetails.value.email = '';
+  communicationPreferenceTouched.value = false;
+  communicationPreference.value = COMMUNICATION_PREFERENCE.REGISTRANT;
+  validationErrors.value = validationErrors.value.filter(err => err !== 'email');
+
+  const registrantOptionText = communicationPreferenceOptions.value
+    .find(o => o.value === COMMUNICATION_PREFERENCE.REGISTRANT)?.text || '';
+
+  showModal({
+    title: formatMessage('Same email address not permitted'),
+    message: formatMessage(
+      'The participant and the person registering must not use the same email address. The participant\'s email address has been removed and the communication setting has been set to "{setting}".',
+      { setting: registrantOptionText }
+    ),
+    type: 'error',
+  });
+
+  return true;
+};
 
 const modal = reactive({
   show: false,
@@ -572,6 +744,9 @@ const resetFormState = () => {
   showRegisteredContactAlert.value = false;
   isAlreadyRegistered.value = false;
   hasConsent.value = false;
+  isLegalGuardian.value = false;
+  communicationPreferenceTouched.value = false;
+  communicationPreference.value = defaultCommunicationPreference.value;
   initializeEventOptions();
 };
 
@@ -629,6 +804,15 @@ const checkAndLoadExistingRegistration = async (participantId) => {
       bday: formatBirthday(registration.registrant.bday),
       registration_id: registration.id
     };
+
+    isRegistrant.value = toBool(registration.has_registrant);
+    isLegalGuardian.value = toBool(registration.registrant_is_legal_guardian);
+
+    if (registration.communication_preference && !isParticipantUnderage.value) {
+      const cp = registration.communication_preference;
+      communicationPreference.value = String(cp?.id ?? cp);
+      communicationPreferenceTouched.value = true;
+    }
 
   } else {
     if (accountOwner.value.id === participantId) {
@@ -929,7 +1113,7 @@ const validateRequiredFields = () => {
   validationErrors.value = [];
   const errors = [];
 
-  if (isParticipantUnderage.value && !isAlreadyRegistered.value) {
+  if (showParentEmailField.value) {
     const trimmedParentEmail = (parentEmail.value || '').trim();
     const participantEmail = (contactDetails.value.email || '').trim();
 
@@ -941,19 +1125,27 @@ const validateRequiredFields = () => {
     }
   }
 
-  const getMissingFields = (requiredFields) =>
+  if (mustBeGuardian.value && !isLegalGuardian.value) {
+    errors.push('legalGuardian');
+  }
+
+  const getMissingFields = (details, requiredFields) =>
     _.filter(requiredFields, field =>
-      _.isEmpty((_.get(contactDetails.value, field) ?? '').toString().trim())
+      _.isEmpty((_.get(details, field) ?? '').toString().trim())
     );
 
-  errors.push(...getMissingFields(requiredParticipantContactFields.value));
-  errors.push(...getMissingFields(requiredRegistrantContactFields.value));
+  errors.push(...getMissingFields(contactDetails.value, effectiveRequiredParticipantFields.value));
 
-  const email = _.get(contactDetails.value, 'email', '').trim();
-  if (email && !isValidEmail(email)) {
-    if (!errors.includes('email')) {
-      errors.push('email');
-    }
+  if (isRegistrant.value) {
+    const registrant = { ...registrantDetails.value };
+    errors.push(
+      ...getMissingFields(registrant, effectiveRequiredRegistrantFields.value).map(f => `registrant.${f}`)
+    );
+  }
+
+  const email = (contactDetails.value.email || '').trim();
+  if (email && !isValidEmail(email) && !errors.includes('email')) {
+    errors.push('email');
   }
 
   if (!hasConsent.value) {
@@ -962,16 +1154,13 @@ const validateRequiredFields = () => {
 
   // Check grouped options (only one needs to be filled per group if option is required)
   const { optionsByGroup, ungroupedOptions } = getGroupedAndUngroupedOptions();
-  optionsByGroup.forEach((groupOptions, groupName) => {
+  optionsByGroup.forEach((groupOptions) => {
     const requiredOptions = groupOptions.filter(option => isOptionRequired(option));
 
     if (requiredOptions.length > 0) {
       const hasAnyValue = groupOptions.some(option => hasOptionValue(option));
-
       if (!hasAnyValue) {
-        requiredOptions.forEach(option => {
-          errors.push(option.id);
-        });
+        requiredOptions.forEach(option => errors.push(option.id));
       }
     }
   });
@@ -1000,20 +1189,27 @@ watch(() => contactDetails.value.email, (newEmail) => {
 });
 
 const checkValidationFields = () => {
+  if (checkSameEmailAsRegistrant()) {
+    return false;
+  }
+
   validationErrors.value = [];
 
   if (!validateRequiredFields()) {
-    const email = _.get(contactDetails.value, 'email', '').trim();
+    const email = (contactDetails.value.email || '').trim();
     const hasInvalidEmail = email && !isValidEmail(email);
     const isSameEmail = validationErrors.value.includes('parentEmailSameAsParticipant');
+    const isGuardianMissing = validationErrors.value.includes('legalGuardian');
 
     showModal({
       title: formatMessage('Validation Error'),
-      message: isSameEmail
-        ? formatMessage('The parent/guardian email must be different from the participant\'s own email address.')
-        : hasInvalidEmail
-          ? formatMessage('Please enter a valid email address.')
-          : formatMessage('Please fill all required fields.'),
+      message: isGuardianMissing
+        ? formatMessage('Minors must be registered by a legal guardian!')
+        : isSameEmail
+          ? formatMessage('The parent/guardian email must be different from the participant\'s own email address.')
+          : hasInvalidEmail
+            ? formatMessage('Please enter a valid email address.')
+            : formatMessage('Please fill all required fields.'),
       type: 'error'
     });
     return false;
@@ -1021,7 +1217,29 @@ const checkValidationFields = () => {
   return true;
 };
 
+watch(mustBeGuardian, (must) => {
+  if (must) {
+    isLegalGuardian.value = true;
+  }
+});
+
+const guardianCheckboxKey = ref(0);
+
+const onLegalGuardianChange = (checked) => {
+  if (!checked && mustBeGuardian.value) {
+    guardianCheckboxKey.value++;
+    showModal({
+      title: formatMessage('Legal guardian required'),
+      message: formatMessage('Minors must be registered by a legal guardian!'),
+      type: 'error',
+    });
+    return;
+  }
+  isLegalGuardian.value = checked;
+};
+
 watch([() => parentEmail.value, () => contactDetails.value.email], () => {
+  if (!showParentEmailField.value) return;
   if (!isParticipantUnderage.value) return;
   const p = (parentEmail.value || '').trim().toLowerCase();
   const c = (contactDetails.value.email || '').trim().toLowerCase();
@@ -1146,7 +1364,7 @@ const checkWaitingList = () => {
     return;
   }
 
-  if (isParticipantUnderage.value && !isAlreadyRegistered.value) {
+  if (showParentEmailField.value) {
     requestParentConsent();
     return;
   }
@@ -1185,84 +1403,71 @@ const handlePostRegistration = (update = false) => {
   postRegistration();
 };
 
+const buildFilteredReplies = () => {
+  const filteredReplies = {};
+  const { optionsByGroup, ungroupedOptions } = getGroupedAndUngroupedOptions();
+  const allOptions = [...[...optionsByGroup.values()].flat(), ...ungroupedOptions];
+
+  allOptions.forEach(option => {
+    if (option.option_config_class === 'EventManager_Model_TextOption') return;
+    if (option.option_config_class === 'EventManager_Model_FileOption'
+      && !option.option_config?.file_acknowledgement) return;
+    if (hasOptionValue(option)) {
+      filteredReplies[option.id] = replies.value[option.id];
+    }
+  });
+  return filteredReplies;
+};
+
 const isSubmitting = ref(false);
 const postRegistration = async () => {
   if (isSubmitting.value) return;
   isSubmitting.value = true;
 
-  const filteredReplies = {};
-  const { optionsByGroup, ungroupedOptions } = getGroupedAndUngroupedOptions();
-
-  optionsByGroup.forEach((groupOptions, groupName) => {
-    groupOptions.forEach(option => {
-      if (option.option_config_class === 'EventManager_Model_FileOption') {
-        if (option.option_config && option.option_config.file_acknowledgement) {
-          if (hasOptionValue(option)) {
-            filteredReplies[option.id] = replies.value[option.id];
-          }
-        }
-        return;
-      }
-
-      if (option.option_config_class === 'EventManager_Model_TextOption') {
-        return;
-      }
-
-      if (hasOptionValue(option)) {
-        filteredReplies[option.id] = replies.value[option.id];
-      }
-    });
-  });
-
-  ungroupedOptions.forEach(option => {
-    if (option.option_config_class === 'EventManager_Model_FileOption') {
-      if (option.option_config && option.option_config.file_acknowledgement) {
-        if (hasOptionValue(option)) {
-          filteredReplies[option.id] = replies.value[option.id];
-        }
-      }
-      return;
-    }
-
-    if (option.option_config_class === 'EventManager_Model_TextOption') {
-      return;
-    }
-
-    if (hasOptionValue(option)) {
-      filteredReplies[option.id] = replies.value[option.id];
-    }
-  });
+  const filteredReplies = buildFilteredReplies();
 
   const eventId = route.params.id;
-  registrantDetails.value.email = registrantEmail.value;
+  registrantDetails.value.email = registrantDetails.value.email || registrantEmail.value;
 
   if (!(eventDetails.value.registrations.find(reg => reg.id === contactDetails.value.registration_id))) {
     contactDetails.value.registration_id = '';
   }
 
   const registration = {
-    'eventId': eventId,
-    'contactDetails': contactDetails.value,
-    'replies': filteredReplies,
-    'registrantDetails': registrantDetails.value,
-    'isAlreadyRegistered': isAlreadyRegistered.value
+    eventId,
+    contactDetails: contactDetails.value,
+    replies: filteredReplies,
+    registrantDetails: registrantDetails.value,
+    isAlreadyRegistered: isAlreadyRegistered.value,
+    isOnBehalf: isRegistrant.value,
+    isLegalGuardian: isRegistrant.value && isLegalGuardian.value,
+    communicationPreference: isRegistrant.value
+      ? communicationPreference.value
+      : COMMUNICATION_PREFERENCE.PARTICIPANT,
   };
   const body = JSON.parse(JSON.stringify(registration));
   let localRegistrationId = '';
 
+  const url = isGuardianConsentFlow.value
+    ? `/EventManager/registration/parentConsent/confirm/${encodeURIComponent(consentToken.value)}`
+    : `/EventManager/register/${eventId}`;
+
   try {
-    const response = await fetch(`/EventManager/register/${eventId}`, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
+    const resp = await fetch(url, {
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
       method: 'POST',
-      body: JSON.stringify(body)
-    }).then(resp => resp.json())
-      .then(data => {
-        localRegistrationId = data.id;
-        console.debug(data);
-      });
+      body: JSON.stringify(body),
+    });
+    const data = await resp.json().catch(() => ({}));
+
+    if (!resp.ok) {
+      const err = new Error('Registration failed');
+      if (resp.status === 422 && data?.error) {
+        err.serverMessage = data.error;
+      }
+      throw err;
+    }
+    localRegistrationId = data.id;
 
     if (hasFileChanged.value) {
       await uploadFiles(eventId, localRegistrationId);
@@ -1289,7 +1494,7 @@ const postRegistration = async () => {
     console.error('Registration request failed:', error);
     showModal({
       title: formatMessage('Error'),
-      message: formatMessage('Registration failed. Please try again.'),
+      message: error.serverMessage || formatMessage('Registration failed. Please try again.'),
       type: 'error'
     });
   } finally {
@@ -1309,14 +1514,15 @@ const requestParentConsent = async () => {
   isSendingParentConsent.value = true;
 
   const eventId = route.params.id;
-  registrantDetails.value.email = registrantEmail.value;
 
   const body = {
     eventId,
     parentEmail: parentEmail.value.trim(),
     contactDetails: contactDetails.value,
-    replies: replies.value,
-    registrantDetails: registrantDetails.value,
+    replies: buildFilteredReplies(),
+    registrantDetails: {},
+    isOnBehalf: false,
+    isLegalGuardian: false,
   };
 
   try {
@@ -1331,7 +1537,7 @@ const requestParentConsent = async () => {
     showModal({
       title: formatMessage('Parent/Guardian consent required'),
       message: formatMessage(
-        'Since the participant is under 16, we\'ve sent an email to the parent/guardian to confirm consent. The registration will be completed automatically once they confirm.'
+        'We have sent an email to the parent/guardian. They will review the details and complete the registration.'
       ),
       type: 'success',
       onConfirm: () => {
@@ -1434,6 +1640,45 @@ function isJwt(token) {
   }
 }
 
+const fetchParentConsentData = async () => {
+  const resp = await fetch(`/EventManager/registration/parentConsent/data/${encodeURIComponent(consentToken.value)}`);
+  const data = await resp.json().catch(() => ({}));
+  if (!resp.ok) {
+    throw new Error(data?.error || formatMessage('This confirmation link is invalid or has expired.'));
+  }
+  return data;
+};
+
+const handleGuardianFromConsent = (pending) => {
+  contactDetails.value = {
+    ...emptyContactDetails(),
+    ...(pending.contactDetails || {}),
+    bday: formatBirthday(pending.contactDetails?.bday),
+    registration_id: '',
+  };
+
+  Object.entries(pending.replies || {}).forEach(([optionId, value]) => {
+    replies.value[optionId] = value;
+  });
+
+  const guardian = accountOwner.value?.email ? accountOwner.value : null;
+  if (guardian) {
+    const { registration_id, registration_type, ...guardianData } = guardian;
+    registrantDetails.value = {
+      ...emptyRegistrantDetails(),
+      ...guardianData,
+      bday: formatBirthday(guardian.bday),
+    };
+  } else {
+    registrantDetails.value = { ...emptyRegistrantDetails(), email: pending.parentEmail };
+  }
+  registrantEmail.value = pending.parentEmail;
+
+  isRegistrant.value = true;
+  isLegalGuardian.value = true;
+  shouldShowRegistrantCheckbox.value = true;
+};
+
 const fetchEvent = async () => {
   let eventId = route.params.id;
   const response = await fetch(`/EventManager/event/${eventId}`, {
@@ -1441,10 +1686,12 @@ const fetchEvent = async () => {
   });
   const data = await response.json();
   eventDetails.value = data;
-  registrationParticipantContactFields.value = data.participant_contact_fields;
-  requiredParticipantContactFields.value = data.required_participant_contact_fields;
-  registrationRegistrantContactFields.value = data.registrant_contact_fields;
-  requiredRegistrantContactFields.value = data.required_registrant_contact_fields;
+  guardianRequiredAge.value = Number(data.guardian_required_age) || 16;
+  communicationPreferenceRecords.value = data.registration_communication_preference || [];
+  registrationParticipantContactFields.value = data.participant_contact_fields || [];
+  requiredParticipantContactFields.value = data.required_participant_contact_fields || [];
+  registrationRegistrantContactFields.value = data.registrant_contact_fields || [];
+  requiredRegistrantContactFields.value = data.required_registrant_contact_fields || [];
   if (data.country_list) {
     countries.value = data.country_list.map(c => ({
       value: c.shortName,
@@ -1489,7 +1736,21 @@ onMounted(async () => {
      registrationId.value = registrationIdFromUrl;
    }
 
+  consentToken.value = route.query.consent || null;
+
   await Promise.all([fetchEvent(), fetchAccountData()]);
+
+  if (consentToken.value) {
+    try {
+      const pending = await fetchParentConsentData();
+      resetFormState();
+      handleGuardianFromConsent(pending);
+    } catch (error) {
+      isPreview.value = true;
+      showModal({ title: formatMessage('Error'), message: error.message, type: 'error' });
+    }
+    return;
+  }
 
   let initialParticipantId;
 

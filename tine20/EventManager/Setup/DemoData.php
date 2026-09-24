@@ -113,7 +113,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _onCreate()
     {
         $this->_createEvents();
-        $this->_createCustomfields();
+        //$this->_createCustomfields(); // if necessary uncomment
     }
 
     protected function _createEvents()
