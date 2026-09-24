@@ -37,6 +37,46 @@ class Sales_Model_DocumentPosition_Invoice extends Sales_Model_DocumentPosition_
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_Document_Invoice::MODEL_NAME_PART;
+
+        $_definition[self::UI_CONFIG] = [
+            self::UI_CONFIG_LAYOUT_SMALL => [
+                Sales_Model_Document_Abstract::FLD_CUSTOMER_ID,
+                self::FLD_TITLE,
+                self::FLD_QUANTITY,
+                self::FLD_UNIT,
+                self::FLD_NET_PRICE,
+            ],
+            self::UI_CONFIG_LAYOUT_MEDIUM => [
+                Sales_Model_Document_Abstract::FLD_CUSTOMER_ID,
+                self::FLD_DOCUMENT_ID,
+                self::FLD_POS_NUMBER,
+                self::FLD_TYPE,
+                self::FLD_TITLE,
+                self::FLD_QUANTITY,
+                self::FLD_UNIT,
+                self::FLD_UNIT_PRICE,
+                self::FLD_POSITION_DISCOUNT_SUM,
+                self::FLD_NET_PRICE,
+            ],
+            self::UI_CONFIG_LAYOUT_BIG => [
+                Sales_Model_Document_Abstract::FLD_CUSTOMER_ID,
+                self::FLD_DOCUMENT_ID,
+                self::FLD_POS_NUMBER,
+                self::FLD_TYPE,
+                self::FLD_TITLE,
+                self::FLD_QUANTITY,
+                self::FLD_UNIT,
+                self::FLD_UNIT_PRICE_TYPE,
+                self::FLD_UNIT_PRICE,
+                self::FLD_POSITION_DISCOUNT_SUM,
+                self::FLD_NET_PRICE,
+                self::FLD_SALES_TAX_RATE,
+                self::FLD_GROSS_PRICE,
+                self::FLD_EVAL_DIM_COST_CENTER,
+                self::FLD_SERVICE_PERIOD_START,
+                self::FLD_SERVICE_PERIOD_END,
+            ],
+        ];
     }
 
     /**

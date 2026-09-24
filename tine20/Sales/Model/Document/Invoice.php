@@ -160,6 +160,52 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 ],
             ],
         ];
+
+        $_definition[self::UI_CONFIG] = [
+            self::UI_CONFIG_LAYOUT_SMALL => [
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_CUSTOMER_ID,
+                self::FLD_NET_SUM,
+                self::FLD_INVOICE_STATUS,
+            ],
+            self::UI_CONFIG_LAYOUT_MEDIUM => [
+                self::FLD_ATTACHMENTS,
+                self::FLD_TAGS,
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_DOCUMENT_DATE,
+                self::FLD_INVOICE_STATUS,
+                self::FLD_REVERSAL,
+                self::FLD_CUSTOMER_ID,
+                self::FLD_CONTRACT_ID,
+                self::FLD_DOCUMENT_TITLE,
+                self::FLD_NET_SUM,
+                self::FLD_EVAL_DIM_COST_CENTER,
+            ],
+            self::UI_CONFIG_LAYOUT_BIG => [
+                self::FLD_ATTACHMENTS,
+                self::FLD_TAGS,
+                self::FLD_DESCRIPTION,
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_DOCUMENT_DATE,
+                self::FLD_INVOICE_STATUS,
+                self::FLD_REVERSAL,
+                self::FLD_CUSTOMER_ID,
+                self::FLD_DEBITOR_ID,
+                self::FLD_CONTRACT_ID,
+                self::FLD_DOCUMENT_TITLE,
+                self::FLD_NET_SUM,
+                self::FLD_GROSS_SUM,
+                self::FLD_EVAL_DIM_COST_CENTER,
+                self::FLD_SERVICE_PERIOD_START,
+                self::FLD_SERVICE_PERIOD_END,
+                self::FLD_PURCHASE_ORDER_REFERENCE,
+                self::FLD_VAT_PROCEDURE,
+                self::FLD_LAST_DATEV_SEND_DATE,
+                self::FLD_BUYER_REFERENCE,
+                self::FLD_PROJECT_REFERENCE,
+                self::FLD_DOCUMENT_LANGUAGE,
+            ],
+        ];
     }
 
     /**

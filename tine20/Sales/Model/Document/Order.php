@@ -209,6 +209,48 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_DocumentPosition_Order::MODEL_NAME_PART;
 
+        $_definition[self::UI_CONFIG] = [
+            self::UI_CONFIG_LAYOUT_SMALL => [
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_CUSTOMER_ID,
+                self::FLD_NET_SUM,
+                self::FLD_ORDER_STATUS,
+            ],
+            self::UI_CONFIG_LAYOUT_MEDIUM => [
+                self::FLD_ATTACHMENTS,
+                self::FLD_TAGS,
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_DOCUMENT_DATE,
+                self::FLD_ORDER_STATUS,
+                self::FLD_CUSTOMER_ID,
+                self::FLD_RECIPIENT_ID,
+                self::FLD_CONTRACT_ID,
+                self::FLD_DOCUMENT_TITLE,
+                self::FLD_NET_SUM,
+                self::FLD_EVAL_DIM_COST_CENTER,
+            ],
+            self::UI_CONFIG_LAYOUT_BIG => [
+                self::FLD_ATTACHMENTS,
+                self::FLD_TAGS,
+                self::FLD_DESCRIPTION,
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_DOCUMENT_DATE,
+                self::FLD_ORDER_STATUS,
+                self::FLD_REVERSAL,
+                self::FLD_CUSTOMER_ID,
+                self::FLD_RECIPIENT_ID,
+                self::FLD_CONTRACT_ID,
+                self::FLD_DOCUMENT_TITLE,
+                self::FLD_NET_SUM,
+                self::FLD_POSITIONS_DISCOUNT_SUM,
+                self::FLD_INVOICE_DISCOUNT_SUM,
+                self::FLD_GROSS_SUM,
+                self::FLD_EVAL_DIM_COST_CENTER,
+                self::FLD_SERVICE_PERIOD_START,
+                self::FLD_SERVICE_PERIOD_END,
+                self::FLD_DOCUMENT_LANGUAGE,
+            ],
+        ];
     }
 
     /**
