@@ -1,12 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     Setup
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -485,10 +485,17 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $mycnf = $backupDir . '/my.cnf';
         $dbName = $this->_config->database->dbname;
 
+        // the config table is dumped separately so sensitive keys can be excluded
+        $configTable = SQL_TABLE_PREFIX . 'config';
+        $hasConfig = $this->tableExists('config');
+
         try {
             $this->createMyConf($mycnf, $this->_config->database);
 
             $ignoreTables = '';
+            if ($hasConfig) {
+                $ignoreTables .= '--ignore-table=' . escapeshellarg($dbName . '.' . $configTable) . ' ';
+            }
             if (count($option['structTables']) > 0) {
                 $structDump = 'mysqldump --defaults-extra-file=' . $mycnf . ' --no-data --no-tablespaces ' .
                     escapeshellarg($dbName);
@@ -518,6 +525,10 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             }
 
             exec($cmd);
+
+            if ($hasConfig) {
+                $this->backupConfigTable($mycnf, $dbName, $configTable, $backupDir, $option['configExcludeKeys'] ?? []);
+            }
         } finally {
             if (file_exists($mycnf)) {
                 unlink($mycnf);
@@ -536,11 +547,54 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             });
             $output = array_filter($output);
             $allTables = $this->_db->listTables();
+            if ($hasConfig) {
+                // config table is dumped to tine20_mysql_config.sql.bz2, not the main dump
+                $allTables = array_diff($allTables, [$configTable]);
+            }
             $diff = array_diff($allTables, $output);
             if (!empty($diff)) {
                 throw new Tinebase_Exception_Backend('dump did not work, table diff: ' . print_r($diff, true));
             }
         }
+    }
+
+    /**
+     * dump the config table separately so configured keys can be excluded from the backup
+     *
+     * @param string $mycnf
+     * @param string $dbName
+     * @param string $configTable
+     * @param string $backupDir
+     * @param array  $excludeKeys config keys (name column) that should not be dumped
+     */
+    protected function backupConfigTable(
+        string $mycnf,
+        string $dbName,
+        string $configTable,
+        string $backupDir,
+        array $excludeKeys
+    ): void {
+        $where = '';
+        if (!empty($excludeKeys)) {
+            $quotedKeys = array_map(static function ($key) {
+                return "'" . str_replace("'", "''", (string) $key) . "'";
+            }, $excludeKeys);
+            $where = ' --where=' . escapeshellarg('name not in (' . implode(',', $quotedKeys) . ')');
+        }
+
+        $configCmd = 'mysqldump --defaults-extra-file=' . $mycnf
+            . $where
+            . ' --single-transaction --max_allowed_packet=512M'
+            . ' --opt --no-tablespaces --default-character-set=utf8mb4'
+            . ' ' . escapeshellarg($dbName)
+            . ' ' . escapeshellarg($configTable)
+            . ' | bzip2 > ' . $backupDir . '/tine20_mysql_config.sql.bz2';
+
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Config backup cmd: ' . $configCmd);
+        }
+
+        exec($configCmd);
     }
 
     /**
@@ -560,16 +614,31 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $mycnf = $backupDir . '/my.cnf';
         $this->createMyConf($mycnf, $this->_config->database);
 
-        $cmd = "bzcat $mysqlBackupFile"
-             . " | mysql --defaults-extra-file=$mycnf -f "
-             . escapeshellarg($this->_config->database->dbname);
+        $dbName = escapeshellarg($this->_config->database->dbname);
+        $commands = ["bzcat $mysqlBackupFile | mysql --defaults-extra-file=$mycnf -f $dbName"];
 
-        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' restore cmd: ' . $cmd);
+        // the config table is restored from its own dump, if present
+        $configBackupFile = $backupDir . '/tine20_mysql_config.sql.bz2';
+        if (file_exists($configBackupFile) && is_readable($configBackupFile)) {
+            $commands[] = "bzcat $configBackupFile | mysql --defaults-extra-file=$mycnf -f $dbName";
+        }
 
         $error = false;
+        $output = [];
         try {
-            exec($cmd, $output, $result);
+            foreach ($commands as $cmd) {
+                if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Setup_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' restore cmd: ' . $cmd
+                    );
+                }
+
+                exec($cmd, $cmdOutput, $result);
+                $output = array_merge($output, $cmdOutput);
+                if ($result > 0) {
+                    $error = true;
+                }
+            }
         } catch (ErrorException $ee) {
             $error = true;
             if (Setup_Core::isLogLevel(Zend_Log::ERR)) Setup_Core::getLogger()->err(
@@ -578,8 +647,8 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             unlink($mycnf);
         }
 
-        if ($error || $result > 0) {
-            throw new Exception('restore command failed: '. $output);
+        if ($error) {
+            throw new Exception('restore command failed: ' . implode("\n", $output));
         }
     }
 
