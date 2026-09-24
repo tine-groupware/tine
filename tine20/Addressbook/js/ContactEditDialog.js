@@ -531,8 +531,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         const t = initials.join('.');
 
         this.contactImage.textCt.dom.innerHTML = t ? t.toUpperCase() : '';
-        this.contactImage.textCt.setVisible(t && this.record.json.jpegphoto.includes('icon-set'));
-        this.contactImage.imageCt.setVisible(!t || !this.record.json.jpegphoto.includes('icon-set'));
+        this.contactImage.textCt.setVisible(t && this.record.json.jpegphoto?.includes('icon-set'));
+        this.contactImage.imageCt.setVisible(!t || !this.record.json.jpegphoto?.includes('icon-set'));
     },
 
     /**
