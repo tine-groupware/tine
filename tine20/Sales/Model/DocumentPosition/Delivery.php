@@ -51,6 +51,35 @@ class Sales_Model_DocumentPosition_Delivery extends Sales_Model_DocumentPosition
         unset($_definition[self::FIELDS][self::FLD_GROSS_PRICE]);
         unset($_definition[self::FIELDS][self::FLD_SERVICE_PERIOD_START]);
         unset($_definition[self::FIELDS][self::FLD_SERVICE_PERIOD_END]);
+
+        $_definition[self::UI_CONFIG] = [
+            self::UI_CONFIG_LAYOUT_SMALL => [
+                Sales_Model_Document_Abstract::FLD_CUSTOMER_ID,
+                self::FLD_TITLE,
+                self::FLD_QUANTITY,
+                self::FLD_UNIT,
+            ],
+            self::UI_CONFIG_LAYOUT_MEDIUM => [
+                Sales_Model_Document_Abstract::FLD_CUSTOMER_ID,
+                self::FLD_DOCUMENT_ID,
+                self::FLD_POS_NUMBER,
+                self::FLD_TYPE,
+                self::FLD_TITLE,
+                self::FLD_QUANTITY,
+                self::FLD_UNIT,
+            ],
+            self::UI_CONFIG_LAYOUT_BIG => [
+                Sales_Model_Document_Abstract::FLD_CUSTOMER_ID,
+                self::FLD_DOCUMENT_ID,
+                self::FLD_POS_NUMBER,
+                self::FLD_TYPE,
+                self::FLD_TITLE,
+                self::FLD_QUANTITY,
+                self::FLD_UNIT,
+                self::FLD_EVAL_DIM_COST_CENTER,
+                self::FLD_PRODUCT_ID,
+            ],
+        ];
     }
 
     /**

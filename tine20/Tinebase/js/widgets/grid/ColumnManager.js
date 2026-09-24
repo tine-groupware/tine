@@ -66,7 +66,7 @@ Tine.widgets.grid.ColumnManager = function() {
             
             // e.g. no access to owningApp
             if (! app) return null;
-            
+
             if (fieldDefinition) {
                 if (_.get(fieldDefinition, 'disabled') || _.get(fieldDefinition, 'uiconfig.disabled')) {
                     return null;
@@ -103,8 +103,17 @@ Tine.widgets.grid.ColumnManager = function() {
                     return null;
                 }
             }
-            
-            const uiConfig = this.getColumnUIConfig(field, fieldDefinition, null, app);
+
+            if (modelConfig?.uiconfig) {
+                ['large', 'big', 'medium', 'small'].forEach((level) => {
+                    if (modelConfig.uiconfig[level] && modelConfig.uiconfig[level].includes(config.id ?? config.dataIndex)) {
+                        config.responsiveLevel = level;
+                    }
+                })
+            }
+
+            const uiConfig = this.getColumnUIConfig(field, fieldDefinition, config, app);
+
             Ext.applyIf(uiConfig, {
                 minWidth: 50,
                 defaultWidth: 80,
@@ -132,7 +141,9 @@ Tine.widgets.grid.ColumnManager = function() {
             const config = {
                 id: refConfig?.id ?? field.name,
                 dataIndex: refConfig?.dataIndex ?? field.name,
-                minWidth: 50
+                minWidth: 50,
+                responsiveLevel: refConfig?.responsiveLevel ?? null,
+                header: refConfig?.header ?? null,
             };
             
             if (type === 'auto' && refConfig?.renderer && (!refConfig?.width || refConfig.width === 100)) {
@@ -272,7 +283,11 @@ Tine.widgets.grid.ColumnManager = function() {
                     config.defaultWidth = 200;
                 }
             }
-            
+
+            if (['created_by', 'creation_time', 'last_modified_by', 'last_modified_time'].includes(config.dataIndex) && !config.responsiveLevel) {
+                config.responsiveLevel = 'big';
+            }
+
             if (type === 'keyfield') {
                 config.defaultWidth = 80;
                 config.maxWidth = 1000;
@@ -290,7 +305,7 @@ Tine.widgets.grid.ColumnManager = function() {
                             return current.length < shortest.length ? current : shortest;
                         }, data[0].i18nValue);
                         const minTextLength = Math.ceil(this.getTextWidth(minText) / 10) * 10;
-                        
+
                         config.maxWidth = maxTextLength + 50;
                         config.defaultWidth = minTextLength + 50;
                     } catch (e) {
@@ -315,10 +330,14 @@ Tine.widgets.grid.ColumnManager = function() {
                 if (fieldDefinition?.uiconfig?.responsiveLevel) {
                     config.responsiveLevel = fieldDefinition.uiconfig.responsiveLevel;
                 }
-                if (fieldDefinition.hasOwnProperty('shy')) {
+                if (fieldDefinition.hasOwnProperty('shy') && !config.responsiveLevel) {
                     if (fieldDefinition.shy) config.responsiveLevel = 'large';
                     config.hidden = !!fieldDefinition.shy;
                 }
+                if (fieldDefinition?.uiconfig?.responsiveLevel) {
+                    config.responsiveLevel = fieldDefinition.uiconfig.responsiveLevel;
+                }
+
                 if (fieldDefinition?.tooltip) {
                     config.tooltip = fieldDefinition.tooltip;
                 }

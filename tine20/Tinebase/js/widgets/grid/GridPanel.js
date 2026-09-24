@@ -1985,8 +1985,22 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }
 
             // todo : hide the layout action if disableResponsiveLayout ?
-            const levels = [...new Set(columns.map((col) => col?.responsiveLevel).filter(Boolean))];
-            this.widthClasses = _.uniq(['auto', 'oneColumn', 'big'].concat(levels)); // @TODO sort by size!
+            const levelOrder = ['small', 'medium', 'big', 'large'];
+            const modelConfig = this.recordClass?.getModelConfiguration?.();
+            const levels = new Set(columns.map((col) => col?.responsiveLevel).filter(Boolean));
+
+            levelOrder.forEach((level) => {
+                if (modelConfig?.uiconfig?.[level]) {
+                    levels.add(level);
+                }
+            });
+            levels.add('big');
+
+            this.widthClasses = [
+                'auto',
+                'oneColumn',
+                ...levelOrder.filter((level) => levels.has(level)),
+            ];
 
             const layoutActions = this.widthClasses.map((level) => {
                 const text = level === 'oneColumn' ? 'one column' : level;

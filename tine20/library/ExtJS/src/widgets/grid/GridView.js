@@ -1257,6 +1257,8 @@ viewConfig: {
                 }
             }
             const mode = this.getResponsiveMode();
+            const modelConfig = this.grid.recordClass ? this.grid.recordClass.getModelConfiguration() : null;
+
             cm.config.forEach((col, idx) => {
                 col.initialConfig = col.initialConfig || {... col};
                 col.index = idx;
@@ -1273,9 +1275,10 @@ viewConfig: {
                         hidden = col.id !== 'responsive';
                     } else {
                         //handle auto mode and strict mode
-                        if (!refConfig) {
-                            const responsiveLevel = col?.responsiveLevel ?? 'big';
-                            const colModeClass = getLayoutClassByMode(responsiveLevel, this.cm.config);
+                        if (!refConfig || !refConfig.hasOwnProperty('hidden') || refConfig.hasOwnProperty('responsiveLevel')) {
+                            const defaultResponsiveLevel = modelConfig?.uiconfig?.hasOwnProperty('big') ? 'large' : 'big';
+                            const colResponsiveLevel = col?.responsiveLevel ?? defaultResponsiveLevel;
+                            const colModeClass = getLayoutClassByMode(colResponsiveLevel, this.cm.config);
                             if (col?.responsiveLevel || !hidden) hidden = colModeClass.level > mode.level;
                         }
                         if (col.id === 'responsive') hidden = true;

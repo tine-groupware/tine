@@ -60,6 +60,46 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
         ];
 
         self::_adaptFields($_definition);
+
+        $_definition[self::UI_CONFIG] = [
+            self::UI_CONFIG_LAYOUT_SMALL => [
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_CUSTOMER_ID,
+                self::FLD_NET_SUM,
+                self::FLD_OFFER_STATUS,
+            ],
+            self::UI_CONFIG_LAYOUT_MEDIUM => [
+                self::FLD_ATTACHMENTS,
+                self::FLD_TAGS,
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_DOCUMENT_DATE,
+                self::FLD_OFFER_STATUS,
+                self::FLD_CUSTOMER_ID,
+                self::FLD_RECIPIENT_ID,
+                self::FLD_CONTRACT_ID,
+                self::FLD_DOCUMENT_TITLE,
+                self::FLD_NET_SUM,
+                self::FLD_EVAL_DIM_COST_CENTER,
+            ],
+            self::UI_CONFIG_LAYOUT_BIG => [
+                self::FLD_ATTACHMENTS,
+                self::FLD_TAGS,
+                self::FLD_DESCRIPTION,
+                self::FLD_DOCUMENT_NUMBER,
+                self::FLD_DOCUMENT_DATE,
+                self::FLD_OFFER_STATUS,
+                self::FLD_CUSTOMER_ID,
+                self::FLD_RECIPIENT_ID,
+                self::FLD_CONTRACT_ID,
+                self::FLD_DOCUMENT_TITLE,
+                self::FLD_NET_SUM,
+                self::FLD_POSITIONS_DISCOUNT_SUM,
+                self::FLD_INVOICE_DISCOUNT_SUM,
+                self::FLD_GROSS_SUM,
+                self::FLD_EVAL_DIM_COST_CENTER,
+                self::FLD_DOCUMENT_LANGUAGE,
+            ],
+        ];
     }
 
     /**
