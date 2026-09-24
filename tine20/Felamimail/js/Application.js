@@ -99,15 +99,16 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         this.updateInterval = parseInt(Tine.Felamimail.registry.get('preferences').get('updateInterval')) * 60000;
         Tine.log.debug('user defined update interval is "' + this.updateInterval/1000 + '" seconds');
-        
-        this.defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
-        Tine.log.debug('default account is "' + this.defaultAccount);
 
         Tine.Tinebase.appMgr.isInitialised('Felamimail')
             .then(_.bind(async function() {
                 this.initAccountModel();
                 this.initGridPanelHooks();
                 await this.initAccountStore();
+
+                if (this.defaultAccount) {
+                    Tine.log.debug('default account is "' + this.defaultAccount.get('name'));
+                }
 
                 if (window.isMainWindow) {
                     if (Tine.Tinebase.appMgr.getActive() !== this && this.updateInterval) {
@@ -409,9 +410,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     checkMails: function(folder, callback) {
         this.checkMailsDelayedTask.cancel();
-        
+
         if (! this.getFolderStore().getCount() && this.defaultAccount) {
-            this.fetchSubfolders('/' + this.defaultAccount);
+            this.fetchSubfolders('/' + this.defaultAccount.get('id'));
             return;
         }
         
@@ -924,6 +925,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 reader: Tine.Felamimail.accountBackend.getReader(),
                 listeners: {
                     load: _.bind(() => {
+                        const defaultAccountId = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+                        this.defaultAccount = this.accountStore.getById(defaultAccountId);
+                        if (!this.defaultAccount) {
+                            this.defaultAccount = this.accountStore.getAt(0);
+                        }
                         fulfill(this.accountStore)
                     }, this)
                 }
