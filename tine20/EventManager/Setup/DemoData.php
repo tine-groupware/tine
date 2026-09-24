@@ -125,25 +125,6 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             Tinebase_Model_Container::TYPE_SHARED,
         );
 
-        $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Tinebase_Model_EvaluationDimensionItem::class,
-            [
-                [
-                    'field' => Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER,
-                    'operator' => 'equals',
-                    'value' => '02100'
-                ],
-            ],
-        );
-        $cost_center_item = Tinebase_Controller_EvaluationDimensionItem::getInstance()
-            ->search($filter)->getFirstRecord();
-        if (!$cost_center_item) {
-            $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('tinebase_import_editem_csv');
-
-            $importer = call_user_func_array($definition->plugin . '::createFromDefinition', array($definition, []));
-            $importer->importFile(__DIR__ . '/DemoData/files/costcenter.csv');
-        }
-
         EventManager_Config::getInstance()
             ->set(EventManager_Config::JWT_SECRET, 'jwtSecretCreatedFromEventManagerDemoData');
 
