@@ -520,7 +520,8 @@ class HumanResources_Controller_AttendanceControllerTests extends HumanResources
         $scleverTimezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $this->_personas['sclever']->getId());
         $localHour = (int)$dt->getClone()->setTimezone($scleverTimezone)->format('H');
         $this->assertSame(6, $ts->notes->count());
-        $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock in: %1$s'), $localHour . ':03:10')));
+        $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock in: %1$s'), $localHour . ':03:10')),
+            'clock in not found in note: ' . print_r($ts->notes->toArray(), true));
         $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock pause: %1$s'), $localHour . ':03:11')));
         $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock in: %1$s'), ($localHour + 1) . ':03:10')));
         $this->assertNotNull($ts->notes->find('note', sprintf($t->_('Clock pause: %1$s'), ($localHour + 1). ':03:10')));
