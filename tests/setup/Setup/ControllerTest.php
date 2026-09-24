@@ -1,10 +1,10 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -455,6 +455,85 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         $tables = Setup_Controller::getInstance()->getBackupStructureOnlyTables();
 
         $this->assertTrue(in_array(SQL_TABLE_PREFIX . 'felamimail_cache_message', $tables), 'felamimail tables need to be in _getBackupStructureOnlyTables');
+    }
+
+    /**
+     * the config table is dumped separately and configured keys are excluded from that dump
+     */
+    public function testBackupExcludesConfigKeys()
+    {
+        if (! is_executable('/usr/bin/mysqldump')) {
+            self::markTestSkipped('no mysqldump executable available');
+        }
+
+        if (! $this->_uit->isInstalled('Tinebase')) {
+            $this->_uit->installApplications(['Addressbook']);
+        }
+
+        $db = Tinebase_Core::getDb();
+        $configTable = SQL_TABLE_PREFIX . 'config';
+        $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+
+        $testKeys = ['imap', 'smtp', 'backup_test_key'];
+        $ids = [];
+        foreach ($testKeys as $key) {
+            $ids[$key] = md5($applicationId . $key . 'backup_test');
+            // remove leftovers from a previous (possibly failed) run so the test is re-runnable
+            $db->query('DELETE FROM ' . $db->quoteIdentifier($configTable) . ' WHERE id = ?', [$ids[$key]]);
+            $db->query(
+                'INSERT INTO ' . $db->quoteIdentifier($configTable) . ' (id, application_id, name, value)'
+                . ' VALUES (?, ?, ?, ?)',
+                [$ids[$key], $applicationId, $key, 'secret-password-for-' . $key]
+            );
+        }
+
+        $backupDir = Tinebase_Core::getTempDir() . '/backup_test_' . uniqid();
+        $options = [
+            'backupDir' => $backupDir,
+            'db' => 1,
+            'noTimestamp' => true,
+            'configExcludeKeys' => ['imap', 'smtp'],
+        ];
+
+        // count occurrences in a dump without loading the whole (decompressed) file into memory
+        $countInDump = static function (string $file, string $needle): int {
+            exec('bzcat ' . escapeshellarg($file) . ' | grep -cF ' . escapeshellarg($needle), $out);
+            return (int) ($out[0] ?? 0);
+        };
+
+        try {
+            $this->_uit->getInstance()->backup($options);
+
+            $mainDumpFile = $backupDir . '/tine20_mysql.sql.bz2';
+            $configDumpFile = $backupDir . '/tine20_mysql_config.sql.bz2';
+
+            // config table must not be part of the main dump
+            $this->assertSame(0, $countInDump($mainDumpFile, 'CREATE TABLE `' . $configTable . '`'));
+
+            // config table is dumped separately
+            $this->assertFileExists($configDumpFile);
+            $this->assertGreaterThan(0, $countInDump($configDumpFile, 'CREATE TABLE `' . $configTable . '`'));
+
+            // excluded keys (and their values) must not be in the config dump
+            $this->assertSame(0, $countInDump($configDumpFile, 'secret-password-for-imap'));
+            $this->assertSame(0, $countInDump($configDumpFile, 'secret-password-for-smtp'));
+
+            // non-excluded keys must be in the config dump
+            $this->assertGreaterThan(0, $countInDump($configDumpFile, 'secret-password-for-backup_test_key'));
+        } finally {
+            foreach ($testKeys as $key) {
+                $db->query('DELETE FROM ' . $db->quoteIdentifier($configTable) . ' WHERE id = ?', [$ids[$key]]);
+            }
+            foreach (['tine20_mysql.sql.bz2', 'tine20_mysql_config.sql.bz2'] as $file) {
+                $path = $backupDir . '/' . $file;
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+            if (is_dir($backupDir)) {
+                rmdir($backupDir);
+            }
+        }
     }
 
     public function testSortInstallableApplications(): void

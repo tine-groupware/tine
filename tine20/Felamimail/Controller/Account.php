@@ -1216,6 +1216,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $credentials = null;
         if ($_oldRecord->credentials_id) {
             $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
+            // TODO remove substr - should no longer be necessary
             $credentials->key = substr($userCredentialCache->password, 0, 24);
             try {
                 $credentialsBackend->getCachedCredentials($credentials);
