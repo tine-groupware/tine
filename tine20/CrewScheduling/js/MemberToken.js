@@ -5,6 +5,7 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import Attendee from "Calendar/Model/Attendee";
 Ext.ns('Tine.CrewScheduling');
 
 require('../styles/memberToken.scss');
@@ -63,8 +64,8 @@ Ext.extend(Tine.CrewScheduling.MemberToken, Ext.XTemplate, {
         return Object.assign({}, data.user_id, {
             count: data.count,
             fbInfo: data.fbInfo,
-            initials: data.user_id.n_short ? data.user_id.n_short
-                : _.join(_.map(_.map([data.user_id.n_given, data.user_id.n_family], _.toUpper), _.head), ''),
+            initials: data.user_id ? (data.user_id.n_short ? data.user_id.n_short
+                : _.join(_.map(_.map([data.user_id.n_given, data.user_id.n_family], _.toUpper), _.head), '')) : Attendee.getRecord(data).getTitle(),
             signatureId: Tine.Calendar.Model.Attender.getAttendeeStore.getSignature(data)
         });
     },

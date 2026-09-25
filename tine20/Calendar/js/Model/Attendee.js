@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import { assign, isFunction, map } from 'lodash';
 import Record from 'data/Record'
 import { accountSortType } from 'common'
 
@@ -170,7 +171,7 @@ Attendee.getSortOrder = function(user_type) {
  * @static
  */
 Attendee.getDefaultData = function(overrides) {
-    return _.assign({
+    return assign({
         // @TODO have some config here? user vs. default?
         user_type: 'any',
         role: 'REQ',
@@ -281,11 +282,9 @@ Attendee.getAttendeeStore.getAttenderRecord = function(attendeeStore, attendee) 
 Attendee.getAttendeeStore.signatureDelimiter = ';';
 
 Attendee.getAttendeeStore.getSignature = function(attendee) {
-    var _ = window.lodash;
-
-    attendee = _.isFunction(attendee.beginEdit) ? attendee.data : attendee;
-    return [attendee.cal_event_id, attendee.user_type, attendee.user_id.id || attendee.user_id, _.map(attendee.crewscheduling_roles, (csRole) => {
-            return (csRole.role.id || csRole.role) + ':' + _.map(csRole.data?.event_types || csRole.event_types, (eventType) => {
+    attendee = isFunction(attendee.beginEdit) ? attendee.data : attendee;
+    return [attendee.cal_event_id, attendee.user_type, Attendee.getRecord(attendee).getUserId(), map(attendee.crewscheduling_roles, (csRole) => {
+            return (csRole.role.id || csRole.role) + ':' + map(csRole.data?.event_types || csRole.event_types, (eventType) => {
                 return eventType.data?.id || eventType.id;
             }).join('&')
         }).join(',')]
@@ -293,13 +292,14 @@ Attendee.getAttendeeStore.getSignature = function(attendee) {
 };
 
 Attendee.getAttendeeStore.fromSignature = function(signatureId) {
-    var ids = signatureId.split(Attendee.getAttendeeStore.signatureDelimiter);
+    const [cal_event_id, user_type, user_id, crewscheduling_roles]= signatureId.split(Attendee.getAttendeeStore.signatureDelimiter);
 
     return new Attendee({
-        cal_event_id: ids[0],
-        user_type: ids[1],
-        user_id: ids[2],
-        crewscheduling_roles: ids[3] // @TODO do we need to dehydrate here?
+        cal_event_id,
+        user_type,
+        user_id: user_type !== 'email' ? user_id : null,
+        user_email: user_type === 'email' ? user_id : null,
+        crewscheduling_roles // @TODO do we need to dehydrate here?
     });
 }
 
@@ -329,5 +329,9 @@ Attendee.getAttendeeStore.getData = function(attendeeStore, event) {
 
     return attendeeData;
 };
+
+Attendee.getRecord = function(attendeeData) {
+    return isFunction(attendeeData?.beginEdit) ? attendeeData : Attendee.setFromJson(attendeeData || {});
+}
 
 export default Attendee

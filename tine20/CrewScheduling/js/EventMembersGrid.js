@@ -19,6 +19,7 @@ require('./MemberToken');
 require('./MemberSelectionDialog');
 import { HTMLProxy, Expression } from "twingEnv.es6";
 import PollReply from "./Model/PollReply";
+import Attendee from "Calendar/Model/Attendee";
 
 
 /**
@@ -238,7 +239,7 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
                 var attendee = _.get(event, 'data.attendee', []),
                     userId = key.replace('user' + Tine.Calendar.Model.Attender.getAttendeeStore.signatureDelimiter, ''),
                     current = _.find(attendee, function(attendee) {
-                        return _.get(attendee, 'user_id.id') == userId;
+                        return Attendee.getRecord(attendee).getUserId()=== userId;
                     });
 
                 if (current) {

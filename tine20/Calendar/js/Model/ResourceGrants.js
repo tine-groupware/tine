@@ -6,6 +6,8 @@
  * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import { get } from 'lodash';
+
 /**
  * Model of a grant
  */
@@ -43,7 +45,7 @@ Tine.Calendar.Model.ResourceGrants = Tine.Tinebase.data.Record.create([
 Tine.widgets.container.GrantsManager.register('Calendar_Model_Event', function(container) {
     var _ = window.lodash,
         me = this,
-        grantsModelName = _.get(container, 'xprops.Tinebase.Container.GrantsModel', 'Tinebase_Model_Grants');
+        grantsModelName = get(container, 'xprops.Tinebase.Container.GrantsModel', 'Tinebase_Model_Grants');
 
     if (grantsModelName == 'Calendar_Model_ResourceGrants') {
         // resource events container

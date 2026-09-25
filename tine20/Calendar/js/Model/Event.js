@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import { pick, get, forEach, findIndex } from 'lodash';
 import Record from 'data/Record'
 
 // @see https://github.com/ericmorand/twing/issues/332
@@ -102,7 +103,7 @@ const Event = Record.create([], {
 
     getSchedulingData: function() {
         var _ = window.lodash,
-            schedulingData = _.pick(this.data, ['uid', 'originator_tz', 'dtstart', 'dtend', 'is_all_day_event',
+            schedulingData = pick(this.data, ['uid', 'originator_tz', 'dtstart', 'dtend', 'is_all_day_event',
                 'transp', 'recurid', 'base_event_id', 'rrule', 'rrule_until', 'exdate', 'rrule_constraints']);
 
         // NOTE: for transistent events id is not part of data but we need the transistent id e.g. for freeBusy info
@@ -117,7 +118,7 @@ const Event = Record.create([], {
 
     hasPoll: function() {
         var _ = window.lodash;
-        return ! +_.get(this, 'data.poll_id.closed', true);
+        return ! +get(this, 'data.poll_id.closed', true);
     },
 
     getPollUrl: function(pollId) {
@@ -337,7 +338,7 @@ Event.getDefaultAttendee = function(organizer, container) {
 Event.getDefaultLocation = function(defaultAttendee) {
     var location = null;
     if (defaultAttendee) {
-        _.forEach(defaultAttendee, function(attendee) {
+        forEach(defaultAttendee, function(attendee) {
             if (attendee.user_type == 'resource') {
                 var type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(lodash.get(attendee, 'user_id.type', {}))
                 if (type?.get('is_location')) {
@@ -352,13 +353,13 @@ Event.getDefaultLocation = function(defaultAttendee) {
 
 Event.getDefaultLocationRecord = function(resource) {
     var relations = resource.relations,
-        locationId = relations ? _.findIndex(relations, function(k) { return k.type == 'LOCATION'; }) : -1,
+        locationId = relations ? findIndex(relations, function(k) { return k.type == 'LOCATION'; }) : -1,
         locationContact = locationId >= 0 ? relations[locationId].related_record : null;
 
     if (locationContact) {
         return locationContact;
     } else {
-        var siteId = relations ? _.findIndex(relations, function (k) {
+        var siteId = relations ? findIndex(relations, function (k) {
                 return k.type == 'SITE';
             }) : -1,
             siteContact = siteId >= 0 ? relations[siteId].related_record : null;

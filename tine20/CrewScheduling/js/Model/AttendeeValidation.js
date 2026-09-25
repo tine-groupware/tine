@@ -13,6 +13,7 @@ import * as csRole from "./schedulingRole"
 import * as eRC from "./eventRoleConfig"
 import {getLists} from "./schedulingRole";
 import PollReply from "./PollReply";
+import Attendee from "Calendar/Model/Attendee";
 
 const wkdays = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA']
 /**
@@ -236,7 +237,7 @@ export default class AttendeeValidation {
         const eRCs = await eRC.getFromEvent(event)
         const existingAttendee = find(event.data?.attendee || event.attendee, (candidate) => {
             const candidateData = candidate.data || candidate
-            return attendeeData.user_type === candidateData.user_type && (attendeeData.user_id?.id || attendeeData.user_id) === (candidateData.user_id?.id || candidateData.user_id)
+            return attendeeData.user_type === candidateData.user_type && Attendee.getRecord(attendeeData).getUserId() === Attendee.getRecord(candidateData).getUserId()
         })
 
         const { givenRoleAttERCs, otherRolesAttERCs } = await eRC.getEventRoleConfigsOfAttendee(eRCs, existingAttendee || attendee, role)
@@ -269,7 +270,7 @@ export default class AttendeeValidation {
         let someOtherTakesRole = false
         if (await async.detect(event.data?.attendee || event.attendee, async (other) => {
             const otherData = other.data || other
-            if (attendeeData.user_type === otherData.user_type && (attendeeData.user_id?.id || attendeeData.user_id) === (otherData.user_id?.id || otherData.user_id)) return
+            if (attendeeData.user_type === otherData.user_type && Attendee.getRecord(attendeeData).getUserId() === Attendee.getRecord(otherData).getUserId()) return
 
             const { givenRoleAttERCs, otherRolesAttERCs } = await eRC.getEventRoleConfigsOfAttendee(eRCs, other, role)
             someOtherTakesRole = someOtherTakesRole || givenRoleAttERCs.length

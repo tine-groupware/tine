@@ -81,7 +81,7 @@ Tine.Calendar.AttendeeCombo = Ext.extend(Ext.form.ComboBox, {
             if (this.organizer?.email === attendeeRecord.get('user_id').email) {
                 suffix = this.app.i18n._('Organizer');
             }
-            if (attendee.user_id.id === this.currentAccount.contact_id) {
+            if (attendee.user_id?.id === this.currentAccount.contact_id) {
                 suffix = this.app.i18n._('Me');
             }
 
