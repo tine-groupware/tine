@@ -445,9 +445,14 @@ const showParentEmailField = computed(
 
 const effectiveRequiredParticipantFields = computed(() => {
   const required = requiredParticipantContactFields.value || [];
+  const isEmailConfiguredRequired = required.includes('email');
   const withoutEmail = required.filter(f => f !== 'email');
 
   if (isRegistrant.value && registrantHasEmail.value) {
+    return withoutEmail;
+  }
+
+  if (showParentEmailField.value && !isEmailConfiguredRequired) {
     return withoutEmail;
   }
 
@@ -1375,7 +1380,7 @@ const checkWaitingList = () => {
     isExpired.value = true;
   }
 
-  if (available_places && (available_places <= 0 || isExpired.value)) {
+  if (available_places && (available_places < 0 || isExpired.value)) {
     const expiredMessage = isExpired.value
       ? `${formatMessage('The registration date for')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('has expired. If you register you will be on our waiting list. Do you still want to register?')}`
       : `${formatMessage('The event')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('is full. If you register you will be on our waiting list. Do you still want to register?')}`;
@@ -1593,7 +1598,7 @@ const confirmCancel = async () => {
       type: 'success',
       onConfirm: () => {
         const baseUrl = window.location.origin;
-        window.location.href = `${baseUrl}/EventManager/view/#/event`;
+        window.location.href = `${baseUrl}/EventManager/view/events`;
       }
     });
   } catch (error) {
