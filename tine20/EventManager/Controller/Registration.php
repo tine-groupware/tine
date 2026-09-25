@@ -41,6 +41,12 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
      */
     protected $_notificationDataBeforeDelete = [];
 
+    private const PROTECTED_CONTACT_FIELDS = [
+        'id', 'seq', 'registration_id', 'registration_type',
+        'created_by', 'creation_time', 'last_modified_by', 'last_modified_time',
+        'is_deleted', 'deleted_by', 'deleted_time',
+    ];
+
     /**
      * the constructor
      *
@@ -91,11 +97,31 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         ]);
     }
 
+    private function _copyContactData($target, iterable $source): void
+    {
+        foreach ($source as $field => $value) {
+            if ($target->has($field) && !in_array($field, self::PROTECTED_CONTACT_FIELDS, true)) {
+                $target->$field = $value;
+            }
+        }
+    }
+
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+        $this->_handleRegistrationFileUpload($_record);
+    }
+
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+        $this->_handleRegistrationFileUpload($_record);
+    }
+
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
         parent::_inspectAfterCreate($_createdRecord, $_record);
         $this->_processBookedOptionsAfterCreate($_record);
-        $this->_handleRegistrationFileUpload($_record);
         $this->_updateParentStatistics($_record);
         $template = $this->_getTemplate($_record);
         $this->_sendProcessEmail($_record, $template);
@@ -105,7 +131,6 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     {
         parent::_inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord);
         $this->_processBookedOptionsAfterUpdate($_updatedRecord, $_oldRecord);
-        $this->_handleRegistrationFileUpload($_record);
         $bookedOptionsDeleted = false;
         if ($_record->{EventManager_Model_Registration::FLD_STATUS} === "3") {
             if (!empty($_record->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS})) {
@@ -395,15 +420,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 && $participant->original_id
                 && $participant->original_id === $registrant->original_id
             ) {
-                foreach ($participant as $field => $value) {
-                    if (
-                        $registrant->has($field)
-                        && $field !== 'id'
-                        && $field !== 'registration_type'
-                    ) {
-                        $_record->{EventManager_Model_Registration::FLD_REGISTRANT}->$field = $value;
-                    }
-                }
+                $this->_copyContactData($registrant, $participant);
             }
 
             return parent::update($_record, $_duplicateCheck, $_updateDeleted);
@@ -460,8 +477,8 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
         foreach ($_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $booked_option) {
             if (
-                !$booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
-                === EventManager_Model_FileOption::class
+                $booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
+                !== EventManager_Model_Selections_File::class
             ) {
                 continue;
             }
@@ -497,13 +514,26 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 $event_id = $_registration->{EventManager_Model_Registration::FLD_EVENT_ID};
 
                 // Build participant-specific folder path
-                $participant = $_registration->{EventManager_Model_Registration::FLD_PARTICIPANT};
-                $registrant = $_registration->{EventManager_Model_Registration::FLD_REGISTRANT};
-                $participant_original_id = $participant->original_id;
-                $participant_name = $participant_original_id;
+                $participant_name = 'participant';
                 try {
-                    $participant_name = Addressbook_Controller_Contact::getInstance()
-                        ->get($participant_original_id)->n_fileas;
+                    $regId = $_registration->getId();
+                    $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        EventManager_Model_Register_Contact::class,
+                        [
+                            [
+                                'field' => 'registration_id',
+                                'operator' => 'equals',
+                                'value' => $regId
+                            ],
+                            [
+                                'field' => 'registration_type',
+                                'operator' => 'equals',
+                                'value' => 'participant'
+                            ],
+                        ],
+                    );
+                    $participant = EventManager_Controller_Register_Contact::getInstance()->search($filter)->getFirstRecord();
+                    $participant_name = $participant->n_fileas;
                 } catch (Tinebase_Exception_NotFound $e) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -517,35 +547,14 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 $result = EventManager_Controller::processFileUpload($node_id, $file_name, $event_id, $folder_path);
 
                 // necessary to update nodeId to match id from tree_nodes and not temp file
-                if ($result !== false) {
-                    $booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
-                        ->{EventManager_Model_Selections_File::FLD_NODE_ID} = $result->getId();
-                    $booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
-                        ->{EventManager_Model_Selections_File::FLD_FILE_UPLOAD} = true;
-                    $event = EventManager_Controller_Event::getInstance()->get($event_id);
-                    $option_id = $booked_option->{EventManager_Model_BookedOption::FLD_OPTION};
-                    foreach ($event->{EventManager_Model_Event::FLD_REGISTRATIONS} as $registration) {
-                        if ($registration->getId() === $_registration->getId()) {
-                            foreach (
-                                $registration
-                                    ->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $event_bookedOption
-                            ) {
-                                if (
-                                    $option_id === $event_bookedOption
-                                        ->{EventManager_Model_BookedOption::FLD_OPTION}->getId()
-                                ) {
-                                    $event_bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
-                                        ->{EventManager_Model_Selections_File::FLD_NODE_ID} = $result->getId();
-                                    $event_bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
-                                        ->{EventManager_Model_Selections_File::FLD_FILE_UPLOAD} = true;
-                                }
-                                $registration->{EventManager_Model_Registration::FLD_PARTICIPANT} = $participant;
-                                $registration->{EventManager_Model_Registration::FLD_REGISTRANT} = $registrant;
-                            }
-                        }
-                    }
-                    EventManager_Controller_Event::getInstance()->update($event);
+                if ($result === false) {
+                    throw new Tinebase_Exception_UnexpectedValue('Could not store uploaded file ' . $file_name);
                 }
+
+                $booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                    ->{EventManager_Model_Selections_File::FLD_NODE_ID} = $result->getId();
+                $booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                    ->{EventManager_Model_Selections_File::FLD_FILE_UPLOAD} = true;
             }
         }
     }
@@ -1324,11 +1333,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $participantReg = new EventManager_Model_Register_Contact([], true);
         }
 
-        foreach ($participantData as $field => $value) {
-            if ($participantReg->has($field)) {
-                $participantReg->$field = $value;
-            }
-        }
+        $this->_copyContactData($participantReg, $participantData ?? []);
         $participantReg->n_fileas = $this->getNFileas($participantReg);
 
         $participantReg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_ID}
@@ -1346,11 +1351,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
         $sourceData = $isSelfRegistration ? $participantData : $registrantData;
 
-        foreach ($sourceData as $field => $value) {
-            if ($registrantReg->has($field)) {
-                $registrantReg->$field = $value;
-            }
-        }
+        $this->_copyContactData($registrantReg, $sourceData ?? []);
         $registrantReg->n_fileas = $this->getNFileas($registrantReg);
 
         $registrantReg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_ID}
@@ -1427,11 +1428,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 return $contact;
             } else {
                 $newDenormalizedContact = new EventManager_Model_Register_Contact();
-                foreach ($contactInformation as $field => $value) {
-                    if ($newDenormalizedContact->has($field) && $field !== 'id' && $field !== 'registration_type') {
-                        $newDenormalizedContact->$field = $value;
-                    }
-                }
+                $this->_copyContactData($newDenormalizedContact, $contactInformation);
                 $contact = $newDenormalizedContact;
             }
         } catch (Exception $e) {
@@ -1468,49 +1465,94 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             if (isset($_FILES['files']) && is_array($_FILES['files']['name'])) {
                 $file_count = count($_FILES['files']['name']);
                 $registration = $this->get($registration_id);
-                $old_booked_options = $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS};
+                $old_booked_options = $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} ?: [];
                 $booked_options = [];
-                foreach ($old_booked_options as $booked_option) {
-                    if ($booked_option->{EventManager_Model_BookedOption::FLD_OPTION}->id === $option_id) {
-                        $node_id = $booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
-                            ->{EventManager_Model_Selections_File::FLD_NODE_ID};
-                        $node = Tinebase_FileSystem::getInstance()->get($node_id);
-                        Tinebase_FileSystem::getInstance()->deleteFileNode($node);
-                    } else {
-                        $booked_options[] = $booked_option;
-                    }
-                }
+                $nodes_to_delete = [];
+
                 for ($i = 0; $i < $file_count; $i++) {
-                    if ($_FILES['files']['error'][$i] === UPLOAD_ERR_OK) {
-                        $path = Tinebase_TempFile::getTempPath();
-                        file_put_contents($path, $_FILES['files']['name'][$i]);
-                        $temp_file = Tinebase_TempFile::getInstance()->createTempFile(
-                            $path,
-                            $_FILES['files']['name'][$i],
-                            $_FILES['files']['type'][$i],
-                            $_FILES['files']['size'][$i],
-                            $_FILES['files']['error'][$i]
-                        );
-                        $selection_config = new EventManager_Model_Selections_File([
+                    if ($_FILES['files']['error'][$i] !== UPLOAD_ERR_OK) {
+                        continue;
+                    }
+
+                    $uploadedTmp = $_FILES['files']['tmp_name'][$i];
+                    if (!is_uploaded_file($uploadedTmp)) {
+                        throw new Tinebase_Exception_Record_NotAllowed('Invalid upload');
+                    }
+
+                    $path = Tinebase_TempFile::getTempPath();
+                    if (!move_uploaded_file($uploadedTmp, $path)) {
+                        throw new Tinebase_Exception_UnexpectedValue('Could not move uploaded file');
+                    }
+
+                    $fileName = basename((string) $_FILES['files']['name'][$i]);
+                    $fileType = $_FILES['files']['type'][$i];
+                    $fileSize = filesize($path);
+
+                    $temp_file = Tinebase_TempFile::getInstance()->createTempFile(
+                        $path,
+                        $fileName,
+                        $fileType,
+                        $fileSize,
+                        UPLOAD_ERR_OK
+                    );
+
+                    $booked_options[] = new EventManager_Model_BookedOption([
+                        'event_id' => $event_id,
+                        'option' => $option_id,
+                        'selection_config' => new EventManager_Model_Selections_File([
                             'node_id'   => $temp_file->getId(),
-                            'file_name' => $_FILES['files']['name'][$i],
-                            'file_type' => $_FILES['files']['type'][$i],
-                            'file_size' => $_FILES['files']['size'][$i],
-                        ], true);
-                        $booked_options[] = new EventManager_Model_BookedOption([
-                            'event_id' => $event_id,
-                            'option' => $option_id,
-                            'selection_config' => $selection_config,
-                            'selection_config_class' => EventManager_Model_Selections_File::class,
-                        ], true);
+                            'file_name' => $fileName,
+                            'file_type' => $fileType,
+                            'file_size' => $fileSize,
+                        ], true),
+                        'selection_config_class' => EventManager_Model_Selections_File::class,
+                    ], true);
+                }
+
+                if (empty($booked_options)) {
+                    throw new Tinebase_Exception_Record_Validation('No valid file uploaded');
+                }
+
+                foreach ($old_booked_options as $booked_option) {
+                    $option = $booked_option->{EventManager_Model_BookedOption::FLD_OPTION};
+                    $old_option_id = is_object($option) ? $option->getId() : $option;
+
+                    if ($old_option_id !== $option_id) {
+                        $booked_options[] = $booked_option;
+                        continue;
+                    }
+
+                    $node_id = $booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                        ->{EventManager_Model_Selections_File::FLD_NODE_ID} ?? null;
+                    if (!empty($node_id)) {
+                        $nodes_to_delete[] = $node_id;
                     }
                 }
-                $booked_options = new Tinebase_Record_RecordSet(
+
+                $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = new Tinebase_Record_RecordSet(
                     EventManager_Model_BookedOption::class,
                     $booked_options
                 );
-                $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = $booked_options;
-                $registration = $this->update($registration);
+
+                $tm = Tinebase_TransactionManager::getInstance();
+                $transactionId = $tm->startTransaction(Tinebase_Core::getDb());
+                try {
+                    $fs = Tinebase_FileSystem::getInstance();
+                    foreach ($nodes_to_delete as $node_id) {
+                        try {
+                            $fs->deleteFileNode($fs->get($node_id));
+                        } catch (Tinebase_Exception_NotFound $tenf) {
+                            // already gone
+                        }
+                    }
+
+                    $registration = $this->update($registration);
+                    $tm->commitTransaction($transactionId);
+                } catch (Throwable $t) {
+                    $tm->rollBack();
+                    throw $t;
+                }
+
                 $response->getBody()->write(json_encode($registration->toArray()));
             }
         } catch (Tinebase_Exception_Record_Validation $terv) {
@@ -1522,6 +1564,10 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
             $response = new \Laminas\Diactoros\Response('php://memory', 401);
             $response->getBody()->write(json_encode($terna->getMessage()));
+        } catch (Throwable $t) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $t);
+            $response = new \Laminas\Diactoros\Response('php://memory', 500);
+            $response->getBody()->write(json_encode(['error' => 'Upload failed']));
         } finally {
             $assertAclUsage();
         }
