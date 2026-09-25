@@ -36,7 +36,7 @@ Tine.Sales.AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.getForm().findField('product_id').allowBlank = !isProductType;
         this.getForm().items.items.forEach((field) => {
-            const isGenericField = ['type', 'title'].concat(type === 'TEXT' ? 'description' : []).indexOf(field.name) >= 0;
+            const isGenericField = ['type', 'title', 'grouping'].concat(type === 'TEXT' ? 'description' : []).indexOf(field.name) >= 0;
             
             // manage type relevant fields
             const isTypeField = isProductType || isGenericField;
