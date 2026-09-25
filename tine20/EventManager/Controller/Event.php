@@ -531,6 +531,14 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
             for ($i = 0; $i < count($eventsArray); $i++) {
                 $eventArray = $eventsArray[$i];
+
+                // public endpoint: never expose other people's registrations or internal metadata
+                unset(
+                    $eventArray[EventManager_Model_Event::FLD_REGISTRATIONS],
+                    $eventArray['relations'],
+                    $eventArray['notes']
+                );
+
                 $localizationFields = ['name', 'subheading', 'description'];
                 foreach ($localizationFields as $localizationField) {
                     if (empty($eventArray[$localizationField])) {
@@ -573,6 +581,13 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
             $converter = Tinebase_Convert_Factory::factory($event);
             $eventArray = $converter->fromTine20Model($event);
+
+            // public endpoint: never expose other people's registrations or internal metadata
+            unset(
+                $eventArray[EventManager_Model_Event::FLD_REGISTRATIONS],
+                $eventArray['relations'],
+                $eventArray['notes']
+            );
 
             $localizationFields = ['name', 'subheading', 'description'];
             foreach ($localizationFields as $localizationField) {
@@ -684,11 +699,37 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                     }
 
                     $email_registrant = $decoded->email ?? '';
+                    if ($email_registrant === '') {
+                        $response = new \Laminas\Diactoros\Response('php://memory', 400);
+                        $response->getBody()->write(json_encode(['error' => 'Invalid or expired token']));
+                        return $response;
+                    }
+
                     $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($email_registrant);
                     $dependant_participant = [];
                     $registrations_data = [];
-                    $registrationIds = [];
                     $accountOwner = [];
+
+                    $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        EventManager_Model_Register_Contact::class,
+                        [
+                            [
+                                'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
+                                'operator' => 'equals',
+                                'value' => 'registrant'
+                            ],
+                            [
+                                'field' => 'email',
+                                'operator' => 'equals',
+                                'value' => $email_registrant
+                            ],
+                        ],
+                    );
+                    $registrantContacts = EventManager_Controller_Register_Contact::getInstance()
+                        ->search($filter);
+                    $registrationIds = array_values(array_unique(array_filter(
+                        $registrantContacts->registration_id
+                    )));
 
                     $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                         EventManager_Model_Register_Contact::class,
@@ -698,19 +739,18 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                                 'operator' => 'equals',
                                 'value' => 'participant'
                             ],
+                            [
+                                'field' => 'email',
+                                'operator' => 'equals',
+                                'value' => $email_registrant
+                            ],
                         ],
                     );
-                    $registerContacts = EventManager_Controller_Register_Contact::getInstance()
-                        ->search($filter);
+                    $ownParticipant = EventManager_Controller_Register_Contact::getInstance()
+                        ->search($filter)->getFirstRecord();
 
-                    foreach ($registerContacts as $registerContact) {
-                        $regId = $registerContact->registration_id;
-                        if (!in_array($regId, $registrationIds)) {
-                            $registrationIds[] = $regId;
-                        }
-                        if (count($accountOwner) === 0 && $registerContact->email === $email_registrant) {
-                            $accountOwner[] = $registerContact->toArray();
-                        }
+                    if ($ownParticipant) {
+                        $accountOwner[] = $ownParticipant->toArray();
                     }
 
                     foreach ($registrationIds as $registrationId) {
@@ -724,16 +764,18 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                             }
                             continue;
                         }
+
+                        $statusId = $registration->{EventManager_Model_Registration::FLD_STATUS};
                         $status = EventManager_Config::getInstance()
                             ->get(EventManager_Config::REGISTRATION_STATUS)->records
-                            ->getById($registration->{EventManager_Model_Registration::FLD_STATUS});
-                        $registration->{EventManager_Model_Registration::FLD_STATUS} = $status->value;
-                        if (
-                            $registration->{EventManager_Model_Registration::FLD_REGISTRANT}
-                                ->email === $email_registrant
-                        ) {
-                            $registrations_data[] = $registration->toArray();
-                        }
+                            ->getById($statusId);
+                        $registration->{EventManager_Model_Registration::FLD_STATUS} = $status
+                            ? $status->value
+                            : $statusId;
+
+                        $registrationArray = $registration->toArray();
+                        $registrationArray['status_id'] = $statusId;
+                        $registrations_data[] = $registrationArray;
                     }
 
                     if (!empty($contact)) {
