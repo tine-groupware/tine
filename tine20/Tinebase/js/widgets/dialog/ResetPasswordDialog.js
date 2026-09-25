@@ -43,15 +43,6 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
             this.contactRecord = Tine.Tinebase.data.Record.setFromJson(this.record.get('contact_id'), Tine.Addressbook.Model.Contact);
         }
 
-        this.mustChangeTriggerPlugin = new FieldTriggerPlugin({
-            visible: false,
-            doAssertState: false,
-            triggerConfig: {tag: "div", cls: "x-form-trigger-flat x-form-trigger-plugin x-form-localized-field tinebase-trigger-overlay"},
-            onTriggerClick:  Ext.emptyFn,
-            qtip: i18n._('Password has expired in accordance with the password policy and needs to be changed'),
-            preserveElStyle: true
-        })
-
         const validationText = i18n._('The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message.');
 
         this.items = [{
@@ -106,7 +97,6 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
                                 boxLabel: i18n.gettext('Password Must Change'),
                                 hidden: this.ldapBackend,
                                 name: 'password_must_change',
-                                plugins: [this.mustChangeTriggerPlugin],
                                 columnWidth: 0.5,
                                 checked: true,
                             }], [{

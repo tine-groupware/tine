@@ -4,6 +4,10 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
 /* all fields */
 .x-form-field{
     margin: 0 0 0 0;
@@ -24,7 +28,7 @@
   position: absolute !important;
   inset: 0 !important;
   box-shadow: inset 0 0 0 3px #ff0000 !important;
-  border-radius: 4px !important;
+  border-radius: var(--bs-border-radius) !important;
   z-index: 999999 !important;
   pointer-events: none !important;
 }
@@ -60,8 +64,6 @@
 /* ---- text fields ---- */
 .x-form-text, textarea.x-form-field{
     padding:1px 3px;
-    background:repeat-x 0 0;
-    border:1px solid;
 }
 
 textarea.x-form-field {
@@ -82,10 +84,6 @@ textarea.x-form-field {
 
 .ext-ie6 textarea.x-form-field, .ext-ie7 textarea.x-form-field {
     margin:-1px 0; /* ie bogus margin bug */
-}
-
-.ext-strict .x-form-text {
-    height:18px;
 }
 
 .ext-safari.ext-mac textarea.x-form-field {
@@ -147,61 +145,108 @@ textarea {
     float: none !important;
 }
 
+@mixin form-sizing {
+  box-sizing: border-box;
+  width: 100% !important;
+  height: auto;
+}
+
+.x-form-field.form-control {
+  box-sizing: border-box;
+  height: auto;
+}
+
+// NOTE: fields positioned by a box layout (hbox/vbox item) get their width from the layout,
+//       fields in toolbars from their config or css (e.g. the paging toolbar's page number)
+.x-form-field.form-control:not(.x-box-item):not(.x-toolbar .x-form-field) {
+  @include form-sizing;
+}
+
+// the focus ring (box-shadow) of the fields is drawn outside of them and got cut off by the (ext) containers
+// which hide their overflow. clip instead - with some margin for the focus ring. (as a bonus a clipping
+// container can't be scrolled by the browser, e.g. when focusing a field which is wider than it)
+// NOTE: an explicit (inline) overflow like autoScroll wins
+.tw-editdialog {
+  .x-panel,
+  .x-panel-bwrap,
+  .x-panel-body,
+  .x-panel-tbar,
+  .x-panel-bbar,
+  .x-box-inner,
+  .x-fieldset-bwrap,
+  .x-fieldset-body,
+  .x-column,
+  .x-column-layout-ct,
+  .x-column-inner,
+  .x-toolbar.x-toolbar-layout-ct,
+  .x-tab-panel,
+  .x-tab-panel-bwrap,
+  .x-tab-panel-body,
+  .x-form-field-wrap {
+    overflow: clip;
+    overflow-clip-margin: $input-focus-width;
+  }
+
+  // a scrolling (border layout center) container can't have a clip margin - keep the space inside
+  .x-border-scroll-center {
+    padding: $input-focus-width;
+  }
+}
+
 /* wrapped fields and triggers */
-.x-form-field-wrap .x-form-trigger{
-    width:17px;
-    height:21px;
-    border:0;
-    background:transparent no-repeat 0 0;
-    cursor:pointer;
-    border-bottom: 1px solid;
-    position:absolute;
-    top:0;
-}
-
-.x-form-field-wrap .x-form-date-trigger, .x-form-field-wrap .x-form-clear-trigger, .x-form-field-wrap .x-form-search-trigger{
-    cursor:pointer;
-}
-
-.ext-webkit .x-form-field-wrap .x-form-trigger{
-    right:0;
-}
-
-.x-form-field-wrap .x-form-twin-triggers .x-form-trigger{
-    position:static;
-    top:auto;
-    vertical-align:top;
-}
-
 .x-form-field-wrap {
-    position:relative;
-    left:0;top:0;
-    zoom:1;
-    white-space: nowrap;
+  position:relative;
+  left:0;
+  top:0;
+  zoom:1;
+  white-space: nowrap;
+
+  > .form-control,
+  > .form-select {
+    @include form-sizing;
+
+    &.x-trigger-hidden {
+      // a lot of trigger/action icons are defined with !important
+      background-image: none !important;
+      padding-right: $form-select-padding-x;
+    }
+  }
+  .x-form-trigger {
+    --trigger-width: $form-select-padding-x * 2;
+    position: absolute;
+    top: 0;
+    right: $form-select-padding-x;
+    width: $form-select-padding-x * 2;
+    height: 100%;
+    background: none;
+    border: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .x-form-date-trigger,
+  .x-form-clear-trigger,
+  .x-form-search-trigger {
+    cursor:pointer;
+  }
+  &.x-form-field-twin-trigger-wrap .form-select {
+    padding-right: 2 * $form-select-padding-x * 2.5;
+  }
+  .x-form-twin-triggers {
+    width: 2 * $form-select-padding-x * 2.5;
+
+    .x-form-trigger:first-child {
+      background-position: center;
+      background-repeat: no-repeat;
+      box-sizing: border-box;
+      background-size: 14px;
+      opacity: 0.7;
+      right: $form-select-padding-x * 2.5;
+    }
+  }
 }
 
-.x-form-field-wrap .x-form-trigger-over{
-    background-position:-17px 0;
-}
-
-.x-form-field-wrap .x-form-trigger-click{
-    background-position:-34px 0;
-}
-
-.x-trigger-wrap-focus .x-form-trigger{
-    background-position:-51px 0;
-}
-
-.x-trigger-wrap-focus .x-form-trigger-over{
-    background-position:-68px 0;
-}
-
-.x-trigger-wrap-focus .x-form-trigger-click{
-    background-position:-85px 0;
-}
-
-.x-trigger-wrap-focus .x-form-trigger{
-    border-bottom: 1px solid;
+.x-form-field-trigger-wrap * {
+  border:none;
 }
 
 .x-item-disabled .x-form-trigger-over{
@@ -219,17 +264,12 @@ textarea {
 }
 
 /* field focus style */
-.x-form-focus, textarea.x-form-focus{
+input.x-form-focus, textarea.x-form-focus{
 	border: 1px solid;
 }
 
 /* invalid fields */
-.x-form-invalid, textarea.x-form-invalid{
-	background:repeat-x bottom;
-	border: 1px solid;
-}
-
-.ext-webkit .x-form-invalid{
+input.x-form-invalid, textarea.x-form-invalid{
 	border: 1px solid;
 }
 
@@ -355,8 +395,6 @@ textarea {
     text-align:right;
 }
 
-.ext-webkit .x-small-editor .x-form-text{padding-top:3px;font-size:100%;}
-
 .x-form-clear {
     clear:both;
     height:0;
@@ -392,18 +430,7 @@ textarea {
 
 .x-form-display-field{
     padding-top: 2px;
-}
-
-.ext-gecko .x-form-display-field, .ext-strict .ext-ie7 .x-form-display-field{
-    padding-top: 1px;
-}
-
-.ext-ie .x-form-display-field{
-    padding-top: 3px;
-}
-
-.ext-strict .ext-ie8 .x-form-display-field{
-    padding-top: 0;
+    width: auto !important;
 }
 
 .x-form-column {
@@ -485,15 +512,11 @@ textarea {
 
 /* fieldsets */
 .x-fieldset {
+    border-radius: var(--bs-border-radius);
     border:1px solid;
-    padding:10px;
+    padding:8px;
     margin-bottom:10px;
     display:block; /* preserve margins in IE */
-}
-
-/* make top of checkbox/tools visible in webkit */
-.ext-webkit .x-fieldset-header {
-    padding-top: 1px;
 }
 
 .ext-ie .x-fieldset legend {

@@ -2768,7 +2768,7 @@ msgid "Download example file"
 msgstr "Példa file letöltése"
 
 #, python-brace-format
-msgid "Select {0} to add you {1} to:"
+msgid "Select {0} to add your {1} to:"
 msgstr "{0} kiválasztása, {1} hozzáadása ide:"
 
 msgid "Set Import Options"

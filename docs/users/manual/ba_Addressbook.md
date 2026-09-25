@@ -106,7 +106,7 @@ das gemeinsame Standard-Adressbuch für alle Mitarbeiter des Unternehmens, eben 
 
 Beachten Sie, dass Ihre {{ branding.title }}-Installation von diesem Schema abweichen kann. So könnte z.B. das gemeinsame interne Adressbuch den Namen Ihres Unternehmens oder Ihrer Organisationseinheit tragen. Außerdem könnte sich in dem Ordner z.B. ein Adressbuch External Contacts o.ä. befinden, das der Speicherung von Kunden, Lieferanten oder anderer externer Kontakte dient.
 
-Wenn Sie sich nun über das passende Adressbuch für Ihre Daten im Klaren sind und diese entsprechend aufbereitet haben, starten Sie den Import über Adressbuch -> Kontakte importieren. In dem sich öffnenden Fenster Datei und Format wählen, wählen Sie die Datei mit Ihren Kontakten aus und prüfen das Import-Format. Standardmäßig ist CSV-Import für Kontakte eingestellt; haben Sie Ihre Import-Datei, wie oben beschrieben, vorbereitet und ausgewählt, gehen Sie Vorwärts (rechts unten).
+Wenn Sie sich nun über das passende Adressbuch für Ihre Daten im Klaren sind und diese entsprechend aufbereitet haben, starten Sie den Import über Adressbuch -> Kontakte importieren. In dem sich öffnenden Fenster Datei und Format wählen, Wählen Sie die Datei aus, die Ihre Kontakte enthältn aus und prüfen das Import-Format. Standardmäßig ist CSV-Import für Kontakte eingestellt; haben Sie Ihre Import-Datei, wie oben beschrieben, vorbereitet und ausgewählt, gehen Sie Vorwärts (rechts unten).
 
 <!-- SCREENSHOT -->
 ![Abbildung: Import-Optionen setzen]({{ img_url_desktop }}Adressbuch/4_adressbuch_mit_import_optionen_setzen_light.png#only-light){.desktop-img}

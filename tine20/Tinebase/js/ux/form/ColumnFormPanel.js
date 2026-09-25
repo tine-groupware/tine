@@ -60,6 +60,12 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
     labelAlign: 'top',
 
     /**
+     * @cfg {String} cellBodyStyle
+     * body style of the cells wrapping each form item
+     */
+    cellBodyStyle: 'padding-left: 2px; padding-right: 2px;',
+
+    /**
      * @cfg {Object} columnLayoutConfig
      * Layout Config overrides to be applied to the underlying column layout
      */
@@ -91,9 +97,10 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
 
             // autoWidth
             if (! this.formDefaults.columnWidth) {
-                const tcw = _.sum(_.map(initialRowConfig, 'columnWidth')) || 0;
-                const nw = _.filter(initialRowConfig, c => { return c && !c.columnWidth });
-                nw.forEach(c => {c.columnWidth = (1-tcw)/nw.length});
+                const flex = _.filter(initialRowConfig, c => c && !c.width);
+                const tcw = _.sum(_.map(flex, 'columnWidth')) || 0;
+                const nw = _.filter(flex, c => !c.columnWidth);
+                nw.forEach(c => { c.columnWidth = (1 - tcw) / nw.length });
             }
 
             // each row consists of n column objects
@@ -162,7 +169,7 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
             layout: 'form',
             labelAlign: this.labelAlign,
             defaults: this.formDefaults,
-            bodyStyle: 'padding-left: 2px; padding-right: 2px;',
+            bodyStyle: this.cellBodyStyle,
             border: false,
             items: c
         };
@@ -170,6 +177,7 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
         if (c.width) {
             cell.width = c.width;
             delete cell.columnWidth;
+            delete c.width;
         }
 
         return cell;

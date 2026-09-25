@@ -221,8 +221,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
 
         // create action
         return new Ext.Action({
-            width: 20,
             text: '',
+            style: 'margin-right: 5px;',
             disabled: false,
             iconCls: (this.selectTypeDefault === 'user') ? 'tinebase-accounttype-user' : 'tinebase-accounttype-group',
             menu: new Ext.menu.Menu({

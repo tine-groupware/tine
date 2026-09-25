@@ -1018,7 +1018,7 @@ msgstr "Bitte wählen Sie die Datei, die die Datensätze enthält, die Sie zu Ti
 
 #, python-brace-format
 msgid "Select file containing your {0}"
-msgstr "Wählen Sie die Datei mit Ihren {0}"
+msgstr "Wählen Sie die Datei aus, die Ihre {0} enthält"
 
 msgid "once"
 msgstr "einmalig"

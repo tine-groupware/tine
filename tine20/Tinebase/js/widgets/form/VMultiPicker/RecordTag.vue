@@ -95,6 +95,10 @@ defineExpose({
   margin-left: 2px;
   cursor: pointer;
   margin-top: 1px;
+
+  .dark-mode & {
+    color: black;
+  }
 }
 
 .record:active{
@@ -108,17 +112,21 @@ defineExpose({
   background-repeat: no-repeat;
   background-size: 13px 13px;
   background-position: center !important;
-  filter: invert(1) hue-rotate(180deg);
+  &:not(.dark-mode *) {
+    filter: invert(1) hue-rotate(180deg);
+  }
 }
 
 .tabler-icons-cross {
   background-image: url(../../../node_modules/@tabler/icons/icons/outline/x.svg) !important;
-  width: 13px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
   background-repeat: no-repeat;
   background-size: 13px 13px;
   background-position: center !important;
-  filter: invert(1) hue-rotate(180deg);
+  &:not(.dark-mode *) {
+    filter: invert(1) hue-rotate(180deg);
+  }
 }
 
 </style>

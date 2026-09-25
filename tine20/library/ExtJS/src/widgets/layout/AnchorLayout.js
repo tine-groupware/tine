@@ -135,7 +135,10 @@ anchor: '-50 75%'
         var cs = this.getRenderedItems(ct), len = cs.length, i, c, a, cw, ch, el, vs;
         for(i = 0; i < len; i++){
             c = cs[i];
-            c.autoHeight = c.autoHeight || ct.autoHeight;
+            // inherit autoHeight from ct, but revert once ct drops it again (e.g. after responsive stacking)
+            // NOTE: items with an explicit height (e.g. ace field) keep it - their content can't give them a height
+            if (c.__ownAutoHeight === undefined) c.__ownAutoHeight = !!c.autoHeight;
+            c.autoHeight = c.__ownAutoHeight || (!!ct.autoHeight && !Ext.isNumber(c.initialConfig.height));
             el = c.getPositionEl();
             if(c.anchor){
                 a = c.anchorSpec;

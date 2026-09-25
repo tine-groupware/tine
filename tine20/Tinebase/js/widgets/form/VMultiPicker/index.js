@@ -137,6 +137,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             recordClass.getMeta('appName'),
             recordClass.getMeta('modelName'),
             Object.assign({
+                width: this.el.getWidth(),
                 editDialogConfig: this.editDialogConfig,
                 // isMetadataModelFor: this.isMetadataModelFor,
                 // requiredGrant: this.requiredGrant,

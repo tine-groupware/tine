@@ -45,9 +45,9 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
      * @cfg {String/Object} autoCreate <p>A {@link Ext.DomHelper DomHelper} element spec, or true for a default
      * element spec. Used to create the {@link Ext.Component#getEl Element} which will encapsulate this Component.
      * See <tt>{@link Ext.Component#autoEl autoEl}</tt> for details.  Defaults to:</p>
-     * <pre><code>{tag: "input", type: "text", size: "16", autocomplete: "off"}</code></pre>
+     * <pre><code>{tag: "input", type: "text", autocomplete: "off"}</code></pre>
      */
-    defaultAutoCreate : {tag: "input", type: "text", size: "16", autocomplete: "off"},
+    defaultAutoCreate : {tag: "input", type: "text", autocomplete: "off"},
     /**
      * @cfg {Boolean} hideTrigger <tt>true</tt> to hide the trigger element and display only the base
      * text field (defaults to <tt>false</tt>)
@@ -83,16 +83,17 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
 
     actionMode: 'wrap',
 
-    defaultTriggerWidth: 17,
+    defaultTriggerWidth: 16,
+    fieldClass : 'x-form-field form-select',
 
     // private
     onResize : function(w, h){
         Ext.form.TriggerField.superclass.onResize.call(this, w, h);
-        var tw = this.getTriggerWidth();
-        if(Ext.isNumber(w)){
-            this.el.setWidth(w - tw);
+        // a width of 0 is what hidden (not displayed) fields measure - never pin that
+        if (Ext.isNumber(w) && w > 0) {
+            this.wrap.setWidth(w);
+            // this.el.setWidth('100%');
         }
-        this.wrap.setWidth(this.el.getWidth() + tw);
     },
 
     getTriggerWidth: function(){
@@ -116,13 +117,25 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
         Ext.form.TriggerField.superclass.onRender.call(this, ct, position);
 
         this.wrap = this.el.wrap({cls: 'x-form-field-wrap x-form-field-trigger-wrap'});
+        this.el.addClass(this.triggerClass);
         this.trigger = this.wrap.createChild(this.triggerConfig ||
-                {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger " + this.triggerClass});
+                {tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger " + this.triggerClass}, this.el);
         this.initTrigger();
         if(!this.width){
-            this.wrap.setWidth(this.el.getWidth()+this.trigger.getWidth());
+            this.syncAutoWidth();
         }
         this.resizeEl = this.positionEl = this.wrap;
+    },
+
+    // private - size the wrap to the natural width of the field (no width configured)
+    syncAutoWidth: function(){
+        var w = this.el.getWidth();
+        if(!w){
+            // not displayed (e.g. rendered hidden) - measure once shown instead of pinning the wrap to 0
+            this.on('show', this.syncAutoWidth, this, {single: true});
+            return;
+        }
+        this.wrap.setWidth(w + this.trigger.getWidth());
     },
 
     updateEditState: function(){
@@ -132,7 +145,8 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
                 this.el.dom.readOnly = true;
                 this.el.addClass('x-trigger-noedit');
                 this.mun(this.el, 'click', this.onTriggerClick, this);
-                this.trigger.setDisplayed(false);
+                // this.trigger.setDisplayed(false);
+                this.el.addClass('x-trigger-hidden');
             } else {
                 if (!this.editable) {
                     this.el.dom.readOnly = true;
@@ -143,9 +157,10 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
                     this.el.removeClass('x-trigger-noedit');
                     this.mun(this.el, 'click', this.onTriggerClick, this);
                 }
-                this.trigger.setDisplayed(!this.hideTrigger);
+                // this.trigger.setDisplayed(!this.hideTrigger);
+                this.el[(this.hideTrigger ? 'add' : 'remove') + 'Class']('x-trigger-hidden');
             }
-            //fixme: this.wrap.getWidth() might be 0 , but the width in style is set
+            // NOTE: wrap.getWidth() is 0 while not displayed - onResize ignores that
             this.onResize(this.width || this.wrap.getWidth());
         }
     },

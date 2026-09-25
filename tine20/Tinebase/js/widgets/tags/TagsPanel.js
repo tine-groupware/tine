@@ -289,6 +289,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         
         this.formField = {
             layout: 'form',
+            border: false,
             items: new Tine.widgets.tags.TagFormField({
                 tagsPanel: this,
                 recordTagsStore: this.recordTagsStore
@@ -298,6 +299,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         this.items = [{
             xtype: 'panel',
             layout: 'fit',
+            border: false,
             bbar: this.bottomBar,
             items: [
                 this.dataView,

@@ -502,8 +502,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         ]
                     }, {
                         layout: 'hbox',
-                        height: 160,
-                        // autoHeight: true,
+                        autoHeight: true,
                         layoutConfig: {
                             align: 'stretch',
                             pack: 'start'
@@ -511,8 +510,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         items: [{
                             flex: 1,
                             xtype: 'fieldset',
-                            layout: 'hfit',
-                            margins: '0 5 10 5',
                             title: this.app.i18n._('Accounting'),
                             items: [{
                                 xtype: 'columnform',

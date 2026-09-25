@@ -85,7 +85,10 @@ html, body {
 
 .action_copy {
     background-image:url(../../images/icon-set/icon_copy_to_clipboard.svg) !important;
+}
 
+.action_color_picker {
+  background-image:url(../js/node_modules/@tabler/icons/icons/outline/color-picker.svg) !important;
 }
 
 .action_paste {
@@ -180,10 +183,6 @@ html, body {
     background-image:url(../js/node_modules/@tabler/icons/icons/outline/arrows-diff.svg) !important;
 }
 
-//.action_compare {
-//    background-image:url(../js/node_modules/@tabler/icons/icons/outline/file-diff.svg) !important;
-//}
-
 .cloud-share {
     background-image:url(../js/node_modules/@tabler/icons/icons/outline/cloud-share.svg) !important;
 }
@@ -232,6 +231,7 @@ html, body {
     background-image:url(../../images/icon-set/icon_arrow_left.svg) !important;
 }
 
+.action_generate_password,
 .action_managePermissions {
     background-image:url(../../images/icon-set/Icon_key.svg) !important;
 }
@@ -364,6 +364,10 @@ html, body {
 
 .action_image {
     background-image:url(../../images/icon-set/icon_file_image.svg) !important;
+}
+
+.icon_magic_wand {
+  background-image:url(../js/node_modules/@tabler/icons/icons/outline/wand.svg) !important;
 }
 
 .tinebase-action-debug-console {
@@ -648,6 +652,10 @@ html, body {
     background-image:url(../../images/icon-set/icon_preview.svg) !important;
 }
 
+.action_hide_preview {
+  background-image: url(../../images/icon-set/icon_preview_disabled.svg);
+}
+
 /* ----- notes ------------------------------------------------------------*/
 .notes_noteIcon {
    background-image:url(../../images/icon-set/icon_edit.svg) !important;
@@ -872,7 +880,6 @@ span.tine-grid-row-action-icon {
     border-radius: 2px;
     color: lightgrey;
     background-color: white;
-    //background: linear-gradient(darken(lightgrey, 10), lightgrey);
     &:hover {
         border-color: grey;
         color: gray;
@@ -1009,66 +1016,6 @@ span:hover.tinebase-download-link {
     margin-right: 2px;
 }
 
-
-
-////tbar
-//.tine-bar {
-//  .x-btn {
-//    //width: 30px;
-//    //height: 30px;
-//
-//    td {
-//      background-color: inherit;
-//    }
-//
-//    .x-btn-image {
-//      //width: 30px;
-//      //height: 30px;
-//      //background-size: 30px 30px !important;
-//      filter: invert(1);
-//    }
-//  }
-//
-//  .x-btn-over .x-btn-mc{
-//    background-color: inherit;
-//  }
-//
-//  div.x-btn-image {
-//    top: 0;
-//    left: 0;
-//  }
-//
-//  /*
-//  .attendance-clock-menu-button.x-btn {
-//    filter: none;
-//}
-//
-//.attendance-clock-menu-button div.x-btn-arrow {
-//    display: none !important;
-//}
-//
-//.attendance-clock-menu-button button {
-//    color: white !important;
-//}
-//
-//.attendance-clock-menu-button .x-btn-image.attendance-clock{
-//    width: 30px;
-//    height: 30px;
-//}
-//
-//.attendance-clock-menu-button td{
-//    background-color: inherit;
-//}
-//
-//.attendance-clock-menu-button.x-btn-over .x-btn-mc{
-//    background-color: inherit;
-//}
-//
-//.attendance-clock-menu-button.x-btn-over .x-btn-tl{
-//    display: none;
-//}
-//   */
-//}
 
 
 
@@ -1323,11 +1270,6 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit,
 
 .tb-widgets-path-pathitem-separator {
     color: black;
-}
-
-.x-form-field-trigger-wrap input {
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
 }
 
 .x-form-radio-group .x-form-item {

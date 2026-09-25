@@ -206,6 +206,8 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.blConfigPanel = new Tine.Tinebase.BL.BLConfigPanel({
             app: this.app,
             height: 150,
+            // sits in a fieldset already - no additional frame (QuickaddGridPanel default)
+            frame: false,
             editDialog: this,
             owningRecordClass: Tine.HumanResources.Model.WorkingTimeScheme,
             dataPath: 'data.working_time_scheme.blpipe',

@@ -808,7 +808,9 @@ viewConfig: {
             g.enableResponsive = g.ownerCt.enableResponsive;
         }
 
-        if (g.enableResponsive) g.autoHeight = g.autoHeight || g.ownerCt.autoHeight
+        // inherit autoHeight from ownerCt, but revert once it drops it again (e.g. after responsive stacking)
+        if (g.__ownAutoHeight === undefined) g.__ownAutoHeight = !!g.autoHeight;
+        if (g.enableResponsive) g.autoHeight = g.__ownAutoHeight || !!g.ownerCt.autoHeight
 
         const csize = c.getSize(true);
         const vw = csize.width;
@@ -828,7 +830,19 @@ viewConfig: {
             }
             this.el.setSize(csize.width, 'auto');
             this.scroller.setSize(vw, 'auto');
+            if (g.minHeight) {
+                // grow with the rows, but keep the grid at least minHeight high
+                this.scroller.setStyle('min-height', '');
+                var chrome = g.getHeight() - this.scroller.getHeight();
+                this.scroller.setStyle('min-height', Math.max(0, g.minHeight - chrome) + 'px');
+            }
         }else{
+            if (this.scroller.dom.style.overflow === 'visible') {
+                // was autoHeight before
+                this.scroller.dom.style.overflow = '';
+                this.scroller.dom.style.position = '';
+                this.scroller.setStyle('min-height', '');
+            }
             this.el.setSize(csize.width, csize.height);
 
             var hdHeight = this.mainHd.getHeight();

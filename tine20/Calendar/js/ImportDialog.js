@@ -24,7 +24,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
     
     appName: 'Calendar',
     modelName: 'Event',
-    
+
     /**
      * init import wizard
      */
@@ -159,7 +159,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             height: 100,
             items: [{
                 xtype: 'label',
-                html: '<p>' + i18n._('Please choose the file that contains the records you want to add to Tine 2.0') + '</p><br />'
+                html: '<p>' + i18n._('Please choose the file that contains the records you want to add to Tine 2.0')
             }, {
                 xtype: 'tw.uploadbutton',
                 ref: '../../uploadButton',
@@ -190,73 +190,63 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         });
         
         return {
-            xtype: 'form',
+            xtype: 'columnform',
+            autoHeight: true,
             labelAlign: 'top',
             baseCls: 'ux-subformpanel',
+            // regular form fields inside the ux.displaypanel wizard page - see Calendar.scss
+            cls: 'cal-import-remote-panel',
+            // no cell padding - align the fields with the ones of the other panels
+            cellBodyStyle: '',
             id: 'remotePanel',
             hidden: false,
             title: this.app.i18n._('Choose Remote Location'),
-            //height: 230,
-            items: [{
-                xtype: 'label',
-                html: '<p>' + this.app.i18n._('Please choose a remote location you want to add to Tine 2.0') + '</p><br />'
-            }, {
-                ref: '../../remoteLocation',
+            items: [[{
+                ref: '../../../../remoteLocation',
+                fieldLabel: this.app.i18n._('Please choose a remote location you want to add to Tine 2.0'),
                 xtype: 'textfield',
                 scope: this,
                 enableKeyEvents: true,
-                width: 400,
                 listeners: {
                     scope: this,
                     keyup: function() {
                         this.manageButtons();
                     }
                 }
-            }, {
-                xtype: 'label',
-                ref: '../../remoteUsernameLabel',
-                html: '<p><br />' + this.app.i18n._('Username') + '</p><br />'
-            }, {
-                ref: '../../remoteUsername',
+            }], [{
+                ref: '../../../../remoteUsername',
+                fieldLabel: this.app.i18n._('Username'),
                 xtype: 'textfield',
                 scope: this,
                 disabled: true,
                 enableKeyEvents: true,
-                width: 400,
                 listeners: {
                     scope: this,
                     keyup: function() {
                         this.manageButtons();
                     }
                 }
-            }, {
-                xtype: 'label',
-                ref: '../../remotePasswordLabel',
-                html: '<p><br />' + this.app.i18n._('Password') + '</p><br />'
-            }, {
-                ref: '../../remotePassword',
+            }], [{
+                ref: '../../../../remotePassword',
+                fieldLabel: this.app.i18n._('Password'),
                 xtype: 'tw-passwordTriggerField',
                 clipboard: false,
                 scope: this,
                 disabled: true,
                 enableKeyEvents: true,
-                width: 400,
                 listeners: {
                     scope: this,
                     keyup: function() {
                         this.manageButtons();
                     }
                 }
-            }, {
-                xtype: 'label',
-                html: '<p><br />' + this.app.i18n._('Refresh time') + '</p><br />'
-            }, {
+            }], [{
                 xtype: 'combo',
+                fieldLabel: this.app.i18n._('Refresh time'),
                 mode: 'local',
-                ref: '../../ttlCombo',
+                ref: '../../../../ttlCombo',
                 value: 'once',
                 scope: this,
-                width: 400,
                 listeners: {
                     scope: this,
                     'select': function() {
@@ -268,7 +258,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 valueField: 'ttl_id',
                 displayField: 'ttl',
                 store: ttlStore
-            }]
+            }]]
         };
     },
     
@@ -282,21 +272,17 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             ref: '../../importOptionsPanel',
             baseCls: 'ux-subformpanel',
             title: this.app.i18n._('General Settings'),
-            height: 100,
-            width: 400,
             items: [{
                 xtype: 'label',
-                html: '<p>' + this.app.i18n._('Calendar name (you need permissions to add events)') + '<br /><br /></p>'
+                html: this.app.i18n._('Calendar name (you need permissions to add events)') 
             }, {
                 xtype: 'panel',
-                heigth: 150,
-                layout: 'hbox',
+                layout: 'hfit',
                 border: false,
                 items: [{
                     xtype: 'panel',
                     border: false,
-                    flex: 1,
-                    height: 20,
+                    layout: 'anchor',
                     items: [new Tine.widgets.container.SelectionComboBox({
                         id: this.app.appName + 'EditDialogContainerSelector',
                         ref: '../../../../containerCombo',
@@ -307,7 +293,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                         value: this.defaultImportContainer,
                         requiredGrant: false,
                         recordClass: this.recordClass,
-                        width: 400
+                        anchor: '100%'
                     })]
                 }]
             }]
@@ -332,16 +318,17 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             baseCls: 'ux-subformpanel',
             title: this.app.i18n._('What should the file you upload look like?'),
             flex: 1,
+            layout: 'anchor',
             items: [
             {
                 xtype: 'label',
-                html: '<p>' + this.app.i18n._('tine (Groupware) does not support all types of files you may want to upload. You will need to manually adjust your file so that tine (Groupware) can process it.') + '</p><br />'
+                html: this.app.i18n._('tine (Groupware) does not support all types of files you may want to upload. You will need to manually adjust your file so that tine (Groupware) can process it.')
             }, {
 //                xtype: 'label',
-//                html: '<p>' + this.app.i18n._('Below is a list of all supported import formats, along with a sample file showing how Tine 2.0 expects your file to be structured.') + '</p><br />'
+//                html: this.app.i18n._('Below is a list of all supported import formats, along with a sample file showing how Tine 2.0 expects your file to be structured.')
 //            }, {
                 xtype: 'label',
-                html: '<p>' + this.app.i18n._('Please select the import format of the file you want to upload') + '<br /><br /></p>'
+                html: this.app.i18n._('Please select the import format of the file you want to upload') 
             }, {
                 xtype: 'combo',
                 ref: '../../definitionCombo',
@@ -353,7 +340,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 editable: false,
                 allowBlank: false,
                 forceSelection: true,
-                width: 400,
+                anchor: '100%',
                 value: this.selectedDefinition ? this.selectedDefinition.id : null,
                 listeners: {
                     scope: this,
@@ -402,6 +389,10 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             // title: this.app.i18n._('Choose File and Format'),
             // baseCls: 'ux-subformpanel',
             layout: 'vbox',
+            // sub panels (and their fields) take the full width
+            layoutConfig: {
+                align: 'stretch'
+            },
             border: false,
             xtype: 'ux.displaypanel',
             // frame: true,
@@ -410,12 +401,12 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 xtype: 'panel',
                 baseCls: 'ux-subformpanel',
                 title: this.app.i18n._('Select type of source'),
-                height: 60,
+                layout: 'anchor',
                 items: [{
                     xtype: 'combo',
                     mode: 'local',
                     ref: '../../typeCombo',
-                    width: 400,
+                    anchor: '100%',
                     listeners:{
                         scope: this,
                         'select': function (combo) {
@@ -433,16 +424,12 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                                     this.remotePassword.enable();
                                     this.remoteUsername.show();
                                     this.remotePassword.show();
-                                    this.remoteUsernameLabel.show();
-                                    this.remotePasswordLabel.show();
                                 } else {
                                     this.remoteLocation.emptyText = 'http://example.ics';
                                     this.remoteUsername.disable();
                                     this.remotePassword.disable();
                                     this.remoteUsername.hide();
                                     this.remotePassword.hide();
-                                    this.remoteUsernameLabel.hide();
-                                    this.remotePasswordLabel.hide();
                                 }
                                 this.remoteLocation.applyEmptyText();
                                 this.remoteLocation.reset();

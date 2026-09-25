@@ -28,11 +28,9 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
     canonicalName: 'PollPanel',
     xtype: 'form',
     frame: true,
-    layout: 'vbox',
-    layoutConfig: {
-        align : 'stretch',
-        pack  : 'start'
-    },
+    // grows with the active card (options form / alternative dates rows)
+    autoHeight: true,
+    layout: 'fit',
 
     statusWeightMap: ["DECLINED", "NEEDS-ACTION", "TENTATIVE", "ACCEPTED"],
 
@@ -87,11 +85,12 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
                 layoutOnCardChange: true,
                 deferredRender: true
             },
-            flex: 1,
+            autoHeight: true,
             items: [{
                 // layout: 'form',
                 // frame: true,
                 xtype: 'columnform',
+                autoHeight: true,
                 border: false,
                 labelAlign: 'top',
                 width: '100%',
@@ -150,7 +149,8 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
                 }]]
             }, new Tine.widgets.grid.QuickaddGridPanel({
                 ref: '../alternativeEventsGrid',
-                layout: 'fit',
+                autoHeight: true,
+                minHeight: 150,
                 border: false,
                 frame: false,
                 autoExpandColumn: 'info',

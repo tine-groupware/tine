@@ -42,7 +42,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Number} northHeight
      */
-    northHeight: 55,
+    northHeight: 60,
     /**
      * @cfg {Number} westWidth
      */

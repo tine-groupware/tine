@@ -39,6 +39,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     mode: 'local',
 
+    /**
+     * @cfg {Number} tabsMinHeight
+     * (minimum) height of the attendee/rrule/alarm/poll tabs, the attendee grid grows with its rows
+     */
+    tabsMinHeight: 210,
+
     saveEvent: function(record, options, additionalArguments) {
         // NOTE: only mainscreen can handle busyConflicts
         additionalArguments.checkBusyConflicts = 0;
@@ -56,11 +62,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         //     });
     },
 
-    onResize: function() {
-        Tine.Calendar.EventEditDialog.superclass.onResize.apply(this, arguments);
-        this.setTabHeight.defer(100, this);
-    },
-    
     /**
      * returns dialog
      * 
@@ -100,11 +101,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     border: false,
                     items: [{
                         layout: 'hbox',
+                        style: 'margin-bottom: 4px;',
                         layoutConfig: {
                             enableResponsive: false,
                         },
                         items: [{
-                            margins: '5',
+                            margins: '5 5 5 11',
                             width: 100,
                             xtype: 'label',
                             text: this.app.i18n._('Summary')
@@ -119,12 +121,13 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     }, {
                         layout: 'hbox',
+                        style: 'margin-bottom: 4px;',
                         layoutConfig: {
                             enableResponsive: false,
                         },
                             hidden: !this.app.featureEnabled('featureEventType'),
                         items: [{
-                            margins: '5',
+                            margins: '5 5 5 11',
                             width: 100,
                             // height: 30,
                             xtype: 'label',
@@ -142,12 +145,13 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     }, {
                                 layout: 'hbox',
+                        style: 'margin-bottom: 4px;',
                         layoutConfig: {
                             enableResponsive: false,
                         },
                                 hidden: !Tine.Tinebase.featureEnabled('featureSite'),
                                 items: [{
-                                    margins: '5',
+                                    margins: '5 5 5 11',
                                     width: 100,
                                     // height: 30,
                                     xtype: 'label',
@@ -171,11 +175,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }]
                     }, {
                         layout: 'hbox',
+                        style: 'margin-bottom: 4px;',
                         layoutConfig: {
                             enableResponsive: false,
                         },
                         items: [{
-                            margins: '5',
+                            margins: '5 5 5 11',
                             width: 100,
                             xtype: 'label',
                             text: this.app.i18n._('View')
@@ -184,16 +189,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         })]
                     }, {
                         layout: 'hbox',
-                        height: 135,
-                        // autoHeight: true,
+                        autoHeight: true,
+                        style: 'margin: 5px 0',
                         layoutConfig: {
-                            align : 'stretch',
+                            align : 'stretchmax',
                             pack  : 'start'
                         },
                         items: [{
                             flex: 1,
                             xtype: 'fieldset',
-                            layout: 'hfit',
                             margins: '0 5 0 0',
                             title: this.app.i18n._('Details'),
                             items: [{
@@ -307,7 +311,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 xtype: 'widget-keyfieldcombo',
                                 app:   'Calendar',
                                 keyFieldName: 'eventStatus',
-                                width: 115,
+                                anchor: '100%',
                                 hideLabel: true,
                                 value: 'CONFIRMED',
                                 name: 'status',
@@ -355,7 +359,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     return Ext.form.Checkbox.prototype.setValue.call(this, bool);
                                 }
                             }, Ext.apply(this.perspectiveCombo.getAttendeeStatusField(), {
-                                width: 115,
+                                anchor: '100%',
                                 hideLabel: true
                             })]
                         }]
@@ -364,7 +368,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         deferredRender: false,
                         activeTab: 0,
                         border: false,
-                        height: 235,
+                        // grows with the active tab (attendee rows), the center region scrolls
+                        autoHeight: true,
                         form: true,
                         items: [
                             this.attendeeGridPanel,
@@ -393,26 +398,24 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             // @todo generalise!
                             title: this.app.i18n._('Description'),
                             iconCls: 'descriptionIcon',
-                            layout: 'form',
-                            labelAlign: 'top',
+                            // url field + description filling the rest (an anchored 100% height would ignore the url field)
+                            layout: 'vbox',
+                            layoutConfig: {
+                                align: 'stretch'
+                            },
                             border: false,
                             items: [{
-                                hideLabel: true,
                                 xtype:'textfield',
-                                width: '100%',
-                                itemCls: 'cal-urlfield',
                                 name: 'url',
                                 emptyText: this.app.i18n._('URL'),
                                 requiredGrant: 'editGrant'
                             }, {
-                                style: 'margin-top: -4px; border 0px;',
-                                labelSeparator: '',
                                 xtype:'textarea',
                                 name: 'description',
-                                hideLabel: true,
+                                flex: 1,
+                                margins: '4 0 0 0',
                                 grow: false,
                                 preventScrollbars:false,
-                                anchor:'100% 100%',
                                 emptyText: this.app.i18n._('Enter a description'),
                                 requiredGrant: 'editGrant'
                             }]
@@ -515,6 +518,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var organizerCombo;
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
             editDialog: this,
+            autoHeight: true,
+            minHeight: this.tabsMinHeight,
             bbar: [{
                 xtype: 'label',
                 html: Tine.Tinebase.appMgr.get('Calendar').i18n._('Organizer') + "&nbsp;"
@@ -563,9 +568,12 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             editDialog : this
         });
         this.rrulePanel = new Tine.Calendar.RrulePanel({
-            eventEditDialog : this
+            eventEditDialog : this,
+            height: this.tabsMinHeight
         });
-        this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
+        this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({
+            height: this.tabsMinHeight
+        });
         this.attendeeStore = this.attendeeGridPanel.getStore();
         this.attendeeStore.on('add', this.onAttendeeStoreChange, this);
         this.attendeeStore.on('clear', this.onAttendeeStoreChange, this);
@@ -860,13 +868,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // NOTE: mind the add new attendee row!
         this.action_freeTimeSearch.setDisabled(this.attendeeStore.getCount() < 2);
     },
-    setTabHeight: function() {
-        var eventTab = this.items.first().items.first();
-        var centerPanel = eventTab.items.first();
-        var tabPanel = centerPanel.items.last();
-        tabPanel.setHeight(centerPanel.getEl().getBottom() - tabPanel.getEl().getTop());
-    },
-    
+
     validateDtEnd: function() {
         var dtStart = this.getForm().findField('dtstart').getValue(),
             dtEndField = this.getForm().findField('dtend'),

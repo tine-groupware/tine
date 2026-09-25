@@ -13,7 +13,7 @@ describe('mainScreen', () => {
     test('import', async () => {
         await new Promise(r => setTimeout(r, 2000));
         let newPage =  await lib.getEditDialog('Einträge importieren');
-        await expectPuppeteer(newPage).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei mit Ihren Inventargegenstände'});
+        await expectPuppeteer(newPage).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei aus, die Ihre Inventargegenstände enthält'});
         await lib.makeScreenshot(newPage,{path:'screenshots/Inventarisierung/5_inventar_import.png'});
         await expectPuppeteer(newPage).toClick('button', {text: 'Abbrechen'});
     })

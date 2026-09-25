@@ -131,12 +131,15 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
         if(Ext.isIE){
             this.wrap.repaint();
         }
-        this.resizeEl = this.positionEl = this.wrap;
+        this.resizeEl = this.wrap;
+        // bsWrap is the outermost element - layouts check/move the positionEl, with the inner wrap they would move
+        // it out of bsWrap and leave an empty bootstrap-scope div behind
+        this.positionEl = this.bsWrap;
     },
 
     // private
     onDestroy : function(){
-        Ext.destroy(this.wrap);
+        Ext.destroy(this.wrap, this.bsWrap);
         Ext.form.Checkbox.superclass.onDestroy.call(this);
     },
 

@@ -462,7 +462,7 @@ Ext.fly('elId').setHeight(150, {
                 m = sides.match(/\w/g),
                 s;
             for (var i=0, len=m.length; i<len; i++) {
-                s = m[i] && parseInt(this.getStyle(styles[m[i]]), 10);
+                s = m[i] && parseFloat(this.getStyle(styles[m[i]]));
                 if (s) {
                     val += MATH.abs(s);
                 }

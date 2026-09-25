@@ -60,7 +60,6 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
         if (! this.attendeeStatusField) {
             this.attendeeStatusField = Ext.ComponentMgr.create({
                 xtype: 'widget-keyfieldcombo',
-                width: 115,
                 hideLabel: true,
                 app:   'Calendar',
                 name: 'attendeeStatus',

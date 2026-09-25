@@ -2925,7 +2925,7 @@ msgstr "Bitte wählen Sie die Datei, die die Datensätze enthält, die Sie zu Ti
 
 #, python-brace-format
 msgid "Select file containing your {0}"
-msgstr "Wählen Sie die Datei mit Ihren {0}"
+msgstr "Wählen Sie die Datei aus, die Ihre {0} enthält"
 
 msgid "What should the file you upload look like?"
 msgstr "Wie soll die Datei, die Sie hochladen, aussehen?"
@@ -2940,8 +2940,8 @@ msgid "Download example file"
 msgstr "Beispieldatei herunterladen"
 
 #, python-brace-format
-msgid "Select {0} to add you {1} to:"
-msgstr "Wählen {0} hinzufügen {1} zu:"
+msgid "Select {0} to add your {1} to:"
+msgstr "{0} zum hinzufügen der {1} auswählen:"
 
 msgid "Set Import Options"
 msgstr "Import-Optionen setzen"
