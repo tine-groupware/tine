@@ -961,7 +961,7 @@ msgid "The customer <b>{customer}</b> can't be selected as it has no debitor for
 msgstr "Der/die Kund*in <b>{customer}</b> kann nicht ausgewählt werden, da er keinen Debitor im Geschäftsbereich <b>{division.title}</b> der Kategorie <b>{category}</b> dieses Dokumentes hat."
 
 msgid "Open Debitor"
-msgstr "Offener Debitor"
+msgstr "Öffne Debitor"
 
 msgid "Boilerplate"
 msgid_plural "Boilerplates"
