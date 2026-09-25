@@ -55,7 +55,7 @@
                 v-if="item.status === 'Cancelled'"
                 class="action-button-table"
                 size="sm"
-                @click="registerAgain(item, true)"
+                @click="registerAgain(item)"
               >
                 {{ formatMessage('Register Again') }}
               </b-button>
@@ -63,7 +63,7 @@
                 <b-button
                   class="action-button-table"
                   size="sm"
-                  @click="registerAgain(item, false)"
+                  @click="registerAgain(item)"
                 >
                   {{ formatMessage('Update') }}
                 </b-button>
@@ -356,14 +356,14 @@ function getEventDate(eventId) {
   return formattedDate || formatMessage('TBD');
 }
 
-async function registerAgain(registration, isReregistered) {
+async function registerAgain(registration) {
   const baseUrl = window.location.origin;
   const eventId = registration.event_id;
   const token = route.params.token;
   const participantId = registration.participant?.id;
   const registrationId = registration.id;
 
-  window.location.href = `${baseUrl}/EventManager/view/event/${eventId}/registration/${token}?registrationId=${registrationId}&participantId=${participantId}&isReregistered=${isReregistered}`;
+  window.location.href = `${baseUrl}/EventManager/view/event/${eventId}/registration/${token}?registrationId=${registrationId}&participantId=${participantId}`;
 }
 
 function openCreateNewProfile() {

@@ -236,7 +236,7 @@
                           <div class="file-actions">
                             <span
                               class="file-download"
-                              @click="downloadFile(uploadedFiles[option.id][0].node_id, uploadedFiles[option.id][0].name, uploadedFiles[option.id][0].file_type)"
+                              @click="downloadUploadedFile(option.id)"
                             >
                               {{uploadedFiles[option.id][0].name}}
                             </span>
@@ -445,9 +445,14 @@ const showParentEmailField = computed(
 
 const effectiveRequiredParticipantFields = computed(() => {
   const required = requiredParticipantContactFields.value || [];
+  const isEmailConfiguredRequired = required.includes('email');
   const withoutEmail = required.filter(f => f !== 'email');
 
   if (isRegistrant.value && registrantHasEmail.value) {
+    return withoutEmail;
+  }
+
+  if (showParentEmailField.value && !isEmailConfiguredRequired) {
     return withoutEmail;
   }
 
@@ -776,7 +781,7 @@ const handleEditExistingRegistration = async (participantId) => {
 };
 
 const checkAndLoadExistingRegistration = async (participantId) => {
-  const registration = eventDetails.value.registrations?.find(reg => {
+  const registration = eventRegistrations.value.find(reg => {
     if (registrationId.value) {
       return reg.id === registrationId.value;
     }
@@ -784,7 +789,7 @@ const checkAndLoadExistingRegistration = async (participantId) => {
   });
 
   if (registration) {
-    const isCancelled = registration.status === '3';
+    const isCancelled = String(registration.status_id ?? registration.status) === '3';
     showRegisteredContactAlert.value = !isCancelled;
     isAlreadyRegistered.value = !isCancelled;
 
@@ -881,7 +886,7 @@ const loadBookedOptions = async (registration) => {
         case 'EventManager_Model_Selections_File':
           if (sc.node_id) {
             try {
-              await loadPreviouslyUploadedFile(optionId, sc.node_id, sc.file_name);
+              await loadPreviouslyUploadedFile(optionId, sc.node_id, sc.file_name, registration.id);
             } catch (error) {
               console.error(`Failed to load file for option ${optionId}:`, error);
             }
@@ -894,31 +899,20 @@ const loadBookedOptions = async (registration) => {
   }
 };
 
-const loadPreviouslyUploadedFile = async (optionId, nodeId, fileName) => {
-  try {
-    const response = await fetch(`/EventManager/getFile/${nodeId}`, {
-      method: 'GET'
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch file: ${response.statusText}`);
-    }
-
-    const blob = await response.blob();
-    const file = new File([blob], fileName, {
-      type: blob.type
-    });
-
-    if (!uploadedFiles.value[optionId]) {
-      uploadedFiles.value[optionId] = [];
-    }
-
-    uploadedFiles.value[optionId] = [file];
-  } catch (error) {
-    console.error(`Error loading file for option ${optionId}:`, error);
-    throw error;
+const loadPreviouslyUploadedFile = async (optionId, nodeId, fileName, regId) => {
+  const params = new URLSearchParams({
+    registrationId: regId,
+    eventId: route.params.id,
+    token: route.params.token,
+  });
+  const response = await fetch(`/EventManager/getFile/${encodeURIComponent(nodeId)}?${params}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch file: ${response.statusText}`);
   }
+  const blob = await response.blob();
+  uploadedFiles.value[optionId] = [new File([blob], fileName, { type: blob.type })];
 };
+
 
 const handleParticipantSelection = async (participantId) => {
   const scenario = determineRegistrationScenario(participantId);
@@ -1321,16 +1315,26 @@ const download = (data, name, type) => {
 };
 
 const downloadFile = async (nodeId, name, type) => {
-  await fetch(`/EventManager/getFile/${nodeId}`, {
-    method: 'GET'
-  }).then(res => res.blob()).then(data => {
-    download(data, name, type);
-  });
+  const params = new URLSearchParams({ eventId: route.params.id });
+  const res = await fetch(`/EventManager/getFile/${encodeURIComponent(nodeId)}?${params}`);
+  if (!res.ok) {
+    showModal({ title: formatMessage('Error'), message: formatMessage('Could not download the file.'), type: 'error' });
+    return;
+  }
+  download(await res.blob(), name, type);
+};
+
+const downloadUploadedFile = (optionId) => {
+  const file = uploadedFiles.value[optionId]?.[0];
+  if (file) {
+    download(file, file.name, file.type);
+  }
 };
 
 const uploadFileForOption = async (eventId, registrationId, optionId, files) => {
   const formData = new FormData();
   formData.append('eventId', eventId);
+  formData.append('token', route.params.token);
 
   Array.from(files).forEach(file => {
     formData.append('files[]', file);
@@ -1376,7 +1380,7 @@ const checkWaitingList = () => {
     isExpired.value = true;
   }
 
-  if (available_places && (available_places <= 0 || isExpired.value)) {
+  if (available_places && (available_places < 0 || isExpired.value)) {
     const expiredMessage = isExpired.value
       ? `${formatMessage('The registration date for')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('has expired. If you register you will be on our waiting list. Do you still want to register?')}`
       : `${formatMessage('The event')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('is full. If you register you will be on our waiting list. Do you still want to register?')}`;
@@ -1429,11 +1433,12 @@ const postRegistration = async () => {
   const eventId = route.params.id;
   registrantDetails.value.email = registrantDetails.value.email || registrantEmail.value;
 
-  if (!(eventDetails.value.registrations.find(reg => reg.id === contactDetails.value.registration_id))) {
+  if (!eventRegistrations.value.find(reg => reg.id === contactDetails.value.registration_id)) {
     contactDetails.value.registration_id = '';
   }
 
   const registration = {
+    token: route.params.token,
     eventId,
     contactDetails: contactDetails.value,
     replies: filteredReplies,
@@ -1593,7 +1598,7 @@ const confirmCancel = async () => {
       type: 'success',
       onConfirm: () => {
         const baseUrl = window.location.origin;
-        window.location.href = `${baseUrl}/EventManager/view/#/event`;
+        window.location.href = `${baseUrl}/EventManager/view/events`;
       }
     });
   } catch (error) {
@@ -1639,6 +1644,12 @@ function isJwt(token) {
     return false;
   }
 }
+
+const eventRegistrations = computed(() =>
+  (registrations.value || []).filter(
+    reg => String(reg.event_id?.id ?? reg.event_id ?? '') === String(route.params.id)
+  )
+);
 
 const fetchParentConsentData = async () => {
   const resp = await fetch(`/EventManager/registration/parentConsent/data/${encodeURIComponent(consentToken.value)}`);

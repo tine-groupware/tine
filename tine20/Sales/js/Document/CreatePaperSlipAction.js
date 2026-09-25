@@ -154,7 +154,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 };
 
                 const paperSlipConfig = { record, recordClass, editDialog, type: 'paperslip' }
-                paperSlipConfig.force = e.ctrlKey || e.altKey
+                paperSlipConfig.force = e.ctrlKey || e.altKey || e.shiftKey
                 if (Tine.OnlyOfficeIntegrator) {
                     Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
                         id: record.id,
