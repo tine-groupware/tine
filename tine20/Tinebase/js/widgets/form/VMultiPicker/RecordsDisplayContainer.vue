@@ -11,9 +11,9 @@
   <div class="bootstrap-scope" ref="mainContainer">
     <div class="main-container w-100 h-100 d-flex" @click="readOnly ? null : triggerCombo()">
       <div
-        class="flex-grow-1 d-flex align-items-center mid-container overflow-hidden"
+        class="form-select flex-grow-1 d-flex align-items-center overflow-hidden"
         ref="containerDiv"
-        :class="{'height-17 overflow-hidden': !props.multiLine}"
+        :class="{'overflow-hidden': !props.multiLine}"
       >
         <div class="d-flex align-items-center record-tag-container" :class="{'flex-wrap': props.multiLine}" ref="contentDiv">
           <RecordTag
@@ -35,9 +35,6 @@
           />
         </div>
       </div>
-      <div v-if="!readOnly" class="d-flex align-items-center">
-        <div class="x-form-trigger x-form-arrow-trigger embedded-icon dark-reverse"></div>
-      </div>
     </div>
     <BPopover
       :target="popoverTarget"
@@ -53,7 +50,7 @@
         <div class="d-flex flex-wrap">
           <RecordTag
             v-for="record in recordsInPopover"
-            class="mb-1 dark-reverse text-wrap"
+            class="mb-1 text-wrap"
             :key="record.getId()"
             @click.stop
             :id="record.getId()"
@@ -196,9 +193,6 @@ const triggerCombo = () => {
 </script>
 
 <style scoped>
-.mid-container{
-  margin-bottom: 1px;
-}
 
 .record {
   background-color: #3a8acc;
@@ -217,19 +211,13 @@ const triggerCombo = () => {
 }
 
 .main-container {
-  font-size: 11px;
-  background-color: white;
+  font-size: 12px;
   height: 100%;
   cursor: text;
 }
 
-.dark-mode .main-container{
-  background-color: #333333;
-  filter: invert(1) hue-rotate(180deg);
-}
-
-.height-17 {
-  height: 17px;
+.form-select:before {
+  content: "\200b";
 }
 
 .embedded-icon {

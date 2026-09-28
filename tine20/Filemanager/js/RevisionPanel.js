@@ -80,6 +80,7 @@ Tine.Filemanager.RevisionPanel = Ext.extend(Ext.form.FieldSet, {
                         listeners: {scope: this, check: this.onKeepNumCheck}
                     }, {
                         xtype: 'numberfield',
+                        cls: 'form-control-sm',
                         ref: '../../../keepNumInput'
                     }]
                 }, {
@@ -96,6 +97,7 @@ Tine.Filemanager.RevisionPanel = Ext.extend(Ext.form.FieldSet, {
                         listeners: {scope: this, check: this.onKeepMonthCheck}
                     }, {
                         xtype: 'numberfield',
+                        cls: 'form-control-sm',
                         ref: '../../../keepMonthInput'
                     }]
                 }]

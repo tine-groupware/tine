@@ -245,7 +245,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     }
                                 }
                             ), {
-                               columnWidth: .045,
+                               columnWidth: .065,
                                xtype:'button',
                                ref: '../../../../../../../contactButton',
                                iconCls: 'applyContactData',
@@ -281,7 +281,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 'n_fn',
                                 Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
                                 {
-                                    columnWidth: .450,
+                                    columnWidth: .430,
                                     disabled: true
                                 }
                             )], [

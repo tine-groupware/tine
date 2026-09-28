@@ -164,7 +164,7 @@ Ext.extend(T, Ext.Container, {
         if(!this.el){
             if(!this.autoCreate){
                 this.autoCreate = {
-                    cls: this.toolbarCls + ' x-small-editor'
+                    cls: this.toolbarCls //+ ' x-small-editor'
                 };
             }
             this.el = ct.createChild(Ext.apply({ id: this.id },this.autoCreate), position);

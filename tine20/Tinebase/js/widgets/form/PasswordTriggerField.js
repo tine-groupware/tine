@@ -6,8 +6,7 @@
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import RecordEditFieldTriggerPlugin from "./RecordEditFieldTriggerPlugin";
-import FieldTriggerPlugin from "../../ux/form/FieldTriggerPlugin";
+import FieldTriggerPlugin from "/ux/form/FieldTriggerPlugin";
 
 Ext.ns('Tine.Tinebase.widgets.form');
 
@@ -19,7 +18,7 @@ Ext.ns('Tine.Tinebase.widgets.form');
  * @class       Tine.Tinebase.widgets.form.PasswordTriggerField
  * @extends     Ext.form.TriggerField
  */
-Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTriggerField, {
+Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TextField, {
 
     /**
      * @cfg {Boolean} hasPwGen
@@ -54,23 +53,34 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
 
     initComponent: function() {
         // NOTE: we need to have this in the instance - otherwise we'd overwrite the prototype
-        this.defaultAutoCreate = {tag: "input", type: "password", size: "16", autocomplete: "off"};
+        this.defaultAutoCreate = {tag: "input", type: "password", autocomplete: "off"};
 
         this.defaultAutoCreate.type = (this.locked && this.allowBrowserPasswordManager) ? 'password' : 'text';
         if (!this.allowBrowserPasswordManager) {
             this.initPreventBrowserPasswordManager();
         }
 
-        if (!this.unLockable) {
-            this.afterIsRendered().then(() => { this.getTrigger(0).hide(); });
-        }
         this.plugins = this.plugins || [];
 
+        if (this.clipboard) {
+            this.plugins.push(new FieldTriggerPlugin({
+                disabled: false,
+                triggerClass: 'action_copy',
+                qtip: i18n._('Copy to Clipboard'),
+                onTriggerClick: this.onCopy.createDelegate(this)
+            }));
+        }
+
+        if (this.unLockable) {
+            this.plugins.push(new FieldTriggerPlugin({
+                triggerClass: 'action_preview',
+                qtip: i18n._('Cleartext/Hidden'),
+                onTriggerClick: this.onToggleLockState.createDelegate(this)
+            }));
+        }
         if (this.hasPwGen) {
             this.passwordFieldTriggerPlugin = new FieldTriggerPlugin({
-                disabled: false,
-                triggerClass: 'action_managePermissions',
-                text: i18n._('Generate password'),
+                triggerClass: 'action_generate_password',
                 qtip: i18n._('Generate password'),
                 onTriggerClick: () => {
                     const pw = this.genPW();
@@ -171,25 +181,13 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
         this.setValue(valueArray.join(''));
         this.selectTextTimeout = setTimeout(() => {this.selectText(start, start)}, 20);
     },
-    
-    initTrigger: function () {
-        Tine.Tinebase.widgets.form.PasswordTriggerField.superclass.initTrigger.apply(this, arguments);
-        this.triggers[0].set({'ext:qtip': i18n._('Cleartext/Hidden')});
-        this.triggers[1].set({'ext:qtip': i18n._('Copy to Clipboard')});
-        if (this.locked) {
-            this.triggers[0].addClass('locked');
-        }
-        if (! this.clipboard) {
-            this.triggers[1].hide();
-        }
-    },
 
-    onTrigger1Click: async function () {
+    onToggleLockState: async function (p) {
         if(this.readOnly || this.disabled){
             return;
         }
-        this.triggers[0][(this.locked ? 'remove' : 'add') + 'Class']('locked');
-        
+        p.setTriggerClass(this.locked ? 'action_hide_preview' : 'action_preview')
+
         if (this.allowBrowserPasswordManager) {
             this.el.dom.type = this.locked ? 'text' : 'password';
         } else {
@@ -209,7 +207,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
         this.focus();
     },
 
-    onTrigger2Click: function () {
+    onCopy: function () {
         // NOTE: password fields can not be copied
         if(this.readOnly || this.disabled){
             return;
@@ -220,7 +218,9 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
         document.execCommand("copy");
         this.el.dom.type = type;
         this.selectText(String(this.getValue()).length);
+        Ext.ux.Notification.show(i18n._('Copied to clipboard'), window.formatMessage('"{value}" was copied to clipboard', {value: i18n._('Password')}), Ext.ux.Notification.INFO);
     }
+
 });
 
 Ext.reg('tw-passwordTriggerField', Tine.Tinebase.widgets.form.PasswordTriggerField);

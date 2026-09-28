@@ -12,12 +12,6 @@
   --shadow-color: #{$shadow-color};
   --icon-color: var(--bs-btn-color);
 }
-//$focusColor: #0062a7;
-
-
-//.x-shadow {
-//  display: none !important;
-//}
 
 .x-tree-node-el.waves-effect {
   display: block;
@@ -132,10 +126,6 @@
 ul.x-tab-strip li {
   background-color: var(--tab-color);
   margin-left: 0px;
-
- //&:first-child {
- //  margin-left: 0px;
- //}
 }
 
 li.x-item-disabled span.x-tab-strip-text,
@@ -306,11 +296,7 @@ span.x-tab-strip-text.tine-favicon {
       border-bottom: 0px !important;
     }
   }
-//  .x-toolbar-left-row{
-//  & .x-toolbar-left {
-//      border-right: 1px $filterTbColor solid !important;
-//    }
-//}
+
   .x-panel-bwrap {
     background-color: $tabPanelColor;
     color: black;
@@ -318,46 +304,6 @@ span.x-tab-strip-text.tine-favicon {
 
   .x-panel-body {
     color: black;
-  }
-  //.x-btn .x-btn-text,
-  //.x-item-disabled .x-btn-text {
-  //  color: #000000 !important;
-  //}
-
-  .x-toolbar .x-btn-mc em.x-btn-arrow,
-  .x-toolbar .x-btn-mc em.x-btn-split,
-  .x-btn .x-btn-image{
-    //@include transform-blacktowhite;
-  }
-
-  //.x-toolbar .x-btn-mc em.x-btn-arrow .x-btn-image,
-  //.x-toolbar .x-btn-mc em.x-btn-split .x-btn-image {
-  //  filter: none;
-  //}
-
-  //.x-btn em.x-btn-arrow .x-btn-text,
-  //.x-btn em.x-btn-split .x-btn-text {
-  //  color: #000000 !important;
-  //}
-
-  input {
-    background: transparent;
-    width: 258px;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 1px solid black !important;
-    color: #000000;
-  }
-
-  .x-form-trigger {
-    //@include transform-blacktowhite;
-    background-position: 0 !important;
-    border-bottom: none;
-    background-size: 14px;
-    background-color: transparent !important;
-    box-sizing: border-box;
-    border-bottom: 1px solid black !important;
   }
 
   // ebbh button size
@@ -427,11 +373,6 @@ span.x-tab-strip-text.tine-favicon {
   border: none
 }
 
-// grr - we need different colors for windows and panels...
-//.x-panel-body {
-//  border-color: $tbColor;
-//}
-
 /* FORM PANEL */
 .x-form {
   background-image: none;
@@ -466,9 +407,6 @@ span.x-tab-strip-text.tine-favicon {
 
 .x-form {
   .x-panel-tl, .x-panel-tc, .x-panel-tr {
-    //border-top: 1px solid $tbColor;
-    //border-top: none;
-    //border-bottom: none;
     border: none;
     background-color: $tbColor;
   }
@@ -489,9 +427,6 @@ span.x-tab-strip-text.tine-favicon {
 }
 
 /* FORM */
-.x-form-text, textarea.x-form-field {
-  background-image: none;
-}
 
 .x-form-item-label .field-description {
   position: absolute;
@@ -517,22 +452,6 @@ span.x-tab-strip-text.tine-favicon {
     font-weight: normal;
     font-style: normal;
   }
-}
-
-.x-form-text, textarea.x-form-field {
-  border-left: none !important;
-  border-right: none !important;
-  border-top: none !important;
-}
-
-.x-form-field-wrap .x-form-trigger {
-  background-position-y: -1px;
-  background-position-x: 1px;
-  border-bottom: none;
-}
-
-.x-form-text, textarea.x-form-field {
-  border-color: $tbColor;
 }
 
 /* PROGRESS */
@@ -603,33 +522,6 @@ span.x-tab-strip-text.tine-favicon {
   color: red;
 }
 
-.x-form-focus, textarea.x-form-focus {
-  border-color: var(--focus-color);
-}
-
-// till all triggers are updated...
-@mixin x-form-trigger-flat {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 13px;
-  box-sizing: border-box;
-  height: 100%;
-
-  &:hover {
-    background-size: 15px 15px !important;
-    background-position: 1px 1px !important;
-    cursor: pointer;
-  }
-  &:active {
-    background-position: 5px 5px !important;
-    background-size: 13px 13px !important;
-  }
-}
-
-.x-trigger-wrap-focus .x-form-trigger {
-  box-sizing: border-box;
-}
-
 .x-form-invalid + span img.x-form-trigger {
   background-color: transparent;
   border: none;
@@ -650,31 +542,20 @@ span.x-tab-strip-text.tine-favicon {
   }
 }
 
-.x-form-field-wrap .x-form-trigger, // twin triggers e.g. preferences admin dlg
-.x-form-trigger.x-form-arrow-trigger, // usual arrow triggers like combos
-.x-form-trigger {
-  background-image: url('../../images/icon-set/icon_arrow_down.svg');
-  @include x-form-trigger-flat;
-}
-
-.x-form-trigger.x-form-search-trigger {
+.x-form-search-trigger {
   background-image: url('../../images/icon-set/icon_search.svg');
-  @include x-form-trigger-flat;
 }
 
-.x-form-trigger.x-form-clear-trigger {
+.x-form-field-wrap .x-form-clear-trigger {
   background-image: url('../../images/icon-set/icon_clear.svg');
-  @include x-form-trigger-flat;
 }
 
-.x-form-field-wrap .x-form-date-trigger {
+.x-form-date-trigger {
   background-image: url('../../images/icon-set/icon_calendar_day.svg');
-  @include x-form-trigger-flat;
 }
 
 .x-form-field-wrap img.x-form-spinner-trigger {
   background-image: url('../../images/icon-set/icon_arrow_updown.svg');
-  @include x-form-trigger-flat;
   background-position-y: 2px !important;
 
   &:hover {
@@ -682,58 +563,16 @@ span.x-tab-strip-text.tine-favicon {
   }
 }
 
-.tw-uidTriggerField .x-form-field-wrap .x-form-trigger {
-  background-image: url('../../images/icon-set/icon_magic_wand.svg');
-  @include x-form-trigger-flat;
-  background-size: 17px;
-  &:hover {
-    background-size: 19px;
-  }
-}
-
 .x-form-field-wrap .x-form-spinner-splitter {
   background-image: none;
 }
-.tw-passwordTriggerField .x-form-field-wrap .x-form-trigger:nth-child(1) {
-  background-image: url(../../images/icon-set/icon_preview.svg);
-  @include x-form-trigger-flat;
+
+.x-form-unlocked-trigger {
+  background-image:url(../../Tinebase/js/node_modules/@tabler/icons/icons/outline/lock-open-2.svg) !important;
 }
 
-.tw-passwordTriggerField .x-form-field-wrap .x-form-trigger.locked:nth-child(1) {
-  background-image: url(../../images/icon-set/icon_preview_disabled.svg);
-  @include x-form-trigger-flat;
-}
-
-.tw-passwordTriggerField .x-form-field-wrap .x-form-trigger:nth-child(2) {
-  background-image: url('../../images/icon-set/icon_copy_to_clipboard.svg') !important;
-  @include x-form-trigger-flat;
-}
-
-
-span.x-form-twin-triggers img.x-form-unlocked-trigger {
-  background-image: url('../../images/icon-set/icon_lock_open.svg') !important;
-  @include x-form-trigger-flat;
-}
-
-span.x-form-twin-triggers img.x-form-locked-trigger {
-  background-image: url('../../images/icon-set/icon_lock.svg') !important;
-  @include x-form-trigger-flat;
-}
-
-span.x-form-twin-triggers img.x-form-clear-trigger {
-  background-image: url('../../images/icon-set/icon_clear.svg') !important;
-  @include x-form-trigger-flat;
-  background-size: 11px;
-  //background-position-y: 2px !important;
-  &:hover {
-    background-size: 13px;
-    background-position-y: 1px !important;
-  }
-}
-
-.tw-recordEditField .x-form-field-wrap .x-form-trigger {
-  background-image: url('../../images/icon-set/icon_edit.svg');
-  @include x-form-trigger-flat;
+.x-form-locked-trigger {
+  background-image:url(../../Tinebase/js/node_modules/@tabler/icons/icons/outline/lock.svg) !important;
 }
 
 .x-html-editor-wrap {
@@ -748,60 +587,6 @@ span.x-form-twin-triggers img.x-form-clear-trigger {
   @include transform-blacktowhite;
 }
 
-.x-form-text, textarea.x-form-field {
-  background-color: transparent;
-  border: none;
-}
-
-textarea.x-form-field, // wrap-less
-.custom-field > .x-form-field, // wrap-less
-.x-form-element > .x-form-field, // wrap-less
-.x-box-inner > .x-form-field, // wrap-less
-.x-column-inner > .x-form-field, // wrap-less
-.x-small-editor > .x-form-field, // wrap-less
-.x-toolbar-cell > .x-form-field, // wrap-less
-.tw-ftb-frow-field > .x-form-field, // wrap-less
-.tw-ftb-frow-operator > .x-form-field, // wrap-less
-.tw-ftb-frow-value > .x-form-field, // wrap-less
-.ext-webkit .x-form-field-wrap,
-.x-form-field-wrap {
-  background-color: var(--field-bg-color);
-  border-bottom: 1px solid var(--field-bg-color);
-  &.x-form-focus,
-  &.x-trigger-wrap-focus {
-    border-color: var(--focus-color) !important;
-  }
-  &.x-form-invalid {
-    border-bottom: 1px solid #ff7870 !important;
-    background-color: #fee !important;
-  }
-}
-
-.status-fields {
-  textarea.x-form-field, // wrap-less
-  .x-form-element > .x-form-field, // wrap-less
-  .x-box-inner > .x-form-field, // wrap-less
-  .x-small-editor > .x-form-field, // wrap-less
-  .ext-webkit .x-form-field-wrap,
-  .x-form-field-wrap {
-    background-color: $dialogBg;
-    border-color: color.adjust($dialogBg, $lightness: -10%) !important;
-  }
-}
-.ext-webkit .x-form-invalid,
-.x-form-invalid {
-  background-color: transparent !important;
-  background-image: none !important;
-  border: none;
-}
-
-.x-form-invalid + span {
-  img.x-form-trigger {
-    background-color: transparent !important;
-    border: none;
-  }
-}
-
 /* RESIZEABLE */
 .x-resizable-over .x-resizable-handle-southeast,
 .x-resizable-pinned .x-resizable-handle-southeast {
@@ -812,11 +597,7 @@ textarea.x-form-field, // wrap-less
   height: 10px;
 }
 
-  /* GRID */
-//.cal-daysviewpanel-header-inner,
-//.cal-timelinepanel-header-label {
-//  background: $tbColor none repeat-x scroll 0 top;
-//}
+/* GRID */
 
 .x-grid3-header,
 .cal-timelinepanel-header-label,
@@ -913,10 +694,6 @@ a.x-grid3-hd-btn:hover {
   background-image: none;
   background-color: $tbColor;
 }
-
-//.x-date-middle .x-btn .x-btn-text {
-//  color: #000;
-//}
 
 .x-date-left a {
   background-image: url('../../images/icon-set/icon_arrow_left.svg');
@@ -1091,18 +868,6 @@ td.x-date-mp-sel a,
   }
 
 }
-//
-//.x-tool-close {
-//  background-image: url('../../images/icon-set/icon_clear.svg') !important;
-//}
-//
-//.x-tool-toggle {
-//  background-image: url('../../images/icon-set/icon_arrow_full_up.svg');
-//}
-//
-//.x-panel-collapsed .x-tool-toggle {
-//  background-image: url('../../images/icon-set/icon_arrow_full_down.svg');
-//}
 
 /* TIPS */
 
@@ -1150,7 +915,6 @@ td.x-date-mp-sel a,
 
 .x-menu-floating {
   border: none;
-  //@include shadow;
 }
 
 .x-menu-item-active {
@@ -1359,18 +1123,6 @@ span:hover.tinebase-contact-link {
   align-items: center;
   justify-content: flex-start;
   overflow: hidden !important;
-}
-
-.tinebase-warning {
-  color: #cc0000;
-}
-
-.tinebase-trigger-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
 }
 
 .form-check-label {

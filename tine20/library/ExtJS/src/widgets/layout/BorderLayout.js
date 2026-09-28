@@ -146,6 +146,13 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
      */
     floatWestLevel: 1,
 
+    /**
+     * Minimum height of a grid/tabpanel center region in a container with autoScroll - below that the container
+     * scrolls instead of squeezing the center (a panel's own minHeight wins)
+     * @type {number} minCenterHeight
+     */
+    minCenterHeight: 200,
+
     type: 'border',
 
     targetCls: 'x-border-layout-ct',
@@ -158,6 +165,8 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
     // private
     onLayout : function(ct, target){
 
+        // remember whether responsiveness is configured here or only inherited (nested layouts)
+        if (this.ownResponsive === undefined) this.ownResponsive = !!this.enableResponsive;
         // if parent responsiveEnabled, make this container also responsiveEnabled
         ct.enableResponsive = this.enableResponsive ?? ct?.ownerCt?.enableResponsive;
         this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
@@ -176,8 +185,12 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
 
         if (this.stackEast && this.enableResponsive) {
             target.setStyle('overflowY', 'auto');
+            // e.g. to keep some space for focus rings (a scrolling container can't have a clip margin)
+            target.addClass('x-border-scroll-center');
         } else {
-            target.setStyle('overflowY', 'unset');
+            // NOTE: '' (back to the stylesheet) - 'unset' would be 'visible'
+            target.setStyle('overflowY', '');
+            target.removeClass('x-border-scroll-center');
         }
 
         var collapsed, i, c, pos, items = ct.items.items, len = items.length;
@@ -233,6 +246,10 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
         has to be set instead of absolute positions as the position static (default)
          */
         let stackLeftMargin = 0;
+        if (this.stackEast && this.enableResponsive) {
+            // stacked regions are in the (padded) flow - absolutely positioned ones ignore the padding
+            size.width -= target.getPadding('lr');
+        }
         var w = size.width, h = size.height,
             centerW = w, centerH = h, centerY = 0, centerX = 0,
             n = this.north, s = this.south, west = this.west, e = this.east, c = this.center,
@@ -256,15 +273,25 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
                 if (!this.floatWest) centerY = b.height + b.y + m.bottom;
             } else {
                 n.el.setStyle('position', 'absolute');
+                let unstacked = false;
                 if (n.__sizeCache) {
-                    b = n.__sizeCache.b;
                     m = n.__sizeCache.m;
                     n.panel.autoHeight = n.__sizeCache.autoHeight;
+                    // the cached height of an autoHeight panel is just what its content measured when
+                    // stacking began (e.g. only the header when opened narrow) - measure it live instead
+                    if (n.panel.autoHeight) unstacked = true;
+                    else b = n.__sizeCache.b;
                     delete n.__sizeCache;
                 }
                 b.width = w - (m.left+m.right);
                 b.x = m.left;
                 b.y = m.top;
+                if (unstacked && !n.isCollapsed) {
+                    // content reflows for the new width (resize layouts are buffered) - lay it out now, then measure
+                    n.panel.setWidth(b.width);
+                    n.panel.doLayout();
+                    b.height = n.getSize().height;
+                }
                 centerY = b.height + b.y + m.bottom;
                 centerH -= centerY;
             }
@@ -284,17 +311,25 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
                 b.width = w - (m.left+m.right);
             } else {
                 s.el.setStyle('position', 'absolute');
+                let unstacked = false;
                 if (s?.__sizeCache) {
-                    b = s.__sizeCache.b;
                     m = s.__sizeCache.m;
                     s.panel.autoHeight = s.__sizeCache.autoHeight;
+                    // see north
+                    if (s.panel.autoHeight) unstacked = true;
+                    else b = s.__sizeCache.b;
                     delete s.__sizeCache;
+                }
+                b.width = w - (m.left+m.right);
+                if (unstacked && !s.isCollapsed) {
+                    s.panel.setWidth(b.width);
+                    s.panel.doLayout();
+                    b.height = s.getSize().height;
                 }
                 totalHeight += (b.height + m.top + m.bottom);
                 b.x = m.left;
                 b.y = h - totalHeight + m.top;
                 centerH -= totalHeight;
-                b.width = w - (m.left+m.right);
             }
             s.applyLayout(b);
         }
@@ -361,7 +396,9 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
                 else e.el.setStyle('margin-left', `${stackLeftMargin}px`)
 
                 b.height = 'auto'
-                b.width = centerW - (m.left+m.right);
+                // stacked below the center region: same width as the center (margins separate it from the center
+                // region only when side by side)
+                b.width = centerW;
             } else {
                 e.el.setStyle('position', 'absolute');
                 e.el.setStyle('margin-left', 'unset')
@@ -386,7 +423,19 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
                 width: centerW,
                 height: centerH
             }
+            // unstacked, the center is pinned to the container height, so it has to scroll its overflow itself
+            // (stacked, the container scrolls). Applies to responsive layouts and to containers which want to
+            // scroll (autoScroll) - which a border layout otherwise defeats.
+            // Grids/tabpanels scroll on their own, explicit autoScroll wins.
+            const selfScrolling = c.panel instanceof Ext.grid.GridPanel || c.panel instanceof Ext.TabPanel;
+            const scrollCenter = (this.ownResponsive || !!ct.autoScroll)
+                && !selfScrolling
+                && c.panel.initialConfig.autoScroll === undefined;
             if (this.layoutClass.level <= 2 && this.enableResponsive) {
+                if (scrollCenter) {
+                    c.panel.getContentTarget()?.setStyle('overflowY', '');
+                    c.panel.getContentTarget()?.removeClass('x-border-scroll-center');
+                }
                 if (!c.__sizeCache) c.__sizeCache = {'b': {...b}, 'm':{...m}, autoHeight: c.panel.autoHeight};
                 c.el.setStyle('position', 'unset')
                 c.panel.autoHeight = true;
@@ -396,6 +445,11 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
             } else {
                 c.el.setStyle('position', 'absolute');
                 c.el.setStyle('margin-left', 'unset');
+                if (scrollCenter) {
+                    c.panel.getContentTarget()?.setStyle('overflowY', 'auto');
+                    // e.g. to keep some space for focus rings (a scrolling container can't have a clip margin)
+                    c.panel.getContentTarget()?.addClass('x-border-scroll-center');
+                }
                 if (c?.__sizeCache) {
                     b = c.__sizeCache.b;
                     m = c.__sizeCache.m;
@@ -406,6 +460,17 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
                 b.y = centerY + m.top;
                 b.width = centerW - (m.left+m.right);
                 b.height = centerH - (m.top+m.bottom);
+                if (ct.autoScroll && selfScrolling) {
+                    // don't squeeze a grid/tabpanel center - let it overflow so the container scrolls instead
+                    const minHeight = c.panel.minHeight || this.minCenterHeight;
+                    if (b.height < minHeight) {
+                        if (s && s.isVisible()) {
+                            // keep the south region below the (now taller) center
+                            s.el.setStyle('top', (b.y + minHeight + m.bottom + s.getMargins().top) + 'px');
+                        }
+                        b.height = minHeight;
+                    }
+                }
             }
             c.applyLayout(b);
         }
@@ -1238,7 +1303,7 @@ Ext.extend(Ext.layout.BorderLayout.SplitRegion, Ext.layout.BorderLayout.Region, 
             }
             var sd = this.splitEl.dom, s = sd.style;
             this.panel.setPosition(box.x, box.y);
-            var sw = sd.offsetWidth;
+            var sw = this.hideSplitBar ? 0 : sd.offsetWidth; // hidden (visibility) split bar takes no space
             s.left = (box.x+box.width-sw)+'px';
             s.top = (box.y)+'px';
             s.height = Math.max(0, box.height)+'px';
@@ -1249,7 +1314,7 @@ Ext.extend(Ext.layout.BorderLayout.SplitRegion, Ext.layout.BorderLayout.Region, 
                 return this.applyLayoutCollapsed(box);
             }
             var sd = this.splitEl.dom, s = sd.style;
-            var sw = sd.offsetWidth;
+            var sw = this.hideSplitBar ? 0 : sd.offsetWidth; // hidden (visibility) split bar takes no space
             this.panel.setPosition(box.x+sw, box.y);
             s.left = (box.x)+'px';
             s.top = (box.y)+'px';
@@ -1261,7 +1326,7 @@ Ext.extend(Ext.layout.BorderLayout.SplitRegion, Ext.layout.BorderLayout.Region, 
                 return this.applyLayoutCollapsed(box);
             }
             var sd = this.splitEl.dom, s = sd.style;
-            var sh = sd.offsetHeight;
+            var sh = this.hideSplitBar ? 0 : sd.offsetHeight; // hidden (visibility) split bar takes no space
             this.panel.setPosition(box.x, box.y);
             s.left = (box.x)+'px';
             s.top = (box.y+box.height-sh)+'px';
@@ -1273,7 +1338,7 @@ Ext.extend(Ext.layout.BorderLayout.SplitRegion, Ext.layout.BorderLayout.Region, 
                 return this.applyLayoutCollapsed(box);
             }
             var sd = this.splitEl.dom, s = sd.style;
-            var sh = sd.offsetHeight;
+            var sh = this.hideSplitBar ? 0 : sd.offsetHeight; // hidden (visibility) split bar takes no space
             this.panel.setPosition(box.x, box.y+sh);
             s.left = (box.x)+'px';
             s.top = (box.y)+'px';

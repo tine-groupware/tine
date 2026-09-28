@@ -192,6 +192,7 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             items: [{
                 title: this.app.i18n._('Option'),
                 frame: true,
+                autoScroll: true,
                 layout: 'form',
                 width: '100%',
                 items: [{

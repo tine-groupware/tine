@@ -59,6 +59,12 @@ Ext.layout.FitLayout = Ext.extend(Ext.layout.ContainerLayout, {
                 item.setWidth(size.width);
             } else {
                 item.setSize(size);
+                // the item is pinned to the container height, so a container which wants to scroll (autoScroll)
+                // never does - let the item scroll its overflow itself (grids/tabpanels scroll on their own)
+                if (this.container.autoScroll && item.initialConfig.autoScroll === undefined
+                    && !(item instanceof Ext.grid.GridPanel) && !(item instanceof Ext.TabPanel)) {
+                    item.getContentTarget?.()?.setStyle('overflowY', 'auto');
+                }
             }
         }
     }

@@ -213,6 +213,8 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var editTagDialog = {
             layout: 'border',
             border: false,
+            // scroll instead of squeezing the rights/contexts tabpanel below its minHeight
+            autoScroll: true,
             items: [{
                 region: 'north',
                 xtype: 'columnform',
@@ -241,6 +243,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             }, {
                 region: 'center',
                 xtype: 'tabpanel',
+                minHeight: 250,
                 activeTab: 0,
                 deferredRender: false,
                 defaults: { autoScroll: true },

@@ -364,7 +364,6 @@ require("./BL/BLConfigPanel.js");
 /* pkg: Tinebase FAT Client (css/Tinebase-FAT.css)*/
 require("../styles/Tinebase.scss");
 require("../styles/mimetypes.scss");
-require("../styles/SmallForms.scss");
 require("../styles/ux/ArrowCollapse.scss");
 require("../styles/ux/SubFormPanel.scss");
 require("../styles/ux/ConnectionStatus.scss");
@@ -384,7 +383,6 @@ require("../styles/ux/form/LayerCombo.scss");
 require("../styles/ux/display/DisplayPanel.scss");
 require("../styles/ux/layout/CenterLayout.scss");
 require("../styles/ux/tree/treegrid.scss");
-require("../styles/ux/LockCombo.scss");
 require("../styles/ux/LockTextField.scss");
 require("../styles/ux/Menu.scss");
 require("../styles/ux/MessageBox.scss");
@@ -394,9 +392,7 @@ require("../styles/widgets/FilterToolbar.scss");
 require("../styles/widgets/AccountPicker.scss");
 require("../styles/widgets/PreviewPanel.scss");
 require("../styles/widgets/PreferencesPanel.scss");
-require("../styles/widgets/UidTriggerField.scss");
 require("../styles/widgets/FileSelectionArea.scss");
-require("../styles/widgets/PasswordTriggerField.scss");
 require("../styles/widgets/print.css");
 
 require('./MunicipalityKey/model');

@@ -6,17 +6,18 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+import FieldClearerPlugin from "/ux/form/FieldClearerPlugin";
+
 Ext.ns('Ext.ux');
 
 /**
- * Generic widget for a twintriggerd search field
+ * Generic widget for a twin triggerd search field
  * 
  * @namespace   Ext.ux
  * @class       Ext.ux.SearchField
- * @extends     Ext.form.TwinTriggerField
+ * @extends     Ext.form.TriggerField
  */
-Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
+Ext.ux.SearchField = Ext.extend(Ext.form.TriggerField, {
     /**
      * @cfg {String} paramName
      */
@@ -32,8 +33,7 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     
     validationEvent:false,
     validateOnBlur:false,
-    trigger1Class:'x-form-clear-trigger',
-    trigger2Class:'x-form-search-trigger',
+    triggerClass:'x-form-search-trigger',
     hideTrigger1:true,
     width:180,
     hasSearch : false,
@@ -41,8 +41,14 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
      * @private
      */
     initComponent : function(){
+        this.clearer = new FieldClearerPlugin({
+            onTriggerClick: this.onTrigger1Click.createDelegate(this),
+        })
+        this.plugins = this.plugins || [];
+        this.plugins.unshift(this.clearer);
+
         this.emptyText = this.emptyText || i18n._('enter search filter');
-        
+
         Ext.ux.SearchField.superclass.initComponent.call(this);
 
         this.on('specialkey', function(f, e){
@@ -59,12 +65,12 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
      * @private
      */
     onTrigger1Click : function(){
+        this.el.dom.value = '';
         if (this.hasSearch) {
-            this.el.dom.value = '';
             this.fireEvent('change', this, this.getRawValue(), this.startValue);
             this.startValue = this.getRawValue();
-            this.triggers[0].hide();
             this.hasSearch = false;
+            this.clearer.assertState();
         }
     },
     /**
@@ -75,7 +81,11 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
         this.fireEvent('change', this, this.getRawValue(), this.startValue);
         this.startValue = this.getRawValue();
         this.hasSearch = true;
-        this.triggers[0][v.length < 1 ? 'hide' : 'show']();
+        this.clearer.assertState();
+    },
+
+    onTriggerClick : function(){
+        this.onTrigger2Click();
     }
 });
 

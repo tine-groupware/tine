@@ -245,7 +245,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                     recordClass: this.recordClass,
                                     maxLength: 64
                                 }, {
-                                    width: 110,
+                                    width: 120,
                                     xtype: 'extuxclearabledatefield',
                                     fieldLabel: this.app.i18n._('Birthday (private)'),
                                     name: 'bday',

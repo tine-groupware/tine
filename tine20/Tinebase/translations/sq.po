@@ -2769,7 +2769,7 @@ msgid "Download example file"
 msgstr "Shkarko skedarin shëmbull"
 
 #, python-brace-format
-msgid "Select {0} to add you {1} to:"
+msgid "Select {0} to add your {1} to:"
 msgstr "Zgjidhni {0} t'ju shtohet {1} në:"
 
 msgid "Set Import Options"

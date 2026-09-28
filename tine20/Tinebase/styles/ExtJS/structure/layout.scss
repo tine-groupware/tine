@@ -298,3 +298,21 @@
     left:0;
     top:0;
 }
+
+.x-box-inner.x-box-flex {
+    display: flex;
+    position: static;
+    height: auto !important;
+
+    > .x-box-item {
+        position: static !important;
+        flex: none;   // Ext's berechnete Breiten nicht schrumpfen/strecken
+
+        &.x-panel {
+            display: flex;
+            flex-direction: column;
+            > .x-panel-bwrap { flex: 1; display: flex; flex-direction: column; }
+            > .x-panel-bwrap > .x-panel-body { flex: 1; }
+        }
+    }
+}

@@ -164,7 +164,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
     getAutoCreate: function() {
         this.autoCreate = {
             tag: 'div',
-                cls: 'ux-pp-field',
+                cls: 'ux-pp-field', // +' x-small-editor',
                 cn: [{
                     tag: 'div',
                     cls: 'ux-pp-range',
@@ -212,6 +212,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
             });
 
             this.rangeCombo = new Ext.form.ComboBox({
+                cls: 'form-select-sm',
                 typeAhead: true,
                 triggerAction: 'all',
                 mode: 'local',

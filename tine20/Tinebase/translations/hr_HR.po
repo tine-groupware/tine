@@ -2804,7 +2804,7 @@ msgid "Download example file"
 msgstr "Preuzmi primjer datoteke"
 
 #, python-brace-format
-msgid "Select {0} to add you {1} to:"
+msgid "Select {0} to add your {1} to:"
 msgstr "Odaberite {0} za dodati {1} u:"
 
 msgid "Set Import Options"

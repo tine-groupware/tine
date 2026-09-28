@@ -40,9 +40,11 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.printer = Tine.Addressbook.Printer.ListRenderer;
 
         this.memberGridPanel = new Tine.Addressbook.ListMemberRoleGridPanel({
-            region: "center",
+            // grows with its rows, the center region scrolls
+            autoHeight: true,
+            minHeight: 200,
             frame: true,
-            margins: '6 0 0 0'
+            style: 'margin-top: 6px;'
         });
        
         this.supr().initComponent.apply(this, arguments);
@@ -77,14 +79,10 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 ]
             },{
                 region: 'center',
-                layout: 'border',
-                layoutConfig: {
-                    enableResponsive: true,
-                    responsiveBreakpointOverrides: [{level: 2, width: 600}]
-                },
+                layout: 'hfit',
+                border: false,
                 items: [{
                     xtype: 'fieldset',
-                    region: 'north',
                     autoHeight: true,
                     title: this.app.i18n._('Group Information'),
                     items: [{

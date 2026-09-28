@@ -23,7 +23,7 @@ Ext.form.NumberField = Ext.extend(Ext.form.TextField,  {
     /**
      * @cfg {String} fieldClass The default CSS class for the field (defaults to "x-form-field x-form-num-field")
      */
-    fieldClass: "x-form-field x-form-num-field",
+    fieldClass: "form-control x-form-field x-form-num-field",
     /**
      * @cfg {Boolean} allowDecimals False to disallow decimal values (defaults to true)
      */

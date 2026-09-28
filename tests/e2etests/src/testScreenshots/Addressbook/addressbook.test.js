@@ -26,7 +26,7 @@ describe('Contacts', () => {
             await expectPuppeteer(page).toClick('.x-btn-text', {text: 'Kontakte importieren'});
             importDialog = await importDialog;
 
-            await expectPuppeteer(importDialog).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei mit Ihren Kontakte'});
+            await expectPuppeteer(importDialog).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei aus, die Ihre Kontakte enthält'});
             await lib.uploadFile(importDialog, 'src/testScreenshots/Addressbook/test.csv');
             await expectPuppeteer(importDialog).toMatchElement('button', {text: new RegExp('test.csv.*'), timeout:10000})
             await lib.makeScreenshot(importDialog,{path: 'screenshots/Adressbuch/1_adressbuch_importfenster.png'});
@@ -47,7 +47,7 @@ describe('Contacts', () => {
             importDialog = lib.getNewWindow();
             await expectPuppeteer(page).toClick('.x-btn-text', {text: 'Kontakte importieren'});
             importDialog = await importDialog;
-            await expectPuppeteer(importDialog).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei mit Ihren Kontakte'});
+            await expectPuppeteer(importDialog).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei aus, die Ihre Kontakte enthält'});
             await lib.uploadFile(importDialog, 'src/testScreenshots/Addressbook/test.csv');
             await expectPuppeteer(importDialog).toMatchElement('button', {text: new RegExp('test.csv.*')})
             await expectPuppeteer(importDialog).toClick('button', {text: 'Vorwärts'});
@@ -65,7 +65,7 @@ describe('Contacts', () => {
             importDialog = lib.getNewWindow();
             await expectPuppeteer(page).toClick('.x-btn-text', {text: 'Kontakte importieren'});
             importDialog = await importDialog;
-            await expectPuppeteer(importDialog).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei mit Ihren Kontakte'});
+            await expectPuppeteer(importDialog).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei aus, die Ihre Kontakte enthält'});
             await lib.uploadFile(importDialog, 'src/testScreenshots/Addressbook/test_fail.csv');
             await expectPuppeteer(importDialog).toMatchElement('button', {text: new RegExp('test_fail.csv.*')})
             await expectPuppeteer(importDialog).toClick('button', {text: 'Vorwärts'});

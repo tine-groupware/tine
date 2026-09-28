@@ -79,6 +79,9 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
     // private config overrides
     windowNamePrefix: 'ImportWindow_',
 
+    // some space between the wizard pages and the dialog border
+    bodyStyle: 'padding: 10px;',
+
     /**
      * init import wizard
      */
@@ -253,21 +256,23 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             : i18n._('Below you find a list of all supported import formats.');
             
         return {
-            title: i18n._('Choose File and Format'),
             layout: 'vbox',
+            // sub panels (and their fields) take the full width
+            layoutConfig: {
+                align: 'stretch'
+            },
             border: false,
             xtype: 'ux.displaypanel',
-            frame: true,
             ref: '../filePanel',
             canonicalName: 'ImportFileAndFormat',
             items: [{
                 xtype: 'panel',
                 baseCls: 'ux-subformpanel',
                 title: i18n._('Choose Import File'),
-                height: 100,
                 items: [{
                     xtype: 'label',
-                    html: '<p>' + i18n._('Please choose the file that contains the records you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    cls: 'tw-import-text',
+                    html: i18n._('Please choose the file that contains the records you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title)
                 }, {
                     xtype: 'tw.uploadbutton',
                     ref: '../../uploadButton',
@@ -281,15 +286,19 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 baseCls: 'ux-subformpanel',
                 title: i18n._('What should the file you upload look like?'),
                 flex: 1,
+                layout: 'anchor',
                 items: [{
                     xtype: 'label',
-                    html: '<p>' + i18n._('Tine 2.0 does not understand all kinds of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    cls: 'tw-import-text',
+                    html: i18n._('Tine 2.0 does not understand all kinds of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title)
                 }, {
                     xtype: 'label',
-                    html: '<p>' + importText + '</p><br />'
+                    cls: 'tw-import-text',
+                    html: importText
                 }, {
                     xtype: 'label',
-                    html: '<p>' + i18n._('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '</p>'
+                    cls: 'tw-import-text',
+                    html: i18n._('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title)
                 }, {
                     xtype: 'combo',
                     ref: '../../definitionCombo',
@@ -301,7 +310,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     editable: false,
                     allowBlank: false,
                     forceSelection: true,
-                    width: 400,
+                    anchor: '100%',
                     value: this.selectedDefinition ? this.selectedDefinition.id : null,
                     listeners: {
                         scope: this,
@@ -366,10 +375,12 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         if (null !== this.recordClass.getContainerName()) {
             items = items.concat([{
                 xtype: 'label',
-                html: '<p>' + String.format(i18n._('Select {0} to add you {1} to:'), this.recordClass.getContainerName(), this.recordClass.getRecordsName()) + '</p>'
+                cls: 'tw-import-text',
+                // vbox: css margins don't count
+                margins: '0 0 8 0',
+                html: String.format(i18n._('Select {0} to add your {1} to:'), this.recordClass.getContainerName(), this.recordClass.getRecordsName())
             }, new Tine.widgets.container.SelectionComboBox({
                 id: this.app.appName + 'EditDialogContainerSelector',
-                width: 300,
                 ref: '../containerCombo',
                 stateful: false,
                 containerName: this.recordClass.getContainerName(),
@@ -384,7 +395,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     }
                 },
                 requiredGrant: false, // 'add' ?
-                style: 'margin-bottom: 15px;'
+                margins: '0 0 15 0'
             })]);
         }
 
@@ -392,18 +403,22 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             canonicalName: 'ImportTags',
             app: this.appName,
             ref: '../tagsPanel',
-            style: 'border: 1px solid silver; border-top: none;',
-            border: true,
+            border: false,
             collapsible: false,
-            height: 200
+            flex: 1
         }));
 
         return {
             title: i18n._('Set Import Options'),
-            layout: 'fit',
+            baseCls: 'ux-subformpanel',
+            layout: 'vbox',
+            layoutConfig: {
+                align: 'stretch'
+            },
             border: false,
             xtype: 'form',
-            frame: true,
+            // same background as the other pages (.x-form has its own)
+            bodyStyle: 'background: transparent;',
             ref: '../optionsPanel',
             canonicalName: 'ImportOptions',
             items: items,
@@ -476,10 +491,15 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         
         return {
             title: i18n._('Resolve Conflicts'),
+            baseCls: 'ux-subformpanel',
             layout: 'vbox',
+            layoutConfig: {
+                align: 'stretch'
+            },
             border: false,
             xtype: 'form',
-            frame: true,
+            // same background as the other pages (.x-form has its own)
+            bodyStyle: 'background: transparent;',
             ref: '../conflictsPanel',
             canonicalName: 'ImportResolveConflicts',
             items: [{
@@ -666,9 +686,9 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         });
         return {
             title: i18n._('Summary'),
+            baseCls: 'ux-subformpanel',
             border: false,
             xtype: 'ux.displaypanel',
-            frame: true,
             ref: '../summaryPanel',
             autoScroll: true,
             canonicalName: 'ImportSummary',

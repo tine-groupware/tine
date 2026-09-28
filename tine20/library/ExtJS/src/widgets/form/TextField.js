@@ -163,6 +163,9 @@ var myField = new Ext.form.NumberField({
      * field (defaults to <tt>false</tt>)
      */
 
+    // private
+    fieldClass : 'form-control x-form-field',
+
     initComponent : function(){
         Ext.form.TextField.superclass.initComponent.call(this);
         this.addEvents(

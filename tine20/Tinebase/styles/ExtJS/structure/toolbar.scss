@@ -153,9 +153,10 @@
 }
 
 /* Paging Toolbar */
-.x-tbar-page-number{
-	width:30px;
-	height:14px;
+.x-form-text.x-tbar-page-number{
+	// border-box incl. the form-control padding
+	width:40px !important;
+    text-align:center;
 }
 
 .ext-ie .x-tbar-page-number{

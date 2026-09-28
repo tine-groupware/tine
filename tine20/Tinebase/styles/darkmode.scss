@@ -37,10 +37,13 @@ body.dark-mode {
   --tip-color: #000000;
   --shadow-color: #e0ebf9;
 
+  --bs-border-color: #9a9a9a;
+  --bs-body-bg: #e3e3e3;
+
+
   .hu-color-picker .saturation,
   .hu-color-picker .hue,
   .hu-color-picker .color-show,
-
   .dark-reverse {
     filter: invert(1) hue-rotate(180deg);
 
@@ -72,10 +75,6 @@ body.dark-mode {
     }
     .x-panel-bwrap {
       background-color: transparent;
-    }
-    input {
-      background-color: transparent;
-      border-bottom: 1px solid white !important;
     }
   }
 
@@ -149,55 +148,6 @@ body.dark-mode {
     border-bottom: 0.5px solid white;
   }
 
-  textarea.x-form-field, // wrap-less
-  .custom-field > .x-form-field, // wrap-less
-  .x-form-element > .x-form-field, // wrap-less
-  .x-box-inner > .x-form-field, // wrap-less
-  .x-column-inner > .x-form-field, // wrap-less
-  .x-small-editor > .x-form-field, // wrap-less
-  .x-toolbar-cell > .x-form-field, // wrap-less
-  .tw-ftb-frow-field > .x-form-field, // wrap-less
-  .tw-ftb-frow-operator > .x-form-field, // wrap-less
-  .tw-ftb-frow-value > .x-form-field, // wrap-less
-  .x-grid3-cell-inner > .x-form-field, // wrap-less, quickadd editor
-  .ext-webkit .x-form-field-wrap,
-  .x-form-field-wrap {
-    filter: invert(1) hue-rotate(180deg);
-    border-bottom: 1px solid #1b1b1b;
-    &.x-form-invalid {
-      background-color: #1c0c0c !important;
-    }
-  }
-  .x-form-invalid-tip .x-tip-body {
-    filter: none;
-  }
-  .x-form-text, textarea.x-form-field {
-    color: #ffffff;
-  }
-  .x-form-text.x-form-empty-field, textarea.x-form-empty-field.x-form-field {
-    color: #929292;
-  }
-
-
-  .status-fields {
-    textarea.x-form-field, // wrap-less
-    .x-form-element > .x-form-field, // wrap-less
-    .x-box-inner > .x-form-field, // wrap-less
-    .x-small-editor > .x-form-field, // wrap-less
-    .ext-webkit .x-form-field-wrap,
-    .x-form-field-wrap {
-      background-color: transparent;
-      border-color: color.adjust(#1b1b1b, $lightness: 10%) !important;
-      &.x-form-focus,
-      &.x-trigger-wrap-focus {
-        border-color: var(--focus-color) !important;
-      }
-    }
-  }
-
-  .x-form-trigger.x-form-trigger-plugin {
-    filter: none;
-  }
 
   .ux-imagefield-ct img,
   .addressbook-search-combo img,
@@ -205,12 +155,8 @@ body.dark-mode {
   .ux-imagefield-ct,
   .ux-imagefield-text,
   .ux-imagefield-button,
-  .tw-window-iframe,
-  .x-form-field-wrap .x-form-trigger,
-  .x-form-trigger.x-form-arrow-trigger,
-  .x-form-check-wrap .x-form-checkbox,
-  .x-form-trigger,
-  .x-form-twin-triggers + .x-form-trigger.x-form-trigger-plugin {
+  .tw-window-iframe
+  {
     filter: invert(1) hue-rotate(180deg);
   }
 
@@ -229,7 +175,6 @@ body.dark-mode {
 
   .tw-editdialog .status-fields input {
     background-color: transparent;
-    border-bottom: none;
   }
 
   .x-form-display-field.ace_editor,

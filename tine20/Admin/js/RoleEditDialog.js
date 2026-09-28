@@ -279,6 +279,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var editRoleDialog = {
             layout: 'border',
             border: false,
+            // scroll instead of squeezing the members/rights tabpanel below its minHeight
+            autoScroll: true,
             items: [{
                 region: 'north',
                 layout: 'form',
@@ -304,6 +306,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 xtype: 'tabpanel',
                 plain: true,
                 region: 'center',
+                minHeight: 300,
                 activeTab: 0,
                 items: [
                     this.accountPickerGridPanel,

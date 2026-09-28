@@ -297,11 +297,6 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     background-image: url(../../images/icon-set/icon_calendar_attendee_cancle.svg) !important;
 }
 
-.cal-urlfield {
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
 .x-grid3-cell .x-grid3-col-fbInfo {
     padding-left: 2px;
     padding-top: 1px;
@@ -407,4 +402,27 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .x-date-middle .x-btn .x-btn-text
 {
     color: var(--bs-btn-color);
+}
+
+// import dialog: the remote panel has regular (label top) form fields, but its wizard page is a ux.displaypanel
+// whose display styling (flex rows, small grey labels) must not apply here
+.x-ux-display .cal-import-remote-panel {
+    .x-form-item {
+        display: block;
+        padding-left: 0;
+    }
+
+    label.x-form-item-label {
+        color: inherit;
+        text-align: left;
+        font-size: inherit;
+        padding-left: 0;
+    }
+
+    .x-form-element {
+        color: inherit;
+        font-family: inherit;
+        font-size: inherit;
+        padding-left: 0 !important;
+    }
 }

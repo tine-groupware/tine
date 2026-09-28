@@ -94,7 +94,7 @@ Ext.form.ComboBox = Ext.extend(Ext.form.TriggerField, {
      * @cfg {String/Object} autoCreate <p>A {@link Ext.DomHelper DomHelper} element spec, or <tt>true</tt> for a default
      * element spec. Used to create the {@link Ext.Component#getEl Element} which will encapsulate this Component.
      * See <tt>{@link Ext.Component#autoEl autoEl}</tt> for details.  Defaults to:</p>
-     * <pre><code>{tag: "input", type: "text", size: "24", autocomplete: "off"}</code></pre>
+     * <pre><code>{tag: "input", type: "text", autocomplete: "off"}</code></pre>
      */
     /**
      * @cfg {Ext.data.Store/Array} store The data source to which this combo is bound (defaults to <tt>undefined</tt>).
@@ -119,7 +119,7 @@ Ext.form.ComboBox = Ext.extend(Ext.form.TriggerField, {
      */
 
     // private
-    defaultAutoCreate : {tag: "input", type: "text", size: "24", autocomplete: "off"},
+    defaultAutoCreate : {tag: "input", type: "text", autocomplete: "off"},
     /**
      * @cfg {Number} listWidth The width (used as a parameter to {@link Ext.Element#setWidth}) of the dropdown
      * list (defaults to the width of the ComboBox field).  See also <tt>{@link #minListWidth}
