@@ -145,21 +145,7 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
             ->records->getById('2');
 
         //contact_fields
-        $defaultContactFields = [
-            'n_given'               => true,
-            'n_middle'              => true,
-            'n_family'              => true,
-            'bday'                  => true,
-            'email'                 => true,
-            'tel_cell'              => true,
-            'tel_work'              => true,
-            'adr_one_street'        => true,
-            'adr_one_street2'       => true,
-            'adr_one_postalcode'    => true,
-            'adr_one_locality'      => true,
-            'adr_one_region'        => true,
-            'adr_one_countryname'   => true,
-        ];
+        $defaultContactFields = $this->_getDefaultContactFields();
 
         $templates = [];
 
