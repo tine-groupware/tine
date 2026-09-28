@@ -490,6 +490,8 @@ class SSO_Controller extends Tinebase_Controller_Event
                 new \Laminas\Diactoros\Response()
             );
         } catch (\League\OAuth2\Server\Exception\OAuthServerException $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()
+                ->debug(__METHOD__ . '::' . __LINE__ . ' ' . get_class($e) . ': ' . $e->getMessage());
             $response = (new \Laminas\Diactoros\Response())->withStatus($e->getHttpStatusCode());
             if ($e->getPayload()) {
                 $response->getBody()->write(json_encode($e->getPayload()));
