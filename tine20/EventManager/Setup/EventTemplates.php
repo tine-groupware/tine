@@ -128,7 +128,11 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
 
         $eventContainerName = EventManager_Config::getInstance()
             ->get(EventManager_Config::EVENT_TEMPLATES_CONTAINER_NAME);
-        $container_id = EventManager_Setup_Initialize::_getOrCreateSharedEventContainer($eventContainerName)->getId();
+        $container_id = EventManager_Setup_Initialize::_getOrCreateSharedEventContainer(
+            $eventContainerName,
+            EventManager_Model_Event::class,
+            EventManager_Config::APP_NAME
+        )->getId();
 
         EventManager_Config::getInstance()
             ->set(EventManager_Config::JWT_SECRET, 'jwtSecretCreatedFromEventManagerTemplates');

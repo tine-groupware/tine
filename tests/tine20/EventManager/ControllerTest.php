@@ -599,7 +599,11 @@ class EventManager_ControllerTest extends TestCase
 
         $eventContainerName = EventManager_Config::getInstance()
             ->get(EventManager_Config::EVENT_SHARED_CONTAINER_NAME);
-        $container_id = EventManager_Setup_Initialize::_getOrCreateSharedEventContainer($eventContainerName)->getId();
+        $container_id = EventManager_Setup_Initialize::_getOrCreateSharedEventContainer(
+            $eventContainerName,
+            EventManager_Model_Event::class,
+            EventManager_Config::APP_NAME
+        )->getId();
 
         return new EventManager_Model_Event([
             'container_id'                  => $container_id,

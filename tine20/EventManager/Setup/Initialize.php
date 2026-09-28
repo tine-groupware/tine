@@ -84,96 +84,80 @@ class EventManager_Setup_Initialize extends Setup_Initialize
     protected function _initializeContainer()
     {
         if (!Tinebase_Core::isReplica()) {
-            $eventContainer = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_SHARED_CONTAINER_NAME);
-            $this->_getOrCreateSharedEventContainer($eventContainer);
-
-            $eventTemplatesContainer = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_TEMPLATES_CONTAINER_NAME);
-            $this->_getOrCreateSharedEventContainer($eventTemplatesContainer);
-
-            $eventCalendarContainer = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_SHARED_CALENDAR_NAME);
-            $this->_getORCreateSharedEventCalendar($eventCalendarContainer);
-        }
-    }
-
-    public static function _getOrCreateSharedEventContainer($containerName)
-    {
-        try {
-            $container = Tinebase_Container::getInstance()->getContainerByName(
+            $eventContainer = EventManager_Config::getInstance()
+                ->get(EventManager_Config::EVENT_SHARED_CONTAINER_NAME);
+            $this->_getOrCreateSharedEventContainer(
+                $eventContainer,
                 EventManager_Model_Event::class,
-                $containerName,
-                Tinebase_Model_Container::TYPE_SHARED,
+                EventManager_Config::APP_NAME
             );
-        } catch (Tinebase_Exception_NotFound $e) {
-            $container = new Tinebase_Model_Container([
-                'name'              => $containerName,
-                'type'              => Tinebase_Model_Container::TYPE_SHARED,
-                'owner_id'          => Tinebase_Core::getUser(),
-                'backend'           => 'Sql',
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName(EventManager_Config::APP_NAME)->getId(),
-                'model'             => Calendar_Model_Event::class
-            ]);
-            Tinebase_Container::getInstance()->addContainer($container);
 
-            $grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, [[
-                'account_id'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
-                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
-                Tinebase_Model_Grants::GRANT_READ   => true,
-                Tinebase_Model_Grants::GRANT_ADD    => true,
-                Tinebase_Model_Grants::GRANT_EDIT   => true,
-                Tinebase_Model_Grants::GRANT_DELETE => true,
-            ], [
-                'account_id'   => Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(),
-                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
-                Tinebase_Model_Grants::GRANT_READ   => true,
-                Tinebase_Model_Grants::GRANT_ADD    => true,
-                Tinebase_Model_Grants::GRANT_EDIT   => true,
-                Tinebase_Model_Grants::GRANT_DELETE => true,
-                Tinebase_Model_Grants::GRANT_ADMIN => true,
-            ]]);
-            Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, true, false);
+            $eventTemplatesContainer = EventManager_Config::getInstance()
+                ->get(EventManager_Config::EVENT_TEMPLATES_CONTAINER_NAME);
+            $this->_getOrCreateSharedEventContainer(
+                $eventTemplatesContainer,
+                EventManager_Model_Event::class,
+                EventManager_Config::APP_NAME
+            );
+
+            $eventCalendarContainer = EventManager_Config::getInstance()
+                ->get(EventManager_Config::EVENT_SHARED_CALENDAR_NAME);
+            $this->_getOrCreateSharedEventContainer(
+                $eventCalendarContainer,
+                Calendar_Model_Event::class,
+                Calendar_Config::APP_NAME
+            );
         }
-        return $container;
     }
 
-    public static function _getOrCreateSharedEventCalendar($calendarName)
+    public static function _getOrCreateSharedEventContainer($containerName, $model, $applicationName)
     {
-        try {
-            Tinebase_Container::getInstance()->getContainerByName(
-                Calendar_Model_Event::class,
-                $calendarName,
-                Tinebase_Model_Container::TYPE_SHARED,
-            );
-        } catch (Tinebase_Exception_NotFound $e) {
-            $container = new Tinebase_Model_Container([
-                'name'              => $calendarName,
-                'type'              => Tinebase_Model_Container::TYPE_SHARED,
-                'owner_id'          => Tinebase_Core::getUser(),
-                'backend'           => 'Sql',
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName(Calendar_Config::APP_NAME)->getId(),
-                'model'             => Calendar_Model_Event::class
-            ]);
-            Tinebase_Container::getInstance()->addContainer($container);
+        if (!Tinebase_Core::isReplica()) {
+            try {
+                $container = Tinebase_Container::getInstance()->getContainerByName(
+                    $model,
+                    $containerName,
+                    Tinebase_Model_Container::TYPE_SHARED,
+                );
+            } catch (Tinebase_Exception_NotFound $e) {
+                $container = new Tinebase_Model_Container([
+                    'name' => $containerName,
+                    'type' => Tinebase_Model_Container::TYPE_SHARED,
+                    'owner_id' => Tinebase_Core::getUser(),
+                    'backend' => 'Sql',
+                    'application_id' => Tinebase_Application::getInstance()->getApplicationByName(
+                        $applicationName
+                    )->getId(),
+                    'model' => $model
+                ]);
+                Tinebase_Container::getInstance()->addContainer($container);
 
-            $grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, [[
-                'account_id'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
-                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
-                Tinebase_Model_Grants::GRANT_READ   => true,
-                Tinebase_Model_Grants::GRANT_ADD    => true,
-                Tinebase_Model_Grants::GRANT_EDIT   => true,
-                Tinebase_Model_Grants::GRANT_DELETE => true,
-                Tinebase_Model_Grants::GRANT_EXPORT => true,
-            ], [
-                'account_id'   => Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(),
-                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
-                Tinebase_Model_Grants::GRANT_READ   => true,
-                Tinebase_Model_Grants::GRANT_ADD    => true,
-                Tinebase_Model_Grants::GRANT_EDIT   => true,
-                Tinebase_Model_Grants::GRANT_DELETE => true,
-                Tinebase_Model_Grants::GRANT_ADMIN => true,
-                Tinebase_Model_Grants::GRANT_EXPORT => true,
-            ]]);
-            Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, true, false);
+                $grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, [
+                    [
+                        'account_id' => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+                        'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                        Tinebase_Model_Grants::GRANT_READ => true,
+                        Tinebase_Model_Grants::GRANT_ADD => true,
+                        Tinebase_Model_Grants::GRANT_EDIT => true,
+                        Tinebase_Model_Grants::GRANT_DELETE => true,
+                        Tinebase_Model_Grants::GRANT_EXPORT => true,
+                    ],
+                    [
+                        'account_id' => Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(),
+                        'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                        Tinebase_Model_Grants::GRANT_READ => true,
+                        Tinebase_Model_Grants::GRANT_ADD => true,
+                        Tinebase_Model_Grants::GRANT_EDIT => true,
+                        Tinebase_Model_Grants::GRANT_DELETE => true,
+                        Tinebase_Model_Grants::GRANT_ADMIN => true,
+                        Tinebase_Model_Grants::GRANT_EXPORT => true,
+                    ]
+                ]);
+                Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, true, false);
+            }
+            return $container;
         }
+        return null;
     }
 
     protected function _initializeFavorites()
@@ -199,6 +183,10 @@ class EventManager_Setup_Initialize extends Setup_Initialize
 
     protected function _initializeEventTemplates()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
         EventManager_Setup_EventTemplates::getInstance()->createTemplates();
     }
 
