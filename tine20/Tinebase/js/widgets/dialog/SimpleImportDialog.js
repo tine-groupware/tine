@@ -160,7 +160,7 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
                 height: 100,
                 items: [{
                     xtype: 'label',
-                    html: '<p>' + String.format(i18n._('Select {0} to add you {1} to:'), this.recordClass.getContainerName(), this.recordClass.getRecordsName()) + '</p>'
+                    html: '<p>' + String.format(i18n._('Select {0} to add your {1} to:'), this.recordClass.getContainerName(), this.recordClass.getRecordsName()) + '</p>'
                 }, new Tine.widgets.container.SelectionComboBox({
                     id: this.app.appName + 'EditDialogContainerSelector',
                     width: 300,

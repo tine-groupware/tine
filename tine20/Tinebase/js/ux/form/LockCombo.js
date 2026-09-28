@@ -7,7 +7,8 @@
  *
  * @todo        switch lock and trigger icons (because only the trigger icon has a round upper right corner)
  */
- 
+import FieldTriggerPlugin from "/ux/form/FieldTriggerPlugin";
+
 Ext.ns('Ext.ux', 'Ext.ux.form');
 
 /**
@@ -37,7 +38,6 @@ Ext.ux.form.LockCombo = Ext.extend(Ext.form.ComboBox, {
     
     validationEvent:false,
     validateOnBlur:false,
-    trigger1Class:'x-form-trigger',
     trigger2ClassLocked:'x-form-locked-trigger',
     trigger2ClassUnlocked:'x-form-unlocked-trigger',
     hideTrigger1:false,
@@ -53,58 +53,13 @@ Ext.ux.form.LockCombo = Ext.extend(Ext.form.ComboBox, {
             this.hiddenFieldData = '1';
         }
 
-        this.triggerConfig = {
-            tag:'span', cls:'x-form-twin-triggers', cn:[
-            {tag: "img", id:'trigger1', src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger " + this.trigger1Class},
-            {tag: "img", id:'trigger2', src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger " }
-        ]};
+        this.plugins = this.plugins || [];
+        this.plugins.push(new FieldTriggerPlugin({
+            triggerClass: this.hiddenFieldData === '0' ? this.trigger2ClassUnlocked : this.trigger2ClassLocked,
+            qtip: i18n._('Lock/Unlock') + ' ' + i18n._('When a preference is locked, a normal user cannot edit the preference anymore.'),
+            onTriggerClick: this.onTrigger2Click.createDelegate(this),
+        }));
     },
-
-    getTrigger : function(index){
-        return this.triggers[index];
-    },
-
-    initTrigger : function(){
-        const ts = this.trigger.select('.x-form-trigger', true);
-        this.wrap.setStyle('overflow', 'hidden');
-        const triggerField = this;
-        
-        ts.each(function(t, all, index){
-            t.hide = function(){
-                const w = triggerField.wrap.getWidth();
-                this.dom.style.display = 'none';
-                triggerField.el.setWidth(w-triggerField.trigger.getWidth());
-            };
-            t.show = function(){
-                const w = triggerField.wrap.getWidth();
-                this.dom.style.display = '';
-                triggerField.el.setWidth(w-triggerField.trigger.getWidth());
-            };
-            const triggerIndex = 'Trigger'+(index+1);
-
-            if(this['hide'+triggerIndex]){
-                t.dom.style.display = 'none';
-            }
-            t.on("click", this['on'+triggerIndex+'Click'], this, {preventDefault:true});
-    
-            if(t.id === 'trigger2') {
-                t.set({'ext:qtip': i18n._('When a preference is locked, a normal user cannot edit the preference anymore.')});
-                if(this.hiddenFieldData === '0') {
-                    const _cssClass = this.trigger2ClassLocked.toString();
-                    t.addClass(_cssClass);
-                }
-                if(this.hiddenFieldData === '1' || !this.hiddenFieldData) {
-                    const _cssClass = this.trigger2ClassUnlocked.toString();
-                    t.addClass(_cssClass);
-                }                
-            }
-    
-            t.addClassOnOver('x-form-trigger-over');
-            t.addClassOnClick('x-form-trigger-click');
-        }, this);
-        this.triggers = ts.elements;
-    },
-    
 
     onRender:function(ct, position) {
         Ext.ux.form.LockCombo.superclass.onRender.call(this, ct, position); // render the Ext.Button
@@ -131,30 +86,11 @@ Ext.ux.form.LockCombo = Ext.extend(Ext.form.ComboBox, {
         }
     },
     
-    onTrigger2Click : function(){
-        const _currentValue = Ext.getCmp(this.hiddenFieldId).getValue();
-        const ts = this.trigger.select('.x-form-trigger', true);
-        
-        if (_currentValue === '0') {
-            Ext.getCmp(this.hiddenFieldId).dom.value = '1';
-     
-            const _cssClass = this.trigger2ClassUnlocked.toString();
-            ts.each(function(t, all, index){
-                if (t.id === 'trigger2') {
-                    t.dom.className = "x-form-trigger " + _cssClass;
-                }
-            });
-        }
-        else  {
-            Ext.getCmp(this.hiddenFieldId).dom.value = '0';
-    
-            const _cssClass = this.trigger2ClassLocked.toString();
-            ts.each(function(t, all, index){
-                if (t.id === 'trigger2') {
-                    t.dom.className = "x-form-trigger " + _cssClass;
-                }
-            });
-        }
+    onTrigger2Click : function(p){
+        const currentValue = Ext.getCmp(this.hiddenFieldId).getValue();
+
+        Ext.getCmp(this.hiddenFieldId).dom.value = String(Number(!+currentValue));
+        p.setTriggerClass(currentValue === '0' ? this.trigger2ClassUnlocked : this.trigger2ClassLocked);
     }    
 });
 Ext.reg('lockCombo', Ext.ux.form.LockCombo);

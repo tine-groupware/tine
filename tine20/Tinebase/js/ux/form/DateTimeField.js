@@ -289,9 +289,10 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             var korrel = [0.55, 0.45];
         }
         
-        // needed for readonly
-        this.el.setHeight(20);
-        
+        // date/time fields are positioned absolute, so el needs an explicit height (also needed for readonly):
+        // the one of the (styled) fields, not a fixed legacy height
+        this.el.setHeight(Math.max(this.dateField.wrap.getHeight(), this.timeField.wrap.getHeight()) || 20);
+
         this.el.setStyle({'position': 'relative'});
         
         this.dateField.wrap.setStyle({'position': 'absolute'});

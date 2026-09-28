@@ -18,8 +18,8 @@
 /* ---- text fields ---- */
 .x-form-text, textarea.x-form-field{
     padding:1px 3px;
-    background:repeat-x 0 0;
-    border:1px solid;
+    /*background:repeat-x 0 0;*/
+    /*border:1px solid;*/
 }
 
 textarea.x-form-field {
@@ -182,7 +182,7 @@ textarea {
 }
 
 /* invalid fields */
-.x-form-invalid, textarea.x-form-invalid{
+input.x-form-invalid, textarea.x-form-invalid{
 	background:repeat-x bottom;
 	border: 1px solid;
 }

@@ -1,22 +1,21 @@
-.x-form-trigger-plugin-wrap .x-form-twin-triggers img.x-form-trigger {
-    height: 18px;
-}
-
-/*.ext-webkit .x-small-editor .x-form-trigger-plugin-wrap .x-form-trigger.x-form-trigger-plugin,*/
-/*.x-small-editor .x-form-trigger-plugin-wrap .x-form-trigger.x-form-trigger-plugin,*/
-/*.x-toolbar-cell .x-form-trigger-plugin-wrap .x-form-twin-triggers img.x-form-trigger {*/
-/*    height: 16px;*/
-/*}*/
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
 
 .x-form-trigger.x-form-trigger-plugin {
-    background-repeat: no-repeat;
-    box-sizing: border-box;
-    background-size: 11px;
-    width: 17px;
-    height: 18px;
-    position: absolute;
-    right: 0px;
-    top: 4px;
+   background-position: center;
+   background-repeat: no-repeat;
+   box-sizing: border-box;
+   background-size: 14px;
+   width: 18px;
+   height: 100%;
+   position: absolute;
+   right: 0px;
+   top: 0px;
+   opacity: 0.8;
+   &:not(.x-form-field-trigger-wrap > *) {
+     top: 2px;
+   }
 }
 
 .x-grid-editor .x-form-trigger.x-form-trigger-plugin {
@@ -28,10 +27,6 @@
     top: 0px;
 }
 
-.x-form-trigger.x-form-trigger-plugin:hover {
-    background-position: 1px 1px !important;
-}
-
 .x-form-field-trigger-wrap + .x-form-trigger.x-form-trigger-plugin {
     right: 17px;
 }
@@ -41,29 +36,7 @@
 }
 
 .x-item-disabled + .x-form-trigger.x-form-trigger-plugin {
-    opacity: .6;
-}
-
-.x-form-field-wrap .x-form-trigger.x-form-trigger-plugin,
-.x-form-field-wrap.x-form-field-trigger-wrap.x-form-field-twin-trigger-wrap > .x-form-trigger-plugin {
-    /*right: 32px;*/
-    top: 0px;
-}
-
-.x-form-field-wrap.x-form-field-trigger-wrap.x-form-field-twin-trigger-wrap.x-form-trigger-plugin-wrap > img:nth-child(3) {
-    right: 32px;
-}
-
-.x-form-field-wrap.x-form-field-trigger-wrap.x-form-field-twin-trigger-wrap.x-form-trigger-plugin-wrap > img:nth-child(4) {
-    right: 48px;
-}
-
-.x-form-field-wrap.x-form-field-trigger-wrap.x-form-field-twin-trigger-wrap.x-form-trigger-plugin-wrap > img:nth-child(5) {
-    right: 64px;
-}
-
-.x-form-field-wrap.x-form-field-trigger-wrap.x-form-field-twin-trigger-wrap.x-form-trigger-plugin-wrap > img:nth-child(6) {
-    right: 80px;
+    opacity: .5;
 }
 
 .x-trigger-wrap-focus + .x-form-trigger.x-form-trigger-plugin {

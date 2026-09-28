@@ -947,17 +947,16 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             app: this.app,
             height: 130,
             title: false,
+            // sits in a fieldset already - no additional frame (QuickaddGridPanel default)
+            frame: false,
             account: this.record,
             editDialog: this,
         });
 
         this.mustChangeTriggerPlugin = new FieldTriggerPlugin({
             visible: false,
-            doAssertState: false,
-            triggerConfig: {tag: "div", cls: "x-form-trigger-flat x-form-trigger-plugin x-form-localized-field tinebase-trigger-overlay"},
-            onTriggerClick:  Ext.emptyFn,
+            triggerClass: 'x-dialog-warn',
             qtip: this.app.i18n.gettext('Password is expired in accordance with the password policy and needs to be changed'),
-            preserveElStyle: true
         })
     
         this.saveInaddressbookFields = this.getSaveInAddessbookFields(this);
@@ -1242,6 +1241,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 xtype: 'columnform',
                 title: this.app.i18n.gettext('SMTP'),
                 disabled: ! Tine.Tinebase.registry.get('manageSmtpEmailUser'),
+                autoScroll: true,
                 border: false,
                 frame: true,
                 labelAlign: 'top',
@@ -1366,6 +1366,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: scope
             }
         }, {
+            fieldLabel: this.app.i18n.gettext('Contact'),
             xtype: 'addressbookcontactpicker',
             disabled: scope.record.get('visibility') === 'hidden',
             hidden: hidden ?? false,

@@ -159,7 +159,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         
         this.quickFilter = this.quickFilter ?? new Ext.ux.SearchField({
             enableKeyEvents: true,
-            style: {border: 0, background: 'none',  minWidth: '300px',},
+            width: '100%'
         });
         
         this.quickFilter.onTrigger1Click = this.quickFilter.onTrigger1Click.createSequence(this.onQuickFilterClear, this);
@@ -178,7 +178,8 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
                     border: 0,
                     background: 'none',
                     'text-align': 'left',
-                    'line-height': '11px'
+                    'line-height': '11px',
+                    'font-size': '8px'
                 }
             });
         }

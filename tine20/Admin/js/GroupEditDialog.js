@@ -52,12 +52,9 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             autoScroll: true,
             border: false,
             frame: true,
-            layout: 'border',
-            // layoutConfig: {
-            //     enableResponsive: true
-            // },
+            // form and members grid grow with their content, the tab scrolls
+            layout: 'hfit',
             items: [{
-                region: 'north',
                 xtype: 'columnform',
                 border: false,
                 autoHeight: true,
@@ -146,8 +143,8 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 xtype: 'tinerecordpickergrid',
                 title: this.app.i18n._('Group Members'),
                 store: this.membersStore,
-                region: 'center',
-                anchor: '100% 100%',
+                autoHeight: true,
+                minHeight: 200,
                 showHidden: true
             }]
 

@@ -302,6 +302,8 @@ Tine.widgets.form.FieldManager = function() {
                             fieldDefinition.config.modelName,
                             Ext.apply(field, config)
                         );
+                        // avoid overwriting plugins from config (see Ext.apply bellow)
+                        delete config.plugins;
 
                         field = picker;
                     }

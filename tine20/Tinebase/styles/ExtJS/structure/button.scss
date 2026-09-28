@@ -292,14 +292,13 @@
     line-height:0;
 }
 
-.x-btn-group-bwrap {
-    overflow:hidden;
-    zoom:1;
-}
-
+.x-btn-group-bwrap,
 .x-btn-group-body {
     overflow:hidden;
     zoom:1;
+  &:has(.x-form-field-wrap) {
+    overflow: visible;
+  }
 }
 
 .x-btn-group-notitle .x-btn-group-tc {

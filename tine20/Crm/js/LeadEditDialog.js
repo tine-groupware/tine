@@ -296,13 +296,16 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.contactGrid = new Tine.Crm.Contact.GridPanel({
             record: this.record,
-            anchor: '100% 98%'
+            autoHeight: true,
+            minHeight: 150
         });
 
         if (Tine.Tasks && Tine.Tinebase.common.hasRight('run', 'Tasks')) {
             this.tasksGrid = new dependentTasksPanel({
                 title: Tine.Tasks.Model.Task.getAppName(),
-                editDialog: this
+                editDialog: this,
+                autoHeight: true,
+                minHeight: 200
             })
         } else {
             this.tasksGrid = new Ext.Panel({
@@ -313,7 +316,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         if (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales')) {
             this.productsGrid = new Tine.Crm.Product.GridPanel({
-                record: this.record
+                record: this.record,
+                autoHeight: true,
+                minHeight: 200
             });
         } else {
             this.productsGrid = new Ext.Panel({
@@ -379,14 +384,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 items: [{
                     region: 'center',
-                    layout: 'border',
-                    layoutConfig: {
-                        // enableResponsive: true,
-                        responsiveBreakpointOverrides: [{level: 2, width: 700}]
-                    },
+                    // name, contacts, lead data and tasks/products grow with their content, the center region scrolls
+                    layout: 'hfit',
                     items: [{
-                        region: 'north',
-                        height: 40,
+                        autoHeight: true,
                         layout: 'form',
                         labelAlign: 'top',
                         defaults: {
@@ -404,26 +405,16 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             selectOnFocus: true,
                             maxLength: 255,
                         }]
-                    }, {
-                        region: 'center',
-                        layout: 'form',
-                        items: [ this.contactGrid ]
-                    }, {
-                        region: 'south',
-                        height: 390,
-                        split: true,
-                        collapseMode: 'mini',
-                        header: false,
-                        collapsible: true,
-                        autoScroll: true,
-                        items: [{
+                    },
+                        this.contactGrid,
+                        {
                             xtype: 'panel',
                             layout:'column',
                             layoutConfig: {
                                 // enableResponsive: true,
                                 responsiveBreakpointOverrides: [{level: 2, width: 700}]
                             },
-                            height: 120,
+                            autoHeight: true,
                             id: 'lead_combos',
                             anchor:'100%',
                             labelAlign: 'top',
@@ -532,13 +523,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             xtype: 'tabpanel',
                             id: 'linkPanelBottom',
                             activeTab: 0,
-                            height: 250,
+                            autoHeight: true,
                             items: [
                                 this.tasksGrid,
                                 this.productsGrid
                             ]
-                        }]
-                    }] // end of center lead panel with border layout
+                        }
+                    ] // end of center lead panel
                     }, {
                         layout: 'ux.multiaccordion',
                         animate: true,
@@ -550,6 +541,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         header: false,
                         margins: '0 5 0 5',
                         border: true,
+                        // not framed like the other edit dialogs' accordions (overrides the defaults above)
+                        frame: false,
                         items: [
                             new Ext.Panel({
                                 title: this.app.i18n._('Description'),

@@ -315,7 +315,6 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
 
         this.wkField = new Ext.form.TextField({
             value: this.tb.dtStart.getWeekOfYear(),
-            width: 22,
             cls: "x-tbar-page-number",
             listeners: {
                 scope: this,

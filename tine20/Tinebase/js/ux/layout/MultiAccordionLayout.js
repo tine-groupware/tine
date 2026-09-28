@@ -77,6 +77,13 @@ Ext.extend(Ext.ux.layout.MultiAccordionLayout, Ext.layout.VBoxLayout, {
      */
     multi: true,
 
+    /**
+     * @cfg {Number} eastPaddingLeft
+     * space between split bar and accordion when used as east region
+     * (mirrors the center region: its field edge -> split bar)
+     */
+    eastPaddingLeft: 10,
+
     defaultAnimatePolicy: {
         y: true,
         height: true
@@ -90,12 +97,30 @@ Ext.extend(Ext.ux.layout.MultiAccordionLayout, Ext.layout.VBoxLayout, {
         //     this.enableResponsive = ct.ownerCt?.enableResponsive;
         // }
         if (ct.enableResponsive && !this.hasOwnProperty('enableResponsive')) this.enableResponsive = ct.enableResponsive
+        if (ct.region === 'east') {
+            // some space between the split bar and the accordion, mirroring the center region's spacing
+            // (not when stacked below the center region)
+            const left = ct.autoHeight ? 0 : this.eastPaddingLeft;
+            // same inner space on the right as the (scrolling) center region has on the left (keeps room for
+            // the focus rings - 0.25rem, see form.scss)
+            const right = ct.autoHeight ? 0 : Math.round(parseFloat(getComputedStyle(document.documentElement).fontSize) * 0.25);
+            // NOTE: BoxLayout parses a padding string on first render only
+            this.padding = this.innerCt ? {top: 0, right, bottom: 0, left} : `0 ${right} 0 ${left}`;
+        }
         this.beforeRenderItems(items);
 
         Ext.ux.layout.MultiAccordionLayout.superclass.onLayout.apply(this, arguments);
     },
 
     setContainer : function(ct){
+        if (ct && ct.region === 'east' && ct.initialConfig.margins) {
+            // the dialog frame already spaces the outer edge (like on the left of the center region) - no right
+            // margin. NOTE: the border layout creates the region from initialConfig after rendering the panel
+            const margins = Ext.isString(ct.initialConfig.margins) ?
+                this.parseMargins(ct.initialConfig.margins) : Ext.apply({}, ct.initialConfig.margins);
+            margins.right = 0;
+            ct.initialConfig.margins = ct.margins = margins;
+        }
         ct.monitorResize = true;
         if(ct != this.container){
             var old = this.container;

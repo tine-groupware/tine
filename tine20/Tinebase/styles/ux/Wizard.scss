@@ -13,3 +13,9 @@
     float:left;
     width:auto;
 }
+
+// import dialog: explanatory texts above the fields (block with some space instead of <p>...<br />)
+.tw-import-text {
+    display: block;
+    margin-bottom: 8px;
+}

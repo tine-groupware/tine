@@ -177,7 +177,7 @@ Ext.layout.VBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
     onLayout : function(ct, target){
         Ext.layout.VBoxLayout.superclass.onLayout.call(this, ct, target);
 
-        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt.enableResponsive;
+        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt?.enableResponsive;
         this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
 
         var cs = this.getRenderedItems(ct), csLen = cs.length,
@@ -245,7 +245,9 @@ Ext.layout.VBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
             // Don't run height calculations on flexed items
             if (!c.flex) {
                 // Render and layout sub-containers without a flex or height, once
-                if (!c.height && !c.hasLayout && c.doLayout) {
+                // autoHeight ones every time: their height depends on their (maybe deferred, e.g. rendered hidden)
+                // layout, which would otherwise only run after we measured them
+                if (!c.height && (!c.hasLayout || c.autoHeight) && c.doLayout) {
                     c.doLayout();
                 }
                 ch = c.getHeight();
@@ -310,7 +312,7 @@ Ext.layout.VBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
             }
         }
         // Putting a box layout into an overflowed container is NOT correct and will make a second layout pass necessary.
-        if (i = target.getStyle('overflow') && i != 'hidden' && !this.adjustmentPass) {
+        if ((i = target.getStyle('overflow')) && i != 'hidden' && !this.adjustmentPass) {
             var ts = this.getLayoutTargetSize();
             if (ts.width != size.width || ts.height != size.height){
                 this.adjustmentPass = true;
@@ -378,7 +380,7 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
     onLayout : function(ct, target){
         Ext.layout.HBoxLayout.superclass.onLayout.call(this, ct, target);
 
-        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt.enableResponsive;
+        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt?.enableResponsive;
         this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
 
         var cs = this.getRenderedItems(ct), csLen = cs.length,
@@ -400,8 +402,21 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
         const respFlag = (ct.autoHeight || ct?.ownerCt?.autoHeight)
             && this.enableResponsive
             && this.layoutClass.level < this.responsiveStackLevel
+        const flexMode = !respFlag && !!ct.autoHeight;
+        if (flexMode) {
+            this.innerCt.addClass('x-box-flex');
+        } else {
+            this.innerCt.removeClass('x-box-flex');
+        }
         for (i = 0 ; i < csLen; i++) {
             c = cs[i];
+            if (!respFlag && c.__width && !c.flex) {
+                // restore pre-stacking width before measuring it below,
+                // otherwise extraWidth still sees the stale full stacking width
+                // NOTE: potential bug if @param: this.pack is anything other than `start`
+                c.setWidth(c.__width);
+                delete c.__width;
+            }
             // Total of all the flex values
             totalFlex += c.flex || 0;
             // Don't run width calculations on flexed items
@@ -417,7 +432,7 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
             cm = c.margins;
             // Determine how much width is available to flex
             extraWidth += cw + cm.left + cm.right;
-            let ch;
+            let ch = 0;
             if (respFlag && !c.__height) {
                 c.__height = c.getHeight();
             } else if (!respFlag) {
@@ -437,28 +452,50 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
 
         var innerCtHeight = maxHeight + this.padding.top + this.padding.bottom;
         if (respFlag) {
-            if(!ct.__height) ct.__height = h
             ct.setHeight('auto')
             h = 'auto'
             innerCtHeight = 'auto'
-        } else {
-            if (ct.__height) {
-                ct.setHeight(ct.__height);
-                h = ct.__height
-                delete ct.__height;
+            ct.__wasStacked = true;
+        } else if (ct.__wasStacked) {
+            delete ct.__wasStacked;
+            if (!flexMode) {
+                // Just left stacking into "normal" (absolute-positioning) mode:
+                // ct is still at the correct, content-driven auto height from
+                // the last stacked pass (nothing has touched it yet this pass),
+                // so read it live now and pin it explicitly before children
+                // switch back to absolute positioning - which, unlike stacking,
+                // wouldn't otherwise contribute to an auto-height ct.
+                // (A stale height captured back when stacking first began -
+                // e.g. right after opening the dialog already stacked, before
+                // any real content height existed - would collapse ct instead.)
+                h = ct.getHeight();
+                ct.setHeight(h);
             }
+            // Landing in flexMode instead: ct.autoHeight is true and CSS keeps
+            // it auto - no explicit height needed/wanted here.
         }
-        switch(this.align){
-            case 'stretch':
-                this.innerCt.setSize(w, h);
-                break;
-            case 'stretchmax':
-            case 'top':
-                this.innerCt.setSize(w, innerCtHeight);
-                break;
-            case 'middle':
-                this.innerCt.setSize(w, h = Math.max(h, innerCtHeight));
-                break;
+        if (flexMode) {
+            this.innerCt.setWidth(w);
+            this.innerCt.dom.style.height = '';
+            this.innerCt.setStyle({
+                padding: this.padding.top + 'px ' + this.padding.right + 'px ' + this.padding.bottom + 'px ' + this.padding.left + 'px',
+                'justify-content': {start: 'flex-start', center: 'center', end: 'flex-end'}[this.pack] || 'flex-start',
+                'align-items': {top: 'flex-start', middle: 'center', stretch: 'stretch', stretchmax: 'stretch'}[this.align] || 'flex-start'
+            });
+        } else {
+            this.innerCt.setStyle({padding: '', 'justify-content': '', 'align-items': ''});
+            switch(this.align){
+                case 'stretch':
+                    this.innerCt.setSize(w, h);
+                    break;
+                case 'stretchmax':
+                case 'top':
+                    this.innerCt.setSize(w, innerCtHeight);
+                    break;
+                case 'middle':
+                    this.innerCt.setSize(w, h = Math.max(h, innerCtHeight));
+                    break;
+            }
         }
 
         var leftOver = availWidth,
@@ -485,66 +522,75 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
             c = cs[i];
             if (respFlag) {
                 c.el.setStyle('position', 'unset');
+                c.getPositionEl().setStyle('margin', '');
                 // cacheing width beforehand for later
                 if (!c.__width) c.__width = c.getWidth();
                 c.setSize(w, 'auto')
             } else {
-                if (c.__width && !c.flex) {
-                    // NOTE: potential bug if @param: this.pack is anything other than `start`
-                    c.setWidth(c.__width);
-                    delete c.__width;
-                }
                 c.el.setStyle('position', '');
                 cm = c.margins;
-                l += cm.left;
-                c.setPosition(l, t + cm.top);
-                if(isStart && c.flex){
-                    if (c.__width) {
-                        cw = c.__width;
-                        delete c.__width;
-                    } else {
+                if (flexMode) {
+                    c.getPositionEl().setStyle('margin', cm.top + 'px ' + cm.right + 'px ' + cm.bottom + 'px ' + cm.left + 'px');
+                    if(isStart && c.flex){
                         cw = Math.max(0, widths[idx++] + (leftOver-- > 0 ? 1 : 0));
+                        c.setSize(cw, 'auto');
+                    }else{
+                        c.setHeight('auto');
                     }
-                    if(isRestore){
-                        restore.push(c.getHeight());
+                } else {
+                    c.getPositionEl().setStyle('margin', '');
+                    l += cm.left;
+                    c.setPosition(l, t + cm.top);
+                    if(isStart && c.flex){
+                        if (c.__width) {
+                            cw = c.__width;
+                            delete c.__width;
+                        } else {
+                            cw = Math.max(0, widths[idx++] + (leftOver-- > 0 ? 1 : 0));
+                        }
+                        if(isRestore){
+                            restore.push(c.getHeight());
+                        }
+                        c.setSize(cw, availableHeight);
+                    }else{
+                        cw = c.getWidth();
                     }
-                    c.setSize(cw, availableHeight);
-                }else{
-                    cw = c.getWidth();
+                    l += cw + cm.right;
                 }
-                l += cw + cm.right;
             }
         }
 
-        idx = 0;
-        for (i = 0 ; i < csLen; i++) {
-            c = cs[i];
-            cm = c.margins;
-            ch = c.getHeight();
-            if(isStart && c.flex){
-                ch = restore[idx++];
-            }
-            if(this.align == 'stretch'){
-                c.setHeight(((h - (this.padding.top + this.padding.bottom)) - (cm.top + cm.bottom)).constrain(
-                    c.minHeight || 0, c.maxHeight || 1000000));
-            }else if(this.align == 'stretchmax'){
-                c.setHeight((maxHeight - (cm.top + cm.bottom)).constrain(
-                    c.minHeight || 0, c.maxHeight || 1000000));
-            }else{
-                if(this.align == 'middle'){
-                    diff = availableHeight - (ch + cm.top + cm.bottom);
-                    ch = t + cm.top + (diff/2);
-                    if(diff > 0){
-                        c.setPosition(c.x, ch);
-                    }
-                }
+        if (!flexMode && !respFlag) {
+            idx = 0;
+            for (i = 0 ; i < csLen; i++) {
+                c = cs[i];
+                cm = c.margins;
+                ch = c.getHeight();
                 if(isStart && c.flex){
-                    c.setHeight(ch);
+                    ch = restore[idx++];
+                }
+                if(this.align == 'stretch'){
+                    c.setHeight(((h - (this.padding.top + this.padding.bottom)) - (cm.top + cm.bottom)).constrain(
+                        c.minHeight || 0, c.maxHeight || 1000000));
+                }else if(this.align == 'stretchmax'){
+                    c.setHeight((maxHeight - (cm.top + cm.bottom)).constrain(
+                        c.minHeight || 0, c.maxHeight || 1000000));
+                }else{
+                    if(this.align == 'middle'){
+                        diff = availableHeight - (ch + cm.top + cm.bottom);
+                        ch = t + cm.top + (diff/2);
+                        if(diff > 0){
+                            c.setPosition(c.x, ch);
+                        }
+                    }
+                    if(isStart && c.flex){
+                        c.setHeight(ch);
+                    }
                 }
             }
         }
         // Putting a box layout into an overflowed container is NOT correct and will make a second layout pass necessary.
-        if (i = target.getStyle('overflow') && i != 'hidden' && !this.adjustmentPass) {
+        if ((i = target.getStyle('overflow')) && i != 'hidden' && !this.adjustmentPass) {
             var ts = this.getLayoutTargetSize();
             if (ts.width != size.width || ts.height != size.height){
                 this.adjustmentPass = true;

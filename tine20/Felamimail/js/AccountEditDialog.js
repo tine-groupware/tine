@@ -434,13 +434,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 autoScroll: true,
                 border: false,
                 frame: true,
-                layout: 'border',
+                // form and signature grid grow with their content, the tab scrolls
+                layout: 'hfit',
                 items: [
                     {
-                        region: 'north',
                         xtype: 'columnform',
                         formDefaults: commonFormDefaults,
-                        height: 400,
+                        autoHeight: true,
                         items: [[{
                             fieldLabel: this.app.i18n._('Account Name'),
                             name: 'name',
@@ -525,7 +525,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }]
                         ]
                     }, new Tine.Felamimail.SignatureGridPanel({
-                        region: 'center',
+                        autoHeight: true,
+                        minHeight: 150,
                         editDialog: this
                     })
                 ]

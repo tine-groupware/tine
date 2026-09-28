@@ -16,6 +16,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Inventory'),
     Ext.ux.ItemRegistry.registerItem('Inventory-InventoryItem-EditDialog-TabPanel', Ext.extend(Ext.ux.form.ColumnFormPanel, {
         border: false,
         frame: true,
+        autoScroll: true,
         requiredGrant: 'editGrant',
 
         initComponent: function() {

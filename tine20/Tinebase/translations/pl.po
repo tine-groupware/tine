@@ -2824,7 +2824,7 @@ msgid "Download example file"
 msgstr "Pobierz przykładowy plik"
 
 #, python-brace-format
-msgid "Select {0} to add you {1} to:"
+msgid "Select {0} to add your {1} to:"
 msgstr "Wybierz {0}, aby dodać {1}:"
 
 msgid "Set Import Options"

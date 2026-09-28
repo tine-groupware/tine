@@ -22,6 +22,7 @@ Ext.ns('Tine.Tinebase.widgets.form');
 Tine.Tinebase.widgets.form.UidTriggerField = Ext.extend(Ext.form.TriggerField, {
 
     itemCls: 'tw-uidTriggerField',
+    triggerClass: 'icon_magic_wand',
     enableKeyEvents: true,
 
     /**

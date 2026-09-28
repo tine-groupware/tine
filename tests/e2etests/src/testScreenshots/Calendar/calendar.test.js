@@ -60,7 +60,7 @@ describe('MainScreen', () => {
     test('add attendee', async () => {
         await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-user_id', {text: 'Teilnehmende hinzufügen'});
         await new Promise(r => setTimeout(r, 1000));
-        await page.click('.x-trigger-wrap-focus span');
+        await page.click('.x-cal-attendee-filter-grid .x-form-trigger.x-form-arrow-trigger');
         await new Promise(r => setTimeout(r, 500));
         await lib.makeScreenshot(
             page, {path: 'screenshots/Kalender/Kalender_teilnehmer_hinzu.png',
@@ -128,7 +128,7 @@ describe('editDialog', () => {
     });
 
     test('user view', async () => {
-        await newPage.click('input[name=perspective] + .x-form-trigger.x-form-arrow-trigger');
+        await newPage.click('.x-form-trigger.x-form-arrow-trigger:has(+ input[name=perspective])');
         await expectPuppeteer(newPage).toMatchElement('.x-combo-list-item', {text:'Organisator*in'})
         await expectPuppeteer(newPage).toClick('.x-combo-list-item', {text:'Organisator*in'})
         await new Promise(r => setTimeout(r, 1000));
@@ -138,7 +138,7 @@ describe('editDialog', () => {
     test('save events', async () => {
         const currentUser = await lib.getCurrentUser(newPage);
         const attendeeText = `${currentUser.accountDisplayName} (Teilnehmer*in)`;
-        await newPage.click('input[name=perspective] + .x-form-trigger.x-form-arrow-trigger');
+        await newPage.click('.x-form-trigger.x-form-arrow-trigger:has(+ input[name=perspective])');
         await expectPuppeteer(newPage).toMatchElement('.x-combo-list-item', {text: attendeeText})
         await expectPuppeteer(newPage).toClick('.x-combo-list-item', {text: attendeeText})
         await new Promise(r => setTimeout(r, 1000));

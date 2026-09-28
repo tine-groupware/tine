@@ -110,12 +110,12 @@ disabledDates: ["^03"]
      * @cfg {String/Object} autoCreate
      * A {@link Ext.DomHelper DomHelper element specification object}, or <tt>true</tt> for the default element
      * specification object:<pre><code>
-     * autoCreate: {tag: "input", type: "text", size: "10", autocomplete: "off"}
+     * autoCreate: {tag: "input", type: "text", autocomplete: "off"}
      * </code></pre>
      */
 
     // private
-    defaultAutoCreate : {tag: "input", type: "text", size: "10", autocomplete: "off"},
+    defaultAutoCreate : {tag: "input", type: "text", autocomplete: "off"},
 
     initComponent : function(){
         Ext.form.DateField.superclass.initComponent.call(this);

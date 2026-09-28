@@ -88,11 +88,12 @@ Ext.form.Field = Ext.extend(Ext.BoxComponent,  {
      * See <tt>{@link Ext.Component#autoEl autoEl}</tt> for details.  Defaults to:</p>
      * <pre><code>{tag: 'input', type: 'text', size: '20', autocomplete: 'off'}</code></pre>
      */
-    defaultAutoCreate : {tag: 'input', type: 'text', size: '20', autocomplete: 'off'},
+    defaultAutoCreate : {tag: 'input', type: 'text', autocomplete: 'off'},
     /**
      * @cfg {String} fieldClass The default CSS class for the field (defaults to 'x-form-field')
      */
     fieldClass : 'x-form-field',
+    // fieldClass : 'form-control',
     /**
      * @cfg {String} msgTarget<p>The location where the message text set through {@link #markInvalid} should display.
      * Must be one of the following values:</p>

@@ -225,7 +225,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
                             } else {
                                 Ext.fly(cell).appendChild(column.quickaddField.wrap ? column.quickaddField.wrap : column.quickaddField.el);
-                                _.defer(() => { column.quickaddField.setWidth(Ext.fly(cell).getWidth()-4); })
+                                _.defer(() => { column.quickaddField.setWidth(Ext.fly(cell).getWidth()-7); })
                             }
                             // column.quickaddEditor.startEdit(cell, null);
                         });
@@ -446,7 +446,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             // resize
             //tdEl.setWidth(column.width);
             if (column.quickaddField) {
-                column.quickaddField.setSize(column.width -1);
+                column.quickaddField.setSize(column.width -7);
             }
         }
     },

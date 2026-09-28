@@ -25,8 +25,8 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
     listWidth: 150,
     editable: false,
     color: null,
-
-    // private
+    triggerClass: 'action_color_picker'
+    ,
     initComponent : function(){
         Ext.ux.form.ColorField.superclass.initComponent.call(this);
         
@@ -89,7 +89,7 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
         color = color || '#FFFFFF';
         this.color = color;
 
-        this.el.setStyle('background', color);
+        this.el.setStyle('background-color', color);
         this.el.setStyle('color', color);
 
         return Ext.ux.form.ColorField.superclass.setValue.call(this, color);

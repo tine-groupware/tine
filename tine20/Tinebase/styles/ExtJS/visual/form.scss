@@ -4,18 +4,9 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+
 .x-form-field{
     font:normal 12px arial, tahoma, helvetica, sans-serif;
-}
-
-.x-form-text, textarea.x-form-field{
-    background-color:#fff;
-    border-color:#b5b8c8;
-}
-
-.x-form-select-one {
-    background-color:#fff;
-    border-color:#b5b8c8;
 }
 
 .x-form-check-group-label {
@@ -23,36 +14,12 @@
     color: #15428b;
 }
 
-.x-editor .x-form-check-wrap {
-    background-color:#fff;
+/* field focus style */
+input.x-form-focus, textarea.x-form-focus{
+  border-color: var(--focus-color);
 }
 
-.x-form-field-wrap .x-form-trigger{
-    border-bottom-color:#b5b8c8;
-}
-
-.x-trigger-wrap-focus .x-form-trigger{
-    border-bottom-color:#7eadd9;
-}
-
-.x-item-disabled .x-form-trigger-over{
-    border-bottom-color:#b5b8c8;
-}
-
-.x-item-disabled .x-form-trigger-click{
-    border-bottom-color:#b5b8c8;
-}
-
-.x-form-focus, textarea.x-form-focus{
-	border-color:#7eadd9;
-}
-
-.x-form-invalid, textarea.x-form-invalid{
-    background-color:#fff;
-	border-color:#c30;
-}
-
-.ext-webkit .x-form-invalid{
+input.x-form-invalid, textarea.x-form-invalid {
 	background-color:#fee;
 	border-color:#ff7870;
 }

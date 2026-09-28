@@ -85,18 +85,21 @@ table.x-btn.x-type-data-safe {
     background-repeat: no-repeat;
 }
 
+// checkbox and its number field side by side
 .revision-checkbox-field {
-    position: relative;
-}
+    display: flex;
+    align-items: center;
+    gap: 5px;
 
-.revision-checkbox-field .x-form-check-wrap {
-    display: inline-block;
-}
+    > .bootstrap-scope {
+        flex: none;
+    }
 
-.revision-checkbox-field input:last-child {
-    margin-left: 5px;
-    position: absolute;
-    top: 5px;
+    > input.form-control {
+        flex: none;
+        // form-control width is 100% !important
+        max-width: 80px;
+    }
 }
 
 .revision-container {

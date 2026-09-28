@@ -2771,7 +2771,7 @@ msgid "Download example file"
 msgstr "Ladda ner exempel fil"
 
 #, python-brace-format
-msgid "Select {0} to add you {1} to:"
+msgid "Select {0} to add your {1} to:"
 msgstr "Välj {0} att lägga till dig {1} till:"
 
 msgid "Set Import Options"

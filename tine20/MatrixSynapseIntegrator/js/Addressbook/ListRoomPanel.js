@@ -16,6 +16,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
     Ext.ux.ItemRegistry.registerItem('Addressbook-List-EditDialog-TabPanel', Ext.extend(Ext.Panel, {
         border: false,
         frame: true,
+        autoScroll: true,
         requiredGrant: 'editGrant',
         layout: 'fit',
         hideFields: ['list_id'],
