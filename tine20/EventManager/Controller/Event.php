@@ -781,6 +781,9 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         $enriched = [];
         $requiredFields = [];
         foreach ($eventArray[$fieldsKey] as $fieldName => $fieldConfig) {
+            if (!is_array($fieldConfig)) { // legacy format: 'field_name' => bool
+                $fieldConfig = ['optional' => (bool)$fieldConfig, 'required' => false];
+            }
             $optional = isset($fieldConfig['optional']) ? (bool)$fieldConfig['optional'] : false;
             $required = isset($fieldConfig['required']) ? (bool)$fieldConfig['required'] : false;
 
