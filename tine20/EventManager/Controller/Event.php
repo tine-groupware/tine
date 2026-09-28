@@ -8,8 +8,8 @@ declare(strict_types=1);
  * @package     EventManager
  * @subpackage  Controller
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Paul Mehrer <p.mehrer@metaways.de> Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Paul Mehrer <p.mehrer@metaways.de> Tonia Wulff <t.wulff@metaways.de>
+ * @copyright   Copyright (c) 2020-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -27,6 +27,9 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     use Tinebase_Controller_SingletonTrait;
 
     protected static array $updateStatisticsCache = [];
+
+    /** @var array<string, string> event id => folder name, captured before deletion */
+    protected array $_eventNamesBeforeDelete = [];
 
     /**
      * the constructor
@@ -56,9 +59,18 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         parent::_inspectBeforeCreate($_record);
+        $this->_assertUniqueEventName($_record);
         if ($_record->{EventManager_Model_Event::FLD_TOTAL_PLACES}) {
             $_record->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} =
                 $_record->{EventManager_Model_Event::FLD_TOTAL_PLACES};
+        }
+    }
+
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+        if ($this->getEventName($_record) !== $this->getEventName($_oldRecord)) {
+            $this->_assertUniqueEventName($_record);
         }
     }
 
@@ -152,16 +164,75 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
     public function getEventName($eventRecord)
     {
-        $eventNames = $eventRecord->{EventManager_Model_Event::FLD_NAME};
-        $eventName = '';
-        foreach ($eventNames as $eventName) {
-            if ($eventName->language === 'de') {
-                $eventName = $eventName->text;
-            } elseif ($eventName->language === 'en') {
-                $eventName = $eventName->text;
+        $byLang = [];
+        foreach ($eventRecord->{EventManager_Model_Event::FLD_NAME} ?? [] as $localized) {
+            $byLang[$localized->language] ??= (string) $localized->text;
+        }
+
+        foreach (['de', 'en'] as $lang) {
+            if (($byLang[$lang] ?? '') !== '') {
+                return str_replace('/', '-', $byLang[$lang]);
             }
         }
-        return $eventName;
+
+        return str_replace('/', '-', reset($byLang) ?: '');
+    }
+
+    public function getEventFolderPath(string $eventName): string
+    {
+        $basePath = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_FOLDER_FILEMANAGER_PATH);
+        return $basePath . '/' . $eventName;
+    }
+
+    protected function _renameEventFolder(string $oldName, string $newName): void
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $prefix = $fs->getApplicationBasePath('Filemanager') . '/folders/';
+        $oldPath = $this->getEventFolderPath($oldName);
+        $newPath = $this->getEventFolderPath($newName);
+
+        if (!$fs->isDir($prefix . $oldPath)) {
+            return;
+        }
+
+        $caseOnly = mb_strtolower($oldName) === mb_strtolower($newName);
+        if (!$caseOnly && $fs->fileExists($prefix . $newPath)) {
+            $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+            throw new Tinebase_Exception_SystemGeneric(
+                $translate->_('A folder with this event name already exists.')
+            );
+        }
+
+        Filemanager_Controller_Node::getInstance()->moveNodes([$oldPath], [$newPath]);
+    }
+
+    protected function _assertUniqueEventName(Tinebase_Record_Interface $record): void
+    {
+        if ($record->{EventManager_Model_Event::FLD_IS_TEMPLATE}) {
+            return;
+        }
+
+        $normalize = fn(string $name): string => mb_strtolower(trim($name));
+        $newName = $normalize($this->getEventName($record));
+        if ($newName === '') {
+            return;
+        }
+
+        $events = $this->search();
+        Tinebase_Record_Expander::expandRecords($events);
+
+        foreach ($events as $existing) {
+            if (
+                $existing->getId() !== $record->getId()
+                && !$existing->{EventManager_Model_Event::FLD_IS_TEMPLATE}
+                && $normalize($this->getEventName($existing)) === $newName
+            ) {
+                $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+                throw new Tinebase_Exception_SystemGeneric(
+                    $translate->_('An event with this name already exists. Please choose a different name.')
+                );
+            }
+        }
     }
 
     protected function _createCalendarEvent ($updatedRecord, $_record, $is_appointment = false, $appointments = [])
@@ -305,6 +376,10 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
         $this->_createImageWatermarks($updatedRecord);
         $eventName = $this->getEventName($updatedRecord);
+        $oldEventName = $this->getEventName($currentRecord);
+        if ($oldEventName !== '' && $eventName !== '' && $oldEventName !== $eventName) {
+            $this->_renameEventFolder($oldEventName, $eventName);
+        }
 
         // check if $currentrecord had options that have been deleted in $record
         // - those need to be removed from registrations
@@ -452,10 +527,59 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         }
     }
 
+    public function delete($_ids)
+    {
+        if ($_ids instanceof Tinebase_Record_RecordSet) {
+            $_ids = $_ids->getArrayOfIds();
+        } elseif ($_ids instanceof Tinebase_Record_Interface) {
+            $_ids = [$_ids->getId()];
+        }
+        $_ids = (array) $_ids;
+
+        foreach ($_ids as $id) {
+            try {
+                $event = $this->get($id);
+                if (!$event->{EventManager_Model_Event::FLD_IS_TEMPLATE}) {
+                    $this->_eventNamesBeforeDelete[$id] = $this->getEventName($event);
+                }
+            } catch (Tinebase_Exception_NotFound $e) {
+                // already gone, nothing to rename
+            }
+        }
+        return parent::delete($_ids);
+    }
+
+    protected function _getFreeEventFolderName(string $eventName, string $label): string
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $prefix = $fs->getApplicationBasePath('Filemanager') . '/folders/';
+
+        $name = "$eventName ($label)";
+        for ($i = 2; $fs->fileExists($prefix . $this->getEventFolderPath($name)); $i++) {
+            $name = "$eventName ($label $i)";
+        }
+        return $name;
+    }
     protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
     {
         parent::_inspectAfterDelete($record);
         $this->_deleteCalendarEvent($record);
+
+        $id = $record->getId();
+        $eventName = $this->_eventNamesBeforeDelete[$id] ?? '';
+        unset($this->_eventNamesBeforeDelete[$id]);
+
+        if ($eventName === '') {
+            return;
+        }
+
+        try {
+            $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+            $deletedName = $this->_getFreeEventFolderName($eventName, $translate->_('deleted'));
+            $this->_renameEventFolder($eventName, $deletedName);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
     }
 
 
