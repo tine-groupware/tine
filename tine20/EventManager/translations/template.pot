@@ -229,6 +229,12 @@ msgstr ""
 msgid "Participant E-mail, Registrant E-mail in CC"
 msgstr ""
 
+msgid "A folder with this event name already exists."
+msgstr ""
+
+msgid "An event with this name already exists. Please choose a different name."
+msgstr ""
+
 msgid "Session"
 msgstr ""
 
@@ -236,6 +242,9 @@ msgid "To create the event there must be a shared calendar. Please create it fir
 msgstr ""
 
 msgid "You do not have permission to add an event to the shared calendar. Please contact your administrator to update your permissions."
+msgstr ""
+
+msgid "deleted"
 msgstr ""
 
 msgid "Options"
@@ -568,6 +577,9 @@ msgid "Please fill all required fields."
 msgstr ""
 
 msgid "Legal guardian required"
+msgstr ""
+
+msgid "Could not download the file."
 msgstr ""
 
 msgid "The registration date for"

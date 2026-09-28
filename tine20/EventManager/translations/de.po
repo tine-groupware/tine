@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-09-24 16:38+0200\n"
+"PO-Revision-Date: 2026-09-28 09:40+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -233,6 +233,12 @@ msgstr "E-Mail der Anmeldenden Person"
 msgid "Participant E-mail, Registrant E-mail in CC"
 msgstr "E-Mail der Teilnehmenden Person, Anmeldende Person in Kopie"
 
+msgid "A folder with this event name already exists."
+msgstr "Ein Ordner mit diesem Veranstaltungsnamen ist bereits vorhanden."
+
+msgid "An event with this name already exists. Please choose a different name."
+msgstr "Ein Veranstaltung mit diesem Namen existiert bereits. Bitte wählen Sie einen anderen Namen."
+
 msgid "Session"
 msgstr "Sitzung"
 
@@ -241,6 +247,9 @@ msgstr "Um die Veranstaltung anzulegen, muss ein gemeinsamer Kalender vorhanden 
 
 msgid "You do not have permission to add an event to the shared calendar. Please contact your administrator to update your permissions."
 msgstr "Sie haben keine Berechtigung, einen Termin zum gemeinsamen Kalender hinzuzufügen. Bitte wenden Sie sich an Ihren Administrator, um Ihre Berechtigungen anzupassen."
+
+msgid "deleted"
+msgstr "gelöscht"
 
 msgid "Options"
 msgstr "Optionen"
@@ -573,6 +582,9 @@ msgstr "Bitte füllen Sie alle erforderlichen Felder aus."
 
 msgid "Legal guardian required"
 msgstr "Sorgeberechtigte Person erforderlich"
+
+msgid "Could not download the file."
+msgstr "Die Datei konnte nicht heruntergeladen werden."
 
 msgid "The registration date for"
 msgstr "Das Anmeldedatum für"

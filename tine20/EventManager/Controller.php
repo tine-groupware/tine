@@ -163,8 +163,11 @@ class EventManager_Controller extends Tinebase_Controller_Event
                     EventManager_Setup_Initialize::createEventFolder();
                 }
 
-                $completePath = $basePath;
-                $allFolders = array_merge(["/$eventName"], $folderPath);
+                $completePath = '';
+                $allFolders = array_merge(
+                    [EventManager_Controller_Event::getInstance()->getEventFolderPath($eventName)],
+                    $folderPath
+                );
 
                 foreach ($allFolders as $folder) {
                     $completePath = $completePath . $folder;

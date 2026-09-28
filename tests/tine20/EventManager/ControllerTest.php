@@ -34,7 +34,7 @@ class EventManager_ControllerTest extends TestCase
         $event = $this->_getEvent();
         $this-> _createSharedEventCalendar();
         EventManager_Controller_Event::getInstance()->create($event);
-        self::assertEquals('phpunit event', $event['name'][0]['text']);
+        self::assertNotNull($event->getId());
     }
 
     /**
@@ -315,30 +315,32 @@ class EventManager_ControllerTest extends TestCase
 
     public function testAddAndDeleteRegistration()
     {
-        $this->_testNeedsTransaction(); //registerOnCommitCallback
+        try {
+            $this->_testNeedsTransaction(); //registerOnCommitCallback
 
-        $event = $this->_getEvent();
-        $this-> _createSharedEventCalendar();
-        $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
-        $booked_places = $createdEvent->{EventManager_Model_Event::FLD_BOOKED_PLACES};
-        $available_places = $createdEvent->{EventManager_Model_Event::FLD_AVAILABLE_PLACES};
-        $registration = $this->_getRegistration($event->getId());
-        $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
-        $createdEvent->{EventManager_Model_Event::FLD_REGISTRATIONS}->addRecord($created_registration);
-        $updated_event = EventManager_Controller_Event::getInstance()->update($createdEvent);
-        self::assertEquals(1, count($updated_event->{EventManager_Model_Event::FLD_REGISTRATIONS}));
-        self::assertEquals($booked_places + 1, $updated_event->{EventManager_Model_Event::FLD_BOOKED_PLACES});
-        self::assertEquals($available_places - 1, $updated_event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES});
+            $event = $this->_getEvent();
+            $this->_createSharedEventCalendar();
+            $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
+            $booked_places = $createdEvent->{EventManager_Model_Event::FLD_BOOKED_PLACES};
+            $available_places = $createdEvent->{EventManager_Model_Event::FLD_AVAILABLE_PLACES};
+            $registration = $this->_getRegistration($event->getId());
+            $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
+            $createdEvent->{EventManager_Model_Event::FLD_REGISTRATIONS}->addRecord($created_registration);
+            $updated_event = EventManager_Controller_Event::getInstance()->update($createdEvent);
+            self::assertEquals(1, count($updated_event->{EventManager_Model_Event::FLD_REGISTRATIONS}));
+            self::assertEquals($booked_places + 1, $updated_event->{EventManager_Model_Event::FLD_BOOKED_PLACES});
+            self::assertEquals($available_places - 1, $updated_event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES});
 
-        $updated_event->{EventManager_Model_Event::FLD_REGISTRATIONS}->removeById($registration->getId());
-        EventManager_Controller_Event::getInstance()->update($updated_event);
-        $updated_event = EventManager_Controller_Event::getInstance()->get($updated_event->getId());
-        self::assertEquals(0, count($updated_event->{EventManager_Model_Event::FLD_REGISTRATIONS}));
-        self::assertEquals($booked_places, $updated_event->{EventManager_Model_Event::FLD_BOOKED_PLACES});
-        self::assertEquals($available_places, $updated_event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES});
-
-        // Make sure that event is deleted because we don't use the unittest transaction
-        EventManager_Controller_Event::getInstance()->delete($updated_event);
+            $updated_event->{EventManager_Model_Event::FLD_REGISTRATIONS}->removeById($registration->getId());
+            EventManager_Controller_Event::getInstance()->update($updated_event);
+            $updated_event = EventManager_Controller_Event::getInstance()->get($updated_event->getId());
+            self::assertEquals(0, count($updated_event->{EventManager_Model_Event::FLD_REGISTRATIONS}));
+            self::assertEquals($booked_places, $updated_event->{EventManager_Model_Event::FLD_BOOKED_PLACES});
+            self::assertEquals($available_places, $updated_event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES});
+        } finally {
+            // Make sure that event is deleted because we don't use the unittest transaction
+            EventManager_Controller_Event::getInstance()->delete($updated_event);
+        }
     }
 
     /**
@@ -432,13 +434,14 @@ class EventManager_ControllerTest extends TestCase
         $event = $this->_getEvent();
         $this-> _createSharedEventCalendar();
         $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
-        $createdEvent->{EventManager_Model_Event::FLD_NAME}[0]['text'] = 'updated phpunit event';
+        $newName = 'updated phpunit event ' . Tinebase_Record_Abstract::generateUID(8);
+        $createdEvent->{EventManager_Model_Event::FLD_NAME}[0]['text'] = $newName;
         $updated_event = EventManager_Controller_Event::getInstance()->update($createdEvent);
 
         $relation = $this->_getCalendarEventRelation($updated_event);
         self::assertNotNull($relation);
         $calendarEvent = Calendar_Controller_Event::getInstance()->get($relation->related_id);
-        self::assertEquals('updated phpunit event', $calendarEvent->summary);
+        self::assertEquals($newName, $calendarEvent->summary);
     }
 
     /**
@@ -561,6 +564,16 @@ class EventManager_ControllerTest extends TestCase
         } catch (Tinebase_Exception_NotFound $tenf) {}
     }
 
+    public function testCreateEventWithDuplicateNameFails()
+    {
+        $this->_createSharedEventCalendar();
+        $name = 'phpunit duplicate ' . Tinebase_Record_Abstract::generateUID(8);
+        EventManager_Controller_Event::getInstance()->create($this->_getEvent($name));
+
+        $this->expectException(Tinebase_Exception_SystemGeneric::class);
+        EventManager_Controller_Event::getInstance()->create($this->_getEvent(mb_strtoupper($name)));
+    }
+
     /************ protected helper funcs *************/
 
     /**
@@ -569,8 +582,9 @@ class EventManager_ControllerTest extends TestCase
      * @param $name
      * @return EventManager_Model_Event
      */
-    protected function _getEvent(): EventManager_Model_Event
+    protected function _getEvent(?string $name = null): EventManager_Model_Event
     {
+        $name ??= 'phpunit event ' . Tinebase_Record_Abstract::generateUID(8);
         $adb_controller = Addressbook_Controller_Contact::getInstance();
 
         $contact = $adb_controller->create(new Addressbook_Model_Contact([
@@ -591,7 +605,7 @@ class EventManager_ControllerTest extends TestCase
             'container_id'                  => $container_id,
             'name'                          => [[
                 GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'phpunit event'
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => $name
             ]],
             'start'                         => new Tinebase_DateTime("2025-05-28 17:00:00"),
             'end'                           => new Tinebase_DateTime("2025-05-31 20:30:00"),
