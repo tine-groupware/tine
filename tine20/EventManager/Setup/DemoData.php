@@ -164,21 +164,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ->records->getById('1');
 
         //contact_fields
-        $defaultContactFields = [
-            'n_given'               => true,
-            'n_middle'              => true,
-            'n_family'              => true,
-            'bday'                  => true,
-            'email'                 => true,
-            'tel_cell'              => true,
-            'tel_work'              => true,
-            'adr_one_street'        => true,
-            'adr_one_street2'       => true,
-            'adr_one_postalcode'    => true,
-            'adr_one_locality'      => true,
-            'adr_one_region'        => true,
-            'adr_one_countryname'   => true,
-        ];
+        $defaultContactFields = $this->_getDefaultContactFields();
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
             EventManager_Model_Event::FLD_CONTAINER_ID                  => $container->getId(),
@@ -802,5 +788,25 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 // already created
             }
         }
+    }
+
+    protected function _getDefaultContactFields(): array
+    {
+        $fields = [
+            'n_given', 'n_middle', 'n_family', 'bday', 'email', 'tel_cell', 'tel_work',
+            'adr_one_street', 'adr_one_street2', 'adr_one_postalcode',
+            'adr_one_locality', 'adr_one_region', 'adr_one_countryname',
+        ];
+
+        $required = ['n_given', 'n_family', 'bday'];
+
+        $result = [];
+        foreach ($fields as $field) {
+            $result[$field] = [
+                'optional' => true,
+                'required' => in_array($field, $required, true),
+            ];
+        }
+        return $result;
     }
 }
