@@ -250,16 +250,17 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $nodeSharedRoot = $this->_getNewWebDAVTreeNode($nodeSharedRootPath);
         $nodeSharedRoot->createDirectory('dir1');
         $treeNodeSharedRootPath = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager', Tinebase_FileSystem::FOLDER_TYPE_SHARED);
-        $treeNodeSharedRoot = Tinebase_FileSystem::getInstance()->stat($treeNodeSharedRootPath);
-        $treeNodeDir1 = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($treeNodeSharedRoot)->getFirstRecord();
+        // the shared folder may already contain other (persistent) folders, so look up dir1 by name
+        // instead of assuming it is the first child
+        $treeNodeDir1 = Tinebase_FileSystem::getInstance()->stat($treeNodeSharedRootPath . '/dir1');
         $this->_testGrantsHelper($treeNodeDir1, $nodeSharedRootPath);
         
         // try to get folder /shared/dir1/dir2
         // check grants in \Tinebase_Frontend_WebDAV_Directory::getChildren
-        $nodeDir1 = current($nodeSharedRoot->getChildren());
+        $nodeDir1 = $nodeSharedRoot->getChild('dir1');
         $nodeDir1->createDirectory('dir2');
         $nodeDir1Path = $nodeSharedRootPath . '/' . $nodeDir1->getName();
-        $treeNodeDir2 = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($treeNodeDir1)->getFirstRecord();
+        $treeNodeDir2 = Tinebase_FileSystem::getInstance()->stat($treeNodeSharedRootPath . '/dir1/dir2');
         $this->_testGrantsHelper($treeNodeDir2, $nodeDir1Path);
     }
 
