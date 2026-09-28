@@ -442,6 +442,8 @@ php-unit-update-tests:
   rules:
     - if: $PHP_UNIT_UPDATE_TESTS == "false"
       when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /skip-php-unit-update-tests/
+      when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-update-tests/
     # update test should only be stated on the lts branch
     - if: $CI_COMMIT_BRANCH != $TINE_VERSION_LTS
@@ -472,6 +474,8 @@ php-unit-update-tests-merge-request:
       su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
   rules:
     - if: $PHP_UNIT_UPDATE_TESTS_MERGE_REQUEST == "false"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /skip-php-unit-update-tests-merge-request/
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-update-tests-merge-request/
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_UPDATE_TESTS_MERGE_REQUEST != "false"
