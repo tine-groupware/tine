@@ -51,6 +51,8 @@ tinedockercompose_redis_image: "valkey/valkey:9.0"
 tinedockercompose_broadcasthub: false
 tinedockercompose_edocument_service: false
 
+tinedockercompose_traefik_host_allow_port_80: false
+
 # activate backup by commenting in this line
 # tinedockercompose_backup_dir: /var/lib/tine20/backup
 

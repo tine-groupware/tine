@@ -99,12 +99,16 @@ services:
     ### for traefik support (see https://doc.traefik.io/traefik/providers/docker/)
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.web.rule=Host(`{{ tinedockercompose_traefik_host }}`)"
-      - "traefik.http.routers.web.entrypoints=websecure"
+{% if tinedockercompose_traefik_host_allow_port_80 %}
+      - "traefik.http.routers.web.rule=Host(`tine.pooldeck.de`)"
+      - "traefik.http.routers.web.entrypoints=web"
+{% endif %}
+      - "traefik.http.routers.websecure.rule=Host(`{{ tinedockercompose_traefik_host }}`)"
+      - "traefik.http.routers.websecure.entrypoints=websecure"
 {% if tinedockercompose_traefik_cert is defined and tinedockercompose_traefik_key is defined %}
-      - "traefik.http.routers.web.tls=true"
+      - "traefik.http.routers.websecure.tls=true"
 {% else %}
-      - "traefik.http.routers.web.tls.certresolver=http01"
+      - "traefik.http.routers.websecure.tls.certresolver=http01"
 {% endif %}
       - "traefik.http.services.web.loadbalancer.server.port=80"
 {% endif %}
@@ -197,9 +201,11 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+{% if not tinedockercompose_traefik_host_allow_port_80 %}
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+{% endif %}
       - "--entrypoints.websecure.address=:443"
 {% if tinedockercompose_traefik_cert is defined and tinedockercompose_traefik_key is defined %}
       - "--providers.file.directory=/etc/traefik/dynamic_conf"
