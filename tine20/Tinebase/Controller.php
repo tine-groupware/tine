@@ -1785,25 +1785,73 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function checkConfig()
     {
         $configfile = Setup_Core::getConfigFilePath();
-        if ($configfile) {
-            $configfile = escapeshellcmd($configfile);
-            if (preg_match('/^win/i', PHP_OS)) {
-                exec("php -l $configfile 2> NUL", $error, $code);
-            } else {
-                exec("php -l $configfile 2> /dev/null", $error, $code);
-            }
-            if ($code == 0) {
-                return true;
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
-                    Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Config file syntax error');
-            }
-        } else {
+        if (!$configfile) {
             if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Config file missing');
+            return false;
+        }
+        $configfile = escapeshellcmd($configfile);
+        if (preg_match('/^win/i', PHP_OS)) {
+            exec("php -l $configfile 2> NUL", $error, $code);
+        } else {
+            exec("php -l $configfile 2> /dev/null", $error, $code);
+        }
+        if ($code !== 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT))
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Config file syntax error');
+            return false;
+        }
+        
+        if (!is_array($rootCfgData = include($configfile))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                . ' including file does not return an array: ' . $configfile);
+            return false;
+        }
+        if (! ($confdFolder = $rootCfgData[Tinebase_Config::CONFD_FOLDER] ?? null)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' no confd folder configured.');
+            return true;
+        }
+        if (!is_readable($confdFolder)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                . ' can\'t open conf.d folder "' . $confdFolder . '"');
+            return false;
         }
 
-        return false;
+        $dirEntries = scandir($confdFolder, SCANDIR_SORT_ASCENDING);
+        if ($dirEntries === false) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                . ' scandir() failed on folder "' . $confdFolder . '"');
+            return false;
+        }
+
+        foreach ($dirEntries as $dirEntry) {
+            $filename = $confdFolder . DIRECTORY_SEPARATOR . $dirEntry;
+            if (str_ends_with($dirEntry, '.inc.json')) {
+                if (!is_array(json_decode(file_get_contents($filename, false), true))) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                        . ' Failed json decodeing: ' . $filename);
+                    return false;
+                }
+            } elseif (strpos($dirEntry, '.inc.php') === (strlen($dirEntry) - 8)) {
+                if (preg_match('/^win/i', PHP_OS)) {
+                    exec("php -l $filename 2> NUL", $error, $code);
+                } else {
+                    exec("php -l $filename 2> /dev/null", $error, $code);
+                }
+                if ($code !== 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                        . ' PHP syntax check failed for ' . $filename . ': ' . print_r($error, true));
+                    return false;
+                }
+                if (!is_array(include($filename))) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+                        . ' including file does not return an array: ' . $filename);
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
