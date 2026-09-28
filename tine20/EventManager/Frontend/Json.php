@@ -55,7 +55,11 @@ class EventManager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         try {
             $eventContainerName = EventManager_Config::getInstance()
                 ->get(EventManager_Config::EVENT_SHARED_CONTAINER_NAME);
-            $container = EventManager_Setup_Initialize::_getOrCreateSharedEventContainer($eventContainerName);
+            $container = EventManager_Setup_Initialize::_getOrCreateSharedEventContainer(
+                $eventContainerName,
+                EventManager_Model_Event::class,
+                EventManager_Config::APP_NAME
+            );
 
             $container->account_grants = Tinebase_Container::getInstance()
                 ->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())
