@@ -57,6 +57,21 @@ describe('data/Record', () => {
         expect(recordData.name).toEqual('update')
     })
 
+    it('setFromJson copes with date values', () => {
+        // const record = new RecordCls({date: '2026-09-18 17:23:00'}) // NOTE: not in constructor yet ;-(
+        const record = Record.setFromJson(JSON.stringify({date: '2026-09-18 17:23:00'}), RecordCls)
+
+        expect(record.get('date')).toBeInstanceOf(Date)
+        expect(record.get('date').toISOString()).toEqual('2026-09-18T17:23:00.000Z') // no Ext.Date augments in unittests
+    })
+
+    it('setFromJson copes with array dates', () => {
+        const record = Record.setFromJson(JSON.stringify({date: ['2026-09-18 17:23:00', '2026-09-18 17:32:00']}), RecordCls)
+
+        expect(record.get('date')).toBeInstanceOf(Array)
+        expect(record.getData().date).toBeInstanceOf(Array)
+    })
+
     it('copes with magic customfield names', () => {
         const record = new RecordCls({})
         record.set('#cftest', 'value')
