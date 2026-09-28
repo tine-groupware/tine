@@ -604,8 +604,8 @@ class EventManager_ControllerTest extends TestCase
         return new EventManager_Model_Event([
             'container_id'                  => $container_id,
             'name'                          => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => $name
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => $name
             ]],
             'start'                         => new Tinebase_DateTime("2025-05-28 17:00:00"),
             'end'                           => new Tinebase_DateTime("2025-05-31 20:30:00"),
