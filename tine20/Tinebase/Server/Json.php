@@ -387,7 +387,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         }
         
         if (isset($cache)) {
-            $lifetime = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE !== 'DEVELOPMENT' ? 30 : 3600;
+            $lifetime = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT' ? 30 : 3600;
             $cache->save($server, $cacheId, array(), $lifetime);
         }
 
