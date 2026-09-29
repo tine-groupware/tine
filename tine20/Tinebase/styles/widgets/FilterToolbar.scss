@@ -44,6 +44,17 @@
     text-align: right;
 }
 
+// keep the (save/search) buttons side by side - otherwise the row grows and its content gets centered
+.tw-filtertoolbar .tw-ftb-frow-searchbutton {
+    white-space: nowrap;
+
+    > :not(.x-hide-display) {
+        float: none !important; // set inline by FilterToolbar.arrangeButtons
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
 /* fix Ext.Button Layout */
 .tw-filtertoolbar .x-btn td {
     padding: 0px;

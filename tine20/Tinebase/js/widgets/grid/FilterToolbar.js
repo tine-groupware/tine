@@ -522,8 +522,18 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }
     },
 
-    fixWidths: function() {
-        var aw = this.getWidth()-300,
+    fixWidths: function(isSecondPass) {
+        const flexCls = ['tw-ftb-frow-field', 'tw-ftb-frow-operator', 'tw-ftb-frow-value'];
+        const frow = this.el.child('tr.fw-ftb-frow', true);
+        const table = frow?.closest('table');
+        // space taken by everything but the widths distributed below (buttons, prefix, paddings, ...)
+        // NOTE: without a previous distribution we can only estimate (the second pass measures exactly)
+        const fixedWidth = !table ? 300 : table.offsetWidth - (this.ftbWidths ?
+            _.sum(_.values(this.ftbWidths)) :
+            _.sumBy(frow.children, (td) => flexCls.includes(td.className) ? td.offsetWidth : 0));
+        const availableWidth = table ? Ext.fly(table.parentNode).getWidth(true) : this.getWidth();
+
+        var aw = availableWidth - fixedWidth,
             dim = {
                 'tw-ftb-frow-field': Math.floor(aw*0.45),
                 'tw-ftb-frow-operator': Math.floor(aw*0.17),
@@ -544,6 +554,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             this.el.select('.' + cls).setWidth(dim[cls]);
             this.el.select('.' + cls + ' div[class^=x-form-field-wrap] *').each(fw);
             this.el.select('.' + cls + ' *[id^=ext-comp-]').each(fw);
+        }
+        this.ftbWidths = dim;
+
+        // measure again with the widths distributed (e.g. buttons might have changed in between)
+        if (table && !isSecondPass) {
+            this.fixWidths(true);
         }
     },
 
