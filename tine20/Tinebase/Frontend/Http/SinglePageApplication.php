@@ -155,7 +155,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('script-src')
         );
         $connectSrcs = array_merge(
-            ["'self'"],
+            ["'self'", 'blob:'],
             Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('connect-src')
         );
         $imgSrcs = array_merge(
