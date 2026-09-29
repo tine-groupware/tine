@@ -206,8 +206,9 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
 
         try {
             EventManager_Setup_EventTemplates::getInstance()->createTemplates();
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->applyPrimaryModlogs();
+            EventManager_Setup_EventTemplates::getInstance()->createTemplates();
         }
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.8', self::RELEASE019_UPDATE008);

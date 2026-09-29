@@ -112,14 +112,14 @@ class EventManager_Setup_Initialize extends Setup_Initialize
 
     public static function _getOrCreateSharedEventContainer($containerName, $model, $applicationName)
     {
-        if (!Tinebase_Core::isReplica()) {
-            try {
-                $container = Tinebase_Container::getInstance()->getContainerByName(
-                    $model,
-                    $containerName,
-                    Tinebase_Model_Container::TYPE_SHARED,
-                );
-            } catch (Tinebase_Exception_NotFound $e) {
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerByName(
+                $model,
+                $containerName,
+                Tinebase_Model_Container::TYPE_SHARED,
+            );
+        } catch (Tinebase_Exception_NotFound $e) {
+            if (!Tinebase_Core::isReplica()) {
                 $container = new Tinebase_Model_Container([
                     'name' => $containerName,
                     'type' => Tinebase_Model_Container::TYPE_SHARED,
@@ -128,7 +128,7 @@ class EventManager_Setup_Initialize extends Setup_Initialize
                     'application_id' => Tinebase_Application::getInstance()->getApplicationByName(
                         $applicationName
                     )->getId(),
-                    'model' => $model
+                    'model' => $model,
                 ]);
                 Tinebase_Container::getInstance()->addContainer($container);
 
@@ -151,13 +151,14 @@ class EventManager_Setup_Initialize extends Setup_Initialize
                         Tinebase_Model_Grants::GRANT_DELETE => true,
                         Tinebase_Model_Grants::GRANT_ADMIN => true,
                         Tinebase_Model_Grants::GRANT_EXPORT => true,
-                    ]
+                    ],
                 ]);
                 Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, true, false);
+            } else {
+                throw $e;
             }
-            return $container;
         }
-        return null;
+        return $container;
     }
 
     protected function _initializeFavorites()
