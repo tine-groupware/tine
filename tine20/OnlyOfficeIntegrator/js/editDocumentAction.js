@@ -51,8 +51,8 @@ Promise.all([
             mask.hide();
         },
 
-        handler: function () {
-            const record = this.selections[0];
+        handler: async function () {
+            let record = this.selections[0];
             let recordData = record.toString();
 
             const tempFile = record.get('tempFile');
@@ -60,14 +60,64 @@ Promise.all([
                 recordData = typeof tempFile === 'string' ? tempFile : typeof tempFile === 'object' ? JSON.stringify(tempFile) : tempFile;
             }
 
-            const win = Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
-                // always validate cachePromises to get the correct recordData
-                cachePromises: record?.cachePromises,
-                cache: record?.data?.cache,
-                recordData: recordData,
-                id: record.id,
-                contentPanelConstructorInterceptor: record?.cachePromises ? this.emailInterceptor : null
-            });
+            const templateFormats = {
+                dotx: 'docx',
+                xltx: 'xlsx',
+                potx: 'pptx',
+                ots: 'ods', // 'application/vnd.oasis.opendocument.spreadsheet-template'
+                ott: 'odt', // 'application/vnd.oasis.opendocument.text-template'
+                otp: 'odp' //'application/vnd.oasis.opendocument.presentation-template'
+            };
+
+            const format = record.get('name').split('.').pop();
+
+            if (templateFormats[format]) {
+                try {
+                    const option = await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                        title: app.i18n._('Open Template'),
+                        questionText: app.i18n._('Would you like to edit the template itself or create a new file from it?'),
+                        height: 170,
+                        scope: this,
+                        allowCancel: true,
+                        options: [
+                            {text: app.i18n._('Create New File'), name: 'createNewFile', checked: true},
+                            {text: app.i18n._('Edit Template'), name: 'editTemplate'}
+                        ]
+                    });
+
+                    if (option === 'createNewFile') {
+                        const fileName = record.get('name').split('.').shift();
+                        const parentPath = Tine.Filemanager.Model.Node.dirname(record.get('path'));
+
+                        const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+                            windowTitle: app.i18n._('Create New File'),
+                            singleSelect: true,
+                            mode: 'target',
+                            files: [record],
+                            fileName: `${fileName}.${templateFormats[format]}`,
+                            initialPath: parentPath,
+                            constraint: new RegExp('\\.' + templateFormats[format] + '$'),
+                        });
+
+                        record = await new Promise((resolve) => {
+                            filePickerDialog.on('apply', async (node) => {
+                                const result = await Tine.Filemanager.nodeBackend.copyNodes([record], node[0], null, true);
+                                resolve(Tine.Tinebase.data.Record.setFromJson(result[0], Tine.Filemanager.Model.Node));
+                            });
+                            filePickerDialog.openWindow();
+                        });
+                    }
+                } catch (e) {/* USERABORT */ return }
+
+                Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
+                    // always validate cachePromises to get the correct recordData
+                    cachePromises: record?.cachePromises,
+                    cache: record?.data?.cache,
+                    recordData: record.toString(),
+                    id: record.id,
+                    contentPanelConstructorInterceptor: record?.cachePromises ? this.emailInterceptor : null
+                });
+            }
         },
 
         actionUpdater: function (action, grants, records, isFilterSelect) {
