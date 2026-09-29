@@ -182,6 +182,6 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
      */
     protected static function _isCacheDisabled()
     {
-        return TINE20_BUILDTYPE === 'DEVELOPMENT' || Tinebase_Core::inMaintenanceMode();
+        return TINE20_BUILDTYPE === Tinebase_Config::BUILD_TYPE_DEVELOPMENT || Tinebase_Core::inMaintenanceMode();
     }
 }

@@ -580,7 +580,7 @@ class Tinebase_Core
 
         // be aware of race condition between is_file and include_once => somebody may have deleted the file
         // yes it does get deleted! => check result of include_once
-        if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE !== 'DEVELOPMENT' &&
+        if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE !== Tinebase_Config::BUILD_TYPE_DEVELOPMENT &&
             is_file($cacheFile) && true === @include_once($cacheFile) &&
             class_exists('Tine20Container'))
         {
@@ -713,7 +713,7 @@ class Tinebase_Core
         }
         $config = self::getConfig();
         $buildType = $config->get(Tinebase_Config::BUILD_TYPE);
-        if (empty($buildType) || strtoupper((string) $buildType) === 'AUTODETECT') {
+        if (empty($buildType) || strtoupper((string) $buildType) === Tinebase_Config::BUILD_TYPE_AUTODETECT) {
             // config might be a Zend_Config (without proper default handling) - set type to AUTODETECT
             $buildType = Tinebase_Core::detectBuildType();
         }
@@ -729,9 +729,9 @@ class Tinebase_Core
     public static function detectBuildType()
     {
         if (Tinebase_Frontend_Http_SinglePageApplication::getAbsoluteAssetsJsonFilename()) {
-            return 'RELEASE';
+            return Tinebase_Config::BUILD_TYPE_RELEASE;
         } else {
-            return 'DEVELOPMENT';
+            return Tinebase_Config::BUILD_TYPE_DEVELOPMENT;
         }
     }
     
@@ -2644,9 +2644,9 @@ class Tinebase_Core
         }
 
         $env = $tinebaseConfig->{Tinebase_Config::SENTRY_ENVIRONMENT};
-        if ($env == 'AUTODETECT') {
-            $env = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT'
-                ? 'DEVELOPMENT'
+        if ($env == Tinebase_Config::BUILD_TYPE_AUTODETECT) {
+            $env = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === Tinebase_Config::BUILD_TYPE_DEVELOPMENT
+                ? Tinebase_Config::BUILD_TYPE_DEVELOPMENT
                 : 'PRODUCTION';
         }
 

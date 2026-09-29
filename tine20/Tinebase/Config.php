@@ -98,6 +98,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     public const BUILD_TYPE = 'buildtype';
 
+    /**
+     * Build type constants for AUTODETECT, DEBUG, DEVELOPMENT, and RELEASE modes.
+     */
+    public const BUILD_TYPE_AUTODETECT = 'AUTODETECT';
+    public const BUILD_TYPE_DEBUG = 'DEBUG';
+    public const BUILD_TYPE_DEVELOPMENT = 'DEVELOPMENT';
+    public const BUILD_TYPE_RELEASE = 'RELEASE';
+
     public const BROADCASTHUB = 'broadcasthub';
     public const BROADCASTHUB_ACTIVE = 'active';
     public const BROADCASTHUB_URL = 'url';
@@ -1294,9 +1302,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR => false,
         ],
         /**
-         * One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE
+         * One of: BUILD_TYPE_AUTODETECT, BUILD_TYPE_DEBUG, BUILD_TYPE_DEVELOPMENT, BUILD_TYPE_RELEASE
          */
-        self::BUILD_TYPE => array(
+        self::BUILD_TYPE => [
             //_('Build Type')
             self::LABEL => 'Build Type',
             //_('One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE')
@@ -1305,8 +1313,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE => false,
             self::SETBYSETUPMODULE => false,
-            self::DEFAULT_STR => 'DEVELOPMENT',
-        ),
+            self::DEFAULT_STR => self::BUILD_TYPE_DEVELOPMENT,
+        ],
         self::DBLOGGER => [
             //_('DB logger configuration')
             self::LABEL => 'DB logger configuration',
