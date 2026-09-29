@@ -174,7 +174,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function getJsTranslations($locale = null, $app = 'all')
     {
-        if (! in_array(TINE20_BUILDTYPE, array('DEBUG', 'RELEASE'))) {
+        if (! in_array(TINE20_BUILDTYPE, array(Tinebase_Config::BUILD_TYPE_DEBUG, Tinebase_Config::BUILD_TYPE_RELEASE))) {
             $translations = Tinebase_Translation::getJsTranslations($locale, $app);
             header('Content-Type: application/javascript');
             die($translations);
@@ -281,14 +281,14 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 case 'lang':
                     $lang = $locale ?? Tinebase_Core::getLocale();
                     $fileName = "{$application}/js/{$application}-lang-" . $lang
-                        . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+                        . (TINE20_BUILDTYPE == Tinebase_Config::BUILD_TYPE_DEBUG ? '-debug' : null) . '.js';
                     $customPath = Tinebase_Config::getInstance()->translations;
                     $basePath = ! empty($customPath) && is_readable("$customPath/$lang/$fileName")
                         ? "$customPath/$lang"
                         : '.';
 
                     $langFile = "{$basePath}/{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale()
-                        . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+                        . (TINE20_BUILDTYPE == Tinebase_Config::BUILD_TYPE_DEBUG ? '-debug' : null) . '.js';
                     $filesToWatch[] = $langFile;
                     break;
                 default:

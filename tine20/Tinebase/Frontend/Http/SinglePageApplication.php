@@ -180,7 +180,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('font-src')
         );
 
-        if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT') {
+        if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === Tinebase_Config::BUILD_TYPE_DEVELOPMENT) {
             $protocol  = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PROTOCOL);
             $host      = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST);
             $wsScheme  = $protocol === 'https' ? 'wss' : 'ws';
@@ -213,7 +213,9 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         $header['Strict-Transport-Security'] = 'max-age=16070400';
 
         // cache mainscreen for one day in production
-        $maxAge = !defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE !== 'DEVELOPMENT' ? 86400 : -10000;
+        $maxAge = !defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE !== Tinebase_Config::BUILD_TYPE_DEVELOPMENT
+            ? 86400
+            : -10000;
         $header += [
             'Cache-Control' => 'private, max-age=' . $maxAge,
             'Expires'       => gmdate(
@@ -241,7 +243,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
     {
         $jsonFile = self::getAssetsJsonFilename();
 
-        if (TINE20_BUILDTYPE =='DEVELOPMENT') {
+        if (TINE20_BUILDTYPE == Tinebase_Config::BUILD_TYPE_DEVELOPMENT) {
             $devServerURL = Tinebase_Config::getInstance()->get('webpackDevServerURL', 'http://localhost:10443');
             $jsonFileUri = $devServerURL . '/' . $jsonFile;
             $json = Tinebase_Helper::getFileOrUriContents($jsonFileUri);

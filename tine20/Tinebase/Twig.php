@@ -44,7 +44,7 @@ class Tinebase_Twig
             ]);
         }
 
-        if (!defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE === 'DEVELOPMENT'
+        if (!defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE === Tinebase_Config::BUILD_TYPE_DEVELOPMENT
             || (isset($_options[self::TWIG_CACHE]) && !$_options[self::TWIG_CACHE])
         ) {
             $cacheDir = false;
@@ -425,7 +425,7 @@ class Tinebase_Twig
                 Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL_USEFORJSCLIENT)
             );
 
-            if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEBUG') {
+            if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === Tinebase_Config::BUILD_TYPE_DEBUG) {
                 $file = preg_replace('/\.js$/', '.debug.js', $file);
             }
 

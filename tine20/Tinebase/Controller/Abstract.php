@@ -339,7 +339,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
             if (! $models) {
                 $models = $this->_getModelsFromAppDir();
                 // cache for a long time only on prod
-                $cache->save($models, $cacheId, array(), TINE20_BUILDTYPE === 'DEVELOPMENT' ? 1 : 3600);
+                $cache->save($models, $cacheId, array(), TINE20_BUILDTYPE === Tinebase_Config::BUILD_TYPE_DEVELOPMENT ? 1 : 3600);
             }
 
             $this->_models = $models;

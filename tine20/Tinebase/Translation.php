@@ -362,7 +362,7 @@ class Tinebase_Translation
         $translationFiles = self::getPoTranslationFiles(array('locale' => (string) $locale), $_applicationName);
 
         // create new translation
-        $adapter = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE != 'DEVELOPMENT' ? 'gettext' : 'gettextPo';
+        $adapter = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE != Tinebase_Config::BUILD_TYPE_DEVELOPMENT ? 'gettext' : 'gettextPo';
         $translate = new Zend_Translate($adapter, array(), (string)$locale, $options = array(
             'disableNotices' => true
         ));
