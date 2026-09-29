@@ -319,7 +319,7 @@ Tine.Filemanager.nodeBackendMixin = {
      * @param showConfirmDialog
      * @param params
      */
-    copyNodes : function(items, target, move, showConfirmDialog, params) {
+    copyNodes : async function(items, target, move, showConfirmDialog, params) {
         
         var message = '',
             app = Tine.Tinebase.appMgr.get(this.appName);
@@ -384,18 +384,23 @@ Tine.Filemanager.nodeBackendMixin = {
             };
             
             if (move && withOwnGrants.length && showConfirmDialog) {
-                Ext.MessageBox.show({
-                    icon: Ext.MessageBox.WARNING,
-                    buttons: Ext.MessageBox.OKCANCEL,
-                    title: app.i18n._('Confirm Changing of Folder Permissions'),
-                    msg: app.i18n._("You are about to move a folder that has its own permissions. These permissions will be lost, and the folder will inherit permissions from its new parent folder."),
-                    fn: function(btn) {
-                        if (btn === 'ok') {
-                            Tine.Filemanager.nodeBackend.copyNodes(items, target, move, false, params);
+                const confirmed = await new Promise((resolve) => {
+                    Ext.MessageBox.show({
+                        icon: Ext.MessageBox.WARNING,
+                        buttons: Ext.MessageBox.OKCANCEL,
+                        title: app.i18n._('Confirm Changing of Folder Permissions'),
+                        msg: app.i18n._("You are about to move a folder that has its own permissions. These permissions will be lost, and the folder will inherit permissions from its new parent folder."),
+                        fn: async function (btn) {
+                            if (btn === 'ok') {
+                                resolve(await Tine.Filemanager.nodeBackend.copyNodes(items, target, move, false, params));
+                            } else {
+                                resolve(false);
+                            }
                         }
-                    }
+                    })
                 });
-                return false;
+
+                return confirmed;
             }
         } else {
             message = app.i18n._('Copying data .. {0}');
@@ -412,80 +417,89 @@ Tine.Filemanager.nodeBackendMixin = {
             return _.partial(startBroadcastTransaction(treeNodeRecord, 'update', 300000), treeNodeRecord);
         });
 
-        Ext.Ajax.request({
-            params: params,
-            timeout: 300000, // 5 minutes
-            scope: this,
-            success: function(result, request){
-                Ext.MessageBox.hide();
+        try {
+            const recordsData = await new Promise((resolve, reject) => {
+                Ext.Ajax.request({
+                    params: params,
+                    timeout: 300000, // 5 minutes
+                    scope: this,
+                    success: function(result, request){
+                        resolve(Ext.util.JSON.decode(result.responseText));
 
-                const recordsData = Ext.util.JSON.decode(result.responseText);
-                const grid = app.getMainScreen().getCenterPanel();
-
-                if (grid?.filterToolbar && recordsData.length === 1) {
-                    const filters = grid.filterToolbar.getValue();
-                    filters.forEach((filter) => {
-                        if (filter.field === 'path') {
-                            const path = Tine.Filemanager.Model.Node.dirname(recordsData[0].path);
-                            filter.value = `${path}${recordsData[0].name}`;
-                        }
-                    })
-                    grid.filterToolbar.setValue(filters);
-                }
-
-                _.each(recordsData, (recordData) => {
-                    this.postMessage('update', recordData);
+                        // var nodeData = Ext.util.JSON.decode(result.responseText),
+                        //     treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
+                        //     grid = app.getMainScreen().getCenterPanel();
+                        //
+                        // // Tree refresh
+                        // if(treeIsTarget) {
+                        //
+                        //     for(var i=0; i<items.length; i++) {
+                        //
+                        //         var nodeToCopy = items[i];
+                        //
+                        //         if(nodeToCopy.data && nodeToCopy.data.type !== 'folder') {
+                        //             continue;
+                        //         }
+                        //
+                        //         if(move) {
+                        //             var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target),
+                        //                 nodeToCopyId = nodeToCopy.id,
+                        //                 removeNode = treePanel.getNodeById(nodeToCopyId);
+                        //
+                        //             if(removeNode && removeNode.parentNode) {
+                        //                 removeNode.parentNode.removeChild(removeNode);
+                        //             }
+                        //
+                        //             target.appendChild(copiedNode);
+                        //             copiedNode.setId(nodeData[i].id);
+                        //         }
+                        //         else {
+                        //             var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target);
+                        //             target.appendChild(copiedNode);
+                        //             copiedNode.setId(nodeData[i].id);
+                        //
+                        //         }
+                        //     }
+                        // }
+                        //
+                        // // Grid refresh
+                        // grid.getStore().reload();
+                    },
+                    failure: function(response, request) {
+                        reject({ response, request });
+                    }
                 });
-                _.each(commitBroadcastTransactions, (t) => { t(); });
 
-                // var nodeData = Ext.util.JSON.decode(result.responseText),
-                //     treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
-                //     grid = app.getMainScreen().getCenterPanel();
-                //
-                // // Tree refresh
-                // if(treeIsTarget) {
-                //
-                //     for(var i=0; i<items.length; i++) {
-                //
-                //         var nodeToCopy = items[i];
-                //
-                //         if(nodeToCopy.data && nodeToCopy.data.type !== 'folder') {
-                //             continue;
-                //         }
-                //
-                //         if(move) {
-                //             var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target),
-                //                 nodeToCopyId = nodeToCopy.id,
-                //                 removeNode = treePanel.getNodeById(nodeToCopyId);
-                //
-                //             if(removeNode && removeNode.parentNode) {
-                //                 removeNode.parentNode.removeChild(removeNode);
-                //             }
-                //
-                //             target.appendChild(copiedNode);
-                //             copiedNode.setId(nodeData[i].id);
-                //         }
-                //         else {
-                //             var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target);
-                //             target.appendChild(copiedNode);
-                //             copiedNode.setId(nodeData[i].id);
-                //
-                //         }
-                //     }
-                // }
-                //
-                // // Grid refresh
-                // grid.getStore().reload();
-            },
-            failure: function(response, request) {
-                var nodeData = Ext.util.JSON.decode(response.responseText),
-                    request = Ext.util.JSON.decode(request.jsonData);
+            });
+            Ext.MessageBox.hide();
 
-                Ext.MessageBox.hide();
+            const grid = app.getMainScreen().getCenterPanel();
 
-                Tine.Filemanager.nodeBackend.handleRequestException(nodeData.data, request);
+            if (grid?.filterToolbar && recordsData.length === 1) {
+                const filters = grid.filterToolbar.getValue();
+                filters.forEach((filter) => {
+                    if (filter.field === 'path') {
+                        const path = Tine.Filemanager.Model.Node.dirname(recordsData[0].path);
+                        filter.value = `${path}${recordsData[0].name}`;
+                    }
+                })
+                grid.filterToolbar.setValue(filters);
             }
-        });
+            _.each(recordsData, (recordData) => {
+                this.postMessage('update', recordData);
+            });
+            _.each(commitBroadcastTransactions, (t) => { t(); });
+            return recordsData;
+        } catch ({ response, request }) {
+            var nodeData = Ext.util.JSON.decode(response.responseText),
+                failedRequest = Ext.util.JSON.decode(request.jsonData);
+
+            Ext.MessageBox.hide();
+
+            Tine.Filemanager.nodeBackend.handleRequestException(nodeData.data, failedRequest);
+
+            throw nodeData; // re-throw so callers can also catch failures if desired
+        }
     },
     
     /**

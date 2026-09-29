@@ -378,8 +378,8 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
 
             return config;
         }
-
-        if (['ods', 'odt', 'odx'].includes(this.record.get('name').split('.').pop())) {
+        const format = this.record.get('name').split('.').pop();
+        if (['ods', 'odt', 'odx'].includes(format)) {
             if (await Ext.MessageBox.show({
                 buttons: Ext.MessageBox.YESNO,
                 icon: Ext.MessageBox.ERROR,

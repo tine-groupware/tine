@@ -425,12 +425,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Object} data An object containing arbitrary data supplied by the drag source
      * @return {Boolean} True if the drop was valid, else false
      */
-    onNodeDrop: function(target, dd, e, data) {
+    onNodeDrop: async function(target, dd, e, data) {
         if (Ext.fly(dd.getDragEl()).hasClass('x-dd-drop-nodrop')) {
             return false;
         }
         
-        const success = Tine.Filemanager.nodeBackend.copyNodes(data.nodes, target, !(e.ctrlKey || e.altKey), true) !== false;
+        const success = await Tine.Filemanager.nodeBackend.copyNodes(data.nodes, target, !(e.ctrlKey || e.altKey), true) !== false;
         if(success) {
             this.grid.getStore().remove(data.nodes);
         }

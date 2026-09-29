@@ -53,7 +53,7 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
             }, true);
             
             if (action === 'move' || action === 'copy') {
-                isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
+                isAllowed = isAllowed && sourceNodes.reduce((allowed, node) => {
                     return allowed
                         // delete grant for all sources required
                         && _.get(node, 'data.account_grants.deleteGrant')
@@ -63,7 +63,7 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
             }
             
             // sourceNode != targetNode && source != direct children of target
-            isAllowed = isAllowed && _.reduce(sourceNodes, (allowed, node) => {
+            isAllowed = isAllowed && sourceNodes.reduce((allowed, node) => {
                 const parentId = _.get(node, 'data.parent_id', _.get(node, 'parent_id'));
                 return allowed && node.id !== targetNode.id && parentId !== targetNode.id;
             }, true);
