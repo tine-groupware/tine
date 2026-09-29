@@ -3121,6 +3121,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAlarmGet(Tinebase_Record_Interface $_record)
     {
+        // see Tinebase_Model_Alarm::setMinutesBefore
         $_record->alarms->setMinutesBefore($_record->{$this->_recordAlarmField});
     }
 

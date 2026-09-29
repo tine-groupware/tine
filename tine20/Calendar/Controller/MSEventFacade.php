@@ -242,7 +242,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * fetches all events and sorts exceptions into exdate prop for given filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param string                            $action
+     * @param string                            $_action
      */
     public function getExdateResolvedEvents($_filter, $_action)
     {
