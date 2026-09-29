@@ -97,8 +97,12 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
     },
 
     getTriggerWidth: function(){
+        // NOTE: a hidden trigger is not display:none anymore (see updateEditState / x-trigger-hidden)
+        if (this.hideTrigger || this.readOnly) {
+            return 0;
+        }
         var tw = this.trigger?.getWidth();
-        if(!(this.hideTrigger || this.readOnly) && tw === 0){
+        if(tw === 0){
             tw = this.defaultTriggerWidth;
         }
         return tw;

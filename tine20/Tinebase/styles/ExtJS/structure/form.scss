@@ -193,6 +193,24 @@ textarea {
   }
 }
 
+// toolbars sit at the edge of (overflow hidden) containers - a clip margin doesn't help there, keep the
+// space for the focus ring of their fields inside
+// NOTE: panel toolbars get their padding from structure/panel.scss (.x-panel-tbar .x-toolbar)
+.x-toolbar:has(.form-control, .form-select),
+.x-panel-tbar .x-toolbar:has(.form-control, .form-select),
+.x-panel-bbar .x-toolbar:has(.form-control, .form-select) {
+  padding-top: $input-focus-width;
+  padding-bottom: $input-focus-width;
+}
+
+// toolbar items are close together - the next item would paint over the focus ring
+.x-toolbar .x-form-field-wrap:focus-within,
+.x-toolbar .form-control:focus,
+.x-toolbar .form-select:focus {
+  position: relative;
+  z-index: 1;
+}
+
 /* wrapped fields and triggers */
 .x-form-field-wrap {
   position:relative;

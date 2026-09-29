@@ -866,6 +866,22 @@ span.tine-grid-row-action-icon {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
+
+    // the content shrinks (with ellipsis) so the actions (e.g. lang badge) always stay visible on the right
+    > :first-child {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+    > :first-child,
+    > :first-child > * {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    > .tine-grid-cell-action {
+        flex: none;
+    }
 }
 
 .tine-grid-cell-action {
@@ -886,19 +902,40 @@ span.tine-grid-row-action-icon {
     }
 }
 
+// NOTE: keep width in sync with triggerWidth of LocalizedField / LocalizedLangPicker (badge + gap)
+$localized-badge-height: 18px;
+
 .x-form-trigger.x-form-localized-field {
     background-image: none !important;
-    height: 14px;
+    box-sizing: border-box;
+    width: 24px;
+    height: $localized-badge-height;
+    padding: 0 3px;
+    font-size: 11px;
+    line-height: $localized-badge-height - 2px; // w.o. border
+    text-align: center;
     right: 2px;
     top: 6px;
     cursor: pointer;
 }
 
 .x-form-trigger.x-form-localized-field.x-form-localized-picker {
-    height: 14px !important;
+    height: $localized-badge-height !important;
     border: 1px solid lightgray !important;
     top: 0px;
     right: 2px;
+}
+
+// center the (fixed height) lang badge of single line fields vertically - textareas keep it on top
+.x-form-field-trigger-wrap > input ~ .x-form-trigger.x-form-localized-field {
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+}
+
+// NOTE: like the other trigger plugins (top: 2px; height: 100%) - the form element has some padding on top
+.x-form-element > input ~ .x-form-trigger.x-form-localized-field {
+    top: calc(2px + (100% - #{$localized-badge-height}) / 2);
 }
 
 .dark-mode {

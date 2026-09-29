@@ -65,19 +65,38 @@
     top: 0;
 }
 
+.x-pp-combo.ux-pp-field {
+    display: flex;
+    align-items: stretch;
+}
+
+.x-pp-combo .ux-pp-range,
+.x-pp-combo .ux-pp-controls {
+    float: none;
+    flex: none;
+}
+
+// center vertically without transform - .x-mask-trigger:hover uses transform: scale()
 .x-pp-combo .ux-pp-prev, .x-pp-combo .ux-pp-next {
-    margin-top: 1px;
+    top: 0;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .x-pp-combo .ux-pp-period {
-    margin-top: 1px;
+    height: 100%;
+    padding-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right-width: 22px;
+}
+
+.x-pp-combo .ux-pp-next {
+    right: 7px;
 }
 
 .ux-pp-this .ux-pp-period {
     font-weight: bold;
 }
-
-//.dark-mode .ux-pp-range,
-//.dark-mode .ux-pp-controls div {
-//    filter: invert(1) hue-rotate(180deg);
-//}
