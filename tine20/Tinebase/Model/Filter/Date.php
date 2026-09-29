@@ -100,18 +100,11 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         
         // quote field identifier
         $field = $this->_getQuotedFieldName($_backend);
-
-        $db = Tinebase_Core::getDb();
-        $dbCommand = Tinebase_Backend_Sql_Command::factory($db);
          
         // append query to select object
         foreach ((array)$this->_opSqlMap[$operator]['sqlop'] as $num => $op) {
-            if ((isset($value[$num]) || array_key_exists($num, $value))) {
-                if (($value[$num] && get_parent_class($this) === Tinebase_Model_Filter_Date::class) || in_array($operator, ['isnull', 'notnull'])) {
-                    $_select->where($field . $op, $value[$num]);
-                } elseif($value[$num]) {
-                    $_select->where($dbCommand->setDate($field). $op, $value[$num]);
-                }
+            if (array_key_exists($num, $value) && (in_array($operator, ['isnull', 'notnull']) || !empty($value[$num]))) {
+                $_select->where($field . $op, $value[$num]);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' No filter value found, skipping operator: ' . $operator);
