@@ -115,6 +115,19 @@ Ext.form.TextArea = Ext.extend(Ext.form.TextField,  {
             ts = this.textSizeEl,
             h;
             
+        // measure with the metrics of the textarea (font, line-height, padding, border, box-sizing), otherwise
+        // the sizer's offsetHeight doesn't match the height the textarea needs
+        const cs = getComputedStyle(el.dom);
+        Ext.fly(ts).setStyle({
+            font: cs.font,
+            'line-height': cs.lineHeight,
+            'letter-spacing': cs.letterSpacing,
+            padding: cs.padding,
+            'border-style': 'solid',
+            'border-color': 'transparent',
+            'border-width': cs.borderWidth,
+            'box-sizing': cs.boxSizing
+        });
         Ext.fly(ts).setWidth(this.el.getWidth());
         v = v.replace(/\n$/, '\n&#160;');
         v += this.growAppend;

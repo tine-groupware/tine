@@ -11,12 +11,13 @@ import FieldTriggerPlugin from "../../ux/form/FieldTriggerPlugin"
 class LocalizedLangPicker extends Tine.Tinebase.widgets.keyfield.ComboBox {
 
     initComponent() {
-        this.hideTrigger = true
-        this.width = 100
+        // text, lang badge and the normal combo trigger
+        this.width = 140
 
         this.plugins = this.plugins || [];
         this.plugins.push(this.triggerPlugin = new FieldTriggerPlugin({
             triggerConfig: {tag: "div", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-trigger-plugin x-form-localized-field tine-grid-cell-localized x-form-localized-picker"},
+            triggerWidth: 28, // lang badge (see .x-form-localized-field) + gap
             qtip: i18n._('Some fields are multilingual. Click here to select the language to display.'),
             onTriggerClick: _.bind(this.onTriggerClick, this),
         }));

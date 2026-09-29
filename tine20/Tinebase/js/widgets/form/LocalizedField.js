@@ -14,6 +14,7 @@ const mixin = {
         this.plugins = this.plugins || [];
         this.plugins.push(this.triggerPlugin = new FieldTriggerPlugin({
             triggerConfig: {tag: "div", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-trigger-plugin x-form-localized-field tine-grid-cell-localized"},
+            triggerWidth: 28, // lang badge (see .x-form-localized-field) + gap
             onTriggerClick: _.bind(this.onTriggerClick, this),
             setLangCode: this.setLangCode,
         }));

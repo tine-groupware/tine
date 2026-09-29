@@ -9,6 +9,8 @@ import '../../../styles/ux/form/FieldTriggerPlugin.scss'
 
 class FieldTriggerPlugin {
     triggerClass = 'x-form-trigger'
+    // space the trigger takes in the field (incl. gap to the text)
+    triggerWidth = 18
     visible = true
     qtip = null
     hideOnEmptyValue = false
@@ -72,11 +74,12 @@ class FieldTriggerPlugin {
 
         const visibleTriggerPlugins = _.filter(this.field.plugins, plugin => plugin instanceof FieldTriggerPlugin && plugin.visible)
         const pos = _.indexOf(visibleTriggerPlugins, this)
+        const widthOf = plugins => _.sumBy(plugins, 'triggerWidth')
         this.field.el?.setStyle({
-            'padding-right': visibleTriggerPlugins.length * 18 /* trigger width width */ + (this.field.getTriggerWidth?.() || 0) + 9 + 'px'
+            'padding-right': widthOf(visibleTriggerPlugins) + (this.field.getTriggerWidth?.() || 0) + 9 + 'px'
         })
         this.#trigger?.setStyle({
-            right: pos * 18 /* trigger width width */ + (this.field.getTriggerWidth?.() || 0) + 9 /* field padding w.o. trigger */ + 'px'
+            right: widthOf(visibleTriggerPlugins.slice(0, Math.max(pos, 0))) + (this.field.getTriggerWidth?.() || 0) + 9 /* field padding w.o. trigger */ + 'px'
         })
     }
 
