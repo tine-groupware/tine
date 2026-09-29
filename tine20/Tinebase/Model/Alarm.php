@@ -66,10 +66,6 @@ class Tinebase_Model_Alarm extends Tinebase_Record_NewAbstract implements Tineba
      */
     public const OPTION_ACK_IP = 'ack_ip';
 
-    public const OPT_SKIP = 'skip';
-    public const OPT_ACK = 'ack';
-    public const OPT_SNOOZE = 'snooze';
-    
     /**
      * default minutes_before value
      */
@@ -191,13 +187,17 @@ class Tinebase_Model_Alarm extends Tinebase_Record_NewAbstract implements Tineba
     public function setTime(Tinebase_DateTime $_date)
     {
         if (! isset($this->minutes_before)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' minutes_before not set, reverting to default value(' . self::DEFAULT_MINUTES_BEFORE . ')');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' minutes_before not set, reverting to default value(' . self::DEFAULT_MINUTES_BEFORE . ')');
+            }
             $this->minutes_before = self::DEFAULT_MINUTES_BEFORE;
         }
         
         if ($this->minutes_before !== self::OPTION_CUSTOM) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calculating alarm_time ...');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Calculating alarm_time ...');
+            }
             $date = clone $_date;
             $this->alarm_time = $date->subMinute(round($this->minutes_before));
         }
@@ -212,22 +212,34 @@ class Tinebase_Model_Alarm extends Tinebase_Record_NewAbstract implements Tineba
      */
     public function setMinutesBefore(Tinebase_DateTime $_date)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Current alarm: ' . print_r($this->toArray(), TRUE));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Date: ' . $_date);
-        
-        if ($this->getOption(self::OPTION_CUSTOM) !== TRUE) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Current alarm: ' . print_r($this->toArray(), true));
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Date: ' . $_date);
+        }
+
+        if ($this->getOption(self::OPTION_CUSTOM) !== true) {
             $dtStartTS = $_date->getTimestamp();
-            $alarmTimeTS = $this->alarm_time->getTimestamp();
-            $this->minutes_before = $dtStartTS < $alarmTimeTS ? 0 : round(($dtStartTS - $alarmTimeTS) / 60);
+            if ($this->alarm_time instanceof Tinebase_DateTime) {
+                $alarmTimeTS = $this->alarm_time->getTimestamp();
+                $this->minutes_before = $dtStartTS < $alarmTimeTS ? 0 : round(($dtStartTS - $alarmTimeTS) / 60);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Alarm time empty ... setting it to DEFAULT_MINUTES_BEFORE (' . self::DEFAULT_MINUTES_BEFORE . ')');
+                }
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' alarm: ' . print_r($this->toArray(), true));
+                }
+                $this->alarm_time = $_date->subMinute(self::DEFAULT_MINUTES_BEFORE);
+                $this->minutes_before = self::DEFAULT_MINUTES_BEFORE;
+            }
             
         } else {
             $this->minutes_before = self::OPTION_CUSTOM;
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Resulting minutes_before: ' . $this->minutes_before);
     }
     
     /**
