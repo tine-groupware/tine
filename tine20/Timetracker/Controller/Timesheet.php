@@ -401,7 +401,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     {
         if ($_record->{Timetracker_Model_Timesheet::FLD_END_DATE} &&
             $_record->{Timetracker_Model_Timesheet::FLD_END_DATE}->format('Y-m-d')
-                !== $_record->{Timetracker_Model_Timesheet::FLD_START_DATE}->format('Y-m-d')
+                !== $_record->{Timetracker_Model_Timesheet::FLD_START_DATE}->format('Y-m-d') &&
+            $_record->end_time !== '00:00:00'
         ) {
             $this->_validateEndDate($_record);
 
