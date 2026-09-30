@@ -38,6 +38,7 @@ Ext.ux.form.Spinner = function(config){
 };
 
 Ext.extend(Ext.ux.form.Spinner, Ext.form.TriggerField, {
+    fieldClass : 'x-form-field form-control',
     triggerClass : 'x-form-spinner-trigger',
     splitterClass : 'x-form-spinner-splitter',
 

@@ -556,11 +556,10 @@ span.x-tab-strip-text.tine-favicon {
 
 .x-form-field-wrap img.x-form-spinner-trigger {
   background-image: url('../../images/icon-set/icon_arrow_updown.svg');
-  background-position-y: 2px !important;
-
-  &:hover {
-    background-position-y: 2px !important;
-  }
+  opacity: .7;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 90%;
 }
 
 .x-form-field-wrap .x-form-spinner-splitter {
