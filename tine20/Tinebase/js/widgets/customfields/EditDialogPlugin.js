@@ -76,11 +76,6 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
             cfConfig = Tine.widgets.customfields.ConfigManager.getConfig(this.app, modelName, name);
             
             if (cfConfig) {
-                // transform datetime values
-                if (['date', 'datetime'].indexOf(Ext.util.Format.lowercase(cfConfig.get('definition').type)) != -1) {
-                    this.customfieldsValue[name] = Date.parseDate(this.customfieldsValue[name], Date.patterns.ISO8601Long);
-                }
-                
                 if (field) {
                     if(field.isXType('combo') && Ext.isObject(this.customfieldsValue[name])) {
                         var record = Tine.Tinebase.data.Record.setFromJson(this.customfieldsValue[name], field.recordClass);
