@@ -72,7 +72,7 @@
 
 .cal-yearview-event {
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: var(--bs-border-radius);
     margin: 0px 1px 0px 1px;
     height: 100%;
     line-height: 100%;
@@ -87,17 +87,9 @@
     overflow: hidden;
 }
 
-.ext-gecko .cal-yearview-alldayevent {
-    -moz-border-radius: 8px;
-}
-
-.ext-safari .cal-yearview-alldayevent {
-    -webkit-border-radius: 8px;
-}
-
 /** todo: add khtml switch **/
 .cal-yearview-alldayevent {
-    -khtml-border-radius: 8px;
+    -khtml-border-radius: var(--bs-border-radius);
 }
 
 .cal-yearview-event-croptop {
