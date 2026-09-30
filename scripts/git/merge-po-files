@@ -59,11 +59,13 @@ extract_changes() {
     | strip_graveyard
 }
 
-
-BASE=$1
-LOCAL=$2
+# TODO test merge-helper with changed order of params
+# see https://taiga.metaways.net/project/admin-tine20-service/us/5090
+BASE=$2
+LOCAL=$1
 REMOTE=$3
 OUTPUT=$BASE
+
 TEMP=`mktemp /tmp/merge-po.XXXX`
 
 echo "Using custom PO merge driver (`show_file ${LOCAL}`; $TEMP)"
