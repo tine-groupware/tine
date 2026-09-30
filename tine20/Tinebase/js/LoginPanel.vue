@@ -150,7 +150,7 @@ const logoUrl = `logo/i/300x100/image%2Fsvg%2Bxml/${isDark ? 'dark' : 'light'}`
             </BFormGroup>
           </Transition>
           <div class="d-flex mt-4 justify-content-end">
-            <BButton @click="onLoginPress" variant="primary" class="dark-reverse fs-5 px-4" pill>{{ i18n._('Login') }}</BButton>
+            <BButton @click="onLoginPress" variant="primary" class="dark-reverse fs-5 px-4">{{ i18n._('Login') }}</BButton>
           </div>
 <!--          <div class="auth-divider text-center mt-3">{{i18n._('Or')}}</div>-->
           <div class="d-flex mt-3 justify-content-end" v-if="allowPasskeyLogin">
@@ -184,7 +184,7 @@ const logoUrl = `logo/i/300x100/image%2Fsvg%2Bxml/${isDark ? 'dark' : 'light'}`
             </div>
             <div v-if="config.label"
               @click.prevent.stop="onExtIDPLoginPress(config.id)"
-              class="rounded-pill dark-reverse fs-4 px-4 py-2 external-idp-login-btn mt-2 align-items-center btn-primary d-flex">
+              class="dark-reverse fs-4 px-4 py-2 external-idp-login-btn mt-2 align-items-center btn-primary d-flex">
               <img
                 v-if="config.logo_dark || config.logo_light"
                 :src="config.logo_dark ?? config.logo_light"/>
@@ -356,7 +356,7 @@ $monitor: 1000px;
     width: 400px;
     padding: 20px;
     background-color: #f0f0f0;
-    border-radius: 25px;
+    border-radius: 0.5rem;
   }
 
   .dark-mode .login-container {
