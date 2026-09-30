@@ -108,16 +108,15 @@ Promise.all([
                         });
                     }
                 } catch (e) {/* USERABORT */ return }
-
-                Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
-                    // always validate cachePromises to get the correct recordData
-                    cachePromises: record?.cachePromises,
-                    cache: record?.data?.cache,
-                    recordData: record.toString(),
-                    id: record.id,
-                    contentPanelConstructorInterceptor: record?.cachePromises ? this.emailInterceptor : null
-                });
             }
+            Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
+                // always validate cachePromises to get the correct recordData
+                cachePromises: record?.cachePromises,
+                cache: record?.data?.cache,
+                recordData: record.toString(),
+                id: record.id,
+                contentPanelConstructorInterceptor: record?.cachePromises ? this.emailInterceptor : null
+            });
         },
 
         actionUpdater: function (action, grants, records, isFilterSelect) {
