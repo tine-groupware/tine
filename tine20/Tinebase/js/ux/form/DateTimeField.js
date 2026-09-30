@@ -338,7 +338,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             if (this.dateField) {
                 this.dateField.setReadOnly(bool);
             } else {
-                this.dateFieldReadOnly = true;
+                this.dateFieldReadOnly = bool;
             }
         }
         
@@ -346,7 +346,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             if (this.timeField) {
                 this.timeField.setReadOnly(bool);
             } else {
-                this.timeFieldReadOnly = true;
+                this.timeFieldReadOnly = bool;
             }
         }
 
@@ -363,8 +363,9 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         }
         
         if (this.dateField && this.timeField) {
-            this.dateField.setValue(value);
-            this.timeField.setValue(Ext.isDate(value) ? value.clone() : value);
+            [dateString, timeString] = String(value).split(/[T ]/);
+            this.dateField.setValue(Ext.isDate(value) ? value.clone() : dateString);
+            this.timeField.setValue(Ext.isDate(value) ? value.clone() : timeString);
         }
         
         this.value = value;

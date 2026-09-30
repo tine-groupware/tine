@@ -804,7 +804,7 @@ class Tinebase_CustomFieldTest extends TestCase
     {
         $value = '2022-01-21';
         $filtersToTest = [
-            ['operator' => 'equals', 'value' => '2022-01-21', 'expectContactToBeFound' => 1, 'expectedValue' => '2022-01-21 00:00:00'],
+            ['operator' => 'equals', 'value' => '2022-01-21', 'expectContactToBeFound' => 1, 'expectedValue' => '2022-01-21'],
         ];
         $this->_testContactCustomFieldOfType('date', $value, $filtersToTest);
     }

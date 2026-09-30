@@ -133,6 +133,7 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
                     case 'time':
                         fieldDef.xtype = 'timefield';
                         fieldDef.listAlign = 'tr-br?';
+                        fieldDef.format = 'H:i';
                         break;
                     case 'datetime':
                         fieldDef.xtype = 'datetimefield';
