@@ -165,6 +165,7 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'time':
                     field.xtype = 'timefield';
+                    field.format = fieldDefinition.format || 'H:i';
                     break;
                 case 'datetime':
                     field.xtype = 'datetimefield'; // form ux.datetimefield
