@@ -211,9 +211,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
             . '"key":null},"label":"CF ausgestellt am:","type":"date","required":false}');
         $this->_customFieldImportExportHelper([
             'definition' => $definition,
-        ], '2023-04-04',
-            // client expects TIME
-            '2023-04-04 00:00:00');
+        ], '2023-04-04', '2023-04-04');
     }
 
     /**

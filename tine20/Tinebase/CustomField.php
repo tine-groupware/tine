@@ -588,8 +588,20 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                     $value = $this->_getValueForRecordOrListCf($_record, $customField, $value);
                     break;
                 case 'date':
-                    if (!str_contains((string) $value, '00:00:00')) {
-                        $value .= ' 00:00:00';
+                    if (preg_match('/^\d\d\d\d-\d\d-\d\d/', trim($value), $m)) {
+                        $value = $m[0];
+                    } else {
+                        $value = null;
+                    }
+                    break;
+                case 'time':
+                    if (!preg_match('/^\d\d:\d\d:\d\d$/', $value = trim($value))) {
+                        $value = null;
+                    }
+                    break;
+                case 'datetime':
+                    if (!preg_match('/^\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d$/', $value = trim($value))) {
+                        $value = null;
                     }
                     break;
             }
