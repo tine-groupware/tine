@@ -44,6 +44,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE024 = self::class . '::update024';
     protected const RELEASE018_UPDATE025 = self::class . '::update025';
     protected const RELEASE018_UPDATE026 = self::class . '::update026';
+    protected const RELEASE018_UPDATE027 = self::class . '::update027';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -126,6 +127,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE012          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update012',
+            ],
+            self::RELEASE018_UPDATE027          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update027',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -601,5 +606,17 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             }
         }
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.26', self::RELEASE018_UPDATE026);
+    }
+
+    public function update027()
+    {
+        $db = $this->getDb();
+        /** @var Tinebase_Model_CustomField_Config $cfc */
+        foreach (Tinebase_CustomField::getInstance()->getConfigBackend()->getAll() as $cfc) {
+            if ($cfc->definition instanceof Tinebase_Config_Struct && 'date' === $cfc->definition->type) {
+                $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'customfield SET value = SUBSTRING(value, 1, 10) WHERE customfield_id = ?', [$cfc->getId()]);
+            }
+        }
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.27', self::RELEASE018_UPDATE027);
     }
 }

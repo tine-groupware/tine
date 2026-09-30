@@ -187,3 +187,15 @@ ACHTUNG: bei Verzeichnissen mit Leerzeichen oder Umlauten (urlencode) hat das so
 
 Man kann Username + PW auch in einer "secrets" Datei ablegen.
 Ausserdem kann der Eintrag natürlich auch in die fstab geschrieben werden.
+
+## Filesystem Integrity Checker Scripts
+
+see https://github.com/orgs/tine-groupware/discussions/63
+
+Usage:
+~~~
+check-file-by-name.sh <TINE-FILESDIR>
+files-check-sanity.sh <TINE-FILESDIR>
+~~~
+
+We might add the scripts to the repo later.
