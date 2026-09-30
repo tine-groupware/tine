@@ -130,6 +130,9 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
                     self::CREDENTIAL_CACHE => 'shared',
                     self::REF_ID_FIELD => self::FLD_CC_ID_RECOVERY_PASSWORD,
                 ],
+                self::UI_CONFIG                 => [
+                    'enableRevealPassword'      => true,
+                ],
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL                     => 'Matrix Recovery Password', // _('Matrix Recovery Password')

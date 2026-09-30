@@ -333,12 +333,6 @@ msgstr "Sync contact data from sync backend"
 msgid "Sync user contact data from sync backend"
 msgstr "Sync user contact data from sync backend"
 
-msgid "Sync contact photo from sync backend"
-msgstr "Sync contact photo from sync backend"
-
-msgid "Sync user contact photo from sync backend"
-msgstr "Sync user contact photo from sync backend"
-
 msgid "Sync deleted users from sync backend"
 msgstr "Sync deleted users from sync backend"
 
@@ -1013,6 +1007,18 @@ msgstr "Addresses for sending quota notification email"
 msgid "Quota Monitoring"
 msgstr "Quota Monitoring"
 
+msgid "Monitoring Emails"
+msgstr "Monitoring Emails"
+
+msgid "Email addresses to send monitoring notifications to"
+msgstr "Email addresses to send monitoring notifications to"
+
+msgid "Monitoring Emails Threshold"
+msgstr "Monitoring Emails Threshold"
+
+msgid "Minimum monitoring result level to trigger email notification (0=OK, 1=WARN, 2=CRIT)"
+msgstr "Minimum monitoring result level to trigger email notification (0=OK, 1=WARN, 2=CRIT)"
+
 msgid "Tine20 URL"
 msgstr "Tine20 URL"
 
@@ -1159,6 +1165,9 @@ msgstr "Maximum number of users reached."
 
 msgid "The new password must be different from the old one."
 msgstr "The new password must be different from the old one."
+
+msgid "WebDAV issues notification"
+msgstr "WebDAV issues notification"
 
 msgid "Bank Holiday Calendar"
 msgid_plural "Bank Holiday Calendars"
@@ -2210,6 +2219,12 @@ msgstr "Translation Problem"
 msgid "A problem with the translations was detected. Trying to reload the client..."
 msgstr "A problem with the translations was detected. Trying to reload the client..."
 
+msgid "Uploads"
+msgstr "Uploads"
+
+msgid ". Clicking this button will open the content in a new window."
+msgstr ". Clicking this button will open the content in a new window."
+
 msgid "Total    Uploads"
 msgstr "Total    Uploads"
 
@@ -2385,6 +2400,9 @@ msgstr "Please sort by \"{0}\""
 #, python-brace-format
 msgid "To use manual sorting, you need to sort by column \"{0}\""
 msgstr "To use manual sorting, you need to sort by column \"{0}\""
+
+msgid "Choose more column categories."
+msgstr "Choose more column categories."
 
 msgid "Export Records from these Positions"
 msgstr "Export Records from these Positions"
@@ -3078,12 +3096,6 @@ msgstr "{0} {1} have invalid data after updating. These {1} have not been change
 msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
 msgstr "{0} {1} has invalid data after updating. This {1} has not been changed."
 
-msgid "Set password"
-msgstr "Set password"
-
-msgid "Generate password"
-msgstr "Generate password"
-
 msgid "Admin Mode"
 msgstr "Admin Mode"
 
@@ -3198,6 +3210,12 @@ msgstr "Invalid State"
 msgid "State data for \"{ key }\" is not valid. You need to fix the errors first."
 msgstr "State data for \"{ key }\" is not valid. You need to fix the errors first."
 
+msgid "Set password"
+msgstr "Set password"
+
+msgid "Generate password"
+msgstr "Generate password"
+
 msgid "Back"
 msgstr "Back"
 
@@ -3311,8 +3329,17 @@ msgid_plural "Models"
 msgstr[0] "Model"
 msgstr[1] "Models"
 
+msgid "Value needs to start with { prefix }"
+msgstr "Value needs to start with { prefix }"
+
 msgid "Cleartext/Hidden"
 msgstr "Cleartext/Hidden"
+
+msgid "Reveal Password?"
+msgstr "Reveal Password?"
+
+msgid "You are about to reveal the password. This action will be logged. Proceed?"
+msgstr "You are about to reveal the password. This action will be logged. Proceed?"
 
 msgid "No record"
 msgstr "No record"
@@ -3734,6 +3761,12 @@ msgstr "ID needs to follow the syntax PARENTID:ID"
 msgid "Setting new language..."
 msgstr "Setting new language..."
 
+msgid "has been opened"
+msgstr "has been opened"
+
+msgid "is empty. There is no data to be shown."
+msgstr "is empty. There is no data to be shown."
+
 msgid "Save current view as favorite"
 msgstr "Save current view as favorite"
 
@@ -3751,6 +3784,12 @@ msgstr "Title"
 
 msgid "Shared Favorite (visible by other users)"
 msgstr "Shared Favorite (visible by other users)"
+
+msgid "Show total count of found records"
+msgstr "Show total count of found records"
+
+msgid "fetch result count in background"
+msgstr "fetch result count in background"
 
 msgid "The grant to see and use this filter"
 msgstr "The grant to see and use this filter"
@@ -3772,6 +3811,9 @@ msgstr "Edit Favorite"
 
 msgid "Overwrite Favorite"
 msgstr "Overwrite Favorite"
+
+msgid "Last updated"
+msgstr "Last updated"
 
 #, python-brace-format
 msgid "Do you really want to delete the favorite \"{0}\"?"
@@ -4339,8 +4381,8 @@ msgid_plural "Instances"
 msgstr[0] "Instance"
 msgstr[1] "Instances"
 
-msgid "Flag Icon File"
-msgstr "Flag Icon File"
+msgid "Flag Icon URL/File"
+msgstr "Flag Icon URL/File"
 
 msgid "LogEntry"
 msgid_plural "LogEntries"

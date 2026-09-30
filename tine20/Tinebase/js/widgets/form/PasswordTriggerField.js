@@ -46,10 +46,12 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TextField,
     
     itemCls: 'tw-passwordTriggerField',
     enableKeyEvents: true,
-    
-    revealPasswordFn: null,
+
     record: null,
     policyConfig: null,
+
+    enableRevealPassword: false,
+    revealPasswordModel: null,
 
     initComponent: function() {
         // NOTE: we need to have this in the instance - otherwise we'd overwrite the prototype
@@ -61,6 +63,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TextField,
         }
 
         this.plugins = this.plugins || [];
+        this.record = this?.record ?? this?.editDialog?.record;
 
         if (this.clipboard) {
             this.plugins.push(new FieldTriggerPlugin({
@@ -193,7 +196,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TextField,
         if (this.allowBrowserPasswordManager) {
             this.el.dom.type = this.locked ? 'text' : 'password';
         } else {
-            if (this.revealPasswordFn && this.locked && this.revealedPassword !== this.value) {
+            if (this.enableRevealPassword && this.locked && this.revealedPassword !== this.value) {
                 try {
                     this.value = await this.revealPasswordFn();
                     this.revealedPassword = this.value;
@@ -221,8 +224,27 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TextField,
         this.el.dom.type = type;
         this.selectText(String(this.getValue()).length);
         Ext.ux.Notification.show(i18n._('Copied to clipboard'), window.formatMessage('"{value}" was copied to clipboard', {value: i18n._('Password')}), Ext.ux.Notification.INFO);
-    }
+    },
 
+    async revealPasswordFn() {
+        return new Promise((fulfill, reject) => {
+            if (this.record.id === 0) {
+                return reject('none existing account');
+            }
+
+            Ext.Msg.confirm(i18n._('Reveal Password?'),
+                i18n._('You are about to reveal the password. This action will be logged. Proceed?'),
+                async (button) => {
+                    if (button === 'yes') {
+                        const modelName = `${this.record.appName}_Model_${this.record.modelName}`;
+                        const result = await Tine.Tinebase.revealPassword(this.revealPasswordModel ?? modelName, this.record.id ?? '', this.name);
+                        fulfill(result['password']);
+                    } else {
+                        reject('canceled');
+                    }
+                });
+        });
+    },
 });
 
 Ext.reg('tw-passwordTriggerField', Tine.Tinebase.widgets.form.PasswordTriggerField);
