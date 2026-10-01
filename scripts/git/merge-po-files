@@ -59,10 +59,11 @@ extract_changes() {
     | strip_graveyard
 }
 
-# TODO test merge-helper with changed order of params
-# see https://taiga.metaways.net/project/admin-tine20-service/us/5090
-BASE=$2
-LOCAL=$1
+# TODO verify merge-helper with changed order of params
+#BASE=$2
+#LOCAL=$1
+BASE=$1
+LOCAL=$2
 REMOTE=$3
 OUTPUT=$BASE
 
