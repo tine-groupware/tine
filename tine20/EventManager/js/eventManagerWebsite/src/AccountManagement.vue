@@ -267,7 +267,7 @@ const allParticipants = computed(() => {
 
   registrations.value.forEach(registration => {
     const participantId = registration.participant?.id;
-    const participantName = registration.participant?.n_fn || registration.participant?.n_fileas;
+    const participantName = registration.participant?.n_fileas || registration.participant?.n_fn;
 
     if (!participantsMap.has(participantName)) {
       participantsMap.set(participantName, {
