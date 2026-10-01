@@ -2,6 +2,9 @@
 #
 # Three-way merge driver for setup.xml files
 #
+# usage:
+#   git config merge.setupxml.driver "tine20/scripts/git/merge-setupxml-files %A %O %B"
+#
 set -e
 
 # given a file, find the path that matches its contents

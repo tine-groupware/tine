@@ -1,6 +1,8 @@
 #!/bin/sh
 #
 # Three-way merge driver for PO files
+# usage:
+#   git config merge.pofile.driver "tine20/scripts/git/merge-po-files %A %O %B"
 #
 set -e
 
@@ -59,12 +61,14 @@ extract_changes() {
     | strip_graveyard
 }
 
-# TODO verify merge-helper with changed order of params
-#BASE=$2
-#LOCAL=$1
-BASE=$1
-LOCAL=$2
+# see https://git-scm.com/docs/gitattributes#_performing_a_three_way_merge
+# common ancestor’s version %O
+BASE=$2
+# current version %A
+LOCAL=$1
+# other branches' version %B
 REMOTE=$3
+
 OUTPUT=$BASE
 
 TEMP=`mktemp /tmp/merge-po.XXXX`
