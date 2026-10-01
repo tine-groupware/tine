@@ -444,6 +444,12 @@ msgstr "from "
 msgid "Registration possible until:"
 msgstr "Registration possible until:"
 
+msgid "We will only use your email address to send you the link to the registration form. For further details, please see the"
+msgstr "We will only use your email address to send you the link to the registration form. For further details, please see the"
+
+msgid "Privacy Policy"
+msgstr "Privacy Policy"
+
 msgid "Register / Manage my registrations"
 msgstr "Register / Manage my registrations"
 

@@ -52,6 +52,11 @@
               {{ modal.inputError }}
             </b-form-invalid-feedback>
           </div>
+
+          <div class="privacy-hint mt-2">
+            {{ formatMessage('We will only use your email address to send you the link to the registration form. For further details, please see the') }}
+            <a :href="privacyPolicyUrl" target="_blank" rel="noopener noreferrer">{{ formatMessage('Privacy Policy') }}</a>.
+          </div>
         </b-modal>
 
       </div>
@@ -76,6 +81,7 @@ import { navigateToEvents } from './searchUtils';
 
 const inputSearch = ref("");
 const singlePageRef = ref(null);
+const privacyPolicyUrl = `${window.location.origin}/GDPR/view/privacy-policy`;
 
 const headerLogoHtml = computed(() => singlePageRef.value?.initialData?.header ?? '');
 const footerHtml = computed(() => singlePageRef.value?.initialData?.footer ?? '');
@@ -331,6 +337,16 @@ main {
       border-color: #bd2130 !important;
       transform: scale(1.05);
     }
+  }
+}
+
+.privacy-hint {
+  font-size: 0.875rem;
+  color: #6c757d;
+
+  a {
+    color: #2c3e50;
+    text-decoration: underline;
   }
 }
 
