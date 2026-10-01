@@ -286,6 +286,11 @@ input.x-form-focus, textarea.x-form-focus{
 	border: 1px solid;
 }
 
+// fix missing cursor in FF
+.ext-gecko .form-select:focus-visible {
+  color: $body-color;
+}
+
 /* invalid fields */
 input.x-form-invalid, textarea.x-form-invalid{
 	border: 1px solid;
