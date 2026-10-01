@@ -734,4 +734,24 @@ module.exports = {
             buttonSelector
         );
     },
+
+    /**
+     * Ensures the filter toolbar (ftb) of an app is visible or hidden.
+     * The toggle state is persisted server side, so the current state is checked before clicking.
+     *
+     * @param {Page} page - The Puppeteer page instance.
+     * @param {string} appSelector - The selector of the current app, e.g. ".t-app-addressbook".
+     * @param {boolean} visible - Whether the filter toolbar should be visible.
+     * @returns {Promise<void>}
+     */
+    ensureFilterToolbarVisible: async function (page, appSelector, visible = true) {
+        const toggleSelector = `${appSelector} table.x-btn:has(.action_filter)`;
+        const stateSelector = `${toggleSelector}${visible ? '.x-btn-pressed' : ':not(.x-btn-pressed)'}`;
+
+        await page.waitForSelector(toggleSelector, {visible: true, timeout: this.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
+        if (! await page.$(stateSelector)) {
+            await page.click(`${toggleSelector} button`);
+            await page.waitForSelector(stateSelector, {timeout: this.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
+        }
+    },
 };

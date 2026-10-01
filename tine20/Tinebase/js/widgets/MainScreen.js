@@ -137,7 +137,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             // NOTE: we need to defer as legacy apps init filter toolbar after mainscreen
             this.getTopToolbar().setVisible(isSmall);
             const qfp = this.getCenterPanel()?.filterToolbar?.getQuickFilterPlugin();
-            qfp?.setDetailsHidden(isSmall || qfp.detailsToggleBtn.pressed);
+            qfp?.setDetailsHidden(isSmall || !qfp.detailsToggleBtn.pressed);
             this.resizeRespFilterBar(isSmall, qfp, me);
             this.doLayout()
         }, true);
