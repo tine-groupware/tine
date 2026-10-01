@@ -34,7 +34,7 @@ describe.skip('Mainpage', () => {
         await expectPuppeteer(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
         await expectPuppeteer(page).toClick('.x-menu-item-text', {text: 'Crm'});
         try {
-            await expectPuppeteer(page).toClick('.t-app-crm button', {text: 'Details anzeigen'});
+            await expectPuppeteer(page).toClick('.t-app-crm button', {text: 'Filter'});
         } catch (e) {
 
         }

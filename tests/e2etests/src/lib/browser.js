@@ -384,4 +384,5 @@ module.exports = {
     formFillInputField: helpers.formFillInputField.bind(helpers),
     formFillComboField: helpers.formFillComboField.bind(helpers),
     formRefreshGrid: helpers.formRefreshGrid.bind(helpers),
+    ensureFilterToolbarVisible: helpers.ensureFilterToolbarVisible.bind(helpers),
 };

@@ -130,12 +130,7 @@ describe('context menu', () => {
 describe('filterBar', () => {
 
     test('default search', async () => {
-        try {
-            await expectPuppeteer(page).toClick('.t-app-felamimail button', {text: 'Details verbergen'});
-            await new Promise(r => setTimeout(r, 2000));
-        } catch (e) {
-            console.log('details also not activate')
-        }
+        await lib.ensureFilterToolbarVisible(page, '.t-app-felamimail', false);
         await lib.makeScreenshot(
             page, {path: 'screenshots/StandardBedienhinweise/8_standardbedienhinweise_suchfilter.png'
             , clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}}
@@ -154,12 +149,7 @@ describe('filterBar', () => {
     });
 
     test('details display', async () => {
-        try {
-            await expectPuppeteer(page).toClick('.t-app-felamimail button', {text: 'Details anzeigen'});
-            await new Promise(r => setTimeout(r, 2000));
-        } catch (e) {
-            console.log('details also activate')
-        }
+        await lib.ensureFilterToolbarVisible(page, '.t-app-felamimail');
         await expectPuppeteer(page).toMatchElement('button', {text: 'Suche starten', visible: true})
         let arrowtrigger = await page.$$('.t-app-felamimail .tw-filtertoolbar .x-form-arrow-trigger');
         await arrowtrigger[0].click();
