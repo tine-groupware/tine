@@ -762,10 +762,7 @@ const handleUnknownUser = async () => {
 
 const handleNewParticipantFromAccount = async () => {
   if (accountOwner.value) {
-    registrantDetails.value = {
-      ...accountOwner.value,
-      bday: formatBirthday(accountOwner.value.bday)
-    };
+    registrantDetails.value = prefillRegistrant(accountOwner.value);
     registrantEmail.value = accountOwner.value.email;
     isVerifyEmailRegistrant.value = true;
   }
@@ -798,17 +795,13 @@ const checkAndLoadExistingRegistration = async (participantId) => {
       registrationIdRef.value = registration.id;
     }
 
-    contactDetails.value = {
-      ...registration.participant,
-      bday: formatBirthday(registration.participant.bday),
-      registration_id: registration.id
-    };
+    contactDetails.value = prefillParticipant(registration.participant, {
+      registration_id: registration.id,
+    });
 
-    registrantDetails.value = {
-      ...registration.registrant,
-      bday: formatBirthday(registration.registrant.bday),
-      registration_id: registration.id
-    };
+    registrantDetails.value = prefillRegistrant(registration.registrant, {
+      registration_id: registration.id,
+    });
 
     isRegistrant.value = toBool(registration.has_registrant);
     isLegalGuardian.value = toBool(registration.registrant_is_legal_guardian);
@@ -821,24 +814,15 @@ const checkAndLoadExistingRegistration = async (participantId) => {
 
   } else {
     if (accountOwner.value.id === participantId) {
-      contactDetails.value = {
-        ...accountOwner.value,
-        bday: formatBirthday(accountOwner.value.bday),
-      }
+      contactDetails.value = prefillParticipant(accountOwner.value);
     } else {
       isRegistrant.value = true;
       const reg = registrations.value.find(reg => reg.participant?.id === participantId);
       if (reg) {
-        contactDetails.value = {
-          ...reg.participant,
-          bday: formatBirthday(reg.participant.bday),
-        };
+        contactDetails.value = prefillParticipant(reg.participant);
       }
     }
-    registrantDetails.value = {
-      ...accountOwner.value,
-      bday: formatBirthday(accountOwner.value.bday),
-    };
+    registrantDetails.value = prefillRegistrant(accountOwner.value);
   }
 };
 
@@ -1077,11 +1061,14 @@ const contactFieldOrder = [
   'adr_one_locality', 'adr_one_region', 'adr_one_countryname'
 ];
 
+const isContactFieldEnabled = (fields, fieldName) =>
+  fields?.[fieldName]?.optional === true || fields?.[fieldName]?.required === true;
+
 const getVisibleContactFields = (fields) => {
   if (!fields) return [];
 
   const enabledFields = Object.keys(fields).filter(
-    fieldName => fields[fieldName]?.optional === true || fields[fieldName]?.required === true
+    fieldName => isContactFieldEnabled(fields, fieldName)
   );
 
   return enabledFields.sort((a, b) => {
@@ -1095,12 +1082,36 @@ const getVisibleContactFields = (fields) => {
   });
 };
 
+const getHiddenContactFields = (fields) => {
+  if (!fields) return [];
+  return Object.keys(fields).filter(fieldName => !isContactFieldEnabled(fields, fieldName));
+};
+
+const stripHiddenFields = (source, fields) => {
+  const result = { ...(source || {}) };
+  getHiddenContactFields(fields).forEach((fieldName) => {
+    result[fieldName] = '';
+  });
+  result.bday = formatBirthday(result.bday);
+  return result;
+};
+
 const visibleParticipantContactFields = computed(() => {
   return getVisibleContactFields(registrationParticipantContactFields.value);
 });
 
 const visibleRegistrantContactFields = computed(() => {
   return getVisibleContactFields(registrationRegistrantContactFields.value);
+});
+
+const prefillParticipant = (source, extra = {}) => ({
+  ...stripHiddenFields(source, registrationParticipantContactFields.value),
+  ...extra,
+});
+
+const prefillRegistrant = (source, extra = {}) => ({
+  ...stripHiddenFields(source, registrationRegistrantContactFields.value),
+  ...extra,
 });
 
 const validateRequiredFields = () => {
@@ -1661,12 +1672,7 @@ const fetchParentConsentData = async () => {
 };
 
 const handleGuardianFromConsent = (pending) => {
-  contactDetails.value = {
-    ...emptyContactDetails(),
-    ...(pending.contactDetails || {}),
-    bday: formatBirthday(pending.contactDetails?.bday),
-    registration_id: '',
-  };
+  contactDetails.value = prefillParticipant(pending.contactDetails, { registration_id: '' });
 
   Object.entries(pending.replies || {}).forEach(([optionId, value]) => {
     replies.value[optionId] = value;
@@ -1675,11 +1681,7 @@ const handleGuardianFromConsent = (pending) => {
   const guardian = accountOwner.value?.email ? accountOwner.value : null;
   if (guardian) {
     const { registration_id, registration_type, ...guardianData } = guardian;
-    registrantDetails.value = {
-      ...emptyRegistrantDetails(),
-      ...guardianData,
-      bday: formatBirthday(guardian.bday),
-    };
+    registrantDetails.value = prefillRegistrant(guardianData);
   } else {
     registrantDetails.value = { ...emptyRegistrantDetails(), email: pending.parentEmail };
   }
