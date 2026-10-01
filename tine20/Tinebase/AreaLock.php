@@ -166,6 +166,10 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
         /** @var Tinebase_Model_MFA_UserConfig $userCfg */
         $userCfg = Tinebase_Auth_MFA::getAccountsMFAUserConfig($userMfaId, $identity);
         if (null === $userCfg) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' user: ' . print_r($identity->toArray(), true));
+            }
             throw new Tinebase_Exception('User has no mfa configuration for id ' . $userMfaId);
         }
         if (!in_array($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID},
@@ -185,8 +189,10 @@ class Tinebase_AreaLock implements Tinebase_Controller_Interface
                 try {
                     $expires = $areaConfig->getBackend()->saveValidAuth();
                 } catch (Zend_Session_Exception $zse) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                        __METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage());
+                    }
                     throw $teauf;
                 }
             } else {
