@@ -18,11 +18,7 @@ describe('Mainpage', () => {
     const favoriteShared = 'test favorite shared ' + Math.round(Math.random() * 10000000);
 
     test('save favorite', async () => {
-        try {
-            await expectPuppeteer(page).toClick('.t-app-addressbook button', {text: 'Details anzeigen'});
-        } catch (e) {
-            console.log('filterpanel is aktiv');
-        }
+        await lib.ensureFilterToolbarVisible(page, '.t-app-addressbook');
         await page.waitForSelector('.t-app-addressbook .action_saveFilter');
         await expectPuppeteer(page).toClick('.t-app-addressbook .action_saveFilter');
         await page.waitForSelector('.x-window.x-resizable-pinned');
@@ -50,11 +46,7 @@ describe('Mainpage', () => {
     });
 
     test('save shared favorite', async () => {
-        try {
-            await expectPuppeteer(page).toClick('.t-app-addressbook button', {text: 'Details anzeigen'});
-        } catch (e) {
-            console.log('filterpanel is aktiv');
-        }
+        await lib.ensureFilterToolbarVisible(page, '.t-app-addressbook');
         await page.waitForSelector('.t-app-addressbook .action_saveFilter');
         await expectPuppeteer(page).toClick('.t-app-addressbook .action_saveFilter');
         await page.waitForSelector('.x-window.x-resizable-pinned');

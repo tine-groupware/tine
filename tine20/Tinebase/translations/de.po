@@ -3527,8 +3527,11 @@ msgstr "Diesen Filter löschen"
 msgid "show details"
 msgstr "Details anzeigen"
 
-msgid "Always show advanced filters"
-msgstr "Zeige erweiterte Filter immer an"
+msgid "Filters"
+msgstr "Filter"
+
+msgid "Hide Filters"
+msgstr "Verberge Filter"
 
 msgid "hide details"
 msgstr "Details verbergen"

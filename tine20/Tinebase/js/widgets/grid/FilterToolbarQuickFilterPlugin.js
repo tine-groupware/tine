@@ -109,14 +109,14 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         if (! this.quickFilterGroup) {
             this.quickFilterGroup = new Ext.ButtonGroup({
                 columns: 1,
-                style: {border: 0, background: 'none',  minWidth: '300px'},
+                style: { border: 0, background: 'none',  minWidth: '300px' },
                 displayPriority: 10,
                 items: [
                     this.quickFilter, {
                         xtype: 'toolbar',
                         minWidth: 300,
-                        style: {border: 0, background: 'none'},
-                        items: [this.criteriaText, '->', this.detailsToggleBtn]
+                        style: {border: 0, background: 'none',  minWidth: '300px'},
+                        items: [/*this.criteriaText,*/ '->', this.detailsToggleBtn]
                     }
                 ]
             });
@@ -170,19 +170,19 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             this.quickFilter.on('change', this.syncField, this);
         }
         
-        if (!this.criteriaText) {
-            this.criteriaText = new Ext.Panel({
-                border: 0,
-                html: '',
-                bodyStyle: {
-                    border: 0,
-                    background: 'none',
-                    'text-align': 'left',
-                    'line-height': '11px',
-                    'font-size': '8px'
-                }
-            });
-        }
+        // if (!this.criteriaText) {
+        //     this.criteriaText = new Ext.Panel({
+        //         border: 0,
+        //         html: '',
+        //         bodyStyle: {
+        //             border: 0,
+        //             background: 'none',
+        //             'text-align': 'left',
+        //             'line-height': '11px',
+        //             'font-size': '8px'
+        //         }
+        //     });
+        // }
         
         var stateful = !! this.ftb.recordClass;
         // autogenerate stateId
@@ -191,12 +191,14 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         }
         
         const ftqfp = this;
+        const pill = '&nbsp;<span class="bootstrap-scope dark-reverse"><span class="badge rounded-pill bg-danger d-none"></span></span>';
 
         this.detailsToggleBtn = new Ext.Button(Ext.apply({
             style: {'margin-top': '2px'},
             enableToggle: true,
-            text: i18n._('show details'),
-            tooltip: i18n._('Always show advanced filters'),
+            iconCls: 'action_filter',
+            text: i18n._('Filters') + pill,
+            tooltip: i18n._('Show advanced filters'),
             scope: this,
             handler: this.onDetailsToggle,
             stateful: stateful,
@@ -205,19 +207,16 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
                 return {filterPanelShow: ftqfp.filterPanel.isVisible()};
             },
             applyState: function(state) {
-                if (!state?.filterPanelShow) {
-                    this.setText( i18n._('hide details'));
-                    this.toggle(true);
-                }
+                this.toggle(state.filterPanelShow);
             },
             stateEvents: ['toggle'],
-            listeners: {
-                scope: this,
-                render: function() {
-                    // limit width of this.criteriaText
-                    this.criteriaText.setWidth(this.quickFilterGroup.getWidth() - this.detailsToggleBtn.getWidth());
-                }
-            }
+            // listeners: {
+            //     scope: this,
+            //     render: function() {
+            //         // limit width of this.criteriaText
+            //         this.criteriaText.setWidth(this.quickFilterGroup.getWidth() - this.detailsToggleBtn.getWidth());
+            //     }
+            // }
         }, this.detailsToggleBtnConfig));
         
         this.ftb.hide();
@@ -278,12 +277,16 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     setDetailsHidden: function(hidden) {
         const btn = this.detailsToggleBtn;
 
-        btn.setText(i18n._(`${hidden ? 'show' : 'hide'} details`));
-        
-        const action = !hidden ? 'show' : 'hide';
+        const currnetText = btn.el?.child('button').dom.innerHTML || btn.getText();
+        btn.setText((hidden ? i18n._('Filters') : i18n._('Hide Filters')) + currnetText.match(/&.*$/)[0]);
+
+        const badge = btn.getEl()?.child('.badge');
+        badge?.[hidden ? 'removeClass' : 'addClass']('d-none');
+
+        const action = hidden ? 'hide' : 'show';
         this.ftb[action]();
         if (this.filterPanel) this.filterPanel[action]();
-        
+
         // cares for resizing
         this.ftb.onFilterRowsChange();
     },
@@ -387,7 +390,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             }
         }
 
-        this.setDetailsHidden(btn.pressed);
+        this.setDetailsHidden(!btn.pressed);
     },
 
     onDestroy: function(ftb) {
@@ -472,10 +475,15 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
                    '&nbsp;' + criterias.join(', ');
         }
 
+        const badge = this.detailsToggleBtn.getEl().child('.badge');
+        badge.update(criterias.length);
+
+        this.detailsToggleBtn.setTooltip(text);
+
         // If toolbar is hidden, there is no component to update!
-        if(this.criteriaText.getContentTarget()) {
-            this.criteriaText.update(text);
-        }
+        // if(this.criteriaText.getContentTarget()) {
+        //     this.criteriaText.update(text);
+        // }
     },
     
     /**
