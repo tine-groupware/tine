@@ -94,10 +94,8 @@ class EventManager_Model_ImageMetadata extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Source', // _('Source')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 60,
-                self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
-                ],
+                self::NULLABLE                      => true,
+                self::DEFAULT_VAL                   => 'Watermark Text',
                 self::DESCRIPTION                   => 'This is the source of the image, it will be the text of the watermark for the image', //_('This is the source of the image, it will be the text of the watermark for the image')
             ],
             self::FLD_SORT                      => [
