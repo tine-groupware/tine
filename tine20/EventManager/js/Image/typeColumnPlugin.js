@@ -21,7 +21,7 @@ const ImageTypeColumnPlugin = {
                 return Tine.widgets.grid.RendererManager.get('EventManager', 'ImageMetadata', 'source')(image?.source);
             },
             editor: Tine.widgets.form.FieldManager.get('EventManager', 'ImageMetadata', 'source', 'propertyGrid', {
-                allowBlank: false
+                allowBlank: true
             })
         }));
 
@@ -81,7 +81,7 @@ const ImageTypeColumnPlugin = {
                 // Update the specific field
                 switch (columnId) {
                     case 'source':
-                        imageRecord.source = editEvent.value;
+                        imageRecord.source = editEvent.value || 'Watermark Text';
                         break;
                     case 'sort':
                         imageRecord.sort = parseInt(editEvent.value) || 0;
