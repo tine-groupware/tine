@@ -1369,6 +1369,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
         $this->_copyContactData($participantReg, $participantData ?? []);
         $participantReg->n_fileas = $this->getNFileas($participantReg);
+        $participantReg->n_fn = $this->getNFn($participantReg);
 
         $participantReg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_ID}
             = $registration->getId();
@@ -1387,6 +1388,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
         $this->_copyContactData($registrantReg, $sourceData ?? []);
         $registrantReg->n_fileas = $this->getNFileas($registrantReg);
+        $registrantReg->n_fn = $this->getNFn($registrantReg);
 
         $registrantReg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_ID}
             = $registration->getId();
@@ -1409,6 +1411,16 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         return $registration;
     }
 
+    private function getNFn($record): string
+    {
+        $parts = [
+            trim($record->n_salutation ?? ''),
+            trim($record->n_given ?? ''),
+            trim($record->n_family ?? ''),
+        ];
+
+        return implode(' ', array_filter($parts, fn($part) => $part !== ''));
+    }
     private function getNFileas($record)
     {
         $family = trim($record->n_family ?? '');

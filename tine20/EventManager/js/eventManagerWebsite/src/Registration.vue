@@ -1082,9 +1082,13 @@ const getVisibleContactFields = (fields) => {
   });
 };
 
+const ALWAYS_HIDDEN_FIELDS = ['n_fn', 'n_fileas'];
+
 const getHiddenContactFields = (fields) => {
   if (!fields) return [];
-  return Object.keys(fields).filter(fieldName => !isContactFieldEnabled(fields, fieldName));
+  return Object.keys(fields).filter(fieldName =>
+    ALWAYS_HIDDEN_FIELDS.includes(fieldName) || !isContactFieldEnabled(fields, fieldName)
+  );
 };
 
 const stripHiddenFields = (source, fields) => {
