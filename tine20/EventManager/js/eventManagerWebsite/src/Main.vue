@@ -185,7 +185,7 @@ const handleEmailSubmit = async () => {
     if (response.ok) {
       showModal({
         title: formatMessage('Confirmation E-Mail Sent'),
-        message: formatMessage('Please check your email and click the confirmation link to continue.'),
+        message: formatMessage('Please check your emails (check your spam folder if necessary) and click on the confirmation link to continue.'),
         type: 'confirm',
         okOnly: true,
       });

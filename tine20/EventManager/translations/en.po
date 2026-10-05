@@ -468,8 +468,8 @@ msgstr "Enter your email address"
 msgid "Confirmation E-Mail Sent"
 msgstr "Confirmation E-Mail Sent"
 
-msgid "Please check your email and click the confirmation link to continue."
-msgstr "Please check your email and click the confirmation link to continue."
+msgid "Please check your emails (check your spam folder if necessary) and click on the confirmation link to continue."
+msgstr "Please check your emails (check your spam folder if necessary) and click on the confirmation link to continue."
 
 msgid "Registration Error"
 msgstr "Registration Error"
