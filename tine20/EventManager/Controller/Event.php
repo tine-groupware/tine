@@ -981,6 +981,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 continue;
             }
             $node = Tinebase_FileSystem::getInstance()->get($image->{EventManager_Model_ImageMetadata::FLD_NODE_ID});
+            $image->source = $image->source ?? 'Watermark Text';
             Tinebase_ActionQueue::getInstance()->queueAction(
                 'Tinebase_FileSystem_RecordAttachments.createWatermark',
                 $node,
