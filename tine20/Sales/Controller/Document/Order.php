@@ -40,7 +40,6 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
         ]);
         $this->_modelName = Sales_Model_Document_Order::class;
         $this->_purgeRecords = false;
-        $this->_doContainerACLChecks = false;
 
         $this->_documentStatusConfig = Sales_Config::DOCUMENT_ORDER_STATUS;
         $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_ORDER_STATUS_TRANSITIONS;

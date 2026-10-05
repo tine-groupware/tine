@@ -238,6 +238,75 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertSame(0, $modLogs->count(), print_r($modLogs->toArray(), true));
     }
 
+    public function testOfferDocumentAccessDeniedOnCreate(): void
+    {
+        $customer = $this->_createCustomer();
+        $customerData = $customer->toArray();
+
+        // by default everybody has the admin grant on the default division, restrict it to the current test user
+        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+        $this->_originalGrants[$division->container_id] = Tinebase_Container::getInstance()->getGrantsOfContainer($division->container_id, true);
+        Tinebase_Container::getInstance()->setGrants($division->container_id, new Tinebase_Record_RecordSet(Sales_Model_DivisionGrants::class, [
+            new Sales_Model_DivisionGrants([
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                Sales_Model_DivisionGrants::GRANT_ADMIN => true,
+            ]),
+        ]));
+        Tinebase_Container::getInstance()->resetClassCache();
+
+        // switch to sclever
+        $sclever = $this->_personas['sclever'];
+        Tinebase_Core::setUser($sclever);
+
+        // sclever must not have the offer document admin grant on the default division
+        $this->assertFalse($sclever->hasGrant($division->container_id, Sales_Model_DivisionGrants::GRANT_ADMIN_DOCUMENT_OFFER),
+            'sclever must not have the ' . Sales_Model_DivisionGrants::GRANT_ADMIN_DOCUMENT_OFFER . ' grant on the default division');
+
+        $document = new SMDOffer([
+            SMDOffer::FLD_CUSTOMER_ID => $customerData,
+            SMDOffer::FLD_OFFER_STATUS => SMDOffer::STATUS_DRAFT,
+        ]);
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $this->_instance->saveDocument_Offer($document->toArray());
+    }
+
+    public function testOfferDocumentAccessDeniedWithoutDivisionGrant(): void
+    {
+        $customer = $this->_createCustomer();
+        $customerData = $customer->toArray();
+
+        $document = new SMDOffer([
+            SMDOffer::FLD_CUSTOMER_ID => $customerData,
+            SMDOffer::FLD_OFFER_STATUS => SMDOffer::STATUS_DRAFT,
+        ]);
+        $document = $this->_instance->saveDocument_Offer($document->toArray());
+
+        // by default everybody has the admin grant on the default division, restrict it to the current test user
+        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+        $this->_originalGrants[$division->container_id] = Tinebase_Container::getInstance()->getGrantsOfContainer($division->container_id, true);
+        Tinebase_Container::getInstance()->setGrants($division->container_id, new Tinebase_Record_RecordSet(Sales_Model_DivisionGrants::class, [
+            new Sales_Model_DivisionGrants([
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                'account_id' => Tinebase_Core::getUser()->getId(),
+                Sales_Model_DivisionGrants::GRANT_ADMIN => true,
+            ]),
+        ]));
+        Tinebase_Container::getInstance()->resetClassCache();
+
+        // switch to sclever
+        $sclever = $this->_personas['sclever'];
+        Tinebase_Core::setUser($sclever);
+
+        // sclever must not have the offer document read grant (nor the admin grant) on the default division
+        $this->assertFalse($sclever->hasGrant($division->container_id, Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_OFFER),
+            'sclever must not have the ' . Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_OFFER . ' grant on the default division');
+
+        // reading the offer document needs to be denied
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $this->_instance->getDocument_Offer($document['id']);
+    }
+
     public function testOfferDocumentWithoutRecipient()
     {
         $customer = $this->_createCustomer();
