@@ -40,7 +40,6 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
         ]);
         $this->_modelName = Sales_Model_Document_Offer::class;
         $this->_purgeRecords = false;
-        $this->_doContainerACLChecks = false;
 
         $this->_documentStatusConfig = Sales_Config::DOCUMENT_OFFER_STATUS;
         $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_OFFER_STATUS_TRANSITIONS;

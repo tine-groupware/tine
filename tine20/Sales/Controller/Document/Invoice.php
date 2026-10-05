@@ -42,7 +42,6 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         $this->_backend = new Sales_Backend_Document_Invoice();
         $this->_modelName = Sales_Model_Document_Invoice::class;
         $this->_purgeRecords = false;
-        $this->_doContainerACLChecks = false;
 
         $this->_documentStatusConfig = Sales_Config::DOCUMENT_INVOICE_STATUS;
         $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_INVOICE_STATUS_TRANSITIONS;

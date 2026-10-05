@@ -40,7 +40,6 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
         ]);
         $this->_modelName = Sales_Model_Document_Delivery::class;
         $this->_purgeRecords = false;
-        $this->_doContainerACLChecks = false;
 
         $this->_documentStatusConfig = Sales_Config::DOCUMENT_DELIVERY_STATUS;
         $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_DELIVERY_STATUS_TRANSITIONS;
