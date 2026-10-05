@@ -36,7 +36,6 @@ class Sales_Controller_Document_Debitor extends Tinebase_Controller_Record_Abstr
         ]);
         $this->_modelName = Sales_Model_Document_Debitor::class;
         $this->_purgeRecords = false;
-        $this->_doContainerACLChecks = false;
     }
 
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = null)

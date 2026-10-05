@@ -536,7 +536,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
             $return = '';
             foreach ($diff->diff as $attribute => $value) {
-
                 if (is_array($value) && isset($value['model']) && isset($value['added'])) {
                     $tmpDiff = new Tinebase_Record_RecordSetDiff($value);
 
@@ -551,6 +550,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             isset($recordProperties[$attribute]['config']['controllerClassName']) && ($controller =
                             $recordProperties[$attribute]['config']['controllerClassName']::getInstance()) &&
                             method_exists($controller, 'get')) {
+                        /** @var Tinebase_Controller_Record_Abstract $controller */
+                        $oldCtrlAcl = $controller->doContainerACLChecks(false);
+                        $ctrlAclRaii = new Tinebase_RAII(fn() => $controller->doContainerACLChecks($oldCtrlAcl));
                         if ($oldData) {
                             if (is_array($oldData)) $oldData = isset($oldData['id']) ? $oldData['id'] : '';
                             try {
@@ -573,6 +575,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                         } else {
                             $valueString = '';
                         }
+                        unset($ctrlAclRaii);
                     } else {
                         if (is_array($oldData)) {
                             $oldDataString = '';
