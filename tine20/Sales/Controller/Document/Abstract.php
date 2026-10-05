@@ -32,14 +32,14 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     protected static $_adminGrant = null;
     protected static $_readGrant = null;
 
-    protected function __construct()
+    protected function __construct(bool $allowNoAcl = false)
     {
         if (!$this->_documentStatusConfig || !$this->_documentStatusTransitionConfig || !$this->_documentStatusField ||
             empty($this->_oldRecordBookWriteableFields) || empty($this->_bookRecordRequiredFields) ||
             null === static::$_readGrant || null === static::$_adminGrant) {
             throw new Tinebase_Exception(static::class . ' not initialized properly');
         }
-        if (true !== $this->_doContainerACLChecks) {
+        if (false === $allowNoAcl && true !== $this->_doContainerACLChecks) {
             throw new Tinebase_Exception(static::class . ' needs to have container acl checks on');
         }
 
