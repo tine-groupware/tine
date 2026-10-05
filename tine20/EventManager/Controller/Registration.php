@@ -1515,8 +1515,19 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             foreach ($this->_getEventOptions((string) $event_id) as $option) {
                 if (
                     $option->getId() === $option_id
-                    && $option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS} === EventManager_Model_FileOption::class
+                    && $option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS}
+                    === EventManager_Model_FileOption::class
                 ) {
+                    $cfg = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG};
+                    if (
+                        !filter_var(
+                            $cfg->{EventManager_Model_FileOption::FLD_FILE_UPLOAD}
+                                ?? false,
+                            FILTER_VALIDATE_BOOLEAN
+                        )
+                    ) {
+                        throw new Tinebase_Exception_AccessDenied('This option does not accept uploads');
+                    }
                     $isFileOptionOfEvent = true;
                     break;
                 }

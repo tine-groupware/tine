@@ -123,10 +123,10 @@ Tine.EventManager.FileOptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
 
     validateFileAcknowledgement: function () {
-        const fileAcknowledgementField = this.form.findField('file_acknowledgement');
-        const isFileAcknowledgementChecked = fileAcknowledgementField && fileAcknowledgementField.getValue();
+        const uploadField = this.form.findField('file_upload');
+        const isParticipantUpload = uploadField && uploadField.getValue();
 
-        if (isFileAcknowledgementChecked) {
+        if (!isParticipantUpload) {
             const hasUploadedFile = this.record && this.record.get('node_id');
             const hasFileInGrid = this.gridPanel && this.gridPanel.store.data.items.length > 0;
 
@@ -135,12 +135,11 @@ Tine.EventManager.FileOptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.WARNING,
                     title: this.app.i18n._('File Required'),
-                    msg: this.app.i18n._('Please upload a file or uncheck the file acknowledgement option before saving.')
+                    msg: this.app.i18n._('Please upload a file or enable "Participant should upload a file" before saving.')
                 });
                 return false;
             }
         }
-
         return true;
     },
 
