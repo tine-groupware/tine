@@ -126,7 +126,9 @@ class Tinebase_State
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
+            $selectForUpdate = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
             $results = $this->_backend->search($this->_getFilter($_name, $userId));
+            unset($selectForUpdate);
 
             if ($results->count() == 0) {
                 $record = new Tinebase_Model_State(array(
