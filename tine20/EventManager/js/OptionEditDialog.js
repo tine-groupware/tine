@@ -204,6 +204,7 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         columnWidth: 1
                     },
                     items: [
+                        [fieldManager('is_option_template')],
                         [fieldManager('name_option')],
                         [fieldManager('option_config_class')],
                         [fieldManager('option_config')],
