@@ -550,9 +550,11 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             isset($recordProperties[$attribute]['config']['controllerClassName']) && ($controller =
                             $recordProperties[$attribute]['config']['controllerClassName']::getInstance()) &&
                             method_exists($controller, 'get')) {
-                        /** @var Tinebase_Controller_Record_Abstract $controller */
-                        $oldCtrlAcl = $controller->doContainerACLChecks(false);
-                        $ctrlAclRaii = new Tinebase_RAII(fn() => $controller->doContainerACLChecks($oldCtrlAcl));
+                        $ctrlAclRaii = null;
+                        if ($controller instanceof Tinebase_Controller_Record_Abstract) {
+                            $oldCtrlAcl = $controller->doContainerACLChecks(false);
+                            $ctrlAclRaii = new Tinebase_RAII(fn() => $controller->doContainerACLChecks($oldCtrlAcl));
+                        }
                         if ($oldData) {
                             if (is_array($oldData)) $oldData = isset($oldData['id']) ? $oldData['id'] : '';
                             try {
