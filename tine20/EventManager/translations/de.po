@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-10-05 12:21+0200\n"
+"PO-Revision-Date: 2026-10-06 08:49+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -294,6 +294,12 @@ msgstr "Fehlgeschlagen"
 msgid "Could not create event from template."
 msgstr "Die Veranstaltung konnte nicht anhand der Vorlage erstellt werden."
 
+msgid "Notice"
+msgstr "Hinweis"
+
+msgid "All selected options already exist in this event."
+msgstr "Alle ausgewählten Optionen sind in dieser Veranstaltung bereits vorhanden."
+
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Veranstaltung"
@@ -318,6 +324,9 @@ msgstr "Eventoptionen"
 
 msgid "Ungrouped"
 msgstr "Ungruppiert"
+
+msgid "Create Option from Template"
+msgstr "Option aus Vorlage erstellen"
 
 msgid "Search Participant"
 msgstr "Suche nach Teilnehmern"
@@ -735,6 +744,33 @@ msgstr[1] "Optionen"
 msgid "Rules"
 msgstr "Regeln"
 
+msgid "Option Template"
+msgstr "Optionsvorlage"
+
+msgid "Choose a group or option ..."
+msgstr "Wählen Sie eine Gruppe oder eine Option aus …"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Loading option templates..."
+msgstr "Optionvorlagen werden geladen..."
+
+msgid "Errors"
+msgstr "Fehler"
+
+msgid "Could not load option templates."
+msgstr "Die Optionsvorlagen konnten nicht geladen werden."
+
+msgid "The following options will be created:"
+msgstr "Es werden folgende Optionen erstellt:"
+
+msgid "File"
+msgstr "Datei"
+
+msgid "Reminder:"
+msgstr "Erinnerung:"
+
 msgid "Missing Participant"
 msgstr "Fehlende Teilnehmende"
 
@@ -916,6 +952,9 @@ msgid "Option rule"
 msgid_plural "Option rules"
 msgstr[0] "Optionsregel"
 msgstr[1] "Optionsregeln"
+
+msgid "Is Option Template"
+msgstr "Ist eine Optionsvorlage"
 
 msgid "GENDER_Option rule"
 msgstr "female"
@@ -1107,11 +1146,3 @@ msgstr "Die Anmeldefrist für die Veranstaltung %1$s ist abgelaufen. Wir setzen 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
 
-#~ msgid "Please upload a file or uncheck the file acknowledgement option before saving."
-#~ msgstr "Bitte laden Sie eine Datei hoch oder deaktivieren Sie die Option zur Dateibestätigung, bevor Sie speichern."
-
-#~ msgid "Please check your email and click the confirmation link to continue."
-#~ msgstr "Bitte überprüfen Sie Ihre E-Mails und klicken Sie auf den Bestätigungslink, um fortzufahren."
-
-#~ msgid "Participant, registrant in CC"
-#~ msgstr "Teilnehmer, angemeldende Person im CC"

@@ -35,6 +35,7 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
     public const FLD_SORTING = 'sorting';
     public const FLD_OPTION_RULE = 'option_rule';
     public const FLD_RULE_TYPE = 'rule_type';
+    public const FLD_IS_OPTION_TEMPLATE = 'is_option_template';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -197,6 +198,12 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                 self::DEFAULT_VAL           => 1,
                 self::NAME                  => EventManager_Config::RULE_TYPE,
                 self::NULLABLE              => true,
+            ],
+            self::FLD_IS_OPTION_TEMPLATE => [
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
+                self::LABEL                         => 'Is Option Template',
+                // _('Is Option Template')
             ],
         ]
     ];
