@@ -390,6 +390,9 @@ msgstr "Budget booked hours"
 msgid "hour"
 msgstr "hour"
 
+msgid "GENDER_Timesheet"
+msgstr "GENDER_Timesheet"
+
 msgid "Account"
 msgstr "Account"
 
@@ -485,3 +488,6 @@ msgstr "Time accounts already billed"
 
 msgid "Timetracker"
 msgstr "Timetracker"
+
+msgid "true"
+msgstr "true"
