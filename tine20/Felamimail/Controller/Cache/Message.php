@@ -407,14 +407,25 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $this->_timeStart = microtime(true);
     }
-    
+
     /**
      * at which sequence is the message with the highest messageUid (cache + imap)?
-     * 
+     *
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_ImapProxy $_imap
      * @param boolean $_updateFolder
-     * @throws Felamimail_Exception_IMAPMessageNotFound
+     * @throws Felamimail_Exception
+     * @throws Felamimail_Exception_IMAPMessageNotFound TODO
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     *
+     * TODO fix the removal/re-adding of messages to the cache on moveMessages:
+     *      the message is removed from cache and added again from imap due to different uids:
+     *          Felamimail_Controller_Cache_Message::_updateMessageSequence::438 163a060b7e5ec091a56a3d8a9fabcbcc4a22e75f  22
+     *          Felamimail_Controller_Cache_Message::_updateMessageSequence::450 Check messageUid 22 in folder INBOX
+     *          Felamimail_Controller_Cache_Message::_updateMessageSequence::464 MessageUid 22 not found on IMAP server => remove from cache
+     *      => it is added again shortly after...
+     *      => maybe we can just update the uid in the cache table if this happens??
      */
     protected function _updateMessageSequence(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap, $_updateFolder = TRUE)
     {
@@ -1379,7 +1390,14 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _setFlagsOnCache($flags, $folder, $messages, $checkDiff = true)
     {
-        $supportedFlags = array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(FALSE));
+        $supportedFlags = array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(false));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' supportedFlags: ' . print_r($supportedFlags, true)
+                . ' flags to set: ' . print_r($flags, true)
+            );
+        }
         
         $updateCount = 0;
         foreach ($messages as $cachedMessage) {
@@ -1406,7 +1424,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $updateCount . ' messages.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $updateCount . ' messages.');
+        }
     }
     
     /**
