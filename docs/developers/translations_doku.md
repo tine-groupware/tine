@@ -83,3 +83,32 @@ activate (eintrag in .git/config)
         name = merge po-files driver
         driver = ./scripts/merge-po-files %A %O %B
         recursive = binary
+
+## Record Name Gender
+
+When a record needs gender-specific names in translations, add a comment with `gettext('GENDER_{RecordName}')` to the `recordName` field in the model:
+
+```php
+protected static $_modelConfiguration = array(
+    'recordName'        => 'Timesheet', // gettext('GENDER_Timesheet')
+    'recordsName'       => 'Timesheets', // ngettext('Timesheet', 'Timesheets', n)
+);
+```
+
+Then extract the strings using `langHelper`:
+
+```bash
+./console src:langHelper -- '-u --app Timetracker -l de'
+```
+
+Translators will see `GENDER_Timesheet` as a translatable string in the `.po` files. The `msgstr` value should be one of the following constants:
+
+| Value | Description |
+|-----------|-------------|
+| `male` | Masculine gender (e.g., German: "der ...") |
+| `female` | Feminine gender (e.g., German: "die ...") |
+| `other` | Neutral (e.g., German: "das ...") / no grammatical gender |
+| `company` | Company / legal entity |
+| `person` | Natural person (when distinction matters) |
+
+The application code then uses `_('GENDER_Timesheet')` to retrieve the gendered name at runtime.
