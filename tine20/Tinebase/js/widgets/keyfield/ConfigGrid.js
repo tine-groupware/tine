@@ -142,61 +142,64 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
      * @returns {Ext.grid.ColumnModel}
      */
     getColumnModel: function () {
-        if (! this.cols) {
-            var fields = this.recordClass.getFieldDefinitions(),
-                cols = [
-                    this.defaultCheck,
-                    {
-                        id: 'id',
-                        header: i18n._('ID'),
-                        dataIndex: 'id',
-                        hideable: false,
-                        sortable: false,
-                        editor: new Ext.form.TextField({}),
-                        quickaddField: new Ext.form.TextField({
-                            emptyText: i18n._('Add a New ID...')
-                        })
-                    }, {
-                        id: 'value',
-                        header: i18n._('Value'),
-                        dataIndex: 'value',
-                        hideable: false,
-                        sortable: false,
-                        editor: new Ext.form.TextField({}),
-                        quickaddField: new Ext.form.TextField({
-                            emptyText: i18n._('Add a New Value...')
-                        })
-                    }
-                ];
+        if (! this.colModel) {
+            if (!this.cols) {
+                var fields = this.recordClass.getFieldDefinitions(),
+                    cols = [
+                        this.defaultCheck,
+                        {
+                            id: 'id',
+                            header: i18n._('ID'),
+                            dataIndex: 'id',
+                            hideable: false,
+                            sortable: false,
+                            editor: new Ext.form.TextField({}),
+                            quickaddField: new Ext.form.TextField({
+                                emptyText: i18n._('Add a New ID...')
+                            })
+                        }, {
+                            id: 'value',
+                            header: i18n._('Value'),
+                            dataIndex: 'value',
+                            hideable: false,
+                            sortable: false,
+                            editor: new Ext.form.TextField({}),
+                            quickaddField: new Ext.form.TextField({
+                                emptyText: i18n._('Add a New Value...')
+                            })
+                        }
+                    ];
 
-            Ext.each(fields, function (field) {
-                if (['default', 'id', 'value', 'i18nValue', 'system'].indexOf(field.name) == -1) {
-                    switch (field.name) {
-                        case 'color':
-                            cols.push({
-                                id: 'color',
-                                header: i18n._('Color'),
-                                dataIndex: 'color',
-                                sortable: false,
-                                width: 50,
-                                editor: new Ext.ux.form.ColorField({}),
-                                renderer: Tine.Tinebase.common.colorRenderer
-                            });
-                            break;
-                        case 'icon':
-                            // not supported yet
-                            break;
-                        default:
-                            cols.push(this.getColumn(field));
-                            break;
+                Ext.each(fields, function (field) {
+                    if (['default', 'id', 'value', 'i18nValue', 'system'].indexOf(field.name) == -1) {
+                        switch (field.name) {
+                            case 'color':
+                                cols.push({
+                                    id: 'color',
+                                    header: i18n._('Color'),
+                                    dataIndex: 'color',
+                                    sortable: false,
+                                    width: 50,
+                                    editor: new Ext.ux.form.ColorField({}),
+                                    renderer: Tine.Tinebase.common.colorRenderer
+                                });
+                                break;
+                            case 'icon':
+                                // not supported yet
+                                break;
+                            default:
+                                cols.push(this.getColumn(field));
+                                break;
+                        }
                     }
-                }
-            }, this);
-        } else {
-            cols = this.cols;
+                }, this);
+            } else {
+                cols = this.cols;
+            }
+
+            this.colModel = new Ext.grid.ColumnModel(cols);
         }
-
-        return new Ext.grid.ColumnModel(cols);
+        return this.colModel;
     },
 
     getColumn: function(field) {
