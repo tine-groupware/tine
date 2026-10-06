@@ -40,7 +40,6 @@ class Sales_Controller_Document_Credit extends Sales_Controller_Document_Abstrac
         ]);
         $this->_modelName = Sales_Model_Document_Credit::class;
         $this->_purgeRecords = false;
-        $this->_doContainerACLChecks = false;
 
         $this->_documentStatusConfig = Sales_Config::DOCUMENT_CREDIT_STATUS;
         $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_CREDIT_STATUS_TRANSITIONS;
