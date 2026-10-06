@@ -209,25 +209,27 @@
                        :class="{ 'required-field-error-container': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}">
                     <div class="m-3">
                       <div>{{option.name_option}}</div>
-                      <div v-if="option.option_config && option.option_config.node_id !== ''">
-                        <b-button class="action-button" @click="downloadFile(option.option_config.node_id , option.option_config.file_name, option.option_config.file_type)">{{formatMessage('Download file')}}</b-button>
+
+                      <div v-if="option.option_config?.node_id">
+                        <b-button class="action-button" @click="downloadFile(option.option_config.node_id, option.option_config.file_name, option.option_config.file_type)">
+                          {{formatMessage('Download file')}}
+                        </b-button>
                       </div>
-                      <div class="m-3" v-if="option.option_config && option.option_config.file_acknowledgement && option.option_config.node_id !== ''">
-                        <b-form-checkbox
-                          v-model="replies[option.id]"
-                          value="true"
-                          unchecked-value="false"
-                          @click="singleSelection(option)"
-                        >{{formatMessage('I have read the document and accept the terms and conditions')}}</b-form-checkbox>
+
+                      <div class="m-3" v-if="getFileOptionMode(option) === FILE_OPTION_MODE.ACKNOWLEDGE">
+                        <b-form-checkbox v-model="replies[option.id]" value="true" unchecked-value="false" @click="singleSelection(option)">
+                          {{formatMessage('I have read the document and accept the terms and conditions')}}
+                        </b-form-checkbox>
                       </div>
-                      <div v-else-if="option.option_config" class="m-3">
+
+                      <div v-else-if="getFileOptionMode(option) === FILE_OPTION_MODE.UPLOAD" class="m-3">
                         <input
-                          id="file-input"
+                          :id="'file-input-' + option.id"
                           type="file"
                           class="form-control"
                           @change="(event) => handleFileChange(event, option.id)"
                           :accept="acceptedTypes"
-                          :multiple=false
+                          :multiple="false"
                         >
                         <div v-if="uploadedFiles[option.id] && uploadedFiles[option.id].length > 0" class="uploaded-file-info">
                           <div class="file-label">
@@ -839,13 +841,15 @@ const initializeEventOptions = () => {
       case 'EventManager_Model_TextInputOption':
         replies.value[option.id] = '';
         break;
-      case 'EventManager_Model_FileOption':
-        if (option.option_config && option.option_config.file_acknowledgement) {
+      case 'EventManager_Model_FileOption': {
+        const mode = getFileOptionMode(option);
+        if (mode === FILE_OPTION_MODE.ACKNOWLEDGE) {
           replies.value[option.id] = 'false';
-        } else {
+        } else if (mode === FILE_OPTION_MODE.UPLOAD) {
           uploadedFiles.value[option.id] = [];
         }
         break;
+      }
     }
   });
 };
@@ -930,12 +934,14 @@ const hasOptionValue = (option) => {
     case 'EventManager_Model_CheckboxOption':
       return replies.value[option.id] === 'true';
     case 'EventManager_Model_FileOption':
-      if (option.option_config && option.option_config.file_acknowledgement) {
-        return replies.value[option.id] === 'true';
-      } else if (option.option_config && option.option_config.file_upload) {
-        return uploadedFiles.value[option.id] && uploadedFiles.value[option.id].length > 0;
+      switch (getFileOptionMode(option)) {
+        case FILE_OPTION_MODE.ACKNOWLEDGE:
+          return replies.value[option.id] === 'true';
+        case FILE_OPTION_MODE.UPLOAD:
+          return uploadedFiles.value[option.id]?.length > 0;
+        default:
+          return true;
       }
-      return true;
     case 'EventManager_Model_TextOption':
       return true;
     default:
@@ -1297,6 +1303,23 @@ const singleSelection = (option) => {
   }
 };
 
+const FILE_OPTION_MODE = {
+  ACKNOWLEDGE: 'acknowledge',
+  UPLOAD: 'upload',
+  DOWNLOAD_ONLY: 'download_only',
+};
+
+const getFileOptionMode = (option) => {
+  const cfg = option.option_config || {};
+  if (toBool(cfg.file_acknowledgement) && cfg.node_id) {
+    return FILE_OPTION_MODE.ACKNOWLEDGE;
+  }
+  if (toBool(cfg.file_upload)) {
+    return FILE_OPTION_MODE.UPLOAD;
+  }
+  return FILE_OPTION_MODE.DOWNLOAD_ONLY;
+};
+
 const handleFileChange = (event, optionId) => {
   hasFileChanged.value = true;
   const files = event.target.files;
@@ -1430,7 +1453,7 @@ const buildFilteredReplies = () => {
   allOptions.forEach(option => {
     if (option.option_config_class === 'EventManager_Model_TextOption') return;
     if (option.option_config_class === 'EventManager_Model_FileOption'
-      && !option.option_config?.file_acknowledgement) return;
+      && getFileOptionMode(option) !== FILE_OPTION_MODE.ACKNOWLEDGE) return;
     if (hasOptionValue(option)) {
       filteredReplies[option.id] = replies.value[option.id];
     }
