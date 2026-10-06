@@ -54,9 +54,11 @@ class Tinebase_Controller_AuthToken extends Tinebase_Controller_Record_Abstract
     {
         if (!$this->_purgedOldRecordsThisLifecycle) {
             $this->_purgedOldRecordsThisLifecycle = true;
+            $transaction = Tinebase_RAII::getTransactionManagerRAII();
             $this->deleteByFilter(Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, [
                 ['field' => Tinebase_Model_AuthToken::FLD_VALID_UNTIL, 'operator' => 'before', 'value' => Tinebase_DateTime::now()]
             ]));
+            $transaction->release();
         }
         parent::_checkRight($_action);
     }
