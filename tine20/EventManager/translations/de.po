@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-10-01 22:32+0200\n"
+"PO-Revision-Date: 2026-10-05 12:21+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -655,8 +655,8 @@ msgstr "Bitte laden Sie eine Datei hoch, bevor Sie speichern."
 msgid "File Configuration"
 msgstr "Dateikonfiguration"
 
-msgid "Please upload a file or uncheck the file acknowledgement option before saving."
-msgstr "Bitte laden Sie eine Datei hoch oder deaktivieren Sie die Option zur Dateibestätigung, bevor Sie speichern."
+msgid "Please upload a file or enable \"Participant should upload a file\" before saving."
+msgstr "Bitte laden Sie eine Datei hoch oder aktivieren Sie die Option „Die Teilnehmende Person sollte eine Datei hochladen“, bevor Sie speichern."
 
 msgid "Files"
 msgstr "Dateien"
@@ -860,7 +860,7 @@ msgid "Only participant acknowledgement is necessary (no participant document up
 msgstr "Nur die Bestätigung die Teilnehmende ist erforderlich (kein Hochladen von Teilnehmerdokumenten)."
 
 msgid "Participant should upload a file"
-msgstr "Die Teilnehmende sollten eine Datei hochladen"
+msgstr "Die Teilnehmende Person sollte eine Datei hochladen"
 
 msgid "Image Metadata"
 msgid_plural "Images Metadata"
@@ -1106,6 +1106,9 @@ msgstr "Die Anmeldefrist für die Veranstaltung %1$s ist abgelaufen. Wir setzen 
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
+
+#~ msgid "Please upload a file or uncheck the file acknowledgement option before saving."
+#~ msgstr "Bitte laden Sie eine Datei hoch oder deaktivieren Sie die Option zur Dateibestätigung, bevor Sie speichern."
 
 #~ msgid "Please check your email and click the confirmation link to continue."
 #~ msgstr "Bitte überprüfen Sie Ihre E-Mails und klicken Sie auf den Bestätigungslink, um fortzufahren."

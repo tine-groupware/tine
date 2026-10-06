@@ -651,7 +651,7 @@ msgstr ""
 msgid "File Configuration"
 msgstr ""
 
-msgid "Please upload a file or uncheck the file acknowledgement option before saving."
+msgid "Please upload a file or enable \"Participant should upload a file\" before saving."
 msgstr ""
 
 msgid "Files"
