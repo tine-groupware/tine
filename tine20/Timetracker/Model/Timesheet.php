@@ -57,7 +57,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
      */
     protected static $_modelConfiguration = array(
         'version'           => 12,
-        'recordName'        => 'Timesheet',
+        'recordName'        => 'Timesheet', // gettext('GENDER_Timesheet')
         'recordsName'       => 'Timesheets', // ngettext('Timesheet', 'Timesheets', n)
         self::EXPOSE_JSON_API => true,
         'hasRelations'      => true,
