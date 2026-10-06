@@ -66,7 +66,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         $this->_bookRecordRequiredFields = [
             Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS,
         ];
-        parent::__construct();
+        parent::__construct(allowNoAcl: true);
 
         $this->_getMultipleGrant = Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE;
         $this->_requiredFilterACLget = [Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
