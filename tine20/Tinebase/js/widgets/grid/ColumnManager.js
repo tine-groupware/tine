@@ -199,6 +199,14 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.resizeable = false;
             }
 
+            if (type === 'checker') {
+                config.minWidth = 25;
+                config.defaultWidth = 25;
+                config.maxWidth = 25;
+                config.tooltip = window.i18n._('Checker');
+                config.resizeable = false;
+            }
+
             if (type === 'image') {
                 config.minWidth = 20;
                 config.defaultWidth = 25;
