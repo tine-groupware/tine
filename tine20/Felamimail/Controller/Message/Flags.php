@@ -403,15 +403,16 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             $flag = $this->_getDefaultSenderFlag($headers);
         }
 
-        $flags = isset($_message['flags']) ? $_message['flags']: [];
-
-        if ($flag && is_array($flags) && ! in_array($flag, $flags)) {
-            if (isset($_message['id'])) {
-                $this->addFlags($_message['id'], $flag);
-            }
-            $flags[] = $flag;
+        if ($flag) {
             self::$_allowedFlags[$flag] = $flag;
-            $_message['flags'] = $flags;
+            $flags = isset($_message['flags']) ? $_message['flags']: [];
+            if (is_array($flags) && ! in_array($flag, $flags)) {
+                if (isset($_message['id'])) {
+                    $this->addFlags($_message['id'], $flag);
+                }
+                $flags[] = $flag;
+                $_message['flags'] = $flags;
+            }
         }
     }
 

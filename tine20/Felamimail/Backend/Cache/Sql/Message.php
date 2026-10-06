@@ -211,35 +211,49 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('message_id') . ' IN (?)', $messageIds)
             );
-            $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags']['table'], $where);
+            $deleted = $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags']['table'], $where);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__
+                    . '::' . __LINE__ . ' Deleted ' . $deleted . ' flags from ' . count($_messages) . ' message(s)');
+            }
 
             $this->setMessageTags( new Felamimail_Model_MessageFilter([
                 array('field' => 'id', 'operator' => 'in', 'value' => $messageIds)
             ]), [], 'clear');
 
             $flags = (array)$_flags;
-            $touchedMessages = array();
 
-            foreach ($flags as $flag) {
-                foreach ($messages as $message) {
-                    $id = $touchedMessages[] = ($message instanceof Felamimail_Model_Message) ? $message->getId() : $message;
-                    $folderId = ($message instanceof Felamimail_Model_Message) ? $message->folder_id : $_folderId;
-
-                    $data = array(
-                        'flag' => $flag,
-                        'message_id' => $id,
-                        'folder_id' => $folderId,
+            if (!empty($flags)) {
+                $touchedMessages = array();
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                    Tinebase_Core::getLogger()->trace(
+                        __METHOD__ . '::' . __LINE__
+                        . ' Adding flags ' . print_r($flags, true) . ' to ' . count($_messages) . ' message(s)'
                     );
-                    $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags']['table'], $data);
                 }
+
+                foreach ($flags as $flag) {
+                    foreach ($messages as $message) {
+                        $id = $touchedMessages[] = ($message instanceof Felamimail_Model_Message) ? $message->getId() : $message;
+                        $folderId = ($message instanceof Felamimail_Model_Message) ? $message->folder_id : $_folderId;
+
+                        $data = array(
+                            'flag' => $flag,
+                            'message_id' => $id,
+                            'folder_id' => $folderId,
+                        );
+                        $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags']['table'], $data);
+                    }
+                }
+
+                $this->setMessageTags(new Felamimail_Model_MessageFilter([
+                    array('field' => 'id', 'operator' => 'in', 'value' => $messageIds)
+                ]), $flags, 'add');
+
+                // touch messages so sync can find the updates
+                $this->updateMultiple($touchedMessages, array('timestamp' => Tinebase_DateTime::now()));
             }
-            
-            $this->setMessageTags( new Felamimail_Model_MessageFilter([
-                array('field' => 'id', 'operator' => 'in', 'value' => $messageIds)
-            ]), $flags, 'add');
-            
-            // touch messages so sync can find the updates
-            $this->updateMultiple($touchedMessages, array('timestamp' => Tinebase_DateTime::now()));
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
@@ -309,8 +323,10 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         try {
             $this->setMessageTags($filter, [], 'clear');
         } catch (Felamimail_Exception_IMAPFolderNotFound $feifnf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
-                . '::' . __LINE__ . ' Folder has already been removed - nothing more to do here');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__
+                    . '::' . __LINE__ . ' Folder has already been removed - nothing more to do here');
+            }
         }
         
         $where = array(
@@ -419,7 +435,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             ],
             'function' => 'setMessageTagsIteration',
         ]);
-        $result = $iterator->iterate($_flags, $_mode);
+        $iterator->iterate($_flags, $_mode);
     }
 
     public function setMessageTagsIteration(Tinebase_Record_RecordSet $messages, $_flags, $_mode)
@@ -427,8 +443,10 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         $tagIds = array_filter($_flags, function ($flag) { return strlen((string)$flag)=== 40;});
         $tags = sizeof($tagIds) > 0 ? Tinebase_Tags::getInstance()->getTagsById($tagIds) : [];
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' About to ' . $_mode . ' tags for ' . count($messages) . ' messages.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' About to ' . $_mode . ' tags for ' . count($messages) . ' messages.');
+        }
 
         $filter =  new Felamimail_Model_MessageFilter([
             ['field' => 'id', 'operator' => 'in', 'value' => $messages->getArrayOfIds()]
