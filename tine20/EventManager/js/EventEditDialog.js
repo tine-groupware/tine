@@ -615,8 +615,8 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     items: [
                         fieldManager('appointments', {
                             checkState: function () {
-                                let field = me.form.findField('appointments');
-                                let sessions = field.getValue();
+                                const field = me.form.findField('appointments');
+                                const sessions = field.getValue() || [];
 
                                 const getDateStr = (sessionDate) => {
                                     if (!sessionDate) return null;
@@ -631,7 +631,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     return time.length > 8 ? time.substring(11, 19) : time;
                                 };
 
-                                sessions.sort((session1, session2) => {
+                                const sorted = [...sessions].sort((session1, session2) => {
                                     const date1 = getDateStr(session1['session_date']);
                                     const date2 = getDateStr(session2['session_date']);
 
@@ -648,14 +648,35 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     return time1 < time2 ? -1 : (time1 > time2 ? 1 : 0);
                                 });
 
-                                sessions.forEach((session, index) => {
-                                    session['session_number'] = index + 1;
+                                let changed = false;
+                                sorted.forEach((session, index) => {
+                                    if (session !== sessions[index]) {
+                                        changed = true;
+                                    }
+                                    if (Number(session['session_number']) !== index + 1) {
+                                        session['session_number'] = index + 1;
+                                        changed = true;
+                                    }
                                 });
 
-                                field.setValue(sessions);
+                                if (!changed) {
+                                    return;
+                                }
+
+                                const sm = field.getSelectionModel?.();
+                                const selected = sm?.getSelected?.();
+                                const selectedId = selected?.get?.('id') ?? selected?.id;
+
+                                field.setValue(sorted);
+
+                                if (sm && selectedId) {
+                                    const idx = field.store.findBy(r => (r.get('id') ?? r.id) === selectedId);
+                                    if (idx !== -1) {
+                                        sm.selectRow(idx);
+                                    }
+                                }
                             }
-                        })
-                    ]
+                    })]
                 }
                 ]
             }, {
