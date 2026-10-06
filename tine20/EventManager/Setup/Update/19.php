@@ -25,6 +25,7 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
     protected const RELEASE019_UPDATE009 = __CLASS__ . '::update009';
     protected const RELEASE019_UPDATE010 = __CLASS__ . '::update010';
     protected const RELEASE019_UPDATE011 = __CLASS__ . '::update011';
+    protected const RELEASE019_UPDATE012 = __CLASS__ . '::update012';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -77,6 +78,10 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
             self::RELEASE019_UPDATE011          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update011',
+            ],
+            self::RELEASE019_UPDATE012          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update012',
             ],
         ],
     ];
@@ -246,5 +251,23 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.11', self::RELEASE019_UPDATE011);
+    }
+
+    public function update012()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            EventManager_Model_Option::class,
+        ]);
+
+        try {
+            EventManager_Setup_EventTemplates::getInstance()->createEventForOptionTemplates();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->applyPrimaryModlogs();
+            EventManager_Setup_EventTemplates::getInstance()->createEventForOptionTemplates();
+        }
+
+        $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.12', self::RELEASE019_UPDATE012);
     }
 }

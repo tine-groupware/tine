@@ -47,20 +47,6 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowNamePrefix: 'EventEditWindow_',
     showContainerSelector: true,
 
-    optionTemplates: [
-        // Verpflegung
-        { name_option: 'Konventionell', group: 'Verpflegung', sorting: 1, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
-        { name_option: 'Vegetarisch', group: 'Verpflegung', sorting: 2, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
-        { name_option: 'Vegan', group: 'Verpflegung', sorting: 3, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
-        { name_option: 'Ich nehme nicht an den Mahlzeiten teil', group: 'Verpflegung', sorting: 4, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
-        { name_option: 'Allergien und Unverträglichkeiten',group: 'Verpflegung', sorting: 5, option_config_class: 'EventManager_Model_TextInputOption', option_config: {multiple_lines: true, max_characters: 255}},
-        // Unterbringung
-        { name_option: 'Einzelzimmer', group: 'Unterbringung', sorting: 6, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
-        { name_option: 'Doppelzimmer', group: 'Unterbringung', sorting: 7, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
-        { name_option: 'Keine Übernachtung', group: 'Unterbringung', sorting: 8, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
-        { name_option: 'Doppelzimmer mit...', group: 'Unterbringung', sorting: 9, option_config_class: 'EventManager_Model_TextInputOption', option_config: {multiple_lines: true, max_characters: 255}},
-    ],
-
     initComponent: function () {
         this.app = Tine.Tinebase.appMgr.get('EventManager');
         this.supr().initComponent.apply(this, arguments);
@@ -68,13 +54,6 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.rrulePanel = new Tine.Calendar.RrulePanel({
             eventEditDialog : this
         });
-    },
-
-    onRecordLoad: function () {
-        if ((this.record.id === null || this.record.phantom) && !this.record.get('options')?.length) {
-            this.record.set('options', this.optionTemplates);
-        }
-        this.supr().onRecordLoad.apply(this, arguments);
     },
 
     onAfterRecordLoad: function () {
@@ -149,6 +128,61 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } finally {
             mask.hide();
         }
+    },
+
+    onCreateOptionFromTemplate: function (grid) {
+        const optionRecordClass = Tine.Tinebase.data.RecordMgr.get('EventManager', 'Option');
+
+        const RESET_FIELDS = [
+            'id', 'event_id', 'created_by', 'creation_time',
+            'last_modified_by', 'last_modified_time',
+            'is_deleted', 'deleted_by', 'deleted_time', 'seq'
+        ];
+
+        Tine.EventManager.OptionTemplatePickerDialog.openWindow({
+            listeners: {
+                scope: this,
+                apply: function (templates) {
+                    const store = grid.store;
+                    const defaults = optionRecordClass.getDefaultData();
+
+                    const existing = new Set(store.getRange().map(r =>
+                        (r.get('group') || '') + '\u0000' + r.get('name_option')));
+                    templates = templates.filter(t =>
+                        !existing.has((t.group || '') + '\u0000' + t.name_option));
+
+                    if (!templates.length) {
+                        Ext.MessageBox.alert(
+                            this.app.i18n._('Notice'),
+                            this.app.i18n._('All selected options already exist in this event.')
+                        );
+                        return;
+                    }
+
+                    let sorting = Math.max(0, ...store.getRange().map(r => Number(r.get('sorting')) || 0));
+
+                    const records = templates.map(template => {
+                        const data = _.omit(template, RESET_FIELDS);
+
+                        data.id = Tine.Tinebase.data.Record.generateUID();
+                        data.is_option_template = false;
+                        data.sorting = ++sorting;
+
+                        if (Ext.isArray(data.option_rule) && data.option_rule.length) {
+                            data.option_required = defaults.option_required;
+                            data.display = defaults.display;
+                        }
+                        data.option_rule = [];
+
+                        const option = new optionRecordClass(data, data.id);
+                        option.phantom = true;
+                        return option;
+                    });
+
+                    store.add(records);
+                }
+            }
+        });
     },
 
     getFormItems: function () {
@@ -337,6 +371,17 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                                 }
                                                 return Ext.util.Format.htmlEncode(value);
                                             };
+                                        }
+
+                                        const toolbar = grid.getBottomToolbar() || grid.getTopToolbar();
+                                        if (toolbar) {
+                                            toolbar.add({
+                                                text: me.app.i18n._('Create Option from Template'),
+                                                iconCls: 'action_add',
+                                                disabled: grid.readOnly,
+                                                handler: () => me.onCreateOptionFromTemplate(grid)
+                                            });
+                                            toolbar.doLayout();
                                         }
                                     }
                                 }

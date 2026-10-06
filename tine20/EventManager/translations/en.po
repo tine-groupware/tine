@@ -290,6 +290,12 @@ msgstr "Failed"
 msgid "Could not create event from template."
 msgstr "Could not create event from template."
 
+msgid "Notice"
+msgstr "Notice"
+
+msgid "All selected options already exist in this event."
+msgstr "All selected options already exist in this event."
+
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Event"
@@ -314,6 +320,9 @@ msgstr "Event Options"
 
 msgid "Ungrouped"
 msgstr "Ungrouped"
+
+msgid "Create Option from Template"
+msgstr "Create Option from Template"
 
 msgid "Search Participant"
 msgstr "Search Participant"
@@ -731,6 +740,33 @@ msgstr[1] "Options"
 msgid "Rules"
 msgstr "Rules"
 
+msgid "Option Template"
+msgstr "Option Template"
+
+msgid "Choose a group or option ..."
+msgstr "Choose a group or option ..."
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Loading option templates..."
+msgstr "Loading option templates..."
+
+msgid "Errors"
+msgstr "Errors"
+
+msgid "Could not load option templates."
+msgstr "Could not load option templates."
+
+msgid "The following options will be created:"
+msgstr "The following options will be created:"
+
+msgid "File"
+msgstr "File"
+
+msgid "Reminder:"
+msgstr "Reminder:"
+
 msgid "Missing Participant"
 msgstr "Missing Participant"
 
@@ -912,6 +948,9 @@ msgid "Option rule"
 msgid_plural "Option rules"
 msgstr[0] "Option rule"
 msgstr[1] "Option rules"
+
+msgid "Is Option Template"
+msgstr "Is Option Template"
 
 msgid "GENDER_Option rule"
 msgstr "GENDER_Option rule"

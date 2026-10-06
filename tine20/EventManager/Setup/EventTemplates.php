@@ -52,6 +52,15 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
         EventManager_Model_Selection::MODEL_NAME_PART,
     ];
 
+    private ?array $_templateContext = null;
+
+    private const OPTION_TYPES = [
+        'checkbox'   => [EventManager_Model_CheckboxOption::class,  'setOptionConfigCheckboxDemoData'],
+        'text_input' => [EventManager_Model_TextInputOption::class, 'setOptionConfigTextInputDemoData'],
+        'text'       => [EventManager_Model_TextOption::class,      'setOptionConfigTextDemoData'],
+        'file'       => [EventManager_Model_FileOption::class,      'setOptionConfigFileDemoData'],
+    ];
+
     /**
      * the constructor
      *
@@ -82,6 +91,38 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
             ]);
 
             return EventManager_Controller_Event::getInstance()->search($filter)->count() > 0;
+        } catch (Tinebase_Exception_NotFound) {
+            return false;
+        }
+    }
+
+    public static function hasOptionTemplatesBeenRun()
+    {
+        try {
+            $containerName = EventManager_Config::getInstance()
+                ->get(EventManager_Config::EVENT_TEMPLATES_CONTAINER_NAME);
+            $container = Tinebase_Container::getInstance()->getContainerByName(
+                EventManager_Model_Event::class,
+                $containerName,
+                Tinebase_Model_Container::TYPE_SHARED
+            );
+
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(EventManager_Model_Event::class, [
+                ['field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId()],
+            ]);
+
+            if (EventManager_Controller_Event::getInstance()->search($filter)->count() > 0) {
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    EventManager_Model_EventLocalization::class,
+                    [
+                        ['field' => 'type', 'operator' => 'equals', 'value' => 'name'],
+                        ['field' => 'text', 'operator' => 'equals', 'value' => 'Veranstaltung für Optionsvorlagen'],
+                    ]
+                );
+                return EventManager_Controller_EventLocalization::getInstance()->search($filter)->count() > 0;
+            }
+
+            return false;
         } catch (Tinebase_Exception_NotFound) {
             return false;
         }
@@ -118,527 +159,132 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
     protected function _onCreate()
     {
         $this->createTemplates();
+        //$this->createEventForOptionTemplates();
     }
 
-    public function createTemplates()
+    public function createTemplates(): void
     {
         if (self::hasBeenRun()) {
             return;
         }
 
-        $eventContainerName = EventManager_Config::getInstance()
-            ->get(EventManager_Config::EVENT_TEMPLATES_CONTAINER_NAME);
-        $container_id = EventManager_Setup_Initialize::_getOrCreateSharedEventContainer(
-            $eventContainerName,
-            EventManager_Model_Event::class,
-            EventManager_Config::APP_NAME
-        )->getId();
-
-        EventManager_Config::getInstance()
-            ->set(EventManager_Config::JWT_SECRET, 'jwtSecretCreatedFromEventManagerTemplates');
-
-        $event_type = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_TYPE)->records->getById('1');
-        $event_status = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_STATUS)
-            ->records->getById('2');
-        $option_not_required = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_REQUIRED_TYPE)
-            ->records->getById('2');
-        $option_required_if = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_REQUIRED_TYPE)
-            ->records->getById('3');
-
-        $option_display_if = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE)
-            ->records->getById('2');
-
-        //contact_fields
-        $defaultContactFields = $this->_getDefaultContactFields();
+        $config = EventManager_Config::getInstance();
+        $notRequired = [
+            EventManager_Model_Option::FLD_OPTION_REQUIRED =>
+                $config->get(EventManager_Config::OPTION_REQUIRED_TYPE)->records->getById('2'),
+        ];
+        $conditional = [
+            EventManager_Model_Option::FLD_OPTION_REQUIRED =>
+                $config->get(EventManager_Config::OPTION_REQUIRED_TYPE)->records->getById('3'),
+            EventManager_Model_Option::FLD_DISPLAY =>
+                $config->get(EventManager_Config::DISPLAY_TYPE)->records->getById('2'),
+        ];
 
         $templates = [];
 
         // template 1
-        $template1 = EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container_id,
-            EventManager_Model_Event::FLD_NAME                          => [[
-                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
-                EventManager_Model_EventLocalization::FLD_TEXT => 'Erstkommunion'
-            ]],
-            EventManager_Model_Event::FLD_START                         => '',
-            EventManager_Model_Event::FLD_END                           => '',
-            EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => '',
-            EventManager_Model_Event::FLD_LOCATION_RECORD               => '',
-            EventManager_Model_Event::FLD_TYPE                          => $event_type,
-            EventManager_Model_Event::FLD_STATUS                        => $event_status,
-            EventManager_Model_Event::FLD_FEE                           => '',
-            EventManager_Model_Event::FLD_TOTAL_PLACES                  => '',
-            EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
-            EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
-            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
-            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
-            EventManager_Model_Event::FLD_IS_TEMPLATE                   => true,
-            EventManager_Model_Event::FLD_OPTIONS                       => [
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Hl. Familie',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Hier mit melde ich mein Kind zur Erstkommunionsvorbereitung in folgender Gemeinde an:',
-                    EventManager_Model_Option::FLD_SORTING => 1,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'St. Hedwig',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Hier mit melde ich mein Kind zur Erstkommunionsvorbereitung in folgender Gemeinde an:',
-                    EventManager_Model_Option::FLD_SORTING => 2,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'St. Annen',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Hier mit melde ich mein Kind zur Erstkommunionsvorbereitung in folgender Gemeinde an:',
-                    EventManager_Model_Option::FLD_SORTING => 3,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Mein Kind wurde innerhalb der Pfarrei XXX getauft.',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Taufe',
-                    EventManager_Model_Option::FLD_SORTING => 10,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Taufdatum',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Taufe',
-                    EventManager_Model_Option::FLD_SORTING => 11,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Taufort',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Taufe',
-                    EventManager_Model_Option::FLD_SORTING => 12,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Taufkirche',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Taufe',
-                    EventManager_Model_Option::FLD_SORTING => 13,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Name der Mutter',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Taufe',
-                    EventManager_Model_Option::FLD_SORTING => 14,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Name des vaters',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Taufe',
-                    EventManager_Model_Option::FLD_SORTING => 15,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Kopie der Taufurkunde (wenn vorhanden)',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigFileDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_FileOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Taufe',
-                    EventManager_Model_Option::FLD_SORTING => 16,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Ich bin damit einverstanden, dass mein Kind:',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 20,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'mit Vornamen auf dem Liederzettel des Erstkommunionsgottesdienstes genannt wird',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 21,
-                    EventManager_Model_Option::FLD_OPTION_REQUIRED => $option_not_required,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'mit Namen und Foto auf Aushängen in der Kirche zu sehen ist',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 22,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Datenschutzerklärung',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigFileDemoData(true),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_FileOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Datenschutzinformation',
-                    EventManager_Model_Option::FLD_SORTING => 30,
-                ],
-            ],
-            EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
-            EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
-                EventManager_Model_EventLocalization::FLD_TEXT => 'BESCHREIBUNG HIER'
-            ]],
-        ]));
-        $templates[] = $template1;
+        $gGemeinde = 'Hier mit melde ich mein Kind zur Erstkommunionsvorbereitung in folgender Gemeinde an:';
+        $templates[] = $this->_createTemplate('Erstkommunion', [
+            $this->_opt('checkbox', 'Hl. Familie', $gGemeinde, 1),
+            $this->_opt('checkbox', 'St. Hedwig', $gGemeinde, 2),
+            $this->_opt('checkbox', 'St. Annen', $gGemeinde, 3),
+            $this->_opt('checkbox', 'Mein Kind wurde innerhalb der Pfarrei XXX getauft.', 'Taufe', 10),
+            $this->_opt('text_input', 'Taufdatum', 'Taufe', 11, [false]),
+            $this->_opt('text_input', 'Taufort', 'Taufe', 12, [false]),
+            $this->_opt('text_input', 'Taufkirche', 'Taufe', 13, [false]),
+            $this->_opt('text_input', 'Name der Mutter', 'Taufe', 14, [false]),
+            $this->_opt('text_input', 'Name des vaters', 'Taufe', 15, [false]),
+            $this->_opt('file', 'Kopie der Taufurkunde (wenn vorhanden)', 'Taufe', 16, [false]),
+            $this->_opt('text', 'Ich bin damit einverstanden, dass mein Kind:', '', 20),
+            $this->_opt('checkbox', 'mit Vornamen auf dem Liederzettel des Erstkommunionsgottesdienstes genannt wird', '', 21, extra: $notRequired),
+            $this->_opt('checkbox', 'mit Namen und Foto auf Aushängen in der Kirche zu sehen ist', '', 22),
+            $this->_opt('file', 'Datenschutzerklärung', 'Datenschutzinformation', 30, [true]),
+        ]);
 
         // template 2
-        $template2 = EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container_id,
-            EventManager_Model_Event::FLD_NAME                          => [[
-                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
-                EventManager_Model_EventLocalization::FLD_TEXT => 'Kinderbibeltag'
-            ]],
-            EventManager_Model_Event::FLD_START                         => '',
-            EventManager_Model_Event::FLD_END                           => '',
-            EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => '',
-            EventManager_Model_Event::FLD_LOCATION_RECORD               => '',
-            EventManager_Model_Event::FLD_TYPE                          => $event_type,
-            EventManager_Model_Event::FLD_STATUS                        => $event_status,
-            EventManager_Model_Event::FLD_FEE                           => '',
-            EventManager_Model_Event::FLD_TOTAL_PLACES                  => '',
-            EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
-            EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
-            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
-            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
-            EventManager_Model_Event::FLD_IS_TEMPLATE                   => true,
-            EventManager_Model_Event::FLD_OPTIONS                       => [
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Vegetarisch',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Verpflegung',
-                    EventManager_Model_Option::FLD_SORTING => 1,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Mit Fleisch',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Verpflegung',
-                    EventManager_Model_Option::FLD_SORTING => 2,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Allergien/Unverträglichkeiten',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Verpflegung',
-                    EventManager_Model_Option::FLD_SORTING => 3,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Heilige Familie',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Aus welcher Gemeinde kommen Sie?',
-                    EventManager_Model_Option::FLD_SORTING => 10,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'St. Hedwig',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Aus welcher Gemeinde kommen Sie?',
-                    EventManager_Model_Option::FLD_SORTING => 11,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'St. Annen',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Aus welcher Gemeinde kommen Sie?',
-                    EventManager_Model_Option::FLD_SORTING => 12,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Andere Gemeinde:',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Aus welcher Gemeinde kommen Sie?',
-                    EventManager_Model_Option::FLD_SORTING => 13,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => '(optional)',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Ihre Nachricht an uns',
-                    EventManager_Model_Option::FLD_SORTING => 14,
-                    EventManager_Model_Option::FLD_OPTION_REQUIRED => $option_not_required,
-                ],
-            ],
-            EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
-            EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
-                EventManager_Model_EventLocalization::FLD_TEXT => 'Onkel Quentin wird uns am 19.09.2026 zwischen 10:00 und 16:00 Uhr mit auf seine Entdeckungsreise in die Geschichte von Petrus in seinem geheimnisvollen Buch nehmen. 
-Wir freuen uns, dass Du beim Kinderbibeltag dabei sein möchtest!'
-            ]],
-        ]));
-        $templates[] = $template2;
+        $gGemeinde = 'Aus welcher Gemeinde kommen Sie?';
+        $templates[] = $this->_createTemplate('Kinderbibeltag', [
+            $this->_opt('checkbox', 'Vegetarisch', 'Verpflegung', 1),
+            $this->_opt('checkbox', 'Mit Fleisch', 'Verpflegung', 2),
+            $this->_opt('text_input', 'Allergien/Unverträglichkeiten', 'Verpflegung', 3),
+            $this->_opt('checkbox', 'Heilige Familie', $gGemeinde, 10),
+            $this->_opt('checkbox', 'St. Hedwig', $gGemeinde, 11),
+            $this->_opt('checkbox', 'St. Annen', $gGemeinde, 12),
+            $this->_opt('text_input', 'Andere Gemeinde:', $gGemeinde, 13, [false]),
+            $this->_opt('text_input', '(optional)', 'Ihre Nachricht an uns', 14, extra: $notRequired),
+        ], "Onkel Quentin wird uns am 19.09.2026 zwischen 10:00 und 16:00 Uhr mit auf seine Entdeckungsreise in die Geschichte von Petrus in seinem geheimnisvollen Buch nehmen. \n"
+            . 'Wir freuen uns, dass Du beim Kinderbibeltag dabei sein möchtest!');
 
         // template 3
-        $template3 = EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_CONTAINER_ID                  => $container_id,
-            EventManager_Model_Event::FLD_NAME                          => [[
-                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
-                EventManager_Model_EventLocalization::FLD_TEXT => 'Zeltlager'
-            ]],
-            EventManager_Model_Event::FLD_START                         => '',
-            EventManager_Model_Event::FLD_END                           => '',
-            EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => '',
-            EventManager_Model_Event::FLD_LOCATION_RECORD               => '',
-            EventManager_Model_Event::FLD_TYPE                          => $event_type,
-            EventManager_Model_Event::FLD_STATUS                        => $event_status,
-            EventManager_Model_Event::FLD_FEE                           => '',
-            EventManager_Model_Event::FLD_TOTAL_PLACES                  => '',
-            EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
-            EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
-            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
-            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
-            EventManager_Model_Event::FLD_IS_TEMPLATE                   => true,
-            EventManager_Model_Event::FLD_OPTIONS                       => [
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Jahre',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Alter im Zeltlager:',
-                    EventManager_Model_Option::FLD_SORTING => 1,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Name',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Notfallkontakt in der Zeit des Zeltlagers:',
-                    EventManager_Model_Option::FLD_SORTING => 10,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Telefonnummer',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Notfallkontakt in der Zeit des Zeltlagers:',
-                    EventManager_Model_Option::FLD_SORTING => 11,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'E-Mailadresse',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Notfallkontakt in der Zeit des Zeltlagers:',
-                    EventManager_Model_Option::FLD_SORTING => 12,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Wir benötigen die nachfolgenden Angaben, um Ihr Kind während der Fahrt vor gesundheitlichen Gefahren bewahren und in Notfallsituationen richtig handeln zu können!',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 20,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Unser/Mein Kind muss während der Fahrt Medikamente einnehmen',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 21,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Arzneimittel / Einnahmeturnus / Menge:',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 22,
-                    EventManager_Model_Option::FLD_OPTION_REQUIRED => $option_required_if,
-                    EventManager_Model_Option::FLD_DISPLAY => $option_display_if,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Es sind Allergien/Unverträglichkeiten zu beachten',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 23,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Unser/Mein Kind leidet unter folgenden Allergien/Unverträglichkeiten:',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 24,
-                    EventManager_Model_Option::FLD_OPTION_REQUIRED => $option_required_if,
-                    EventManager_Model_Option::FLD_DISPLAY => $option_display_if,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Nahrungsgewohnheiten',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 25,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Unser/Mein Kind ist Vergetarier/in:',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 26,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Ich bin damit einverstanden, dass...',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 27,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'mein Kind für bestimmte Unternehmungen und im begrenztem Umfang (z.B. Stadtbesichtigung, Einkäufe ect.) in Kleingruppen (mind. 3 Personen) ohne Aufsichtsperson unterwegs sein darf.',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 28,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'mein Kind an Badeausflügen unter Aufsicht teilnehmen kann.',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 29,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Mein Kind ist Nichtschwimmer',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Schwimmkenntnisse des Kindes',
-                    EventManager_Model_Option::FLD_SORTING => 30,
-                    EventManager_Model_Option::FLD_OPTION_REQUIRED => $option_required_if,
-                    EventManager_Model_Option::FLD_DISPLAY => $option_display_if,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Mein Kind ist Schwimmer/Schwimmerin',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Schwimmkenntnisse des Kindes',
-                    EventManager_Model_Option::FLD_SORTING => 31,
-                    EventManager_Model_Option::FLD_OPTION_REQUIRED => $option_required_if,
-                    EventManager_Model_Option::FLD_DISPLAY => $option_display_if,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Mein Kind hat folgendes Schwimmabzeichen',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Schwimmkenntnisse des Kindes',
-                    EventManager_Model_Option::FLD_SORTING => 32,
-                    EventManager_Model_Option::FLD_OPTION_REQUIRED => $option_required_if,
-                    EventManager_Model_Option::FLD_DISPLAY => $option_display_if,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'mein Kind in PKW/Kleinbus mit Leitenden als Fahrer/Fahrerin mitfahren darf.',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 50,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'mein Kind im Falle einer kleineren Verletzung (z.B. Schnitt, Schürfwunde, ect.) ein handelsübliches Pflaster erhält.',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 51,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'mein Kind bei einem Zeckenbiss die Zecke von einer Betreuungsperson entfernt bekommt.',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 52,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'mein Kind, wenn es ständig oder in einer schwerwiegenden Sache gegen die Anordnung der GruppenleiterInnen verstößt, nach Rücksprache mit Frau Ann-Kathrin Berndmeyer - pastorale Mitarbeiterin - und mir auf eigene Kosten und Verantwortung vorzeitig nach Hause geschickt oder von mir abgeholt werden kann.',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 53,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Sonstige Dinge, die beachtet werden müssen oder die Sie uns mitteilen möchten:',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextInputDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 60,
-                    EventManager_Model_Option::FLD_OPTION_REQUIRED => $option_not_required,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Für uns gehört es zu einer guten Vorbereitung, auch alle rechtlichen Fragen vorher genau zu klären.
+        $gNotfall = 'Notfallkontakt in der Zeit des Zeltlagers:';
+        $gSchwimm = 'Schwimmkenntnisse des Kindes';
+        $haftungIntro = 'Für uns gehört es zu einer guten Vorbereitung, auch alle rechtlichen Fragen vorher genau zu klären.
 Da unsere Leiter ehrenamtlich tätig sind, können wir ihnen keine weitgehende persönliche Haftung
-auferlegen. Unsere Haftung ist daher wie folgt auf die Versicherungsleistung beschränkt:',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigTextDemoData('• Die persönliche Haftung der Leiter ist über die Leistung der vorhandenen Versicherung hinaus
+auferlegen. Unsere Haftung ist daher wie folgt auf die Versicherungsleistung beschränkt:';
+        $haftungText = '• Die persönliche Haftung der Leiter ist über die Leistung der vorhandenen Versicherung hinaus
 ausgeschlossen, soweit dies gesetzlich zulässig ist, also auch im Falle einer Fahrlässigkeit. Dies gilt
 insbesondere, wenn ein Teilnehmer einen Schaden erleidet oder verursacht, nachdem er eine
 Weisung der Leitung unbeachtet gelassen oder sich unerlaubt von der Gemeinschaft entfernt hat.
 
-• Verursacht ein Teilnehmer einen Schaden, für welchen ein Leiter in Anspruch genommen wird, so ist
+- Verursacht ein Teilnehmer einen Schaden, für welchen ein Leiter in Anspruch genommen wird, so ist
 dieser verpflichtet, den in Anspruch Genommenen von der Haftung freizustellen, soweit keine
 Versicherung den Schaden übernimmt.
 
 Ich wurde über das Programm des Zeltlagers informiert und weiß, dass u. A. folgende
 Programmpunkte durchgeführt werden: Stadttag, Nachtspiele, Sternlauf, Sauerei, Postenläufe,
-Waldspiele, Schwimmen, Küchen- & Klodienst'),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextOption::class,
-                    EventManager_Model_Option::FLD_GROUP => '',
-                    EventManager_Model_Option::FLD_SORTING => 70,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Hiermit erkläre ich/wir mich/uns einverstanden, dass ein geringfügiger Überschuss nicht an mich zurückgezahlt werden muss, sondern für die Zeltlager der folgenden Jahre verwendet werden darf.',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigCheckboxDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Verzicht auf Rückerstattung Überschüsse',
-                    EventManager_Model_Option::FLD_SORTING => 80,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Ich/Wir haben die "Belehrung für Eltern und Sonstige Sorgeberechtigte gem. §34 Abs. 5, S.2 Infektionsschutzgesetz (IfSG)" zur Kenntnis genommen.',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigFileDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_FileOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Belehrung nach Infektionsschutzgesetz',
-                    EventManager_Model_Option::FLD_SORTING => 90,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Einwilligungserklärung über die Erstellung von Foto und Videoaufnahmen meines Kindes während der Veranstaltung. (Bitte die Einwilligung ausfüllen und unterschrieben hier wieder hochladen)',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigFileDemoData(false),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_FileOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Foto und Videoaufnahmen',
-                    EventManager_Model_Option::FLD_SORTING => 110,
-                ],
-                [
-                    EventManager_Model_Option::FLD_NAME_OPTION => 'Datenschutz Information für das Zeltlager',
-                    EventManager_Model_Option::FLD_OPTION_CONFIG => $this->setOptionConfigFileDemoData(),
-                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_FileOption::class,
-                    EventManager_Model_Option::FLD_GROUP => 'Datenschutzhinweis',
-                    EventManager_Model_Option::FLD_SORTING => 200,
-                ],
-            ],
-            EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
-            EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
-                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
-                EventManager_Model_EventLocalization::FLD_TEXT => 'BESCHREIBUNG HIER'
-            ]],
-        ]));
-        $templates[] = $template3;
+Waldspiele, Schwimmen, Küchen- & Klodienst';
 
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Event Templates were created'
-            . EventManager_Model_Event::MODEL_NAME_PART);
+        $templates[] = $this->_createTemplate('Zeltlager', [
+            $this->_opt('text_input', 'Jahre', 'Alter im Zeltlager:', 1, [false]),
+            $this->_opt('text_input', 'Name', $gNotfall, 10, [false]),
+            $this->_opt('text_input', 'Telefonnummer', $gNotfall, 11, [false]),
+            $this->_opt('text_input', 'E-Mailadresse', $gNotfall, 12, [false]),
+            $this->_opt('text', 'Wir benötigen die nachfolgenden Angaben, um Ihr Kind während der Fahrt vor gesundheitlichen Gefahren bewahren und in Notfallsituationen richtig handeln zu können!', '', 20),
+            $this->_opt('checkbox', 'Unser/Mein Kind muss während der Fahrt Medikamente einnehmen', '', 21),
+            $this->_opt('text_input', 'Arzneimittel / Einnahmeturnus / Menge:', '', 22, extra: $conditional),
+            $this->_opt('checkbox', 'Es sind Allergien/Unverträglichkeiten zu beachten', '', 23),
+            $this->_opt('text_input', 'Unser/Mein Kind leidet unter folgenden Allergien/Unverträglichkeiten:', '', 24, extra: $conditional),
+            $this->_opt('text_input', 'Nahrungsgewohnheiten', '', 25),
+            $this->_opt('checkbox', 'Unser/Mein Kind ist Vergetarier/in:', '', 26),
+            $this->_opt('text', 'Ich bin damit einverstanden, dass...', '', 27),
+            $this->_opt('checkbox', 'mein Kind für bestimmte Unternehmungen und im begrenztem Umfang (z.B. Stadtbesichtigung, Einkäufe ect.) in Kleingruppen (mind. 3 Personen) ohne Aufsichtsperson unterwegs sein darf.', '', 28),
+            $this->_opt('checkbox', 'mein Kind an Badeausflügen unter Aufsicht teilnehmen kann.', '', 29),
+            $this->_opt('checkbox', 'Mein Kind ist Nichtschwimmer', $gSchwimm, 30, extra: $conditional),
+            $this->_opt('checkbox', 'Mein Kind ist Schwimmer/Schwimmerin', $gSchwimm, 31, extra: $conditional),
+            $this->_opt('text_input', 'Mein Kind hat folgendes Schwimmabzeichen', $gSchwimm, 32, extra: $conditional),
+            $this->_opt('checkbox', 'mein Kind in PKW/Kleinbus mit Leitenden als Fahrer/Fahrerin mitfahren darf.', '', 50),
+            $this->_opt('checkbox', 'mein Kind im Falle einer kleineren Verletzung (z.B. Schnitt, Schürfwunde, ect.) ein handelsübliches Pflaster erhält.', '', 51),
+            $this->_opt('checkbox', 'mein Kind bei einem Zeckenbiss die Zecke von einer Betreuungsperson entfernt bekommt.', '', 52),
+            $this->_opt('checkbox', 'mein Kind, wenn es ständig oder in einer schwerwiegenden Sache gegen die Anordnung der GruppenleiterInnen verstößt, nach Rücksprache mit Frau Ann-Kathrin Berndmeyer - pastorale Mitarbeiterin - und mir auf eigene Kosten und Verantwortung vorzeitig nach Hause geschickt oder von mir abgeholt werden kann.', '', 53),
+            $this->_opt('text_input', 'Sonstige Dinge, die beachtet werden müssen oder die Sie uns mitteilen möchten:', '', 60, extra: $notRequired),
+            $this->_opt('text', $haftungIntro, '', 70, [$haftungText]),
+            $this->_opt('checkbox', 'Hiermit erkläre ich/wir mich/uns einverstanden, dass ein geringfügiger Überschuss nicht an mich zurückgezahlt werden muss, sondern für die Zeltlager der folgenden Jahre verwendet werden darf.', 'Verzicht auf Rückerstattung Überschüsse', 80),
+            $this->_opt('file', 'Ich/Wir haben die "Belehrung für Eltern und Sonstige Sorgeberechtigte gem. §34 Abs. 5, S.2 Infektionsschutzgesetz (IfSG)" zur Kenntnis genommen.', 'Belehrung nach Infektionsschutzgesetz', 90),
+            $this->_opt('file', 'Einwilligungserklärung über die Erstellung von Foto und Videoaufnahmen meines Kindes während der Veranstaltung. (Bitte die Einwilligung ausfüllen und unterschrieben hier wieder hochladen)', 'Foto und Videoaufnahmen', 110, [false]),
+            $this->_opt('file', 'Datenschutz Information für das Zeltlager', 'Datenschutzhinweis', 200),
+        ]);
 
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Event Templates were created');
 
-        // dependent option name => trigger option name it depends on
-        $rulesMap = [
+        $this->_applyOptionRules($templates, [
             'Arzneimittel / Einnahmeturnus / Menge:' =>
                 'Unser/Mein Kind muss während der Fahrt Medikamente einnehmen',
             'Unser/Mein Kind leidet unter folgenden Allergien/Unverträglichkeiten:' =>
                 'Es sind Allergien/Unverträglichkeiten zu beachten',
             'Mein Kind ist Nichtschwimmer' =>
-            'mein Kind an Badeausflügen unter Aufsicht teilnehmen kann.',
+                'mein Kind an Badeausflügen unter Aufsicht teilnehmen kann.',
             'Mein Kind ist Schwimmer/Schwimmerin' =>
                 'mein Kind an Badeausflügen unter Aufsicht teilnehmen kann.',
             'Mein Kind hat folgendes Schwimmabzeichen' =>
                 'Mein Kind ist Schwimmer/Schwimmerin',
-        ];
+        ]);
+    }
 
+    protected function _applyOptionRules(array $templates, array $rulesMap): void
+    {
         foreach ($templates as $template) {
-            $options = $template->{EventManager_Model_Event::FLD_OPTIONS};
-
             $byName = [];
-            foreach ($options as $opt) {
+            foreach ($template->{EventManager_Model_Event::FLD_OPTIONS} as $opt) {
                 $byName[$opt->{EventManager_Model_Option::FLD_NAME_OPTION}] = $opt;
             }
 
@@ -648,11 +294,8 @@ Waldspiele, Schwimmen, Küchen- & Klodienst'),
                     continue;
                 }
 
-                $dependent = $byName[$dependentName];
-                $trigger   = $byName[$triggerName];
-
-                $dependent->{EventManager_Model_Option::FLD_OPTION_RULE} = [
-                    $this->setOptionsRuleConfigDemoData($trigger->getId(), 1, ''),
+                $byName[$dependentName]->{EventManager_Model_Option::FLD_OPTION_RULE} = [
+                    $this->setOptionsRuleConfigDemoData($byName[$triggerName]->getId(), 1, ''),
                 ];
                 $changed = true;
             }
@@ -661,5 +304,113 @@ Waldspiele, Schwimmen, Küchen- & Klodienst'),
                 EventManager_Controller_Event::getInstance()->update($template);
             }
         }
+    }
+
+    public function createEventForOptionTemplates(): void
+    {
+        if (self::hasOptionTemplatesBeenRun()) {
+            return;
+        }
+
+        $options = array_map(
+            fn(array $o) => $o + [EventManager_Model_Option::FLD_IS_OPTION_TEMPLATE => true],
+            [
+                $this->_opt('checkbox', 'Konventionell', 'Verpflegung', 1),
+                $this->_opt('checkbox', 'Vegetarisch', 'Verpflegung', 2),
+                $this->_opt('checkbox', 'Vegan', 'Verpflegung', 3),
+                $this->_opt('checkbox', 'Ich nehme nicht an den Mahlzeiten teil', 'Verpflegung', 4),
+                $this->_opt('text_input', 'Allergien und Unverträglichkeiten', 'Verpflegung', 5),
+                $this->_opt('checkbox', 'Einzelzimmer', 'Unterbringung', 6),
+                $this->_opt('checkbox', 'Doppelzimmer', 'Unterbringung', 7),
+                $this->_opt('checkbox', 'Keine Übernachtung', 'Unterbringung', 8),
+                $this->_opt('text_input', 'Doppelzimmer mit...', 'Unterbringung', 9),
+                $this->_opt('file', 'Einwilligungserklärung über die Erstellung von Foto und Videoaufnahmen während der Veranstaltung. (Bitte die Einwilligung ausfüllen und unterschrieben hier wieder hochladen)', null, 20, [false]),
+                $this->_opt('file', 'Datenschutz Information', null, 30),
+            ]
+        );
+
+        $this->_createTemplate('Veranstaltung für Optionsvorlagen', $options);
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Event for Option Templates was created');
+    }
+
+    protected function _getTemplateContext(): array
+    {
+        if ($this->_templateContext === null) {
+            $config = EventManager_Config::getInstance();
+            $config->set(EventManager_Config::JWT_SECRET, 'jwtSecretCreatedFromEventManagerTemplates');
+
+            $this->_templateContext = [
+                'container_id' => EventManager_Setup_Initialize::_getOrCreateSharedEventContainer(
+                    $config->get(EventManager_Config::EVENT_TEMPLATES_CONTAINER_NAME),
+                    EventManager_Model_Event::class,
+                    EventManager_Config::APP_NAME
+                )->getId(),
+                'type'           => $config->get(EventManager_Config::EVENT_TYPE)->records->getById('1'),
+                'status'         => $config->get(EventManager_Config::EVENT_STATUS)->records->getById('2'),
+                'contact_fields' => $this->_getDefaultContactFields(),
+            ];
+        }
+        return $this->_templateContext;
+    }
+
+    protected function _localized(string $text, string $lang = 'de'): array
+    {
+        return [[
+            EventManager_Model_EventLocalization::FLD_LANGUAGE => $lang,
+            EventManager_Model_EventLocalization::FLD_TEXT     => $text,
+        ]];
+    }
+
+    protected function _createTemplate(
+        string $name,
+        array $options,
+        string $description = 'BESCHREIBUNG HIER'
+    ): EventManager_Model_Event {
+        $ctx = $this->_getTemplateContext();
+
+        return EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
+            EventManager_Model_Event::FLD_CONTAINER_ID                => $ctx['container_id'],
+            EventManager_Model_Event::FLD_NAME                        => $this->_localized($name),
+            EventManager_Model_Event::FLD_START                       => '',
+            EventManager_Model_Event::FLD_END                         => '',
+            EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL => '',
+            EventManager_Model_Event::FLD_LOCATION_RECORD             => '',
+            EventManager_Model_Event::FLD_TYPE                        => $ctx['type'],
+            EventManager_Model_Event::FLD_STATUS                      => $ctx['status'],
+            EventManager_Model_Event::FLD_FEE                         => '',
+            EventManager_Model_Event::FLD_TOTAL_PLACES                => '',
+            EventManager_Model_Event::FLD_BOOKED_PLACES               => '',
+            EventManager_Model_Event::FLD_AVAILABLE_PLACES            => '',
+            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS  => $ctx['contact_fields'],
+            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS   => $ctx['contact_fields'],
+            EventManager_Model_Event::FLD_IS_TEMPLATE                 => true,
+            EventManager_Model_Event::FLD_OPTIONS                     => $options,
+            EventManager_Model_Event::FLD_REGISTRATIONS               => [],
+            EventManager_Model_Event::FLD_APPOINTMENTS                => [],
+            EventManager_Model_Event::FLD_DESCRIPTION                 => $this->_localized($description),
+        ]));
+    }
+
+    protected function _opt(
+        string $type,
+        string $name,
+        ?string $group,
+        int $sorting,
+        array $configArgs = [],
+        array $extra = []
+    ): array {
+        [$class, $configMethod] = self::OPTION_TYPES[$type];
+
+        $option = [
+            EventManager_Model_Option::FLD_NAME_OPTION         => $name,
+            EventManager_Model_Option::FLD_OPTION_CONFIG       => $this->$configMethod(...$configArgs),
+            EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => $class,
+            EventManager_Model_Option::FLD_SORTING             => $sorting,
+        ];
+        if ($group !== null) {
+            $option[EventManager_Model_Option::FLD_GROUP] = $group;
+        }
+        return $option + $extra;
     }
 }
