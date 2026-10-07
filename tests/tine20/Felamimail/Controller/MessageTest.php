@@ -1,7 +1,7 @@
 <?php
 
 /**
- * tine Groupware
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     Felamimail
  * @license     https://www.gnu.org/licenses/agpl.html
@@ -2263,6 +2263,29 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
 
         $this->assertStringContainsString('<a href="https://teams.live.com/meet/9477691496180" target="_blank">Click here to join the meeting</a>', $message->body);
+    }
+
+    /**
+     * test that getMessagePart checks ACL when another user tries to fetch a message part
+     *
+     * @see https://github.com/tine-groupware/tine/issues/
+     */
+    public function testGetMessagePartAclCheck()
+    {
+        $cachedMessage = $this->messageTestHelper('text_plain.eml', 'text/plain');
+
+        // switch to different user who should NOT have access to this message
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $originalUser = Tinebase_Core::getUser();
+        Tinebase_Core::set(Tinebase_Core::USER, $sclever);
+
+        try {
+            $this->expectException(Tinebase_Exception_AccessDenied::class);
+            $this->_getController()->getMessagePart($cachedMessage, '1');
+        } finally {
+            // restore original user
+            Tinebase_Core::set(Tinebase_Core::USER, $originalUser);
+        }
     }
 
     /**

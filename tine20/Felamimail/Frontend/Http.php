@@ -190,7 +190,9 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function downloadMessage($messageId)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Downloading Message ' . $messageId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Downloading Message ' . $messageId);
+        }
         
         $this->_outputMessagePart($messageId);
     }
