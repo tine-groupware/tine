@@ -41,7 +41,7 @@ export default async () => {
                 },
             },
             devMiddleware: {
-                writeToDisk: (filePath) => /\/(js|css)\/build\//.test(filePath),
+                writeToDisk: (filePath) => /\/(js|styles)\/build\//.test(filePath),
             },
             // onBeforeSetupMiddleware: function(app, server) {
             //     app.use(function(req, res, next) {
