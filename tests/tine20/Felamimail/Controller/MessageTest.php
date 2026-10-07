@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
@@ -513,9 +513,9 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
 
         $body = $this->_getController()->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT, $this->_account, true);
-        
+
         $this->assertStringContainsString('würde', $body);
-        
+
         // @todo check for seen flag
     }
     
@@ -769,7 +769,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
     public function testGetCompleteMessageDifferentEncoding()
     {
         $cachedMessage = $this->messageTestHelper('UmlauteUTF8TextISO-8859-15Signatur.eml', 'text/different');
-        
+
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
         $this->assertEquals('text/plain', $message->content_type);
         $this->assertStringContainsString('Umlaute UTF8 Text + ISO-8859-15 Signatur', $message->subject);
@@ -2245,6 +2245,29 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
 
         $this->assertStringContainsString('<a href="https://teams.live.com/meet/9477691496180" target="_blank">Click here to join the meeting</a>', $message->body);
+    }
+
+    /**
+     * test that getMessagePart checks ACL when another user tries to fetch a message part
+     *
+     * @see https://github.com/tine-groupware/tine/issues/
+     */
+    public function testGetMessagePartAclCheck()
+    {
+        $cachedMessage = $this->messageTestHelper('text_plain.eml', 'text/plain');
+
+        // switch to different user who should NOT have access to this message
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $originalUser = Tinebase_Core::getUser();
+        Tinebase_Core::set(Tinebase_Core::USER, $sclever);
+
+        try {
+            $this->expectException(Tinebase_Exception_AccessDenied::class);
+            $this->_getController()->getMessagePart($cachedMessage, '1');
+        } finally {
+            // restore original user
+            Tinebase_Core::set(Tinebase_Core::USER, $originalUser);
+        }
     }
 
     /**
