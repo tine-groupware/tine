@@ -17,7 +17,8 @@
 }
 
 .x-menu-list-item{
-	font:normal 11px arial,tahoma,sans-serif;
+	font-weight: normal;
+	font-size: 11px;
 }
 
 .x-menu-sep {
@@ -88,7 +89,8 @@ a.x-menu-item {
   border-width: 1px;
   margin:-2px -2px 0;
   color:#15428b;
-  font:bold 10px tahoma,arial,verdana,sans-serif;
+  font-weight: bold;
+  font-size: 10px;
   display:block;
   padding:3px;
 }

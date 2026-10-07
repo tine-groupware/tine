@@ -41,7 +41,7 @@
   }
 
   code {
-    font-family: monospace;
+    font-family: var(--bs-font-monospace);
     font-size: 0.9em;
     background: rgba(0, 0, 0, 0.06);
     padding: 0.1em 0.3em;
@@ -80,7 +80,7 @@
   }
 
   pre {
-    font-family: monospace;
+    font-family: var(--bs-font-monospace);
     font-size: 0.9em;
     background: rgba(0, 0, 0, 0.06);
     padding: 0.75em 1em;
