@@ -6,7 +6,9 @@
  */
 
 .x-form-field{
-    font:normal 12px arial, tahoma, helvetica, sans-serif;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: normal;
 }
 
 .x-form-check-group-label {
@@ -29,16 +31,19 @@ input.x-form-invalid, textarea.x-form-invalid {
 }
 
 .x-form-grow-sizer {
-	font:normal 12px arial, tahoma, helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 12px;
 }
 
 .x-form-item {
-    font:normal 12px arial, tahoma, helvetica, sans-serif;
+    font-weight: normal;
+    font-size: 12px;
 }
 
 .x-form-invalid-msg {
     color:#c0272b;
-    font:normal 11px arial, tahoma, helvetica, sans-serif;
+    font-weight: normal;
+    font-size: 11px;
     background-image:url(../images/default/shared/warning.gif);
 }
 
@@ -47,11 +52,15 @@ input.x-form-invalid, textarea.x-form-invalid {
 }
 
 .x-small-editor .x-form-field {
-    font:normal 11px arial, tahoma, helvetica, sans-serif;
+    font-weight: normal;
+    font-size: 11px;
+    line-height: normal;
 }
 
 .ext-webkit .x-small-editor .x-form-field {
-    font:normal 11px arial, tahoma, helvetica, sans-serif;
+    font-weight: normal;
+    font-size: 11px;
+    line-height: normal;
 }
 
 .x-form-invalid-icon {
@@ -63,6 +72,7 @@ input.x-form-invalid, textarea.x-form-invalid {
 }
 
 .x-fieldset legend {
-    font:bold 11px arial, tahoma, helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 11px;
     color:#15428b;
 }

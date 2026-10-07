@@ -290,7 +290,9 @@
 
 .preview-panel-felamimail-body .x-form-textarea {
     margin-top: 5px;
-    font: normal 13px courier;
+    font-family: var(--bs-font-monospace);
+    font-weight: normal;
+    font-size: 13px;
     border: 0;
 }
 
@@ -486,7 +488,8 @@
 
 .felamimail-sieverule-conjunction {
     color: #15428b;
-    font: bold 11px tahoma,arial,verdana,sans-serif;
+    font-weight: bold;
+    font-size: 11px;
 }
 
 .felamimail-is-external-recipient .x-grid3-col-address {
