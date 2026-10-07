@@ -4,55 +4,143 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
-.x-window-proxy {
-    background-color:#c7dffc;
-    border-color:#99bbe8;
+@use "../../bootstrap-vue/variables" as bs;
+
+// NOTE: Ext.Window is styled like a bootstrap modal (.modal-content/-header/-body/-footer).
+//       The modal css vars are only defined on .modal, so we define them on .x-window as well.
+.x-window {
+    --bs-modal-padding: #{bs.$modal-inner-padding};
+    --bs-modal-color: #{bs.$modal-content-color};
+    --bs-modal-bg: #{bs.$modal-content-bg};
+    --bs-modal-border-color: #{bs.$modal-content-border-color};
+    --bs-modal-border-width: #{bs.$modal-content-border-width};
+    --bs-modal-border-radius: #{bs.$modal-content-border-radius};
+    // floating windows are not always backed by a backdrop - use the (sm-up) modal shadow
+    --bs-modal-box-shadow: #{bs.$modal-content-box-shadow-sm-up};
+    --bs-modal-inner-border-radius: #{bs.$modal-content-inner-border-radius};
+    --bs-modal-header-padding: #{bs.$modal-header-padding};
+    --bs-modal-header-border-color: #{bs.$modal-header-border-color};
+    --bs-modal-header-border-width: #{bs.$modal-header-border-width};
+    --bs-modal-title-line-height: #{bs.$modal-title-line-height};
+    --bs-modal-footer-gap: #{bs.$modal-footer-margin-between};
+    --bs-modal-footer-border-color: #{bs.$modal-footer-border-color};
+    --bs-modal-footer-border-width: #{bs.$modal-footer-border-width};
+
+    color: var(--bs-modal-color);
+    background-color: var(--bs-modal-bg);
+    background-clip: padding-box;
+    border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
+    border-radius: var(--bs-modal-border-radius);
+    box-shadow: var(--bs-modal-box-shadow);
+    outline: 0;
 }
 
+.x-window-maximized {
+    border-width: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+// .modal-header / .modal-title
 .x-window-tl .x-window-header {
-    color:#15428b;
-	font-weight: bold;
-	font-size: 11px;
+    display: flex;
+    align-items: center;
+    padding: var(--bs-modal-header-padding);
+    border-bottom: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color);
+    border-top-left-radius: var(--bs-modal-inner-border-radius);
+    border-top-right-radius: var(--bs-modal-inner-border-radius);
+    color: inherit;
+    font-size: bs.$h5-font-size;
+    font-weight: bs.$headings-font-weight;
+    line-height: var(--bs-modal-title-line-height);
+
+    .x-window-header-text {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    // tools are rendered before the title - move them to the end
+    .x-tool {
+        order: 1;
+        flex-shrink: 0;
+        float: none;
+        margin-left: bs.$modal-header-padding-x * .5;
+        opacity: bs.$btn-close-opacity;
+
+        &:hover {
+            opacity: bs.$btn-close-hover-opacity;
+        }
+    }
+
+    // .btn-close
+    .x-tool-close {
+        width: bs.$btn-close-width;
+        height: bs.$btn-close-height;
+        box-sizing: content-box;
+        padding: bs.$btn-close-padding-y bs.$btn-close-padding-x;
+        background: transparent bs.escape-svg(bs.$btn-close-bg) center / bs.$btn-close-width auto no-repeat !important;
+    }
 }
 
+// header icon (iconCls) - keep it inside the header padding
+.x-window-tl .x-window-header.x-panel-icon {
+    padding-left: calc(#{bs.$modal-header-padding-x} + 20px) !important;
+    background-position: bs.$modal-header-padding-x center;
+}
+
+.x-window-maximized .x-window-tl .x-window-header {
+    border-radius: 0;
+}
+
+// .modal-footer - the buttons of the window itself or of the dialog (panel) inside the window
+.x-window .x-panel-btns {
+    padding: calc(var(--bs-modal-padding) - var(--bs-modal-footer-gap) * .5);
+    background-color: var(--bs-modal-bg);
+    border-top: var(--bs-modal-footer-border-width) solid var(--bs-modal-footer-border-color);
+    border-bottom-left-radius: var(--bs-modal-inner-border-radius);
+    border-bottom-right-radius: var(--bs-modal-inner-border-radius);
+
+    // .modal-footer > *
+    td.x-toolbar-cell {
+        padding: calc(var(--bs-modal-footer-gap) * .5);
+    }
+}
 
 .x-window-mc {
-    border-color:#99bbe8;
-    font-weight: normal;
-    font-size: 11px;
-    background-color:#dfe8f6;
+    border-width: 0;
+    background-color: transparent;
 }
 
-
-.x-window-maximized .x-window-tc {
-    background-color:#fff;
+.x-window-proxy {
+    background-color: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
+    border-radius: var(--bs-border-radius-lg);
 }
 
 .x-window-bbar .x-toolbar {
-    border-top-color:#99bbe8;
+    border-top-color: var(--bs-border-color);
 }
 
-.x-panel-ghost .x-window-tl {
-    border-bottom-color:#99bbe8;
-}
-
+.x-panel-ghost .x-window-tl,
 .x-panel-collapsed .x-window-tl {
-    border-bottom-color:#84a0c4;
+    border-bottom-color: var(--bs-border-color);
 }
 
-.x-dlg-mask{
-   background-color:#ccc;
+// .modal-backdrop - Ext.Window renders its mask directly before the window element
+.ext-el-mask:has(+ .x-window) {
+    background-color: bs.$modal-backdrop-bg;
+    opacity: bs.$modal-backdrop-opacity;
 }
 
-.x-window-plain .x-window-mc {
-    background-color: #ccd9e8;
-    border-color: #a3bae9 #dfe8f6 #dfe8f6 #a3bae9;
+.x-dlg-mask {
+    background-color: bs.$modal-backdrop-bg;
+    opacity: bs.$modal-backdrop-opacity;
 }
 
+.x-window-plain .x-window-mc,
 .x-window-plain .x-window-body {
-    border-color: #dfe8f6 #a3bae9 #a3bae9 #dfe8f6;
-}
-
-body.x-body-masked .x-window-plain .x-window-mc {
-    background-color: #ccd9e8;
+    border-width: 0;
 }

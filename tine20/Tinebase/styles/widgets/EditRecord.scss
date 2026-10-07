@@ -4,6 +4,7 @@
 .x-panel-footer .x-form-item div {
     padding-top: 0px;
 }
-.tw-editdialog .x-panel-footer {
+// NOTE: :where keeps the specificity low - in Ext.Windows the modal footer style (ExtJS/visual/window.scss) wins
+:where(.tw-editdialog) .x-panel-footer {
     background-color: rgb(240, 240, 240);
 }

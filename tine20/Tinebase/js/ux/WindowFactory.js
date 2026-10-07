@@ -93,9 +93,7 @@ Ext.ux.WindowFactory.prototype = {
             c.id = c.name;
 
             // add titleBar
-            c.height = c.height + 20;
-            // border width
-            c.width = c.width + 16;
+            c.height = c.height + 47;
 
             // save normal size
             c.normSize = { width: c.width, height: c.height };
