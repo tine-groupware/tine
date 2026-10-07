@@ -528,6 +528,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $this->get($_id);
         }
 
+        Felamimail_Controller_Account::getInstance()->checkAccess($message);
+
         // need to re-fetch part structure of RFC822 messages because message structure is used instead
         $partContentType = ($_partId && isset($message->structure['parts'][$_partId])) ? $message->structure['parts'][$_partId]['contentType'] : NULL;
         $partStructure = ($_partStructure !== NULL
