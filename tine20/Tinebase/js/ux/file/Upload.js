@@ -75,7 +75,7 @@ Ext.ux.file.Upload = function(config) {
     this.file = this.file?.fileObject ?? this.file;
     this.fileSize = (this.file.size ? this.file.size : this.file.fileSize);
 
-    this.maxChunkSize = this.maxPostSize - 16384;
+    this.maxChunkSize = Math.min(this.maxPostSize - 16384, this.maxChunkSize);
     this.currentChunkSize = this.maxChunkSize;
     
     this.tempFiles = [];
