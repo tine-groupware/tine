@@ -1,10 +1,16 @@
 html, body {
-    font:normal 12px verdana;
+    font-family: var(--bs-body-font-family);
+    font-size: 12px;
     margin:0;
     padding:0;
     border:0 none;
     overflow:hidden;
     height:100%;
+}
+
+// bootstrap reboot is not loaded globally - form elements don't inherit the font by default
+input, button, select, optgroup, textarea {
+    font-family: inherit;
 }
 
 .tine-gird-cell-date div,

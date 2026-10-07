@@ -11,7 +11,8 @@
 
 .x-date-middle,.x-date-left,.x-date-right {
 	color:#fff;
-	font:bold 11px "sans serif", tahoma, verdana, helvetica;
+	font-weight: bold;
+	font-size: 11px;
 }
 
 .x-date-middle .x-btn .x-btn-text {
@@ -21,7 +22,8 @@
 .x-date-inner th {
     background-color:#dfecfb;
 	border-bottom-color:#a3bad9;
-    font:normal 10px arial, helvetica,tahoma,sans-serif;
+    font-weight: normal;
+    font-size: 10px;
 	color:#233d6d;
 }
 
@@ -30,7 +32,8 @@
 }
 
 .x-date-inner a {
-    font:normal 11px arial, helvetica,tahoma,sans-serif;
+    font-weight: normal;
+    font-size: 11px;
     color:#000;
 }
 
@@ -84,14 +87,16 @@
 }
 
 .x-date-mp td {
-	font:normal 11px arial, helvetica,tahoma,sans-serif;
+	font-weight: normal;
+	font-size: 11px;
 }
 
 .x-date-mp-btns button {
 	background-color:#083772;
 	color:#fff;
 	border-color: #3366cc #000055 #000055 #3366cc;
-	font:normal 11px arial, helvetica,tahoma,sans-serif;
+	font-weight: normal;
+	font-size: 11px;
 }
 
 .x-date-mp-btns {

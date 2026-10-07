@@ -236,7 +236,7 @@ const logoUrl = `logo/i/300x100/image%2Fsvg%2Bxml/${isDark ? 'dark' : 'light'}`
     </div>
     <div
         class="tine-viewport-poweredby"
-        style='position: absolute; bottom: 10px; right: 10px; font:normal 12px arial, helvetica,tahoma,sans-serif;'>
+        style='position: absolute; bottom: 10px; right: 10px; font-size: 12px;'>
       {{ i18n._('Powered by:') }}
       <a target='_blank' :href="Tine.weburl" :title="i18n._('online open source groupware and crm')">
         {{ Tine.title }}
