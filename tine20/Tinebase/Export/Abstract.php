@@ -516,6 +516,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             array_walk($files, fn(&$val) => $val = basename($val));
         }
 
+        Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' $files ' . print_r($files, true));
+
         $maxMatches = 0;
         $maxMatchesIndex = -1;
         foreach ($files as $key => $file) {
