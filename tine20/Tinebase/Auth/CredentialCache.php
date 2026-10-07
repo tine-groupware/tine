@@ -147,9 +147,10 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         $cache->setConvertDates(true);
         
         $this->_encrypt($cache);
-        $this->_saveInSession($cache);
         if ($persist) {
             $this->_persistCache($cache);
+        } else {
+            $this->_saveInSession($cache);
         }
         
         return $cache;
@@ -229,7 +230,6 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
 
         /** @var Tinebase_Model_CredentialCache $result */
         $result = $this->get($id);
-        $this->_saveInSession($result);
         
         return $result;
     }
