@@ -72,6 +72,7 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_NewAbstract implements SSO
             self::FLD_METADATA_URL      => [
                 self::TYPE                  => self::TYPE_STRING,
                 self::LENGTH                => 255,
+                self::DESCRIPTION           => 'Consumer Metadata URL: https://my.tine.url/sso/saml2/idpmetadata', // _('Consumer Metadata URL: https://my.tine.url/sso/saml2/idpmetadata')
                 self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY  => true,
                 ],
