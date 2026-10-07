@@ -68,6 +68,9 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             $matchData[] = 'CATEGORY-' . $cat . '--';
         }
 
+        Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' $matchData ' . print_r($matchData,true));
+        
         if (null !== ($overwriteTemplate = $this->_findOverwriteTemplate($this->_templateFileName, $matchData))) {
             $this->_templateFileName = $overwriteTemplate;
             $this->_createDocument();
