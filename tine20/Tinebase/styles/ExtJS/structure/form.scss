@@ -205,8 +205,8 @@ textarea {
 
 // toolbar items are close together - the next item would paint over the focus ring
 .x-toolbar .x-form-field-wrap:focus-within,
-.x-toolbar .form-control:focus,
-.x-toolbar .form-select:focus {
+.x-toolbar .form-control:not(.x-form-field-wrap > *):focus,
+.x-toolbar .form-select:not(.x-form-field-wrap > *):focus {
   position: relative;
   z-index: 1;
 }
