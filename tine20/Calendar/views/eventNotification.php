@@ -26,7 +26,7 @@ foreach ($this->updates as $field => $update) {
         $translatedMessage = $this->translate->_('%1$s changed from "%2$s" to "%3$s"');
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            Tinebase_Core::getLogger()->debug('Calendar/views/eventNotification::' . __LINE__
                 . ' $i18nFieldName: ' . $i18nFieldName
                 . ' $i18nOldValue: ' . $i18nOldValue
                 . ' $i18nCurrValue: ' . $i18nCurrValue
