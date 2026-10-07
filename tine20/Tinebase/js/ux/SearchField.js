@@ -70,8 +70,8 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TriggerField, {
             this.fireEvent('change', this, this.getRawValue(), this.startValue);
             this.startValue = this.getRawValue();
             this.hasSearch = false;
-            this.clearer.assertState();
         }
+        this.clearer.assertState();
     },
     /**
      * @private
