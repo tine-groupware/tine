@@ -341,7 +341,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     public function getValueForUser($_preferenceName, $_accountId, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Get value for ' . $_preferenceName . ' of account id '. $_accountId . ' / ' . $_accountType);
+            . ' Get value for ' . $_preferenceName . ' of account id '. $_accountId . ' (type ' . $_accountType . ')');
         
         try {
             $queryResult = $this->_getPrefs($_preferenceName, $_accountId, $_accountType);
