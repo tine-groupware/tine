@@ -2137,7 +2137,7 @@ msgstr "Wystąpił wyjątek serii wydarzeń."
 
 #, fuzzy, php-format
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr "%1$s został zmieniony z \"%2$\" na \"%3$\""
+msgstr "%1$s został zmieniony z \"%2$s\" na \"%3$s\""
 
 #, php-format
 msgid "%1$s has been invited"
