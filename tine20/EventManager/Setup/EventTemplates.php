@@ -148,6 +148,7 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
      */
     public function unsetInstance()
     {
+        $this->_templateContext = null;
         if (self::$_instance !== null) {
             self::$_instance = null;
         }
@@ -159,7 +160,7 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
     protected function _onCreate()
     {
         $this->createTemplates();
-        //$this->createEventForOptionTemplates();
+        $this->createEventForOptionTemplates();
     }
 
     public function createTemplates(): void
@@ -167,6 +168,7 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
         if (self::hasBeenRun()) {
             return;
         }
+        $this->_templateContext = null;
 
         $config = EventManager_Config::getInstance();
         $notRequired = [
@@ -311,6 +313,7 @@ Waldspiele, Schwimmen, Küchen- & Klodienst';
         if (self::hasOptionTemplatesBeenRun()) {
             return;
         }
+        $this->_templateContext = null;
 
         $options = array_map(
             fn(array $o) => $o + [EventManager_Model_Option::FLD_IS_OPTION_TEMPLATE => true],
