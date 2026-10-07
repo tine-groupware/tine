@@ -767,7 +767,7 @@ td.x-date-mp-sel a,
 .x-window-body,
 .x-window-plain .x-window-body {
   background-image: none !important;
-  background-color: $panelBGColor !important;
+  background-color: transparent !important;
   border: none !important;
 }
 
@@ -815,27 +815,6 @@ td.x-date-mp-sel a,
 
 .x-progress-inner {
   background-image: none;
-}
-
-.x-window {
-  @include shadow;
-  .x-tool {
-    background-size: 13px 13px;
-    background-position: 1px 1px !important;
-
-    &:hover {
-      background-size: 15px 15px !important;
-      background-position: 0 0 !important;
-    }
-  }
-
-  .x-tool-close {
-    background-image: url('../../images/icon-set/icon_clear.svg') !important;
-  }
-}
-
-.x-window-tl .x-window-header {
-  color: black;
 }
 
 ///* TOOLS */
