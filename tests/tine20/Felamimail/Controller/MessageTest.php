@@ -2254,16 +2254,19 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
      */
     public function testGetMessagePartAclCheck()
     {
+        Felamimail_Controller_Account::getInstance()->doContainerACLChecks(true);
         $cachedMessage = $this->messageTestHelper('text_plain.eml', 'text/plain');
 
         // switch to different user who should NOT have access to this message
-        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $sclever = $this->_personas['sclever'];
         $originalUser = Tinebase_Core::getUser();
         Tinebase_Core::set(Tinebase_Core::USER, $sclever);
 
         try {
-            $this->expectException(Tinebase_Exception_AccessDenied::class);
-            $this->_getController()->getMessagePart($cachedMessage, '1');
+            $part = $this->_getController()->getMessagePart($cachedMessage, '1');
+            self::fail('sclever should not be able to fetch part: ' . print_r($part, true));
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            self::assertStringContainsString('You are not allowed to access this account', $tead->getMessage());
         } finally {
             // restore original user
             Tinebase_Core::set(Tinebase_Core::USER, $originalUser);

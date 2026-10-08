@@ -2503,6 +2503,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     public function checkAccountAcl($account)
     {
         if (! $this->doContainerACLChecks()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ACL checks disabled');
+            }
             return;
         }
         if (! $account instanceof Felamimail_Model_Account) {
@@ -2514,9 +2518,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 Felamimail_Model_Account::TYPE_ADB_LIST,
             ]) && $account->user_id !== Tinebase_Core::getUser()->getId()
         ) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Current user ' . Tinebase_Core::getUser()->getId()
-                . ' has no right to access account: ' . print_r($account->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Current user ' . Tinebase_Core::getUser()->getId()
+                    . ' has no right to access account: ' . print_r($account->toArray(), true));
+            }
             throw new Tinebase_Exception_AccessDenied('You are not allowed to access this account');
         }
     }
