@@ -394,6 +394,10 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'type'                          => 'integer',
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Int::class,
+                    self::OPTIONS                   => ['tablename' => 'tree_fileobjects']
+                ]
             ],
             'preview_count'                 => [
                 self::DOCTRINE_IGNORE           => true,

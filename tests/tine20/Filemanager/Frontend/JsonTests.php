@@ -2824,4 +2824,27 @@ class Filemanager_Frontend_JsonTests extends TestCase
         self::assertEquals(3, count($protectedNodes), 'should find 3 protected nodes (2 files, 1 folder)'
             . print_r($result, true));
     }
+
+    /**
+     * test search nodes with revision_size filter
+     */
+    public function testSearchNodesWithRevisionSizeFilter()
+    {
+        $this->testCreateFileNodes(true);
+        foreach ([
+             [[
+                 'field' => 'revision_size',
+                 'operator' => 'equals',
+                 'value' => null,
+             ]], [[
+                'field' => 'revision_size',
+                'operator' => 'greater',
+                'value' => 0,
+            ]]
+        ] as $filter) {
+            $result = $this->_getUit()->searchNodes($filter, array());
+            $this->assertArrayHasKey('totalcount', $result, 'search with revision_size filter should not throw SQL error');
+            $this->assertArrayHasKey('results', $result, 'search with revision_size filter should return results');
+        }
+    }
 }
