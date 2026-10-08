@@ -1124,6 +1124,21 @@ const prefillRegistrant = (source, extra = {}) => ({
   ...extra,
 });
 
+const isAnswerableOption = (option) => {
+  switch (option.option_config_class) {
+    case 'EventManager_Model_TextOption':
+      return false;
+    case 'EventManager_Model_FileOption':
+      return getFileOptionMode(option) !== FILE_OPTION_MODE.DOWNLOAD_ONLY;
+    default:
+      return true;
+  }
+};
+
+const isAcknowledgementOption = (option) =>
+  option.option_config_class === 'EventManager_Model_FileOption'
+  && getFileOptionMode(option) === FILE_OPTION_MODE.ACKNOWLEDGE;
+
 const validateRequiredFields = () => {
   validationErrors.value = [];
   const errors = [];
@@ -1170,13 +1185,17 @@ const validateRequiredFields = () => {
   // Check grouped options (only one needs to be filled per group if option is required)
   const { optionsByGroup, ungroupedOptions } = getGroupedAndUngroupedOptions();
   optionsByGroup.forEach((groupOptions) => {
-    const requiredOptions = groupOptions.filter(option => isOptionRequired(option));
+    const answerable = groupOptions.filter(isAnswerableOption);
 
-    if (requiredOptions.length > 0) {
-      const hasAnyValue = groupOptions.some(option => hasOptionValue(option));
-      if (!hasAnyValue) {
-        requiredOptions.forEach(option => errors.push(option.id));
-      }
+    answerable
+      .filter(option => isAcknowledgementOption(option) && isOptionRequired(option) && !hasOptionValue(option))
+      .forEach(option => errors.push(option.id));
+
+    const choiceOptions = answerable.filter(option => !isAcknowledgementOption(option));
+    const requiredChoices = choiceOptions.filter(option => isOptionRequired(option));
+
+    if (requiredChoices.length > 0 && !choiceOptions.some(option => hasOptionValue(option))) {
+      requiredChoices.forEach(option => errors.push(option.id));
     }
   });
 
