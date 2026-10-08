@@ -30,7 +30,8 @@ tinedockercompose_redis_hostname: "cache"
 tinedockercompose_db_service: true
 tinedockercompose_db_host: "db"
 tinedockercompose_db_image: "mariadb:11.8"
-tinedockercompose_db_command: "--max-allowed-packet=209715210"
+# innodb_buffer_pool_size can be increased to 4G if target vm has 8G+ of RAM
+tinedockercompose_db_command: "--max-allowed-packet=209715210 --innodb_buffer_pool_size=2G --join_buffer_size=2M --innodb_log_file_size=1G"
 tinedockercompose_db_path: "/srv/tine/db"
 tinedockercompose_db_name: "tine"
 tinedockercompose_db_user: "tine"
