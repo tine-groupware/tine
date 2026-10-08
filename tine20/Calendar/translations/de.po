@@ -939,7 +939,7 @@ msgid "You are responding to a recurring event. What would you like to do?"
 msgstr "Sie antworten auf eine Terminserie. Was möchten sie tun?"
 
 msgid "Respond to the whole series"
-msgstr "Auf die komplette Terminserie antwortenAuf die komplette Terminserie antworten"
+msgstr "Auf die komplette Terminserie antworten"
 
 msgid "Do not respond"
 msgstr "Nicht antworten"
@@ -1018,7 +1018,7 @@ msgstr "Bitte wählen Sie die Datei, die die Datensätze enthält, die Sie zu Ti
 
 #, python-brace-format
 msgid "Select file containing your {0}"
-msgstr "Wählen Sie die Datei aus, die Ihre {0} enthält"
+msgstr "Wählen Sie die Datei mit Ihren {0}"
 
 msgid "once"
 msgstr "einmalig"
@@ -1603,12 +1603,8 @@ msgstr "Umfrage zu diesem Termin anlegen"
 msgid "Poll Name"
 msgstr "Name der Umfrage"
 
-msgid ""
-"Create scheduling suggestions and pick the best alternative based on user "
-"feedback."
-msgstr ""
-"Erstellen sie Terminvorschläge und wählen Sie die beste Alternative "
-"basierend auf Benutzer*innen-Feedback."
+msgid "Create scheduling suggestions and choose the best option based on user feedback."
+msgstr "Erstellen sie Terminvorschläge und wählen Sie die beste Alternative basierend auf dem Feedback der Nutzer."
 
 msgid "Share the link below to poll for attendee status feedback."
 msgstr "Teilen sie diesen Link um Teilnehmenden Feedback zu erfragen."
@@ -2219,5 +2215,8 @@ msgstr "Sonntag"
 msgid "Monday"
 msgstr "Montag"
 
-#~ msgid "Myself"
-#~ msgstr "Ich"
+msgid "Myself"
+msgstr "Ich"
+
+msgid "Create scheduling suggestions and pick the best alternative based on user feedback."
+msgstr "Erstellen sie Terminvorschläge und wählen Sie die beste Alternative basierend auf Benutzer*innen-Feedback."
