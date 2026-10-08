@@ -1333,7 +1333,7 @@ const handleFileChange = (event, optionId) => {
 const deleteFile = (optionId) => {
   hasFileChanged.value = true;
   delete uploadedFiles.value[optionId];
-  const fileInput = document.getElementById('file-input');
+  const fileInput = document.getElementById('file-input-' + optionId);
   if (fileInput) {
     fileInput.value = '';
   }

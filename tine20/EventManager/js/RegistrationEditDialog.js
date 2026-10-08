@@ -10,6 +10,12 @@
 
 Ext.namespace('Tine.EventManager');
 
+const SELECTION_CLASS_BY_OPTION_CLASS = {
+    EventManager_Model_CheckboxOption:  'EventManager_Model_Selections_Checkbox',
+    EventManager_Model_TextInputOption: 'EventManager_Model_Selections_TextInput',
+    EventManager_Model_FileOption:      'EventManager_Model_Selections_File',
+};
+
 Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     initComponent: function () {
@@ -55,16 +61,18 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
     },
 
     setSelectionConfigClassListener: function () {
-        return this.form.findField('booked_options').on('change', function (combo, records) {
-            records.forEach((record) => {
-                if (!record.selection_config_class) {
-                    let option_config_class = record.option.option_config_class;
-                    let appModel = option_config_class.split("Model_");
-                    let selection = appModel[1].split("Option");
-                    record.selection_config_class = "EventManager_Model_Selections_" + selection[0];
+        return this.form.findField('booked_options').on('change', function (field, records) {
+            (records || []).forEach((record) => {
+                if (record.selection_config_class) {
+                    return;
+                }
+                const optionClass = _.get(record, 'option.option_config_class');
+                const selectionClass = SELECTION_CLASS_BY_OPTION_CLASS[optionClass];
+                if (selectionClass) {
+                    record.selection_config_class = selectionClass;
                 }
             });
-        },this);
+        }, this);
     },
 
     setParticipantListener: function () {
