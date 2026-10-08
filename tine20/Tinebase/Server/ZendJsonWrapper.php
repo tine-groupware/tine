@@ -5,7 +5,7 @@
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 class Tinebase_Server_ZendJsonWrapper extends Zend_Json_Server
@@ -99,7 +99,6 @@ class Tinebase_Server_ZendJsonWrapper extends Zend_Json_Server
         $definition->setApiTimeout($reflection->getApiTimeout())
             ->setName($method)
             ->setCallback($this->_buildCallback($reflection))
-            ->setMethodHelp(/** @phpstan-ignore-line */ $reflection->getDescription())
             ->setInvokeArguments($reflection->getInvokeArguments());
 
         foreach ($reflection->getPrototypes() as $proto) {
@@ -124,5 +123,13 @@ class Tinebase_Server_ZendJsonWrapper extends Zend_Json_Server
         /** @phpstan-ignore-next-line */
         $this->_table->addMethod($definition);
         return $definition;
+    }
+
+    public function getCacheKey(): string
+    {
+        $ctx = hash_init('md5');
+        // should be array_all.... pre php84 support though
+        array_reduce(array_keys($this->_serviceMap->getServices()), fn($carry, $val) => hash_update($ctx, $val));
+        return hash_final($ctx);
     }
 }
