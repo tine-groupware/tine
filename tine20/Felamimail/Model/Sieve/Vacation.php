@@ -11,14 +11,18 @@
 
 /**
  * class to hold Vacation data
- * 
- * @property    array  addresses
- * @property    string  subject
- * @property    string  from
- * @property    string  mime
- * @property    string  reason
- * @property    integer  days
- * @property    boolean  enabled
+ *
+ * @property    string $account_id
+ * @property    array $addresses
+ * @property    string $subject
+ * @property    string $from
+ * @property    string $mime
+ * @property    string $reason
+ * @property    integer $days
+ * @property    boolean $enabled
+ * @property    array $contact_ids
+ * @property    string $template_id
+ * @property    string $signature
  * @package     Felamimail
  */
 class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
@@ -58,9 +62,9 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
         'reason'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'start_date'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'end_date'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        // not persistent, only used for message template
         'contact_ids'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'template_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // not persistent, only used for message template
         'signature'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
@@ -101,6 +105,10 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
             ->setFrom($this->from)
             ->setMime($this->mime)
             ->setReason($this->reason)
+            ->setContacts($this->contact_ids)
+            ->setTemplateId($this->template_id)
+            ->setAccountId($this->account_id)
+            ->setSignature($this->signature)
             ->setDateEnabled($this->date_enabled);
         
         $this->setTimezone(Tinebase_Core::getUserTimezone());
