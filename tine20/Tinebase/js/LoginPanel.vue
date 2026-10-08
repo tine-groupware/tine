@@ -95,7 +95,7 @@ const focusPWField = () => {
 const focusUsernameField = () => usernameTRef.value.focus()
 
 const isDark = document.body.classList.contains('dark-mode')
-const logoUrl = `logo/i/300x100/image%2Fsvg%2Bxml/${isDark ? 'dark' : 'light'}`
+const logoUrl = `logo/i/300x100/${isDark ? 'dark' : 'light'}/image/svg+xml`
 
 </script>
 
