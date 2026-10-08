@@ -81,11 +81,14 @@ abstract class Tinebase_License_Abstract
      */
     public static function isLicenseCheckable()
     {
-        try {
-            $result = Tinebase_Application::getInstance()->isInstalled('Addressbook');
-        } catch (Exception) {
-            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' License handling needs Addressbook');
-            return false;
+        static $result = null;
+        if (null === $result) {
+            try {
+                $result = Tinebase_Application::getInstance()->isInstalled('Addressbook');
+            } catch (Exception) {
+                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' License handling needs Addressbook');
+                return false;
+            }
         }
         return $result;
     }

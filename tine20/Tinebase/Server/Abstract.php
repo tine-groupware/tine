@@ -200,7 +200,6 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
                             )),
                             'methodHelp'      => $method['help'],
                             'invokeArguments' => array(),
-                            'object'          => clone $frontEndObject,
                             'callback'        => array(
                                 'type'   => 'instance',
                                 'class'  => $frontEndObject::class,
