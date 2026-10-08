@@ -97,6 +97,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @const string
      */
     public const BUILD_TYPE = 'buildtype';
+    public const BUILD_TYPE_DEVELOPMENT = 'DEVELOPMENT';
 
     public const BROADCASTHUB = 'broadcasthub';
     public const BROADCASTHUB_ACTIVE = 'active';

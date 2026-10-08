@@ -149,14 +149,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                     }
 
                 } else if ($method instanceof Zend_Server_Method_Definition) {
-                    // handle dynamic api definition
-                    $prototypes = $method->getPrototypes();
-                    $func_args = $prototypes[0]->getParameterObjects();
-                    $calling_args = $this->_getCallingArgs($func_args, $request);
-                    $callback = $method->getCallback();
-                    $callbackMethod = $callback->getMethod();
-                    return call_user_func_array(array($method->getObject(), $callbackMethod), $calling_args);
-
+                    return $this->_dispatch($method, $this->_getCallingArgs($method->getPrototypes()[0]->getParameterObjects(), $request));
                 } else {
                     throw new Zend_Json_Server_Exception("Unknown Method '$this->_method'.", 400);
                 }
