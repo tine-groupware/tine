@@ -262,28 +262,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         // setup cache if available and we are in production mode
         if (
             is_array($classes)
-            && Tinebase_Core::getCache()
+            && $cache = Tinebase_Core::getCache()
         ) {
-            $masterFiles = array();
-            
-            $dirname = __DIR__ . '/../../';
-            foreach ($classes as $class => $namespace) {
-                $masterFiles[] = $dirname . str_replace('_', '/', $class) . '.php';
-            }
-            
             try {
-                $cache = new Zend_Cache_Frontend_File(array(
-                    'master_files'              => $masterFiles,
-                    'lifetime'                  => null,
-                    'automatic_serialization'   => true,  // turn that off for more speed
-                    'automatic_cleaning_factor' => 0,     // no garbage collection as this is done by a scheduler task
-                    'write_control'             => false, // don't read cache entry after it got written
-                    'logging'                   => Tinebase_Core::getCache()->getOption('logging'),
-                    'logger'                    => Tinebase_Core::getCache()->getOption('logger'),
-                ));
-                $cache->setBackend(Tinebase_Core::getCache()->getBackend());
-
-                $cacheId = Tinebase_Helper::convertCacheId('_handle_' . sha1(Zend_Json_Encoder::encode($classes)) . '_' .
+                $cacheId = Tinebase_Helper::convertCacheId('_handle_' . sha1(json_encode($classes)) . '_' .
                     (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : Tinebase_Core::USER_ANONYMOUS) .
                     ($appPwd ? $appPwd->getId() : ''));
 
@@ -292,11 +274,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                         . " Get server from cache");
                 }
 
-                $server = $cache->load($cacheId);
-                if ($server instanceof Zend_Json_Server) {
-                    return $server;
+                if ($serverCacheId = $cache->load($cacheId)) {
+                    $server = $cache->load($serverCacheId);
+                    if ($server instanceof Zend_Json_Server) {
+                        return $server;
+                    }
                 }
-                
             } catch (Zend_Cache_Exception $zce) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -336,8 +319,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         }
         
         if (isset($cache)) {
-            $lifetime = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === Tinebase_Config::BUILD_TYPE_DEVELOPMENT ? 30 : 3600;
-            $cache->save($server, $cacheId, array(), $lifetime);
+            $serverCacheId = $server->getCacheKey();
+            $lifetime = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === Tinebase_Config::BUILD_TYPE_DEVELOPMENT ? 30 : 36000 /* 10 hours */;
+            if (false === $cache->test($serverCacheId)) {
+                $cache->save($server, $serverCacheId, specificLifetime: $lifetime);
+            }
+            $cache->save($serverCacheId, $cacheId, specificLifetime: $lifetime);
         }
 
         return $server;
@@ -487,9 +474,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 __METHOD__ . '::' . __LINE__ .' fetching app json classes');
 
             foreach ($userApplications as $application) {
-                if (! Tinebase_License::getInstance()->isPermitted($application->name)) {
-                    continue;
-                }
                 $jsonAppName = $application->name . '_Frontend_Json';
                 if (class_exists($jsonAppName)) {
                     $classes[$jsonAppName] = $application->name;

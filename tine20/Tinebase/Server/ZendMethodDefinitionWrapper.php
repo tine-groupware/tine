@@ -5,7 +5,7 @@
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 class Tinebase_Server_ZendMethodDefinitionWrapper extends Zend_Server_Method_Definition
@@ -33,5 +33,22 @@ class Tinebase_Server_ZendMethodDefinitionWrapper extends Zend_Server_Method_Def
         $result = parent::toArray();
         $result['apiTimeout'] = $this->apiTimeout;
         return $result;
+    }
+
+    public function __sleep(): array
+    {
+        $toSerialize = [
+            '_callback',
+            '_name',
+            '_prototypes',
+        ];
+        if (!empty($this->_invokeArguments)) {
+            $toSerialize[] = '_invokeArguments';
+        }
+        if (null !== $this->apiTimeout) {
+            $toSerialize[] = 'apiTimeout';
+        }
+
+        return $toSerialize;
     }
 }
