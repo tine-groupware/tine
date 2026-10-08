@@ -165,9 +165,8 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     {
         try {
             $session = Tinebase_Session::getSessionNamespace();
-            
-            $session->{self::SESSION_NAMESPACE}[$cache->getId()] = $cache->toArray();
-        } catch (Zend_Session_Exception $zse) {
+            $session->{self::SESSION_NAMESPACE} = [$cache->getId() => $cache->toArray()];
+        } catch (Zend_Session_Exception) {
             // nothing to do
         }
     }
