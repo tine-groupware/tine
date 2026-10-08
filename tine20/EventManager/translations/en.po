@@ -235,20 +235,23 @@ msgstr "A folder with this event name already exists."
 msgid "An event with this name already exists. Please choose a different name."
 msgstr "An event with this name already exists. Please choose a different name."
 
-msgid "Session"
-msgstr "Session"
-
 msgid "To create the event there must be a shared calendar. Please create it first or contact your administrator."
 msgstr "To create the event there must be a shared calendar. Please create it first or contact your administrator."
 
 msgid "You do not have permission to add an event to the shared calendar. Please contact your administrator to update your permissions."
 msgstr "You do not have permission to add an event to the shared calendar. Please contact your administrator to update your permissions."
 
+msgid "Session"
+msgstr "Session"
+
 msgid "deleted"
 msgstr "deleted"
 
 msgid "Options"
 msgstr "Options"
+
+msgid "This option cannot be booked. Please remove it from the booked options."
+msgstr "This option cannot be booked. Please remove it from the booked options."
 
 msgid "It is not possible to add the same participant multiple times"
 msgstr "It is not possible to add the same participant multiple times"

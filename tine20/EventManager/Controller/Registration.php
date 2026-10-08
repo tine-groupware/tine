@@ -47,6 +47,12 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         'is_deleted', 'deleted_by', 'deleted_time',
     ];
 
+    private const SELECTION_CLASS_BY_OPTION_CLASS = [
+        EventManager_Model_CheckboxOption::class  => EventManager_Model_Selections_Checkbox::class,
+        EventManager_Model_TextInputOption::class => EventManager_Model_Selections_TextInput::class,
+        EventManager_Model_FileOption::class      => EventManager_Model_Selections_File::class,
+    ];
+
     /**
      * the constructor
      *
@@ -109,12 +115,22 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         parent::_inspectBeforeCreate($_record);
+        foreach ($_record->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} ?: [] as $bo) {
+            $cfg = $bo->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG};
+            if (!$cfg instanceof Tinebase_Record_Interface && !is_scalar($cfg) && $cfg !== null) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' booked option with unconverted selection_config: '
+                    . print_r($bo->toArray(), true));
+            }
+        }
+        $this->_normalizeBookedOptions($_record);
         $this->_handleRegistrationFileUpload($_record);
     }
 
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
+        $this->_normalizeBookedOptions($_record);
         $this->_handleRegistrationFileUpload($_record);
     }
 
@@ -238,6 +254,37 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     {
         $_record->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = null;
         $this->update($_record);
+    }
+
+    private function _normalizeBookedOptions(EventManager_Model_Registration $registration): void
+    {
+        $bookedOptions = $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS};
+        if (!$bookedOptions) {
+            return;
+        }
+        foreach ($bookedOptions as $bo) {
+            $cfg = $bo->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG};
+            if ($cfg instanceof Tinebase_Record_Interface || $cfg === null || is_scalar($cfg)) {
+                continue;
+            }
+            $class = $bo->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS};
+            if (!$class || !in_array($class, self::SELECTION_CLASS_BY_OPTION_CLASS, true)) {
+                $optionId = $this->_getOptionId($bo);
+                $option = $optionId ? EventManager_Controller_Option::getInstance()->get($optionId) : null;
+                $class = $option
+                    ? (self::SELECTION_CLASS_BY_OPTION_CLASS[$option
+                        ->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS}] ?? null)
+                    : null;
+            }
+            if (!$class) {
+                $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+                throw new Tinebase_Exception_SystemGeneric(
+                    $translate->_('This option cannot be booked. Please remove it from the booked options.')
+                );
+            }
+            $bo->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS} = $class;
+            $bo->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG} = new $class((array) $cfg, true);
+        }
     }
 
     public function _sendProcessEmail($_record, $template, ?array $preloaded = null)
