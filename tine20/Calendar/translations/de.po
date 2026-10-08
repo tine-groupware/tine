@@ -939,7 +939,7 @@ msgid "You are responding to a recurring event. What would you like to do?"
 msgstr "Sie antworten auf eine Terminserie. Was möchten sie tun?"
 
 msgid "Respond to the whole series"
-msgstr "Auf die komplette Terminserie antwortenAuf die komplette Terminserie antworten"
+msgstr "Auf die komplette Terminserie antworten"
 
 msgid "Do not respond"
 msgstr "Nicht antworten"
