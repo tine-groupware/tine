@@ -2892,6 +2892,11 @@ class Setup_Controller
 
         $this->clearCacheDir();
         $cachesCleared[] = 'RoutesCache';
+
+        if (function_exists('apcu_clear_cache')) {
+            apcu_clear_cache();
+            $cachesCleared[] = 'APCuCache';
+        }
     
         if ($deactivateCache) {
             Tinebase_Core::setupCache(false);
