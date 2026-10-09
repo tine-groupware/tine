@@ -177,6 +177,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
                 continue;
             }
             $frontEndObject = $frontend::_getFrontend($application);
+            $invokeArguments = str_ends_with($frontEndObject::class, '_Generic') ? [$application->name] : [];
 
             foreach ($models as $model) {
                 if (! class_exists($model)) {
@@ -199,7 +200,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
                                 'parameters' => $method['params']
                             )),
                             'methodHelp'      => $method['help'],
-                            'invokeArguments' => array(),
+                            'invokeArguments' => $invokeArguments,
                             'callback'        => array(
                                 'type'   => 'instance',
                                 'class'  => $frontEndObject::class,

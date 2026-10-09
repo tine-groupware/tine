@@ -275,6 +275,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 }
 
                 if ($serverCacheId = $cache->load($cacheId)) {
+                    if (function_exists('apcu_fetch') && $server = apcu_fetch($serverCacheId)) {
+                        return $server;
+                    }
                     $server = $cache->load($serverCacheId);
                     if ($server instanceof Zend_Json_Server) {
                         return $server;
@@ -321,7 +324,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if (isset($cache)) {
             $serverCacheId = $server->getCacheKey();
             $lifetime = defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === Tinebase_Config::BUILD_TYPE_DEVELOPMENT ? 30 : 36000 /* 10 hours */;
-            if (false === $cache->test($serverCacheId)) {
+            if (function_exists('apcu_add')) {
+                apcu_add($serverCacheId, $server, $lifetime);
+            } elseif (false === $cache->test($serverCacheId)) {
                 $cache->save($server, $serverCacheId, specificLifetime: $lifetime);
             }
             $cache->save($serverCacheId, $cacheId, specificLifetime: $lifetime);
