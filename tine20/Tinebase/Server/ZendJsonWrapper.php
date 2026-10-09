@@ -129,7 +129,7 @@ class Tinebase_Server_ZendJsonWrapper extends Zend_Json_Server
     {
         $ctx = hash_init('md5');
         // should be array_all.... pre php84 support though
-        array_reduce(array_keys($this->_serviceMap->getServices()), fn($carry, $val) => hash_update($ctx, $val));
+        array_reduce(array_keys($this->getServiceMap()->getServices()), fn($carry, $val) => hash_update($ctx, $val));
         return hash_final($ctx);
     }
 }
