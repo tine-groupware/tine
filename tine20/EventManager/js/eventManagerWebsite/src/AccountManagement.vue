@@ -325,7 +325,12 @@ function getEventName(eventId) {
     return 'Loading...';
   }
   const event = events.value.find(e => e.id === eventId);
-  return event ? event.name : `Event ${eventId}`;
+  const eventName = event?.name;
+  const eventSubheading = event?.subheading;
+  if (eventSubheading) {
+    return `${eventName} - ${eventSubheading}`;
+  }
+  return event ? eventName : `Event ${eventId}`;
 }
 
 function getEventDate(eventId) {
