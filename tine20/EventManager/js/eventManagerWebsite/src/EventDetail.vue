@@ -205,7 +205,28 @@ const isEmailValid = computed(() => {
   return modal.inputValue.length > 0 && emailRegex.test(modal.inputValue);
 });
 
-const openEmailModal = () => {
+const requestRegistrationLink = (email) =>
+  fetch(`/EventManager/registration/doubleOptIn/${route.params.id}`, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ eventId: route.params.id, email }),
+  });
+
+const openEmailModal = async () => {
+  try {
+    const resp = await requestRegistrationLink('');
+    if (resp.ok) {
+      const data = await resp.json();
+      if (Array.isArray(data) && data[0]) {
+        window.location.href = `${window.location.origin}${data[0]}`;
+        return;
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
   showModal({
     title: formatMessage('Email Address'),
     message: formatMessage('Please enter your email address to continue:'),
@@ -213,28 +234,18 @@ const openEmailModal = () => {
     okOnly: false,
     input: true,
     inputPlaceholder: formatMessage('Enter your email address'),
-    onConfirm: handleEmailSubmit
+    onConfirm: handleEmailSubmit,
   });
 };
 
-const handleEmailSubmit = async () => {
+const handleEmailSubmit = async (email) => {
   try {
-    const eventId = route.params.id;
-    const response = await fetch(`/EventManager/registration/doubleOptIn/${eventId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        eventId: route.params.id,
-        email: modal.inputValue,
-      })
-    });
+    const response = await requestRegistrationLink(email);
 
     if (response.ok) {
       const responseData = await response.json();
 
-      if (responseData[0]) { //if contact is known
+      if (Array.isArray(responseData) && responseData[0]) {
         const baseUrl = window.location.origin;
         window.location.href = `${baseUrl}${responseData[0]}`;
         return;

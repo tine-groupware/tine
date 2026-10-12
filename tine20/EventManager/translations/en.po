@@ -504,6 +504,18 @@ msgstr "My Registrations"
 msgid "Search"
 msgstr "Search"
 
+msgid "Welcome back! "
+msgstr "Welcome back! "
+
+msgid "If you want to register someone new, please"
+msgstr "If you want to register someone new, please"
+
+msgid "click here"
+msgstr "click here"
+
+msgid "Otherwise you can continue to update your registration."
+msgstr "Otherwise you can continue to update your registration."
+
 msgid "Please review the participant's details and complete the registration as the legal guardian."
 msgstr "Please review the participant's details and complete the registration as the legal guardian."
 
@@ -614,6 +626,12 @@ msgstr "is full. If you register you will be on our waiting list. Do you still w
 
 msgid "Your registration was updated successfully."
 msgstr "Your registration was updated successfully."
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Register another person"
+msgstr "Register another person"
 
 msgid "Success"
 msgstr "Success"

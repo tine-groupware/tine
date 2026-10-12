@@ -40,14 +40,30 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('EventManager'), Tine.Tinebase.A
             return;
         }
         const event = selections[0].get('id');
-        const dummyToken = 'preview';
-        // todo add event id when pastoral url is the correct url
-        /*if (pastoralUrl) {
-            window.open(pastoralUrl + `?event=${event}`);
-        } else {*/
-            const url = window.location.href;
-            window.open(url.replace('#/EventManager', `/EventManager/view/event/${event}/registration/${dummyToken}`));
-        //}
+        const baseUrl = window.location.href.split('#')[0].replace(/\/$/, '');
+        const previewUrl = `${baseUrl}/EventManager/view/event/${event}/registration/preview`;
+        const win = window.open('about:blank');
+
+        try {
+            const resp = await fetch(`${baseUrl}/EventManager/registration/doubleOptIn/${event}`, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ eventId: event, email: '' }),
+            });
+            const data = resp.ok ? await resp.json() : null;
+            const link = Array.isArray(data) && data[0] ? `${baseUrl}${data[0]}` : previewUrl;
+            if (win) {
+                win.location.href = link;
+            } else {
+                window.open(link);
+            }
+        } catch (e) {
+            console.error(e);
+            if (win) {
+                win.location.href = previewUrl;
+            }
+        }
     }
 
     const actionHomepageConfig = {

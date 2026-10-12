@@ -157,7 +157,33 @@ const isEmailValid = computed(() => {
   return modal.inputValue.length > 0 && emailRegex.test(modal.inputValue);
 });
 
-const openEmailModal = () => {
+const requestRegistrationLink = (email) =>
+  fetch(`/EventManager/registration/doubleOptIn/null`, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+
+const redirectIfLinkReturned = async (response) => {
+  const data = await response.json();
+  if (Array.isArray(data) && data[0]) { // logged in to tine
+    window.location.href = `${window.location.origin}${data[0]}`;
+    return true;
+  }
+  return false;
+};
+
+const openEmailModal = async () => {
+  try {
+    const resp = await requestRegistrationLink('');
+    if (resp.ok && await redirectIfLinkReturned(resp)) {
+      return;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
   showModal({
     title: formatMessage('Email Address'),
     message: formatMessage('Please enter your email address to continue:'),
@@ -165,33 +191,25 @@ const openEmailModal = () => {
     okOnly: false,
     input: true,
     inputPlaceholder: formatMessage('Enter your email address'),
-    onConfirm: handleEmailSubmit
+    onConfirm: handleEmailSubmit,
   });
 };
 
-const handleEmailSubmit = async () => {
+const handleEmailSubmit = async (email) => {
   try {
-    const eventId = null;
-    const response = await fetch(`/EventManager/registration/doubleOptIn/${eventId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: modal.inputValue,
-      })
-    });
-
-    if (response.ok) {
-      showModal({
-        title: formatMessage('Confirmation E-Mail Sent'),
-        message: formatMessage('Please check your emails (check your spam folder if necessary) and click on the confirmation link to continue.'),
-        type: 'confirm',
-        okOnly: true,
-      });
-    } else {
+    const response = await requestRegistrationLink(email);
+    if (!response.ok) {
       throw new Error('Registration request failed');
     }
+    if (await redirectIfLinkReturned(response)) {
+      return;
+    }
+    showModal({
+      title: formatMessage('Confirmation E-Mail Sent'),
+      message: formatMessage('Please check your emails (check your spam folder if necessary) and click on the confirmation link to continue.'),
+      type: 'confirm',
+      okOnly: true,
+    });
   } catch (error) {
     console.error(error);
     showModal({

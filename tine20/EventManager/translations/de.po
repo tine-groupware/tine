@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-10-08 11:12+0200\n"
+"PO-Revision-Date: 2026-10-12 14:43+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -508,6 +508,18 @@ msgstr "Meine Anmeldungen"
 msgid "Search"
 msgstr "Suche"
 
+msgid "Welcome back! "
+msgstr "Willkommen zurück! "
+
+msgid "If you want to register someone new, please"
+msgstr "Wenn Sie eine neue Person anmelden möchten"
+
+msgid "click here"
+msgstr "klicken Sie hier"
+
+msgid "Otherwise you can continue to update your registration."
+msgstr "Andernfalls können Sie mit der Aktualisierung Ihrer Anmeldung fortfahren."
+
 msgid "Please review the participant's details and complete the registration as the legal guardian."
 msgstr "Bitte überprüfen Sie die Angaben zur teilnehmende Person und schließen Sie die Anmeldung als sorgeberechtigte Person ab."
 
@@ -618,6 +630,12 @@ msgstr "ist voll. Wenn Sie sich anmelden, werden Sie auf unsere Warteliste geset
 
 msgid "Your registration was updated successfully."
 msgstr "Ihre Anmeldung wurde erfolgreich aktualisiert."
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Register another person"
+msgstr "Eine weitere Person anmelden"
 
 msgid "Success"
 msgstr "Erfolg"
