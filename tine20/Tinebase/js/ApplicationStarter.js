@@ -205,7 +205,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 // register foreign id field as appName.modelName.fieldKey
                 var fc = appName + '.' + modelName + '.' + fieldconfig.key;
                 Tine.widgets.grid.FilterToolbar.FILTERS[fc] = filterclass;
-                filter = {filtertype: fc};
+                filter = {field: fieldconfig.key, filtertype: fc};
                 break;
             case 'relation':
             case 'relations':
