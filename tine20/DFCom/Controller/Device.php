@@ -93,11 +93,13 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
         $setupStatus = $deviceRecord->xprops('data')['setupStatus'] ?? '1000';
 
         try {
+            $selectForUpdate = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
             /** @var DFCom_Model_Device $device */
             $device = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(DFCom_Model_Device::class, [
                 ['field' => 'deviceString', 'operator' => 'equals', 'value' => $deviceRecord->xprops('data')['deviceString']],
                 ['field' => 'serialNumber', 'operator' => 'equals', 'value' => $deviceRecord->xprops('data')['serialNumber']],
             ]))->getFirstRecord();
+            unset($selectForUpdate);
 
             if (!$device) {
                 if ($setupAuthKey == $deviceRecord->xprops('data')['authKey']) {
