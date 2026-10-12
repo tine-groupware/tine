@@ -14,6 +14,7 @@
       <b-row class="title text-center">
         <b-col>
           <h1>{{registrationTitle}}</h1>
+          <h3 v-if="eventDetails.subheading">{{eventDetails.subheading}}</h3>
           <h5>{{eventDate}}</h5>
         </b-col>
       </b-row>
