@@ -31,7 +31,10 @@ php-unit-all-tests-source-sequential:
   after_script:
     - |
       if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ]; then
-        s3cmd --access_key=${SCREENSHOTS_S3_ACCESS_KEY} --secret_key=${SCREENSHOTS_S3_SECRET_KEY} --host ${SCREENSHOTS_S3_HOST} --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ${CI_PROJECT_DIR}/coverage/ s3://tine-phpunit-coverage/${CI_COMMIT_REF_NAME}/
+        if ! s3cmd --access_key=${SCREENSHOTS_S3_ACCESS_KEY} --secret_key=${SCREENSHOTS_S3_SECRET_KEY} --host ${SCREENSHOTS_S3_HOST} --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ${CI_PROJECT_DIR}/coverage/ s3://tine-phpunit-coverage/${CI_COMMIT_REF_NAME}/ &> /tmp/s3-log; then
+          cat /tmp/s3-log
+          exit 1
+        fi
       fi
   needs: []
   rules:
