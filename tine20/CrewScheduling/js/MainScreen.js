@@ -195,10 +195,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                     csTokenId = sourceEl ? Ext.fly(sourceEl).getAttribute('tine-cs-token-id') : null,
                     [cal_event_id, user_type, user_id, role] = csTokenId ? csTokenId.split(';') : [],
                     dragRecord = user_id ? me.memberSelectionPanel.store.getById(`${user_type}-${user_id}`) : null,
-                    partnerIds = _.map(_.get(dragRecord, 'data.user_id.partners', []), 'id'),
-                    partners = _.filter(v.store.data.items, function(member) {
-                        return _.indexOf(partnerIds, Attendee.getRecord(member).getUserId()) >= 0;
-                    }),
+                    partners = me.memberSelectionPanel.getPartners(dragRecord),
                     isPartnerSelect = !! e.getTarget('.cs-partners'),
                     eventMemberTokenIds = cal_event_id ? _.compact(_.uniq(_.concat(me.membersGrid.selectedTokens, csTokenId))) : [],
                     selected = eventMemberTokenIds.length ? _.compact(eventMemberTokenIds.map(memberTokenId => {
@@ -218,7 +215,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                 return selected.length ? {
                     ddel: ddEl,
                     sourceEl,
-                    repairXY: Ext.fly(sourceEl).getXY(),
+                    repairXY: Ext.fly(sourceEl)?.getXY(),
                     sourceStore: v.store,
                     selected,
                     eventMemberTokenIds
@@ -238,9 +235,14 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             }
         });
 
-        this.on('dragStart', this.membersGrid.onDragStart, this.membersGrid);
-        this.on('dragEnd', this.membersGrid.onDragEnd, this.membersGrid);
-
+        this.on('dragStart', (p, data) => {
+            this.membersGrid.maskDropCells(data.selected);
+        });
+        this.memberSelectionPanel.on('selectionchange', (v, selIds) => {
+            selIds.length ?
+                this.membersGrid.maskDropCells(v.getSelectedRecords()) :
+                this.membersGrid.unmaskDropCells();
+        })
     },
 
     initBaseLayout: function() {
