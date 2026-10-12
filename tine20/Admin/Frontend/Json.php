@@ -1557,7 +1557,13 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (! Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::RUN)) {
             return [];
         }
-        
+
+        if (function_exists('apcu_cache_info')) {
+            $apcuCacheInfo = print_r(@apcu_cache_info(true), true);
+        } else {
+            $apcuCacheInfo = '';
+        }
+
         ob_start();
         phpinfo();
         $out = ob_get_clean();
@@ -1567,6 +1573,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         try {
             $dom->loadHTML($out);
             $body = $dom->getElementsByTagName('body');
+            $body->item(0)->prepend($dom->createTextNode('apcu cache info: ' . $apcuCacheInfo));
             $phpinfo = $dom->saveXml($body->item(0));
         } catch (Exception $e) {
             // no html (CLI)
