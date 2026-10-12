@@ -1071,9 +1071,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
+            $selectForUpdate = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
             $doAclChecks = $this->doContainerACLChecks(false);
             $event = $this->get($_record->getId());
             $this->doContainerACLChecks($doAclChecks);
+            unset($selectForUpdate);
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     .' Going to update the following event. rawdata: ' . print_r($event->toArray(), true));
