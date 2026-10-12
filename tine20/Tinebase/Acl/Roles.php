@@ -191,7 +191,8 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
             )
             ->where($this->_getDb()->quoteIdentifier('role_id') . ' IN (?)',          $roleMemberships)
             ->where($this->_getDb()->quoteIdentifier('applications.status') . ' = ?', Tinebase_Application::ENABLED)
-            ->order('order ASC');
+            ->order('order ASC')
+            ->order('applications.id ASC');
         
         if ($_anyRight) {
             $select->where($this->_getDb()->quoteIdentifier('role_rights.right') . " IS NOT NULL");
