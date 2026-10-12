@@ -18,6 +18,15 @@
         </b-col>
       </b-row>
 
+      <div v-if="showWelcomeBack" class="alert alert-info welcome-back">
+        <strong>{{ formatMessage('Welcome back! ') }}</strong>
+        <template v-if="canRegisterSomeoneNew">
+          {{ formatMessage('If you want to register someone new, please') }}
+          <a href="#" @click.prevent="startNewRegistration">{{ formatMessage('click here') }}</a>.
+        </template>
+        {{ formatMessage('Otherwise you can continue to update your registration.') }}
+      </div>
+
       <div class="registrant-section">
         <div v-if="isGuardianConsentFlow" class="alert alert-info">
           {{ formatMessage('Please review the participant\'s details and complete the registration as the legal guardian.') }}
@@ -34,13 +43,13 @@
       <b-row>
         <b-col>
           <h4
-            v-b-toggle.collapse-1
-            @click="isCollapsedParticipant = !isCollapsedParticipant"
+            @click="isOpenParticipant = !isOpenParticipant"
             class="mb-4 collapsible-header section-heading"
           >
-            {{ participantSectionTitle }} <span class="chevron" :class="{ 'rotated': !isCollapsedParticipant }">▼</span>
+            {{ participantSectionTitle }}
+            <span class="chevron" :class="{ rotated: !isOpenParticipant }">▼</span>
           </h4>
-          <b-collapse visible id="collapse-1">
+          <b-collapse id="collapse-1" v-model="isOpenParticipant">
             <template v-for="fieldName in visibleParticipantContactFields" :key="fieldName">
               <b-form-group
                 label-cols-sm="4"
@@ -88,13 +97,13 @@
           <b-row>
             <b-col>
               <h4
-                v-b-toggle.collapse-3
-                @click="isCollapsedRegistrant = !isCollapsedRegistrant"
+                @click="isOpenRegistrant = !isOpenRegistrant"
                 class="mb-4 collapsible-header section-heading"
               >
-                {{ formatMessage('I (Registrant)') }} <span class="chevron" :class="{ 'rotated': !isCollapsedRegistrant }">▼</span>
+                {{ formatMessage('I (Registrant)') }}
+                <span class="chevron" :class="{ rotated: !isOpenRegistrant }">▼</span>
               </h4>
-              <b-collapse visible id="collapse-3">
+              <b-collapse id="collapse-3" v-model="isOpenRegistrant">
                 <div
                   v-if="mustBeGuardian"
                   class="mb-4"
@@ -140,13 +149,13 @@
       <b-row>
         <b-col v-if="eventDetails.options?.length">
           <h4
-            v-b-toggle.collapse-2
-            @click="isCollapsedEvent = !isCollapsedEvent"
+            @click="isOpenEvent = !isOpenEvent"
             class="mb-4 collapsible-header section-heading"
           >
-            {{formatMessage('Event Information:')}}<span class="chevron" :class="{ 'rotated': !isCollapsedEvent }">▼</span>
+            {{ formatMessage('Event Information:') }}
+            <span class="chevron" :class="{ rotated: !isOpenEvent }">▼</span>
           </h4>
-          <b-collapse visible id="collapse-2">
+          <b-collapse id="collapse-2" v-model="isOpenEvent">
             <h5 class="event-title text-center">{{eventDetails.name}}</h5>
             <div v-for="optionGroup in visibleOptionsByGroup" :key="optionGroup.group">
               <h6 class="option-group">{{optionGroup.group}}</h6>
@@ -310,6 +319,7 @@
         :ok-title="modal.okText"
         :ok-variant="modal.dangerButton ? 'danger' : 'primary'"
         :cancel-title="modal.cancelText"
+        :cancel-variant="modal.cancelVariant"
         @ok="handleModalAction"
         @cancel="handleModalCancel"
       >
@@ -347,9 +357,9 @@ const REGISTRATION_SCENARIO = {
   EDIT_EXISTING_REGISTRATION: 'edit_existing_registration',
 };
 
-const isCollapsedParticipant = ref(false);
-const isCollapsedEvent = ref(false);
-const isCollapsedRegistrant = ref(false);
+const isOpenParticipant = ref(true);
+const isOpenEvent = ref(true);
+const isOpenRegistrant = ref(true);
 const showRegisteredContactAlert = ref(false);
 const replies = ref({});
 const uploadedFiles = ref({});
@@ -386,6 +396,26 @@ const requiredRegistrantContactFields = ref([]);
 
 const toBool = (v) => v === true || v === 1 || v === '1' || v === 'true';
 const isGuardianConsentFlow = computed(() => !!consentToken.value);
+
+const showWelcomeBack = computed(() =>
+  isAlreadyRegistered.value && !isPreview.value && !isGuardianConsentFlow.value
+);
+
+const canRegisterSomeoneNew = computed(() =>
+  Number(eventDetails.value.register_others) === 1
+);
+
+const canRegisterAnother = computed(() =>
+  canRegisterSomeoneNew.value
+  && !!accountOwner.value?.id
+  && !isGuardianConsentFlow.value
+);
+
+const startNewRegistration = () => {
+  const params = new URLSearchParams({ newProfile: 'true', participantId: 'null' });
+  window.location.href = `${window.location.origin}/EventManager/view/event/${route.params.id}`
+    + `/registration/${route.params.token}?${params}`;
+};
 
 const eventDetails = ref({
   name: "",
@@ -1494,12 +1524,16 @@ const postRegistration = async () => {
     contactDetails.value.registration_id = '';
   }
 
+  const pickFields = (details, visible) => ({
+    ..._.pick(details, [...visible, 'id', 'registration_id']),
+  });
+
   const registration = {
     token: route.params.token,
     eventId,
-    contactDetails: contactDetails.value,
+    contactDetails: pickFields(contactDetails.value, visibleParticipantContactFields.value),
+    registrantDetails: pickFields(registrantDetails.value, visibleRegistrantContactFields.value),
     replies: filteredReplies,
-    registrantDetails: registrantDetails.value,
     isAlreadyRegistered: isAlreadyRegistered.value,
     isOnBehalf: isRegistrant.value,
     isLegalGuardian: isRegistrant.value && isLegalGuardian.value,
@@ -1535,20 +1569,30 @@ const postRegistration = async () => {
       await uploadFiles(eventId, localRegistrationId);
     }
 
+    const offerAnother = canRegisterAnother.value;
+
     if (isUpdate.value) {
       isUpdate.value = false;
       showModal({
         title: formatMessage('Update Registration'),
         message: formatMessage('Your registration was updated successfully.'),
         type: 'success',
-        onConfirm: goToAccountPage
+        okOnly: !offerAnother,
+        okText: formatMessage('OK'),
+        cancelText: formatMessage('Register another person'),
+        onConfirm: goToAccountPage,
+        onCancel: offerAnother ? startNewRegistration : null,
       });
     } else {
       showModal({
         title: formatMessage('Success'),
         message: formatMessage('Registration completed successfully! You will receive a confirmation e-mail.'),
         type: 'success',
-        onConfirm: goToAccountPage
+        okOnly: !offerAnother,
+        okText: formatMessage('OK'),
+        cancelText: formatMessage('Register another person'),
+        onConfirm: goToAccountPage,
+        onCancel: offerAnother ? startNewRegistration : null,
       });
     }
 
@@ -2186,6 +2230,15 @@ input[type="date"] {
       border-color: #bd2130 !important;
       transform: scale(1.05);
     }
+  }
+}
+
+.welcome-back {
+  margin: 1.5rem 0;
+  a {
+    color: #2c3e50;
+    font-weight: 600;
+    text-decoration: underline;
   }
 }
 
