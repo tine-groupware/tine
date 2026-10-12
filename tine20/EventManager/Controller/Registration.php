@@ -42,9 +42,12 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     protected $_notificationDataBeforeDelete = [];
 
     private const PROTECTED_CONTACT_FIELDS = [
-        'id', 'seq', 'registration_id', 'registration_type',
+        'id', 'seq', 'registration_id', 'registration_type', 'original_id',
         'created_by', 'creation_time', 'last_modified_by', 'last_modified_time',
-        'is_deleted', 'deleted_by', 'deleted_time',
+        'is_deleted', 'deleted_by', 'deleted_time', 'purge_date',
+        'container_id', 'relations', 'notes', 'tags', 'attachments',
+        'customfields', 'xprops', 'syncBackendIds', 'matrix_id',
+        'GDPR_DataExpiryDate', 'GDPR_Blacklist', 'jpegphoto',
     ];
 
     private const SELECTION_CLASS_BY_OPTION_CLASS = [
@@ -107,7 +110,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     {
         foreach ($source as $field => $value) {
             if ($target->has($field) && !in_array($field, self::PROTECTED_CONTACT_FIELDS, true)) {
-                $target->$field = $value;
+                $target->$field = ($value === '') ? null : $value;
             }
         }
     }
@@ -947,6 +950,10 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         } catch (Tinebase_Exception_ConcurrencyConflict $tecc) {
             $response = new \Laminas\Diactoros\Response('php://memory', 409);
             $response->getBody()->write(json_encode($tecc->getMessage()));
+        } catch (Throwable $t) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $t);
+            $response = new \Laminas\Diactoros\Response('php://memory', 500);
+            $response->getBody()->write(json_encode(['error' => 'Registration failed']));
         } finally {
             $assertAclUsage();
         }
@@ -973,16 +980,8 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         }
 
         if ($requestedRegistrationId !== '') {
-            try {
-                $existingRegistration = $this->get($requestedRegistrationId);
-                $this->_assertRegistrationAccess($existingRegistration, $verifiedEmail, (string) $event_id);
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-                $response = new \Laminas\Diactoros\Response('php://memory', 403);
-                $response->getBody()->write(json_encode(['error' => $tead->getMessage()]));
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                $response = new \Laminas\Diactoros\Response('php://memory', 404);
-                $response->getBody()->write(json_encode(['error' => $tenf->getMessage()]));
-            }
+            $existingRegistration = $this->get($requestedRegistrationId);
+            $this->_assertRegistrationAccess($existingRegistration, $verifiedEmail, (string) $event_id);
             $request['contactDetails']['registration_id'] = $requestedRegistrationId;
             $request['registrantDetails']['registration_id'] = $requestedRegistrationId;
         }
@@ -1700,10 +1699,11 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
     public function publicApiPostDoubleOptIn($event_id): \Laminas\Diactoros\Response
     {
+        $sessionEmail = $this->_getLoggedInUserEmail();
         $assertAclUsage = $this->assertPublicUsage();
 
         try {
-            $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
+            $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true) ?: [];
 
             if (!$key = EventManager_Config::getInstance()->{EventManager_Config::JWT_SECRET}) {
                 $e = new Tinebase_Exception_SystemGeneric('EventManager JWT key is not configured');
@@ -1711,44 +1711,38 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 throw $e;
             }
 
-            $token = JWT::encode([
-                'email' => $request['email'],
-            ], $key, 'HS256');
+            $email = $sessionEmail !== '' ? $sessionEmail : trim((string) ($request['email'] ?? ''));
 
-            if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $request['email'])) {
-                $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($request['email']);
-                if (!empty($contact) && $event_id === "null") {
-                    $link = '/EventManager/view/account/' . $token;
-                    $template = 'SendRegistrationLink';
-                    $this->_sendMessageWithTemplate($template, [
-                        'link' => Tinebase_Core::getUrl() . $link,
-                        'contact' => $contact,
-                        'email' => $request['email'],
-                    ]);
-                } else {
-                    $link = '/EventManager/view/event/' . $request['eventId'] . '/registration/' . $token;
-                    $template = 'SendRegistrationLink';
-                    $event = EventManager_Controller_Event::getInstance()->get($event_id);
-                    if (!empty($contact)) {
-                        $this->_sendMessageWithTemplate($template, [
-                            'link' => Tinebase_Core::getUrl() . $link,
-                            'contact' => $contact,
-                            'email' => $request['email'],
-                            'event' => $event,
-                        ]);
-                    } else {
-                        $tempContact = new Addressbook_Model_Contact([
-                            'email' => $request['email'],
-                        ]);
-                        $this->_sendMessageWithTemplate($template, [
-                            'link' => Tinebase_Core::getUrl() . $link,
-                            'contact' => $tempContact,
-                            'email' => $request['email'],
-                            'event' => $event,
-                        ]);
-                    }
-                }
+            if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $email)) {
+                $response = new \Laminas\Diactoros\Response();
+                $response->getBody()->write(json_encode(['needsEmail' => true]));
+                return $response;
             }
+
+            $token = JWT::encode(['email' => $email], $key, 'HS256');
+            $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($email);
+
+            $link = $event_id === 'null'
+                ? '/EventManager/view/account/' . $token
+                : '/EventManager/view/event/' . $event_id . '/registration/' . $token;
+
+            if ($sessionEmail !== '') {
+                // no double opt-in mail needed, the client redirects directly
+                $response = new \Laminas\Diactoros\Response();
+                $response->getBody()->write(json_encode([$link]));
+                return $response;
+            }
+
+            $context = [
+                'link'    => Tinebase_Core::getUrl() . $link,
+                'contact' => $contact ?: new Addressbook_Model_Contact(['email' => $email]),
+                'email'   => $email,
+            ];
+            if ($event_id !== 'null') {
+                $context['event'] = EventManager_Controller_Event::getInstance()->get($event_id);
+            }
+            $this->_sendMessageWithTemplate('SendRegistrationLink', $context);
+
             $response = new \Laminas\Diactoros\Response();
             $response->getBody()->write(json_encode(['success' => true]));
         } catch (Exception $e) {
@@ -1758,6 +1752,18 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $assertAclUsage();
         }
         return $response;
+    }
+
+    private function _getLoggedInUserEmail(): string
+    {
+        $user = Tinebase_Core::getUser();
+        if (
+            !$user instanceof Tinebase_Model_FullUser
+            || $user->accountLoginName === Tinebase_User::SYSTEM_USER_ANONYMOUS
+        ) {
+            return '';
+        }
+        return strtolower(trim((string) $user->accountEmailAddress));
     }
 
     public function publicApiPostDeregistration($event_id, $token, $registration_id = null): \Laminas\Diactoros\Response

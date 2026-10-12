@@ -3234,54 +3234,76 @@ class Setup_Controller
     }
 
     /**
-     * Add a new auth token to table tine20_auth_token
-     *
-     * Parameter $options has to be array with this structure:
-     *      array(
-     *          'user'          => string   // Username to create the token for
-     *          'id'            => string   // Value for field tine20_auth_token.id (optional)
-     *          'auth_token'    => string   // Value for field tine20_auth_token.auth_token
-     *          'valid_until'   => string   // Value for field tine20_auth_token.valid_until
-     *          'channels'      => string   // Comma separated list of channel names. Values for JSON array in field tine20_auth_token.channels
-     *      )
-     *
-     * @param Array $options
-     * @return Array $result  Array with all fields of new record
+     * @return array
      */
-    public function addAuthToken($options)
+    public function upgradeMysql564()
     {
-        $result = null;
-
-        if (! isset($options['id'])) {
-            $options['id'] = Tinebase_Record_Abstract::generateUID();
+        $setupBackend = Setup_Backend_Factory::factory();
+        if (!$setupBackend->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
+            return ['DB backend does not support the features - upgrade to mysql >= 5.6.4 or mariadb >= 10.0.5'];
+        }
+        if (!Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX)) {
+            return ['full text index feature is disabled'];
         }
 
-        $db = Setup_Core::getDb();
+        $failures = array();
+        $setupUpdate = new Setup_Update_Abstract($setupBackend);
 
-        $channels = explode(',', $options['channels']);
-        foreach($channels as &$channel) {
-            $channel = '"' . $channel . '"';
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            try {
+                $xml = $this->getSetupXml($application->name);
+            } catch (Setup_Exception_NotFound $senf) {
+                // app is not available any more
+                $failures[] = $senf->getMessage();
+                continue;
+            }
+            // should we check $xml->enabled? I don't think so, we asked Tinebase_Application for the applications...
+
+            // get all MCV2 models for all apps, you never know...
+            $controllerInstance = null;
+            try {
+                $controllerInstance = Tinebase_Core::getApplicationInstance($application->name, '', true);
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                $failures[] = 'could not get application controller for app: ' . $application->name;
+            }
+            if (null !== $controllerInstance) {
+                try {
+                    $setupUpdate->updateSchema($application->name, $controllerInstance->getModels(true));
+                } catch (Exception $e) {
+                    $failures[] = 'could not update MCV2 schema for app: ' . $application->name;
+                }
+            }
+
+            if (!empty($xml->tables)) {
+                foreach ($xml->tables->table as $table) {
+                    if (!empty($table->requirements) && !$setupBackend->tableExists((string)$table->name)) {
+                        foreach ($table->requirements->required as $requirement) {
+                            if (!$setupBackend->supports((string)$requirement)) {
+                                continue 2;
+                            }
+                        }
+                        $setupBackend->createTable(new Setup_Backend_Schema_Table_Xml($table->asXML()));
+                        continue;
+                    }
+
+                    // check for fulltext index
+                    foreach ($table->declaration->index as $index) {
+                        if (empty($index->fulltext)) {
+                            continue;
+                        }
+                        $declaration = new Setup_Backend_Schema_Index_Xml($index->asXML());
+                        // TODO should check if index already exists
+                        try {
+                            $setupBackend->addIndex((string)$table->name, $declaration);
+                        } catch (Exception $e) {
+                            $failures[] = (string)$table->name . ': ' . (string)$index->name . '(error: ' . $e->getMessage() . ')';
+                        }
+                    }
+                }
+            }
         }
 
-        try {
-            $query = 'INSERT INTO ' . SQL_TABLE_PREFIX . 'auth_token (id, auth_token, account_id, valid_until, channels) VALUES ';
-            $query .= '(';
-            $query .= $db->quote($options['id']) . ', ';
-            $query .= $db->quote($options['auth_token']) . ', ';
-            $query .= '(SELECT id FROM ' . SQL_TABLE_PREFIX . 'accounts WHERE login_name = ' . $db->quote($options['user']) . '), ';
-            $query .= $db->quote($options['valid_until']) . ', ';
-            $query .= $db->quote('[' . implode(',', $channels) . ']');
-            $query .= ')';
-
-            $db->query($query);
-
-            $dbResult = $db->query('SELECT * FROM ' . SQL_TABLE_PREFIX . 'auth_token WHERE id = ' . $db->quote($options['id']))->fetchAll();
-            $result = $dbResult[0];
-
-        } catch (Zend_Db_Exception $zde) {
-            Tinebase_Exception::log($zde);
-        }
-
-        return $result;
+        return $failures;
     }
 }
