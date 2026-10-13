@@ -3,8 +3,9 @@
 @import "bootstrap/scss/mixins";
 
 .x-form-trigger.x-form-trigger-plugin {
-   background-position: center;
-   background-repeat: no-repeat;
+   cursor: pointer;
+   background-position: center !important; /* we have a lot of background-images defined with important */
+   background-repeat: no-repeat !important;
    box-sizing: border-box;
    background-size: 14px;
    width: 18px;

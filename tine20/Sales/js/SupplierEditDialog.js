@@ -127,7 +127,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };
         
         this.clipboardButton = new Ext.Button({
-           columnWidth: 5/100,
+           width: 40,
            iconCls: 'clipboard',
            tooltip: Ext.util.Format.htmlEncode(this.app.i18n._('Copy address to the clipboard')),
            fieldLabel: '&nbsp;',
@@ -186,15 +186,9 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 columnWidth: .250,
                                 minValue: 1,
                                 maxValue: 4294967296,
-                                xtype: 'uxspinner',
+                                xtype: 'extuxnumberfield',
                                 useThousandSeparator : false,
-                                strategy: new Ext.ux.form.Spinner.NumberStrategy({
-                                    incrementValue : 1,
-                                    alternateIncrementValue: 1,
-                                    minValue: 1,
-                                    maxValue: 4294967296,
-                                    allowDecimals : false
-                                })
+                                allowDecimals: false
                             }, {
                                 columnWidth: .750,
                                 allowBlank: false,
@@ -308,11 +302,11 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 label: this.app.formatMessage('This address is managed by the linked contact. Changes to the readonly fields can be done in that contact directly.'),
                             }], [{
                                 name: 'adr_name_shorthand',
-                                columnWidth: .2,
+                                columnWidth: .25,
                                 fieldLabel: this.app.i18n._('Name shorthand')
                             }, {
                                 xtype: 'widget-keyfieldcombo',
-                                columnWidth: .2,
+                                columnWidth: .25,
                                 app:   'Sales',
                                 keyFieldName: 'languagesAvailable',
                                 fieldLabel: this.app.i18n._('Language'),
@@ -321,7 +315,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }, {
                                 name: 'adr_email',
                                 fieldLabel: this.app.i18n._('Email'),
-                                columnWidth: .55
+                                columnWidth: .5
                             }, this.clipboardButton],[{
                                 name: 'adr_name',
                                 fieldLabel: this.app.i18n._('Name'),
@@ -379,7 +373,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         formDefaults: formFieldDefaults,
                         items: [[
                             {
-                                columnWidth: 1/2,
+                                columnWidth: 1,
                                 fieldLabel: this.app.i18n._('Web'),
                                 xtype: 'urlfield',
                                 name: 'url',
