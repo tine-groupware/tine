@@ -253,7 +253,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             $_filter = new Calendar_Model_EventFilter();
         }
 
-        $events = $this->_eventController->search($_filter, NULL, FALSE, FALSE, $_action);
+        $events = $this->_eventController->search($_filter, _action: $_action);
 
         // if an id filter is set, we need to fetch exceptions in a second query
         if ($_filter->getFilter('id', true, true)) {
@@ -261,7 +261,22 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 array('field' => 'base_event_id', 'operator' => 'in',      'value' => $events->id),
                 array('field' => 'id',            'operator' => 'notin',   'value' => $events->id),
                 array('field' => 'recurid',       'operator' => 'notnull', 'value' => null),
-            )), NULL, FALSE, FALSE, $_action));
+            )), _action: $_action));
+        }
+
+        if ($this->_eventController->doNoSyncDeclinedAttendeeEvents()) {
+            try {
+                $this->_eventController->doNoSyncDeclinedAttendeeEvents(false);
+                $declinedRecursEvents = $this->_eventController->search(new Calendar_Model_EventFilter(array(
+                    array('field' => 'base_event_id', 'operator' => 'in',      'value' => $events->id),
+                    array('field' => 'id',            'operator' => 'notin',   'value' => $events->id),
+                    array('field' => 'recurid',       'operator' => 'notnull', 'value' => null),
+                )), _action: $_action);
+                $declinedRecursEvents->is_deleted = true;
+                $events->merge($declinedRecursEvents);
+            } finally {
+                $this->_eventController->doNoSyncDeclinedAttendeeEvents(true);
+            }
         }
 
         $this->_eventController->getAlarms($events);

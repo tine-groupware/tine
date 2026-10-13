@@ -296,6 +296,66 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
     }
 
+    public function testNoDeclinedAttendeeRecuringEvents(): void
+    {
+        // create a recurring event with the current user as attendee
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', [
+            [
+                'user_id'   => Tinebase_Core::getUser()->contact_id,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+            ],
+        ]);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+        $persistentEvent = $this->_controller->create($event);
+
+        $oldNoSyncValue = $this->_controller->doNoSyncDeclinedAttendeeEvents(true);
+        $noSyncRaii = new Tinebase_RAII(fn() => $this->_controller->doNoSyncDeclinedAttendeeEvents($oldNoSyncValue));
+        Calendar_Controller_MSEventFacade::unsetInstance();
+        $msEventFacade = Calendar_Controller_MSEventFacade::getInstance();
+
+        // only the base event is found
+        $this->assertSame(1, $msEventFacade->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $persistentEvent->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
+
+        // create two recur exceptions
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, Tinebase_DateTime::now());
+        $persistentException1 = $this->_controller->createRecurException($nextOccurance);
+
+        $persistentEvent = $this->_controller->get($persistentEvent->getId());
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, $persistentException1->dtend);
+        $persistentException2 = $this->_controller->createRecurException($nextOccurance);
+
+        $this->assertNotEquals($persistentException1->dtstart->format('c'), $persistentException2->dtstart->format('c'),
+            'expected two distinct recur exceptions');
+
+        // base event + 2 exceptions are found
+        $this->assertSame(1, ($result = $msEventFacade->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $persistentEvent->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC))->count());
+        $this->assertSame(2, $result->getFirstRecord()->exdate->count());
+
+
+        // decline only the first exception
+        $attender = $persistentException1->attendee->find('user_id', $this->_getTestUser()->contact_id);
+        $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $this->_controller->attenderStatusUpdate($persistentException1, $attender, $attender->status_authkey);
+
+        // the declined exception is not found, but the base event + the other exception are
+        $events = $msEventFacade->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $persistentEvent->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC);
+        $this->assertSame(1, $events->count());
+        $baseEvent = $events->getFirstRecord();
+        $this->assertSame(2, $baseEvent->exdate->count());
+        $this->assertSame(1, $baseEvent->exdate->filter('is_deleted', true)->count());
+        $this->assertSame(1, $baseEvent->exdate->filter('is_deleted', false)->count());
+    }
+
     public function testUpdateAttendeeStatus()
     {
         $this->_controller->setCalendarUser(new Calendar_Model_Attender([
