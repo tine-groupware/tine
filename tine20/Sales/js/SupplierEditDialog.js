@@ -373,7 +373,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         formDefaults: formFieldDefaults,
                         items: [[
                             {
-                                columnWidth: 1/2,
+                                columnWidth: 1,
                                 fieldLabel: this.app.i18n._('Web'),
                                 xtype: 'urlfield',
                                 name: 'url',
