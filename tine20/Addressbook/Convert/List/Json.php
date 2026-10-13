@@ -55,6 +55,9 @@ class Addressbook_Convert_List_Json extends Tinebase_Convert_Json
                         'n_fn'  => $member->n_fn,
                     ];
                 } else {
+                    if (!empty($member->container_id)) {
+                        $member['container_id'] = Tinebase_Container::getInstance()->getContainerById($member->container_id)->toArray();
+                    }
                     $result['members'][] = $member->toArray();
                 }
             }
