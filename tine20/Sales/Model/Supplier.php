@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -50,6 +50,7 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         
         'titleProperty'     => '{{number}} - {{name}}',
         'appName'           => 'Sales',

@@ -417,6 +417,12 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
             $pInvoice->{self::FLD_SUPPLIER_ID} = new Sales_Model_Supplier([], true);
         } else {
             Tinebase_Record_Expander::expandRecord($pInvoice->{self::FLD_SUPPLIER_ID});
+            if ($pInvoice->{self::FLD_SUPPLIER_ID}->{self::FLD_EVAL_DIM_COST_BEARER}) {
+                $pInvoice->{self::FLD_EVAL_DIM_COST_BEARER} = $pInvoice->{self::FLD_SUPPLIER_ID}->{self::FLD_EVAL_DIM_COST_BEARER};
+            }
+            if ($pInvoice->{self::FLD_SUPPLIER_ID}->{self::FLD_EVAL_DIM_COST_CENTER}) {
+                $pInvoice->{self::FLD_EVAL_DIM_COST_CENTER} = $pInvoice->{self::FLD_SUPPLIER_ID}->{self::FLD_EVAL_DIM_COST_CENTER};
+            }
         }
         $pInvoice->{self::FLD_SUPPLIER_ID}->fromXRXml($xr);
 
