@@ -78,30 +78,41 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
     protected function _getDuplicateFilter(Tinebase_Record_Interface $_record)
     {
+        $participant = $_record->{EventManager_Model_Registration::FLD_PARTICIPANT};
+        $originalId = $participant
+            ? $participant->{EventManager_Model_Register_Contact::FLD_ORIGINAL_ID}
+            : null;
+
+        if (empty($originalId)) {
+            return null;
+        }
+
         return Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, [
             [
                 TMFA::FIELD => EventManager_Model_Registration::FLD_EVENT_ID,
                 TMFA::OPERATOR => TMFA::OP_EQUALS,
-                TMFA::VALUE => $_record->getIdFromProperty(EventManager_Model_Registration::FLD_EVENT_ID)
+                TMFA::VALUE => $_record->getIdFromProperty(EventManager_Model_Registration::FLD_EVENT_ID),
             ],
             [
                 TMFA::FIELD => EventManager_Model_Registration::FLD_PARTICIPANT,
                 TMFA::OPERATOR => 'definedBy',
                 TMFA::VALUE => [
-                    [TMFA::FIELD => EventManager_Model_Register_Contact::FLD_ORIGINAL_ID,
-                        TMFA::OPERATOR => TMFA::OPERATOR_NOT,
-                        TMFA::VALUE => null
-                    ],
-                    [TMFA::FIELD => EventManager_Model_Register_Contact::FLD_ORIGINAL_ID,
+                    [
+                        TMFA::FIELD    => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
                         TMFA::OPERATOR => TMFA::OP_EQUALS,
-                        TMFA::VALUE => $_record->{EventManager_Model_Registration::FLD_PARTICIPANT}
-                            ->{EventManager_Model_Registration::FLD_ORIGINAL_ID}
+                        TMFA::VALUE    => EventManager_Model_Registration::FLD_PARTICIPANT,
                     ],
-                    [TMFA::FIELD => EventManager_Model_Register_Contact::ID,
+                    [
+                        TMFA::FIELD    => EventManager_Model_Register_Contact::FLD_ORIGINAL_ID,
+                        TMFA::OPERATOR => TMFA::OP_EQUALS,
+                        TMFA::VALUE    => $originalId,
+                    ],
+                    [
+                        TMFA::FIELD => EventManager_Model_Register_Contact::ID,
                         TMFA::OPERATOR => TMFA::OPERATOR_NOT,
-                        TMFA::VALUE => $_record->{EventManager_Model_Registration::FLD_PARTICIPANT}->getId()
+                        TMFA::VALUE => $participant->getId(),
                     ],
-                ]
+                ],
             ],
         ]);
     }
@@ -150,13 +161,16 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     {
         parent::_inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord);
         $this->_processBookedOptionsAfterUpdate($_updatedRecord, $_oldRecord);
-        $bookedOptionsDeleted = false;
-        if ($_record->{EventManager_Model_Registration::FLD_STATUS} === "3") {
+
+        $isDeregistration = $_updatedRecord->{EventManager_Model_Registration::FLD_STATUS} === '3'
+            && $_oldRecord->{EventManager_Model_Registration::FLD_STATUS} !== '3';
+
+        if ($isDeregistration) {
             if (!empty($_record->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS})) {
                 foreach ($_record->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $bookedOption) {
                     if (
                         $bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
-                        === "EventManager_Model_Selections_File"
+                        === EventManager_Model_Selections_File::class
                     ) {
                         $participantName = EventManager_Controller_Register_Contact::getInstance()
                             ->get($_record->{EventManager_Model_Registration::FLD_PARTICIPANT}
@@ -165,12 +179,8 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                     }
                 }
                 $this->_deleteBookedOptions($_record);
-                $bookedOptionsDeleted = true;
             }
-            if (!$bookedOptionsDeleted) {
-                $template = 'SendDeregistrationEmail';
-                $this->_sendProcessEmail($_record, $template);
-            }
+            $this->_sendProcessEmail($_record, 'SendDeregistrationEmail');
         }
 
         if (
@@ -201,18 +211,20 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
         foreach ($_ids as $id) {
             $registration = $this->get($id);
-            try {
-                $this->_notificationDataBeforeDelete[$id] = [
-                    'recipients'  => $this->_getNotificationRecipients($registration),
-                    'participant' => $registration->{EventManager_Model_Registration::FLD_PARTICIPANT}
-                        ? clone $registration->{EventManager_Model_Registration::FLD_PARTICIPANT}
-                        : null,
-                    'registrant'  => $registration->{EventManager_Model_Registration::FLD_REGISTRANT}
-                        ? clone $registration->{EventManager_Model_Registration::FLD_REGISTRANT}
-                        : null,
-                ];
-            } catch (Exception $e) {
-                Tinebase_Exception::log($e);
+            if ($registration->{EventManager_Model_Registration::FLD_STATUS} !== '3') {
+                try {
+                    $this->_notificationDataBeforeDelete[$id] = [
+                        'recipients'  => $this->_getNotificationRecipients($registration),
+                        'participant' => $registration->{EventManager_Model_Registration::FLD_PARTICIPANT}
+                            ? clone $registration->{EventManager_Model_Registration::FLD_PARTICIPANT}
+                            : null,
+                        'registrant'  => $registration->{EventManager_Model_Registration::FLD_REGISTRANT}
+                            ? clone $registration->{EventManager_Model_Registration::FLD_REGISTRANT}
+                            : null,
+                    ];
+                } catch (Exception $e) {
+                    Tinebase_Exception::log($e);
+                }
             }
 
             if ($registration->{EventManager_Model_Registration::FLD_PARTICIPANT}) {
@@ -249,7 +261,9 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             }
         }
 
-        $this->_sendProcessEmail($_record, 'SendDeregistrationEmail', $notificationData);
+        if ($notificationData !== null) {
+            $this->_sendProcessEmail($_record, 'SendDeregistrationEmail', $notificationData);
+        }
         $this->_updateParentStatistics($_record);
     }
 
@@ -357,14 +371,15 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             : null;
 
         $cp = $_record->{EventManager_Model_Registration::FLD_COMMUNICATION_PREFERENCE};
+        $cp = (string) ($cp instanceof Tinebase_Record_Interface ? $cp->getId() : $cp);
 
-        $commRegistrant = EventManager_Config::getInstance()
-            ->get(EventManager_Config::REGISTRATION_COMMUNICATION_PREFERENCE)->records->getById('2')->getId();
-        $commParticipantCcRegistrant = EventManager_Config::getInstance()
-            ->get(EventManager_Config::REGISTRATION_COMMUNICATION_PREFERENCE)->records->getById('3')->getId();
+        $records = EventManager_Config::getInstance()
+            ->get(EventManager_Config::REGISTRATION_COMMUNICATION_PREFERENCE)->records;
+        $commRegistrant              = (string) $records->getById('2')->getId();
+        $commParticipantCcRegistrant = (string) $records->getById('3')->getId();
 
         if (!$registrant) {
-            $cp = $participant;
+            $cp = '';
         }
 
         switch ($cp) {
@@ -1158,14 +1173,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         return false;
     }
 
-    private function _resolveCommunicationPreference(array &$request, bool $isOnBehalf, bool $isUnderage)
+    private function _resolveCommunicationPreference(array &$request, bool $isOnBehalf, bool $isUnderage): string
     {
-        $commParticipant = EventManager_Config::getInstance()
-            ->get(EventManager_Config::REGISTRATION_COMMUNICATION_PREFERENCE)->records->getById('1')->getId();
-        $commRegistrant = EventManager_Config::getInstance()
-            ->get(EventManager_Config::REGISTRATION_COMMUNICATION_PREFERENCE)->records->getById('2')->getId();
-        $commParticipantCcRegistrant = EventManager_Config::getInstance()
-            ->get(EventManager_Config::REGISTRATION_COMMUNICATION_PREFERENCE)->records->getById('3')->getId();
+        $records = EventManager_Config::getInstance()
+            ->get(EventManager_Config::REGISTRATION_COMMUNICATION_PREFERENCE)->records;
+        $commParticipant             = (string) $records->getById('1')->getId();
+        $commRegistrant              = (string) $records->getById('2')->getId();
+        $commParticipantCcRegistrant = (string) $records->getById('3')->getId();
 
         if (!$isOnBehalf) {
             return $commParticipant;
@@ -1188,13 +1202,8 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         }
 
         $pref = (string)($request['communicationPreference'] ?? '');
-        $allowed = [
-            $commParticipant,
-            $commRegistrant,
-            $commParticipantCcRegistrant,
-        ];
 
-        return in_array($pref, $allowed, true)
+        return in_array($pref, [$commParticipant, $commRegistrant, $commParticipantCcRegistrant], true)
             ? $pref
             : $commParticipantCcRegistrant;
     }
