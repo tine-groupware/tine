@@ -59,7 +59,7 @@ class CrewScheduling_Model_EventRoleConfigTest extends CrewScheduling_TestCase
         // regular recurring must not be touched
         $baseEvent = Calendar_Controller_Event::getInstance()->getRecurBaseEvent($event);
         $events = new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$baseEvent]);
-        Calendar_Model_Rrule::mergeRecurrenceSet($events, Tinebase_DateTime::now()->addDay(11), Tinebase_DateTime::now()->addDay(11));
+        Calendar_Model_Rrule::mergeRecurrenceSet($events, Tinebase_DateTime::now()->addDay(11), Tinebase_DateTime::now()->addDay(12));
         $event = $events->getFirstRecord();
         $this->assertEquals('CONFIRMED', $event->status);
 
@@ -94,13 +94,10 @@ class CrewScheduling_Model_EventRoleConfigTest extends CrewScheduling_TestCase
         $event = Calendar_Controller_Event::getInstance()->update($event);
         $this->assertEquals('CANCELLED', $event->status);
 
-        // TODO FIX THIS TEST!
-        return;
-
         // Test manual cancel of a new recur exception
         $baseEvent = Calendar_Controller_Event::getInstance()->getRecurBaseEvent($event);
         $events = new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$baseEvent]);
-        Calendar_Model_Rrule::mergeRecurrenceSet($events, Tinebase_DateTime::now()->addDay(13), Tinebase_DateTime::now()->addDay(13));
+        Calendar_Model_Rrule::mergeRecurrenceSet($events, Tinebase_DateTime::now()->addDay(13), Tinebase_DateTime::now()->addDay(14));
         $event = $events->getFirstRecord();
         $this->assertEquals('CONFIRMED', $event->status);
 
