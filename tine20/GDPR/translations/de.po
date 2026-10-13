@@ -310,7 +310,7 @@ msgid "Missing Consent"
 msgstr "Fehlende Einwilligung"
 
 msgid "The following recipients will be removed from this mass mailing because they have not provided their consent."
-msgstr "Die folgenden Empfänger werden von dieser Serien Mail entfernt da ihre keine Einwilligung fehlt."
+msgstr "Die folgenden Adressen wurden als Empfänger entfernt, da keine Einwilligung zum Verwendungszweck vorliegt."
 
 msgid "User Self-Enrollment Allowed"
 msgstr "Nutzer kann sich selbst anmelden"
