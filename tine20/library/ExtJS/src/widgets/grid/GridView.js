@@ -1307,6 +1307,13 @@ viewConfig: {
             if (sortInfo && JSON.stringify(this.grid.store.sortInfo) !== JSON.stringify(sortInfo)) {
                 this.grid.store.sort(sortInfo.field, sortInfo.direction);
             }
+
+            if (!currentGridState && this.hasRows()) {
+                this.mainBody.update(this.renderBody()).setWidth(this.getTotalWidth());
+                this.processRows(0, true);
+                this.applyEmptyText();
+            }
+
             this.fitColumns(preventRefresh, onlyExpand, omitColumn);
         }
 

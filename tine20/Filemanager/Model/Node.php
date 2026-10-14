@@ -44,7 +44,37 @@ class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
         unset($_definition[self::VERSION]);
         $_definition[self::APP_NAME] = 'Filemanager';
         $_definition[self::MODEL_NAME] = 'Node';
-        
+
+        $_definition[self::UI_CONFIG] = [
+            self::UI_CONFIG_LAYOUT_MEDIUM => [
+                self::FLD_TAGS,
+                'name',
+                'size',
+                'last_modified_by',
+            ],
+            self::UI_CONFIG_LAYOUT_BIG => [
+                self::FLD_TAGS,
+                'ooi_editors',
+                'name',
+                'size',
+                'ooi_editing',
+                'last_modified_by',
+                'last_modified_time'
+            ],
+            self::UI_CONFIG_LAYOUT_LARGE  => [
+                self::FLD_TAGS,
+                'ooi_editors',
+                'name',
+                'contenttype',
+                'size',
+                'ooi_editing',
+                'created_by',
+                'creation_time',
+                'last_modified_by',
+                'last_modified_time'
+            ],
+        ];
+
         parent::inheritModelConfigHook($_definition);
     }
     

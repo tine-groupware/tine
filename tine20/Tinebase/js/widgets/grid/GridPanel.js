@@ -2530,13 +2530,27 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     getCustomfieldColumns: function() {
         var modelName = this.recordClass.getMeta('appName') + '_Model_' + this.recordClass.getMeta('modelName'),
             cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
+            modelConfig = this.recordClass.getModelConfiguration(),
             result = [];
 
         Ext.each(cfConfigs, function(cfConfig) {
+            const cfName = cfConfig.get('name');
+            const refConfig = {};
+
+            if (modelConfig?.uiconfig) {
+                ['small', 'medium', 'big', 'large'].some((level) => {
+                    if (modelConfig.uiconfig[level]?.includes(cfName)) {
+                        refConfig.responsiveLevel = level;
+                        return true;
+                    }
+                    return false;
+                });
+            }
+
             result.push({
                 id: cfConfig.id,
                 header: cfConfig.get('definition').label,
-                dataIndex: '#' + cfConfig.get('name'),
+                dataIndex: '#' + cfName,
                 type: cfConfig.get('definition').type,
                 renderer: Tine.widgets.customfields.Renderer.get(this.app, cfConfig),
                 sortable: !!this.recordClass.getModelConfiguration(),

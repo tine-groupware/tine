@@ -71,6 +71,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             enableDragDrop: true,
             ddGroup: 'fileDDGroup',
             gridType: Ext.grid.EditorGridPanel,
+            disableResponsiveLayout: false,
             clicksToEdit: 'auto',
             listeners: {
                 scope: this,
@@ -147,6 +148,94 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         //         this.actionUpdater.updateActions(record);
         //     }
         // }, this);
+    },
+
+    oneColumnRenderer: function(recordId, metadata, record) {
+        const panel = this.grid.parentScope;
+
+        const block = document.createElement('div');
+        block.className = 'responsive-title';
+
+        if (this.getResponsiveMode().name !== 'oneColumn') {
+            return block.outerHTML;
+        }
+
+        const type = record.get('type');
+        const thumbEl = panel.createThumbnailEl(record);
+
+        const nameEl = document.createElement('div');
+        nameEl.className = 'responsive-grid-text-medium';
+        nameEl.innerText = record.get('name');
+        nameEl.setAttribute('ext:qtip', Ext.util.Format.htmlEncode(record.get('name')));
+
+        const metaEl = document.createElement('div');
+        metaEl.className = 'responsive-grid-text-small';
+        metaEl.innerText = Tine.Tinebase.common.dateRenderer(record.get('last_modified_time')) +  (type === 'folder' ? '' : ' - ' + Tine.Tinebase.common.byteRenderer(record.get('size')));
+
+        const right = document.createElement('div');
+        right.className = 'filemanager-thumbnail-name';
+        right.appendChild(nameEl);
+        right.appendChild(metaEl);
+
+        const row = document.createElement('div');
+        row.className = 'responsive-grid-row';
+        row.appendChild(thumbEl);
+        row.appendChild(right);
+
+        block.appendChild(row);
+        return block.outerHTML;
+    },
+
+    createThumbnailEl: function (record) {
+        const isFolder = record.get('type') === 'folder';
+        const contenttype = record.get('contenttype');
+        const mimeIcon = contenttype ? Tine.Tinebase.common.getMimeIconCls(contenttype) : '';
+
+        const thumbEl = document.createElement('div');
+        thumbEl.className = `filemanager-thumbnail ${isFolder ? 'mime-icon-folder' : `mime-icon-file ${mimeIcon}`}`;
+        // small icon in the big and large layouts
+        if (['big', 'large'].includes(this.grid.getView().getResponsiveMode().name)) {
+            thumbEl.classList.add('is-compact');
+        }
+        if (!isFolder) {
+            const img = document.createElement('img');
+            img.className = 'dark-reverse';
+            thumbEl.appendChild(img);
+        }
+
+        return thumbEl;
+    },
+
+    async getThumbnailUrl(record) {
+        if ((record.get('contenttype') || '').startsWith('image/')) {
+            return Tine.Filemanager.Model.Node.getDownloadUrl(record, record.get('revision'), 'inline');
+        }
+
+        this._thumbCache = this._thumbCache || {};
+        const key = `${record.get('id') || record.get('path')}:${record.get('revision')}`;
+
+        if (!this._thumbCache[key]) {
+            const previewUrl = Ext.urlEncode({
+                frontend: 'http', _num: 0,
+                method: 'Tinebase.downloadPreview',
+                _path: record.get('path'),
+                _type: 'thumbnail',
+                _appId: this.app.id,
+                _revision: record.get('revision'),
+            }, Tine.Tinebase.tineInit.requestUrl + '?');
+
+            this._thumbCache[key] = fetch(previewUrl, {headers: {'X-TINE20-PREVIEWSERVICE-SYNC': true}})
+                .then((response) => response.ok ? response.blob() : null)
+                .then((blob) => {
+                    if (!blob?.size || !blob.type.startsWith('image/')) throw new Error('no preview');
+                    return URL.createObjectURL(blob);
+                })
+                .catch(() => {
+                    delete this._thumbCache[key]; // allow a retry later
+                    return null;
+                });
+        }
+        return this._thumbCache[key];
     },
 
     /**
@@ -266,7 +355,32 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         };
         ed.on('canceledit', this.onCancelEdit, this);
 
-        return Tine.Filemanager.nodeActionsMgr.checkConstraints('edit', row.record);
+        const allowed = Tine.Filemanager.nodeActionsMgr.checkConstraints('edit', row.record);
+
+        if (allowed) {
+            ed.alignment = 'l-l';
+            ed.autoSize = 'none';
+
+            ed.on('startedit', (boundEl) => {
+                const inner = boundEl.dom; // .x-grid3-cell-inner
+                const textEl = inner.querySelector('.filemanager-thumbnail-name') || inner;
+                const innerBox = inner.getBoundingClientRect();
+                const textBox = textEl.getBoundingClientRect();
+
+                const range = document.createRange();
+                range.selectNodeContents(textEl);
+                const textWidth = range.getBoundingClientRect().width;
+
+                const maxWidth = innerBox.right - textBox.left;
+                const width = Math.min(textWidth + 20, maxWidth);
+
+                ed.field.el.dom.style.setProperty('width', `${Math.round(width)}px`, 'important');
+                ed.offsets = [Math.round(textBox.left - innerBox.left), 0];
+                ed.realign();
+            }, this, {single: true});
+        }
+
+        return allowed;
     },
 
     /**
@@ -286,6 +400,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * after grid renderd
      */
     initDragDrop: function () {
+        this.initThumbnailPopover();
+
         if (!this.enableDD) {
             return;
         }
@@ -311,7 +427,44 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.monitorUploadTasks();
     },
-    
+
+    initThumbnailPopover: function () {
+        const delegate = '.filemanager-thumbnail.is-loaded';
+
+        const tip = this.thumbPopover = new Ext.ToolTip({
+            target: this.getEl(),
+            delegate,
+            anchor: 'left',
+            measureWidth: false,
+            showDelay: 300,
+            hideDelay: 200,
+            shadow: false,
+            cls: 'filemanager-thumbnail-popover',
+            listeners: {
+                show: () => {
+                    const src = tip.triggerElement.querySelector('img').src;
+                    tip.body.dom.replaceChildren(Ext.DomHelper.createDom({tag: 'img', cls: 'dark-reverse', src}));
+                },
+                hide: () => { tip.autoHide = true; }
+            }
+        });
+
+        // click on a thumbnail pins the popover
+        this.mon(this.getEl(), 'click', (e, target) => {
+            tip.hide();
+            tip.autoHide = false;
+            tip.triggerElement = target;
+            tip.targetXY = e.getXY();
+            tip.show();
+        }, this, {delegate});
+
+        // click elsewhere closes a pinned popover
+        this.mon(Ext.getBody(), 'click', (e) => {
+            if (tip.isVisible() && !e.within(tip.getEl()) && !e.within(tip.triggerElement)) {
+                tip.hide();
+            }
+        });
+    },
     /**
      * monitor upload tasks
      * 
@@ -497,7 +650,22 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, {
             id: 'last_modified_by',
             width: 50,
-            hidden: false
+            hidden: false,
+            renderer: function (value, metadata, record) {
+                const createdBy = record.get('created_by');
+                const creationTime = record.get('creation_time');
+                const modifiedBy = record.get('last_modified_by');
+                const modifiedTime = record.get('last_modified_time');
+                const notYetModified = !modifiedTime || record.get('seq') <= 2;
+
+                const rendered = Tine.Tinebase.common.usernameRenderer(
+                    notYetModified ? createdBy : modifiedBy,
+                    metadata,
+                    record
+                );
+
+                return notYetModified ? `${rendered} * ` : rendered;
+            }
         }, {
             id: 'revision_size',
             tooltip: this.app.i18n._("Total size of all available revisions"),
@@ -787,6 +955,11 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     onDestroy: function() {
+        Object.values(this._thumbCache || {}).forEach((promise) => {
+            promise.then((url) => url && URL.revokeObjectURL(url));
+        });
+        this.thumbPopover?.destroy();
+
         _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
         return this.supr().onDestroy.call(this);
     },
@@ -924,7 +1097,55 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         })
 
+        if (this.hasNameColumn()) {
+            className += ' filemanager-thumb-row';
+        }
+
+        this.loadRowThumbnail(record);
+
         return className;
+    },
+
+    hasNameColumn: function () {
+        const cm = this.grid?.getColumnModel();
+        const idx = cm ? cm.getIndexById('name') : -1;
+        return idx > -1 && !cm.isHidden(idx);
+    },
+
+    async loadRowThumbnail(record) {
+        await Promise.resolve(); // getViewRowClass runs before the row exists in the DOM
+
+        const idx = this.store.indexOf(record);
+        const row = idx > -1 ? this.grid.getView().getRow(idx) : null;
+        if (!row) return;
+
+        let thumbEl = row.querySelector('.filemanager-thumbnail');
+        if (!thumbEl) {
+            const cell = row.querySelector('td.x-grid3-td-name .x-grid3-cell-inner');
+            if (!cell) return;
+
+            thumbEl = this.createThumbnailEl(record);
+
+            const textEl = document.createElement('span');
+            textEl.className = 'filemanager-thumbnail-name';
+            textEl.append(...cell.childNodes);
+            cell.replaceChildren(thumbEl, textEl);
+        }
+
+        const img = thumbEl.querySelector('img'); // folders have none
+        if (!img) return;
+
+        // no preview -> drop the img, the mime icon class stays as fallback
+        img.onload = () => thumbEl.classList.add('is-loaded');
+        img.onerror = () => img.remove();
+
+        const url = await this.getThumbnailUrl(record);
+        if (!img.isConnected) return;
+        if (url) {
+            img.src = url;
+        } else {
+            img.remove();
+        }
     },
     
     /**
