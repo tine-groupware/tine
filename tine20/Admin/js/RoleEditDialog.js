@@ -271,7 +271,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             selectAnyone: false,
             selectTypeDefault: 'group',
             showHidden: true,
-            disabled:true
+            disabled: !Tine.Tinebase.common.hasRight('manage', 'Admin', 'roles')
         });
         
         this.initRightsTree();
