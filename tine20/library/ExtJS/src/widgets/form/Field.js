@@ -424,13 +424,16 @@ var form = new Ext.form.FormPanel({
                 hidden: true,
                 shadow: false,
                 closable: false,
+                measureWidth: false, // width follows the field, not the text
                 minWidth: 40,
+                bodyStyle: 'white-space: normal; overflow-wrap: anywhere;',
                 html: html
             });
         } else {
             this.overflowTip.update(html);
         }
-
+        // same outer width as the input, re-read on every show (the name editor width can differ per edit)
+        this.overflowTip.setWidth(this.el.getWidth());
         this.overflowTip.showBy(this.el);
     },
 
