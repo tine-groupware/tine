@@ -174,7 +174,10 @@ class SSO_Controller extends Tinebase_Controller_Event
         );
         $bearerTokenValidator->setPublicKey($cryptKey);
         try {
-            $userInfo->respondToUserInfoRequest($request, $response = new \Laminas\Diactoros\Response(headers: ['Cache-Control' => 'no-store']));
+            $userInfo->respondToUserInfoRequest($request, $response = new \Laminas\Diactoros\Response(headers: [
+                'Cache-Control' => 'no-store',
+                'Content-Type' => 'application/json',
+            ]));
         } catch (Tinebase_Exception_NotFound) {
             return new \Laminas\Diactoros\Response(status: 401);
         }
