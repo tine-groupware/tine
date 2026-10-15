@@ -114,61 +114,53 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
         }
     },
 
-    waitingListListener : function () {
-        const total_places = this.form.openerCt.parentEditDialog.record.data.total_places;
-        const available_places = this.form.openerCt.parentEditDialog.record.data.available_places;
-        const registrations = this.form.openerCt.parentEditDialog.record.data.registrations;
-        let registrations_count = 0;
-        registrations.forEach((registration) => {
-            if (registration.status !== "3" && registration.status !== "2") {
-                registrations_count += 1;
-            }
-        })
-        if (available_places <= 0 && total_places <= registrations_count) {
-            const statusField = this.form.findField('status');
-            if (statusField.getValue() !== "3") {
-                statusField.setValue("2");
-            }
+    isUnlimited: function () {
+        const parent = this.form.openerCt.parentEditDialog;
+        const field = parent.form?.findField('unlimited_places');
+        return field ? !!field.getValue() : !!parent.record.data.unlimited_places;
+    },
 
-            statusField.on('expand', function (combo) {
-                setTimeout(function () {
-                    const listId = combo.list ? combo.list.id : null;
-                    let list = null;
-                    if (listId) {
-                        list = document.getElementById(listId);
-                    } else {
-                        const comboLists = Ext.query('.x-combo-list');
-                        list = comboLists[comboLists.length - 1];
-                    }
-                    if (list) {
-                        const items = Ext.query('.x-combo-list-item', list);
-                        combo.getStore().each(function (record, index) {
-                            if (record.get('id') === '1' && items[index]) {
-                                items[index].style.setProperty('color', '#999', 'important');
-                                items[index].style.setProperty('background-color', '#f0f0f0', 'important');
-                                items[index].style.setProperty('opacity', '0.6', 'important');
-                            }
-                        });
-                    }
-                }, 10);
-            }, this);
+    waitingListListener: function () {
+        const parent = this.form.openerCt.parentEditDialog;
+        const statusField = this.form.findField('status');
+        const isBlocked = () => !parent.hasFreePlace(this.record.id);
 
-            statusField.on('beforeselect', function (combo, record, index) {
-                // prevent selection of value confirmed
-                return record.get(combo.valueField) !== "1";
-            }, this);
-
-            statusField.on('select', function (combo, record, index) {
-                const reasonField = this.form.findField('reason_waiting_list');
-                if (statusField.getValue() !== "2") {
-                    reasonField.setValue("3");
-                    reasonField.hide();
-                    this.doLayout();
-                } else {
-                    this.showReasonWaitingList();
-                }
-            }, this);
+        if (isBlocked() && statusField.getValue() === '1') {
+            statusField.setValue('2');
+            this.showReasonWaitingList();
         }
+
+        statusField.on('expand', function (combo) {
+            setTimeout(function () {
+                const list = combo.list ? document.getElementById(combo.list.id) : null;
+                if (!list) return;
+                const items = Ext.query('.x-combo-list-item', list);
+                combo.getStore().each(function (record, index) {
+                    if (record.get('id') !== '1' || !items[index]) return;
+                    ['color', 'background-color', 'opacity'].forEach(p => items[index].style.removeProperty(p));
+                    if (isBlocked()) {
+                        items[index].style.setProperty('color', '#999', 'important');
+                        items[index].style.setProperty('background-color', '#f0f0f0', 'important');
+                        items[index].style.setProperty('opacity', '0.6', 'important');
+                    }
+                });
+            }, 10);
+        }, this);
+
+        statusField.on('beforeselect', function (combo, record) {
+            return !(isBlocked() && record.get(combo.valueField) === "1");
+        }, this);
+
+        statusField.on('select', function () {
+            const reasonField = this.form.findField('reason_waiting_list');
+            if (statusField.getValue() !== "2") {
+                reasonField.setValue("3");
+                reasonField.hide();
+                this.doLayout();
+            } else {
+                this.showReasonWaitingList();
+            }
+        }, this);
     },
 
     hasRegistrantListener : function () {

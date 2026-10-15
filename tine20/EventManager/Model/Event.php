@@ -32,6 +32,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
     public const FLD_TYPE = 'type';
     public const FLD_STATUS = 'status';
     public const FLD_FEE = 'fee';
+    public const FLD_UNLIMITED_PLACES = 'unlimited_places';
     public const FLD_TOTAL_PLACES = 'total_places';
     public const FLD_BOOKED_PLACES = 'booked_places';
     public const FLD_AVAILABLE_PLACES = 'available_places';
@@ -58,7 +59,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 3,
+        self::VERSION                   => 4,
         self::RECORD_NAME               => 'Event', // gettext('GENDER_Event')
         self::RECORDS_NAME              => 'Events', // ngettext('Event', 'Events', n)
         self::CONTAINER_PROPERTY        => self::FLD_CONTAINER_ID,
@@ -235,6 +236,12 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS     => [Zend_Filter_Empty::class => null],
+            ],
+            self::FLD_UNLIMITED_PLACES => [
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
+                self::LABEL                         => 'Unlimited places',
+                // _('Unlimited places')
             ],
             self::FLD_TOTAL_PLACES  => [
                 self::TYPE              => self::TYPE_INTEGER,
