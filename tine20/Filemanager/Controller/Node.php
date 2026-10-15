@@ -905,6 +905,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         try {
             $this->_checkIfExists($path);
             $this->_backend->checkPathACL($parentPathRecord, 'add', /* $_topLevelAllowed */ $_type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+            $this->_checkInvalidCharacters($path);
         } catch (Filemanager_Exception_NodeExists $fene) {
             if ($_forceOverwrite) {
 
@@ -1010,10 +1011,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         return $node !== null ? $node : $this->_backend->stat($_statpath);
     }
-    
+
     /**
      * check file existence
-     * 
+     *
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @param Tinebase_Model_Tree_Node $_node
      * @throws Filemanager_Exception_NodeExists
@@ -1024,11 +1025,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             . ' Check existance of ' . $_path->statpath);
 
         if ($this->_backend->fileExists($_path->statpath)) {
-            
+
             if (! $_node) {
                 $_node = $this->_backend->stat($_path->statpath);
             }
-            
+
             if ($_node) {
                 $existsException = new Filemanager_Exception_NodeExists();
                 $existsException->addExistingNodeInfo($_node);
@@ -1040,6 +1041,20 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Path does not exist yet');
+        }
+    }
+
+    /**
+     * check file has invalid chars
+     *
+     * @param Tinebase_Model_Tree_Node_Path $_path
+     * @throws Filemanager_Exception_InvalidCharacter
+     */
+    protected function _checkInvalidCharacters(Tinebase_Model_Tree_Node_Path $_path)
+    {
+        if (preg_match(Tinebase_Model_Tree_Node::FILENAME_FORBIDDEN_CHARS_EXP, $_path->name, $matches)) {
+            $e = new Filemanager_Exception_InvalidCharacter('Illegal character found: ' . $_path->name . ' => ' . print_r($matches, true));
+            Tinebase_Exception::log($e);
         }
     }
     
@@ -1205,6 +1220,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             if ($this->_backend->fileExists($destinationPathRecord->statpath) && $sourcePathRecord->flatpath === $destinationPathRecord->flatpath) {
                 throw new Filemanager_Exception_DestinationIsSameNode();
             }
+
+            $this->_checkInvalidCharacters($sourcePathRecord);
             
             // test if destination is subfolder of source
             $dest = explode('/', $destinationPathRecord->statpath);

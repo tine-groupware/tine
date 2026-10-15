@@ -113,7 +113,7 @@ export default class UploadFileTask {
                     args.nodeData.sourcePath = args?.uploadId;
                     await updateTask(args);
                 } catch (e) {
-                    if (e.data.code === 403) {
+                    if (e.data.code === 403 || e.data.code === 906) {
                         args.nodeData.status = uploadManager.status.FAILURE;
                         args.nodeData.reason = e.message;
                         await updateTask(args);
@@ -158,7 +158,7 @@ export default class UploadFileTask {
                         args.nodeData.status = uploadManager.status.UPLOADING;
                         args.overwrite = true;
                     }
-        
+
                     if (e.message === 'Node not found') {
                         const type = getResolvedContentType(args.nodeData.type, -1);
                         args.nodeData = await Tine.Filemanager.createNode(args.uploadId, type, [], _.get(args, 'overwrite', false));

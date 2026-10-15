@@ -140,7 +140,8 @@ abstract class Tinebase_Import_Xls_Abstract extends Tinebase_Import_Abstract
         
         if ($this->_options['keepImportFile']) {
             $tmpFile = fopen($_filename, 'r');
-            $this->_options['importFile'] = Tinebase_TempFile::getInstance()->createTempFileFromStream($tmpFile, 'Import-' . Tinebase_DateTime::now() . '.xlsx');
+            $ts = Tinebase_DateTime::now()->format('Ymd\THis');
+            $this->_options['importFile'] = Tinebase_TempFile::getInstance()->createTempFileFromStream($tmpFile, 'Import-' . $ts . '.xlsx');
             fclose($tmpFile);
         }
 

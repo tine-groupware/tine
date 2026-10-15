@@ -100,8 +100,8 @@ Tine.Filemanager.Model.NodeMixin = {
         },
         
         checkForInvalidChars: function (value) {
-            const matches = value.match(/[\/\\\:*?"<>|]/);
-            return matches?.[0] ?? null;
+            const matches = String(value).match(/[\/\\\:*?"<>|]/g);
+            return matches?.length ? matches : null;
         },
         
         getExtension: function(filename) {

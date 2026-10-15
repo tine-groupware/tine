@@ -94,6 +94,9 @@ msgstr "Destination has the same Path"
 msgid "The destination has the same path as the source. No action has been performed."
 msgstr "The destination has the same path as the source. No action has been performed."
 
+msgid "Invalid Characters Found"
+msgstr "Invalid Characters Found"
+
 msgid "Quarantined File"
 msgstr "Quarantined File"
 
@@ -476,12 +479,6 @@ msgstr "Unlocking the data safe..."
 msgid "Close the Data Safe"
 msgstr "Close the Data Safe"
 
-msgid "Upload Failed"
-msgstr "Upload Failed"
-
-msgid "It is not permitted to store files in this folder!"
-msgstr "It is not permitted to store files in this folder!"
-
 msgid "Notification"
 msgstr "Notification"
 
@@ -539,6 +536,12 @@ msgstr "This folder has its own notification settings"
 msgid "path"
 msgstr "path"
 
+msgid "Native Browser Preview"
+msgstr "Native Browser Preview"
+
+msgid "Text"
+msgstr "Text"
+
 msgid "Whole Filemanager"
 msgstr "Whole Filemanager"
 
@@ -559,6 +562,15 @@ msgstr "Limit number of revisions to"
 
 msgid "Hold-back in months"
 msgstr "Hold-back in months"
+
+msgid "Upload Failed"
+msgstr "Upload Failed"
+
+msgid "It is not permitted to store files in this folder!"
+msgstr "It is not permitted to store files in this folder!"
+
+msgid "The following file names contain characters that are not allowed. Please rename the files and try again."
+msgstr "The following file names contain characters that are not allowed. Please rename the files and try again."
 
 msgid "Usage"
 msgstr "Usage"
