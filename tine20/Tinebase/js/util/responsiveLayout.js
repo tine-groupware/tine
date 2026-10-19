@@ -100,6 +100,7 @@ const getDefaultLayoutClasses = (columns = []) => {
 }
 
 export {
+    getDefaultLayoutClasses,
     getLayoutClassByWidth,
     getLayoutClassByMode,
     getLayoutClass
