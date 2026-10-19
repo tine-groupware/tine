@@ -25,3 +25,4 @@ import './notifyAction';
 import './websiteReferralAction.js';
 import './Image/typeColumnPlugin';
 import './OptionTemplatePickerDialog.js';
+import './AppointmentEditDialog.js';
