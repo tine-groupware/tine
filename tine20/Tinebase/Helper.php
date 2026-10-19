@@ -452,21 +452,30 @@ class Tinebase_Helper
      * @param string $filenameOrUrl
      * @param array $options
      * @return string|null
+     * @throws FileNotFoundException
+     *
+     * supported options:
+     * - auth (with username & password sub-keys)
+     * - followlocation
+     * - contenttype
      */
-    public static function getFileOrUriContents($filenameOrUrl, array $options = [])
+    public static function getFileOrUriContents(string $filenameOrUrl, array $options = [])
     {
         if (str_starts_with($filenameOrUrl, 'http')) {
             try {
+                if (!self::_checkUrlHeaders($filenameOrUrl, $options)) {
+                    return null;
+                }
                 $client = Tinebase_Core::getHttpClient($filenameOrUrl);
-                // 0011054: Problems with ScheduledImport of external ics calendars
-                // google shows a lot of trouble with gzip in Zend_Http_Response, so let's deny it
                 $client->setHeaders('Accept-encoding', 'identity');
                 if (isset($options['auth']['username']) && isset($options['auth']['password'])) {
                     $client->setAuth($options['auth']['username'], $options['auth']['password']);
                 }
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Fetching content from ' . $filenameOrUrl);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Fetching content from ' . $filenameOrUrl);
+                }
 
                 $requestBody = $client->request()->getBody();
             } catch (Exception $e) {
@@ -478,6 +487,33 @@ class Tinebase_Helper
 
         $filename = self::getFilename($filenameOrUrl, false);
         return $filename ? file_get_contents($filename) : null;
+    }
+
+    protected static function _checkUrlHeaders(string $filenameOrUrl, array $options = [])
+    {
+        $ch = curl_init($filenameOrUrl);
+        curl_setopt($ch, CURLOPT_NOBODY, true); // HEAD request only
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, $options['followlocation'] ?? true);
+        curl_exec($ch);
+
+        if (isset($options['contenttype'])) {
+            $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        } else {
+            $contentType = null;
+        }
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode === 200 && ($contentType === null || str_starts_with($contentType, $options['contenttype']))) {
+            return true;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' URL check failed for ' . $filenameOrUrl . ' with options: ' . print_r($options, true));
+            }
+            return false;
+        }
     }
 
     /**
