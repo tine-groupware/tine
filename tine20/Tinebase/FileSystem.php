@@ -6,11 +6,12 @@
  * @subpackage  FileSystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 use League\Flysystem\UnableToRetrieveMetadata;
+use Tinebase_Model_Filter_Abstract as TMFA;
 use Tinebase_Model_Tree_FileObject as TMTFO;
 
 /**
@@ -5294,19 +5295,32 @@ class Tinebase_FileSystem implements
                 );
             }
 
+            $roleName = Tinebase_Config::getInstance()
+                ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_NOTIFICATION_ROLE};
+            if (!$roleName) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__
+                        . ' Admin role is not configured , skip sending AVScan notification.' . PHP_EOL
+                    );
+                }
+                return;
+            }
+
             $nodes = $this->_getTreeNodeBackend()->search(
-                new Tinebase_Model_Tree_Node_Filter(
-                    array(array(
-                    'field'     => 'object_id',
-                    'operator'  => 'in',
-                    'value'     => $fileObjectIds
-                    )), /* $_condition = */
-                    '',
-                    /* $_options */ array(
-                        'ignoreAcl' => true,
-                    )
-                ),
+                new Tinebase_Model_Tree_Node_Filter([
+                    [TMFA::FIELD => 'object_id', TMFA::OPERATOR => 'in', TMFA::VALUE => $fileObjectIds],
+                    [TMFA::FIELD => 'is_deleted', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+                ], _options: ['ignoreAcl' => true])
             );
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Found ' . count($nodes) . ' nodes.'
+                );
+            }
+            if ($nodes->count() === 0) {
+                return;
+            }
 
             $expander = new Tinebase_Record_Expander(Tinebase_Model_Tree_FileObject::class, [
                 Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
@@ -5318,12 +5332,6 @@ class Tinebase_FileSystem implements
                 ],
             ]);
             $expander->expand($nodes);
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' Found ' . count($nodes) . ' nodes.'
-                );
-            }
 
             $paths = [];
             foreach ($nodes as $node) {
@@ -5343,17 +5351,6 @@ class Tinebase_FileSystem implements
                 ];
             }
 
-            $roleName = Tinebase_Config::getInstance()
-                ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_NOTIFICATION_ROLE};
-            if (!$roleName) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(
-                        __METHOD__ . '::' . __LINE__
-                        . ' Admin role is not configured , skip sending AVScan notification.' . PHP_EOL
-                    );
-                }
-                return;
-            }
             $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName($roleName);
             $recipientIds = Tinebase_Role::getInstance()->getRoleMembersAccounts($adminRole->getId());
             $recipients = Tinebase_User::getInstance()->getMultiple(array_unique($recipientIds), Tinebase_Model_FullUser::class)
