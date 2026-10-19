@@ -1289,7 +1289,7 @@ viewConfig: {
                         hidden = col.id !== 'responsive';
                     } else {
                         //handle auto mode and strict mode
-                        if (!refConfig || !refConfig.hasOwnProperty('hidden') || refConfig.hasOwnProperty('responsiveLevel')) {
+                        if (!refConfig || refConfig.hasOwnProperty('responsiveLevel')) {
                             const defaultResponsiveLevel = modelConfig?.uiconfig?.hasOwnProperty('big') ? 'large' : 'big';
                             const colResponsiveLevel = col?.responsiveLevel ?? defaultResponsiveLevel;
                             const colModeClass = getLayoutClassByMode(colResponsiveLevel, this.cm.config);
