@@ -9,7 +9,6 @@ import FieldTriggerPlugin from "ux/form/FieldTriggerPlugin";
 
 Ext.ns('Tine.Sales');
 
-import DocumentPosition_PurchaseInvoice from "../../Model/DocumentPosition/PurchaseInvoice";
 import EvaluationDimensionForm from "widgets/form/EvaluationDimensionForm";
 import PaymentMeansField from '../PaymentMeansField'
 import PositionGridPanel from "./PositionGridPanel";
