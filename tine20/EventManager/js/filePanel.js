@@ -1,11 +1,11 @@
 
 /*
- * Tine 2.0
+ * tine Groupware
  *
  * @package     EventManager
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Tonia Wulff <t.wulff@metaways.de>
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -14,6 +14,7 @@ Ext.ux.ItemRegistry.registerItem('EventManager-Event-EditDialog-TabPanel',  Ext.
     frame: true,
     requiredGrant: 'editGrant',
     layout: 'fit',
+    basePath: '/shared/Veranstaltungen/',
 
     initComponent: function () {
         this.app = Tine.Tinebase.appMgr.get('EventManager');
@@ -33,7 +34,7 @@ Ext.ux.ItemRegistry.registerItem('EventManager-Event-EditDialog-TabPanel',  Ext.
             return this.gridPanel;
         }
 
-        var gridPanel = this.gridPanel = new Tine.Filemanager.NodeGridPanel({
+        const gridPanel = this.gridPanel = new Tine.Filemanager.NodeGridPanel({
             app: Tine.Tinebase.appMgr.get('Filemanager'),
             height: 200,
             width: 200,
@@ -45,18 +46,15 @@ Ext.ux.ItemRegistry.registerItem('EventManager-Event-EditDialog-TabPanel',  Ext.
             enableDrag: false,
             hasQuickSearchFilterToolbarPlugin: false,
             stateIdSuffix: '-EventManager-Datei-Panel',
-            /*defaultFilters: [
-                {field: 'query', operator: 'contains', value: ''},
-                {field: 'path', operator: 'equals', value: '/shared/Veranstaltungen/'}
-            ],*/
             displaySelectionHelper: false
         });
 
         gridPanel.pagingToolbar.insert(11, gridPanel.action_goUpFolder);
 
-        gridPanel.getStore().on('load', (store, rs, options) => {
+        gridPanel.getStore().on('load', (store) => {
             const path = _.get(_.filter(_.get(store, 'reader.jsonData.filter'), {field: 'path'}), '[0].value.path');
-            if (path !== _.find(this.getGridPanel().defaultFilters, { field: 'path'}).value) {
+
+            if (path && path !== '/') {
                 store.insert(0, Tine.Tinebase.data.Record.setFromJson({
                     type: 'folder',
                     name: '..',
@@ -65,7 +63,7 @@ Ext.ux.ItemRegistry.registerItem('EventManager-Event-EditDialog-TabPanel',  Ext.
                 }, Tine.Filemanager.Model.Node));
             }
 
-            gridPanel.action_goUpFolder.setHidden(path === this.initialPath.replace(/[0-9A-Z#]+\/$/, ''));
+            gridPanel.action_goUpFolder.setHidden(!path || path === '/');
         }, this);
 
         gridPanel.getGrid().reconfigure(gridPanel.getStore(), this.getColumnModel());
@@ -74,6 +72,85 @@ Ext.ux.ItemRegistry.registerItem('EventManager-Event-EditDialog-TabPanel',  Ext.
         gridPanel.filterToolbar.hide();
 
         return gridPanel;
+    },
+
+    getEventNames: function (record) {
+        const value = record.get('name');
+        const names = Array.isArray(value)
+            ? value.map(t => t?.text)
+            : [value];
+
+        return _.uniq(names
+            .map(n => String(n || '').replace(/\//g, '-').trim())
+            .filter(Boolean));
+    },
+
+    onRecordLoad: async function (editDialog, record) {
+        if (!record) return;
+
+        let path = this.basePath;
+        const folderName = await this.findEventFolder(this.basePath, this.getEventNames(record));
+        if (folderName) {
+            path = `${this.basePath}${folderName}/`;
+        }
+
+        this.initialPath = Tine.Filemanager.Model.Node.sanitize(path);
+        this.loadPath(this.initialPath);
+    },
+
+    findEventFolder: async function (parentPath, names) {
+        if (!names.length) return null;
+        try {
+            const result = await Tine.Filemanager.searchNodes([
+                {field: 'path', operator: 'equals', value: parentPath}
+            ], {limit: 500});
+
+            const folders = _.filter(result?.results, {type: 'folder'});
+            // prefer the order of the translations (e.g. user's language first)
+            for (const name of names) {
+                const match = _.find(folders, f => f.name.toLowerCase() === name.toLowerCase());
+                if (match) return match.name;
+            }
+            return null;
+        } catch (e) {
+            return false;
+        }
+    },
+
+    loadPath: function (path) {
+        const gridPanel = this.getGridPanel();
+        const grid = gridPanel.getGrid();
+
+        gridPanel.filterToolbar.setValue([
+            {field: 'query', operator: 'contains', value: ''},
+            {field: 'path', operator: 'equals', value: path}
+        ]);
+
+        if (grid.viewReady) {
+            gridPanel.getStore().load();
+        } else if (!this.pendingInitialLoad) {
+            this.pendingInitialLoad = true;
+            grid.on('viewready', () => {
+                this.pendingInitialLoad = false;
+                gridPanel.getStore().load();
+            }, this, {single: true});
+        }
+    },
+
+    setOwnerCt: function (ct) {
+        this.ownerCt = ct;
+
+        if (!this.editDialog) {
+            this.editDialog = this.findParentBy(c => c instanceof Tine.widgets.dialog.EditDialog);
+        }
+
+        this.editDialog.on('load', this.onRecordLoad, this);
+        this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
+
+        if (!this.initialOnRecordLoadDone) {
+            this.initialOnRecordLoadDone = true;
+            this.onRecordLoad(this.editDialog, this.editDialog.record);
+        }
     },
 
     getColumnModel: function () {
@@ -130,21 +207,6 @@ Ext.ux.ItemRegistry.registerItem('EventManager-Event-EditDialog-TabPanel',  Ext.
         });
     },
 
-    onRecordLoad: async function(editDialog, record) {
-        const pathFilter = _.find(this.getGridPanel().defaultFilters, { field: 'path'});
-        const path = record.data.xprops?.filemanagerPath;
-
-        this.initialPath = pathFilter.value = Tine.Filemanager.Model.Node.sanitize(path) || '/shared/Veranstaltungen/';
-        this.getGridPanel().filterToolbar.filterStore.each(function (filter) {
-            var field = filter.get('field');
-            if (field === 'path') {
-                filter.set('value', path);
-                return false;
-            }
-        }, this);
-
-    },
-
     setReadOnly: function(readOnly) {
         this.readOnly = readOnly;
         // @TODO: set panel to readonly if user has no grants!
@@ -154,24 +216,5 @@ Ext.ux.ItemRegistry.registerItem('EventManager-Event-EditDialog-TabPanel',  Ext.
 
     },
 
-    setOwnerCt: function(ct) {
-        this.ownerCt = ct;
-
-        if (! this.editDialog) {
-            this.editDialog = this.findParentBy(function (c) {
-                return c instanceof Tine.widgets.dialog.EditDialog
-            });
-        }
-
-        this.editDialog.on('load', this.onRecordLoad, this);
-        this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
-
-        // NOTE: in case record is already loaded
-        if (! this.setOwnerCt.initialOnRecordLoad) {
-            this.setOwnerCt.initialOnRecordLoad = true;
-            this.onRecordLoad(this.editDialog, this.editDialog.record);
-        }
-
-    }
 }), 10);
 
