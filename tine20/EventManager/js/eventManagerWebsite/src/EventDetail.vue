@@ -40,7 +40,12 @@
             <div class="info-value">
               <div v-for="appointment in eventDetails.appointments" :key="appointment.id" class="appointment-card">
                 <div class="appointment-session"><strong>{{formatMessage('Session')}} {{appointment.session_number}}</strong></div>
-                <div class="appointment-time">{{appointment.formattedDate}} | {{appointment.formattedStartTime}} - {{appointment.formattedEndTime}}</div>
+                <div class="appointment-time">
+                  {{appointment.formattedDate}}
+                  <template v-if="appointment.formattedStartTime">
+                    | {{appointment.formattedStartTime}}<template v-if="appointment.formattedEndTime"> - {{appointment.formattedEndTime}}</template>
+                  </template>
+                </div>
                 <MarkdownRenderer v-if="appointment.description" :content="appointment.description" class="appointment-description" />
               </div>
             </div>
@@ -86,12 +91,13 @@
         >
           <p v-html="modal.message"></p>
 
-          <div v-if="modal.input" class="form-group">
+          <form v-if="modal.input" class="form-group" novalidate @submit.prevent="submitModalInput">
             <b-form-input
               v-model="modal.inputValue"
               type="email"
               :placeholder="modal.inputPlaceholder"
               :state="modal.inputError ? false : null"
+              autofocus
               required
             ></b-form-input>
             <b-form-invalid-feedback :state="!modal.inputError">
@@ -102,7 +108,7 @@
               {{ formatMessage('We will only use your email address to send you the link to the registration form. For further details, please see the') }}
               <a :href="privacyPolicyUrl" target="_blank" rel="noopener noreferrer">{{ formatMessage('Privacy Policy') }}</a>.
             </div>
-          </div>
+          </form>
         </b-modal>
 
         <div class="button-group">
@@ -173,6 +179,10 @@ const showModal = (config) => {
   modal.onConfirm = config.onConfirm || null;
   modal.onCancel = config.onCancel || null;
   modal.show = true;
+};
+
+const submitModalInput = () => {
+  handleModalAction({ preventDefault: () => {} });
 };
 
 const handleModalAction = (bvModalEvent) => {
@@ -312,9 +322,11 @@ async function getEvent() {
 
       if (data.appointments && data.appointments.length > 0) {
         data.appointments = data.appointments.map(appointment => {
-          const date = new Date(appointment.session_date).toLocaleDateString("de-DE");
-          const startTime = appointment.start_time.substring(0, 5); // Remove seconds
-          const endTime = appointment.end_time.substring(0, 5); // Remove seconds
+          const date = appointment.session_date
+            ? new Date(appointment.session_date).toLocaleDateString("de-DE")
+            : '';
+          const startTime = appointment.start_time ? appointment.start_time.substring(0, 5) : ''; // Remove seconds
+          const endTime = appointment.end_time ? appointment.end_time.substring(0, 5) : '';       // Remove seconds
 
           return {
             ...appointment,
