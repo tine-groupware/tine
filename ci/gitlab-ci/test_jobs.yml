@@ -242,6 +242,22 @@ prevent-wrong-update-script-changes:
       allow_failure: true
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
+prevent_dot_agents_changes:
+  image: ${TEST_IMAGE}
+  stage: test
+  needs: []
+  before_script: []
+  script:
+    - !reference [.lib, script]
+    - git fetch origin
+    - prevent_dot_agents_changes
+  rules:
+    - if: $PREVENT_DOT_AGENTS_CHANGES == "false"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /allow-failure-prevent-dot-agents-changes/
+      allow_failure: true
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
 prevent-wrong-branch:
   image: alpine
   stage: test
