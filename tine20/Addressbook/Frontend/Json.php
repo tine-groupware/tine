@@ -454,7 +454,14 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _parseAddressFromUrl(string $addressUrl): array
     {
-        $vcard = file_get_contents($addressUrl);
+        try {
+            $vcard = Tinebase_Helper::getFileOrUriContents($addressUrl, [
+                'followlocation' => false,
+                'contenttype' => 'text/vcard'
+            ]);
+        } catch (FileNotFoundException) {
+            $vcard = false;
+        }
 
         // Could not load file from remote
         if ($vcard === false) {
