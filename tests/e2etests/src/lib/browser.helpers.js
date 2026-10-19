@@ -1,9 +1,10 @@
-const puppeteer = require('puppeteer');
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-require('dotenv').config();
-const simpleConsole = require('console');
-const {blue, cyan, green, magenta, red, yellow} = require('colorette')
-const lib = require("./browser");
+import puppeteer from 'puppeteer';
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import simpleConsole from 'console';
+import {blue, cyan, green, magenta, red, yellow} from 'colorette';
 const colors = {
     LOG: text => text,
     ERR: red,
@@ -24,7 +25,7 @@ const priorities = {
 };
 const defaultTypingDelay = 50;
 
-module.exports = {
+export default {
     /**
      * Waits for a file to be downloaded in the specified directory and returns the filename.
      * It checks for the presence of a file that does not have the '.crdownload' extension, which indicates an ongoing download in Chrome.
@@ -70,8 +71,6 @@ module.exports = {
      * @returns {Promise<void>}
      */
     waitForActionableButton: async function (page, text, timeout = 7000, labelSelector = '.x-btn-text') {
-        if (!page) throw new Error('waitForActionableButton: page is required');
-
         // Runs in page context: uses window.getComputedStyle and DOM checks
         await page.waitForFunction(
             (labelSelectorInner, textInner) => {
@@ -184,16 +183,13 @@ module.exports = {
     },
 
     /**
-     * Initializes Jasmine and expect-puppeteer with default options.
+     * Initializes expect-puppeteer with default options.
      * Sets a default timeout of 5000ms for all expect-puppeteer actions.
      *
      * @param {function} setDefaultOptions - The function to set default options for expect-puppeteer.
      * @returns void
      */
-    initJasmineAndExpect: function (setDefaultOptions) {
-        jasmine.getEnv().addReporter({
-            specStarted: result => jasmine.currentTest = result
-        });
+    initExpect: function (setDefaultOptions) {
         setDefaultOptions({timeout: 5000});
     },
 
@@ -528,6 +524,50 @@ module.exports = {
     },
 
     /**
+     * Helper to avoid race condition when interacting with ExtJS DurationSpinner element.
+     * Call thawDurationSpinnerReformat() to restore the original behavior.
+     *
+     * @param {puppeteer.Page} page
+     * @returns {Promise<boolean>} true if the patch was applied by this call
+     */
+    freezeDurationSpinnerReformat: async function (page) {
+        return page.evaluate(() => {
+            const proto = Ext.ux.form.DurationSpinner.prototype;
+            if (proto._originalGetValue) {
+                return false; // already frozen
+            }
+            proto._originalGetValue = proto.getValue;
+            proto.getValue = function() {
+                let value = Ext.ux.form.DurationSpinner.superclass.getValue.call(this);
+                value = Ext.ux.form.DurationSpinner.parse(value, this.baseUnit);
+                if (value === NaN) {
+                    this.markInvalid(i18n._('Not a valid time'));
+                    return;
+                }
+                // Side effect intentionally omitted during freeze.
+                return value;
+            };
+            return true;
+        });
+    },
+
+    /**
+     * Restores original DurationSpinner behavior which was changed by freezeDurationSpinnerReformat().
+     *
+     * @param {puppeteer.Page} page
+     * @returns {Promise<void>}
+     */
+    thawDurationSpinnerReformat: async function (page) {
+        return page.evaluate(() => {
+            const proto = Ext.ux.form.DurationSpinner.prototype;
+            if (proto._originalGetValue) {
+                proto.getValue = proto._originalGetValue;
+                delete proto._originalGetValue;
+            }
+        });
+    },
+
+    /**
      * Inserts a value into an <input> or <textarea> field, either plain / autocomplete with dropdown items,
      * or a bigger combo autocomplete field with pagination and items to click on, and waits for the value to be updated.
      *
@@ -535,6 +575,8 @@ module.exports = {
      * wait for the dropdown, click the matching item, and then wait for the expected value.
      *
      * Regular mode supports `TEST_BYPASS_INPUT_EXTJS_VALIDATION` to set the DOM value directly instead of typing.
+     *
+     * TODO: Explain auto-detection of DurationSpinner and what "freezeReformat" does.
      *
      * @param {puppeteer.Page} page - The page object to perform the actions on.
      * @param {Object} [options]
@@ -544,6 +586,7 @@ module.exports = {
      * @param {string} [options.itemValue] - The combo box item to click (activates combo mode when present).
      * @param {string|null} [options.expectedValue=null] - Expected value after insertion. Defaults to `itemValue` (combo) or `value` (regular).
      * @param {number|null} [options.typingDelay=null] - Delay in ms between keystrokes (defaults to 50).
+     * @param {boolean|null} [options.freezeReformat=null] - Freeze DurationSpinner reformatting (default: autodetect).
      * @returns {Promise<void>}
      */
     formFillField: async function (page, options) {
@@ -553,7 +596,8 @@ module.exports = {
             inputValue,
             itemValue,
             expectedValue,
-            typingDelay
+            typingDelay,
+            freezeReformat
         } = options ?? {};
 
         const isCombo = itemValue != null;
@@ -580,55 +624,61 @@ module.exports = {
 
         await page.waitForSelector(selector, {visible: true});
 
-        await page.evaluate((sel, allow) => {
+        const isDurationSpinner = await page.evaluate((sel, allow) => {
             const el = document.querySelector(sel);
             if (!el) {
                 throw new Error(`formFillField: Selector "${sel}" did not match any element.`);
             }
-            // Validate that the selector points to one of the allowed elements.
             if (allow.indexOf(el.tagName.toLowerCase()) === -1) {
                 throw new Error(`formFillField: Selector "${sel}" matched a <${el.tagName.toLowerCase()}> element, expected one of ${allow.join(', ')}.`);
             }
+            // Auto-detect DurationSpinner (its getValue() reformats the field in place).
+            if (el.id && typeof Ext !== 'undefined' && Ext.getCmp) {
+                const cmp = Ext.getCmp(el.id);
+                if (cmp && Ext.ux?.form?.DurationSpinner) {
+                    return cmp instanceof Ext.ux.form.DurationSpinner;
+                }
+            }
+            return false;
         }, selector, allowedElements);
 
         if (!isCombo && this.getEnvBool('TEST_BYPASS_INPUT_EXTJS_VALIDATION')) {
             // OPTION 1: Set the value directly in DOM to bypass ExtJS's intermediate mask/validation.
-            // Note: This does not work with combo elements that let you click on an item from a list.
+            // Note: This does not work with combo elements that wants you to click on an item from a list.
 
             await page.evaluate((sel, val) => {
                 const el = document.querySelector(sel);
                 el.focus();
                 el.value = val;
                 // Notify ExtJS that the DOM value changed.
-                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('input', {bubbles: true}));
             }, selector, inputText);
 
             await page.keyboard.press('Tab');
         } else {
             // OPTION 2: Mimic a user typing in the characters.
 
-            // Focus, select all existing content reliably (cross-platform) and delete the selection.
-            await page.evaluate((sel) => {
-                const el = document.querySelector(sel);
-                el.focus();
-                el.select();
-            }, selector);
+            // Optionally make DurationSpinner.getValue() side-effect-free while typing, so intermediate
+            // values are not corrupted by checkStates/focus/blur handlers calling getValue() mid-typing.
+            const frozen = (freezeReformat || isDurationSpinner) ? await this.freezeDurationSpinnerReformat(page) : false;
+            try {
+                // Focus the field, wait for ExtJS selectOnFocus to settle, then select all.
+                // The first typed character will replace the selection, just like a human would.
+                await page.evaluate(async (sel) => {
+                    const el = document.querySelector(sel);
+                    el.focus();
+                    await new Promise(r => setTimeout(r, 50));
+                    el.select();
+                }, selector);
 
-            await page.keyboard.press('Backspace');
-
-            // Wait for ExtJS to finish processing the deletion and the field is truly empty.
-            await page.waitForFunction((sel) => {
-                const el = document.querySelector(sel);
-                return el && el.value.trim() === '';
-            }, { timeout: this.getEnvInt('TEST_TIMEOUT_FORM_VALUE_CHANGED') }, selector);
-
-            // At this point, ExtJS validation is actually not completed, and .toFill() gets interrupted by a race condition.
-            // The above block is not working and this pause is needed for now.
-            // TODO: Find a workaround to replace this 300ms pause.
-            await new Promise(r => setTimeout(r, 300));
-
-            // Type the input value with human-like delay.
-            await page.type(selector, inputText, {delay: delay});
+                // Type the input value with human-like delay into the currently focused element.
+                await page.keyboard.type(inputText, {delay: delay});
+            } finally {
+                // Restore the original getValue() BEFORE unfocusing, so the blur reformat still happens.
+                if (frozen) {
+                    await this.thawDurationSpinnerReformat(page);
+                }
+            }
 
             if (!isCombo) {
                 // Unfocus to trigger ExtJS validation.

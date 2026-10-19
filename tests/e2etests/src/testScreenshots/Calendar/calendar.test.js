@@ -1,22 +1,22 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 beforeAll(async () => {
     //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Kalender');
-    await expectPuppeteer(page).toClick('button', {text:'Heute'}); //need for init setup!
+    await expectPuppeteer(page).toClick('.t-app-calendar button', {text:'Heute'}); //need for init setup!
 });
 
 describe('MainScreen', () => {
     test('favorite', async () => {
         await new Promise(r => setTimeout(r, 2000));
         try {
-            await expectPuppeteer(page).toClick('button', {text: 'Blatt'});
+            await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Blatt'});
         } catch (e) {
-            await expectPuppeteer(page).toClick('.x-btn-image.x-toolbar-more-icon',{visible: true});
-            await expectPuppeteer(page).toClick('.x-menu-item-text', {text: 'Blatt', visible: true});
+            await expectPuppeteer(page).toClick('.t-app-calendar .x-btn-image.x-toolbar-more-icon',{visible: true});
+            await expectPuppeteer(page).toClick('.t-app-calendar .x-menu-item-text', {text: 'Blatt', visible: true});
         }
         await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page
@@ -29,12 +29,12 @@ describe('MainScreen', () => {
     });
 
     test('months', async () => {
-        await expectPuppeteer(page).toClick('button', {text: 'Woche'});
+        await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Woche'});
         await lib.makeScreenshot(
             page, {path: 'screenshots/Kalender/14_kalender_ansicht.png',
             clip: {x: 900, y: 0, width: 1366 - 900, height: 150}}
         );
-        await expectPuppeteer(page).toClick('button', {text: 'Monat'});
+        await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Monat'});
         await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(page, {path: 'screenshots/Kalender/1_kalender_monatsuebersicht.png'});
         await new Promise(r => setTimeout(r, 2000));
@@ -42,7 +42,7 @@ describe('MainScreen', () => {
 
     test('details panel', async () => {
         try {
-            await expectPuppeteer(page).toClick('.cal-daysviewpanel-event-body', {text: 'Test Event'}); // @todo need event!
+            await expectPuppeteer(page).toClick('.t-app-calendar .cal-daysviewpanel-event-body', {text: 'Test Event'});
             await new Promise(r => setTimeout(r, 1000));
             await lib.makeScreenshot(page, {path: 'screenshots/Kalender/13_kalender_termin_info.png'});
         } catch (e) {
@@ -58,7 +58,7 @@ describe('MainScreen', () => {
     });
 
     test('add attendee', async () => {
-        await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-user_id', {text: 'Teilnehmende hinzufügen'});
+        await expectPuppeteer(page).toClick('.t-app-calendar .x-grid3-cell-inner.x-grid3-col-user_id', {text: 'Teilnehmende hinzufügen'});
         await new Promise(r => setTimeout(r, 1000));
         await page.click('.x-cal-attendee-filter-grid .x-form-trigger.x-form-arrow-trigger');
         await new Promise(r => setTimeout(r, 500));
@@ -70,20 +70,21 @@ describe('MainScreen', () => {
 
     test('time beam', async () => {
         try {
-            await expectPuppeteer(page).toClick('button', {text: 'Zeitstrahl'});
+            await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Zeitstrahl'});
         } catch (e) {
-            await expectPuppeteer(page).toClick('.x-btn-image.x-toolbar-more-icon',{visible: true});
-            await expectPuppeteer(page).toClick('.x-menu-item-text', {text: 'Zeitstrahl', visible: true});
+            await expectPuppeteer(page).toClick('.t-app-calendar .x-btn-image.x-toolbar-more-icon',{visible: true});
+            await expectPuppeteer(page).toClick('.t-app-calendar .x-menu-item-text', {text: 'Zeitstrahl', visible: true});
         }
         await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/Kalender/5_kalender_termine_listenansicht.png'});
         await new Promise(r => setTimeout(r, 1000));
-        await expectPuppeteer(page).toClick('button', {text:'Heute', visible: true});
+        await expectPuppeteer(page).toClick('.t-app-calendar button', {text:'Heute', visible: true});
     });
 });
 
 describe('editDialog', () => {
 
+    let newPage;
     test('new event', async () => {
         await new Promise(r => setTimeout(r, 3000));
         newPage = await lib.getEditDialog('Termin hinzufügen');
@@ -144,36 +145,51 @@ describe('editDialog', () => {
         await new Promise(r => setTimeout(r, 1000));
         await expectPuppeteer(newPage).toClick('button', {text: 'Ok'});
 
-    })
+    });
 
 });
 
 describe('context menu', () => {
     test('email', async () => {
         try {
-            await expectPuppeteer(page).toClick('button', {text: 'Blatt'});
+            await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Blatt'});
         } catch (e) {
-            await expectPuppeteer(page).toClick('.x-btn-image.x-toolbar-more-icon',{visible: true});
-            await expectPuppeteer(page).toClick('.x-menu-item-text', {text: 'Blatt', visible: true});
+            await expectPuppeteer(page).toClick('.t-app-calendar .x-btn-image.x-toolbar-more-icon',{visible: true});
+            await expectPuppeteer(page).toClick('.t-app-calendar .x-menu-item-text', {text: 'Blatt', visible: true});
         }
         await new Promise(r => setTimeout(r, 2000));
-        await expectPuppeteer(page).toClick('button', {text: 'Woche'});
+        await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Woche'});
         await new Promise(r => setTimeout(r, 2000));
-        await expectPuppeteer(page).toClick('button', {text: 'Heute'});
+        await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Heute'});
         await new Promise(r => setTimeout(r, 2000));
-        await expectPuppeteer(page).toClick('.cal-daysviewpanel-event-body', {text: 'Test Event', button: 'right'});
+        await expectPuppeteer(page).toClick('.t-app-calendar .cal-daysviewpanel-event-body', {text: 'Test Event', button: 'right'});
         await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/Kalender/11_kalender_termin_kontextmenue.png'});
     });
 
     test('set answer', async () => {
-        let answser = await expectPuppeteer(page).toMatchElement('.x-menu-item-text', {text: 'Meine Antwort setzen'});
-        await answser.hover();
-        answser = await expectPuppeteer(page).toMatchElement('.x-menu-item-text', {text: 'Keine Antwort'});
-        await answser.hover();
+        let answer = await expectPuppeteer(page).toMatchElement('.x-menu.x-menu-floating:not(.x-hide-offsets) .x-menu-item-text', {text: 'Meine Antwort setzen'});
+        await answer.hover();
+        answer = await expectPuppeteer(page).toMatchElement('.x-menu.x-menu-floating:not(.x-hide-offsets) .x-menu-item-text', {text: 'Keine Antwort'});
+        await answer.hover();
         await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/Kalender/12_kalender_termin_antworten.png'});
-    })
+    });
+
+    test('delete event', async () => {
+        await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Heute'});
+        // Wait for the event, right-click it, then select "Termin löschen".
+        await expectPuppeteer(page).toMatchElement('.t-app-calendar .cal-daysviewpanel-event-body', {text: 'Test Event',timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
+        await expectPuppeteer(page).toClick('.t-app-calendar .cal-daysviewpanel-event-body', {text: 'Test Event',button: 'right'});
+        const menuSelector = '.x-menu.x-menu-floating:not(.x-hide-offsets)';
+        await page.waitForSelector(menuSelector, {timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
+        await expectPuppeteer(page).toClick(`${menuSelector} .x-menu-item-text`, {text: 'Termin löschen'});
+        // Confirm deletion.
+        await page.waitForSelector('.modal.vue-message-box.show', {timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
+        await expectPuppeteer(page).toClick('.modal-dialog .modal-footer button', {text: 'Ja'});
+        // Wait until the dialog is closed.
+        await page.waitForSelector('.modal.vue-message-box:not(.show)', {timeout: lib.getEnvInt('TEST_TIMEOUT_MASK')});
+    });
 });
 
 describe('poll client', () => {
@@ -188,5 +204,5 @@ describe('poll client', () => {
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });

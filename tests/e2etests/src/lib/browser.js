@@ -1,15 +1,18 @@
-const helpers = require('./browser.helpers');
-const { expect: expectPuppeteer, setDefaultOptions } = require('expect-puppeteer');
-require('dotenv').config();
+import helpers from './browser.helpers.js';
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import { setDefaultOptions } from 'expect-puppeteer';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const mkdirp = require('mkdirp');
-const fs = require('fs');
-const path = require('path');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { mkdirp } from 'mkdirp';
+import fs from 'fs';
 
-// TODO: Cleanup the created content from every test when it fails, maybe using the database?
+// TODO: Cleanup the created content from every test when it fails, maybe using database queries directly?
 // TODO: Replace remaining magic timeout numbers with env variables.
 
-module.exports = {
+export default {
     /**
      * Opens the browser, navigates to tine website, logs in and optionally opens the specified
      * app and module.
@@ -21,7 +24,7 @@ module.exports = {
      * @returns {Promise<void>}
      */
     getBrowser: async function (app, module) {
-        helpers.initJasmineAndExpect(setDefaultOptions);
+        helpers.initExpect(setDefaultOptions);
 
         // Assign the global variables.
         global.browser = await helpers.launchBrowser();
@@ -69,7 +72,7 @@ module.exports = {
      * @returns {Promise<void>} A promise that resolves when the setup process is complete.
      */
     getSetup: async function () {
-        helpers.initJasmineAndExpect(setDefaultOptions);
+        helpers.initExpect(setDefaultOptions);
 
         // Assign the global variables.
         global.browser = await helpers.launchBrowser();
@@ -80,8 +83,6 @@ module.exports = {
             }
         });
         const page = global.page;
-
-        page.setDefaultTimeout(helpers.getEnvInt('TEST_TIMEOUT_SETUP_DEFAULT_PAGE'));
 
         await page.goto(this.getEnvStr('TEST_URL') + '/setup.php', {waitUntil: 'domcontentloaded', timeout: this.getEnvInt('TEST_TIMEOUT_BROWSER')});
         await expectPuppeteer(page).toMatchElement('title', {text: this.getEnvStr('TEST_BRANDING_TITLE')});
@@ -109,6 +110,9 @@ module.exports = {
      * @returns {Promise<string>} A promise that resolves to the path of the downloaded file.
      */
     download: async function (page, selector, option = {}) {
+
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
         const { v1: uuidv1 } = await import('uuid');
         const downloadPath = path.resolve(__dirname, 'download', uuidv1());
         mkdirp(downloadPath);
@@ -367,7 +371,7 @@ module.exports = {
     waitForAppReady: helpers.waitForAppReady.bind(helpers),
     makeScreenshot: helpers.makeScreenshot.bind(helpers),
     proxyConsole: helpers.proxyConsole.bind(helpers),
-    initJasmineAndExpect: helpers.initJasmineAndExpect.bind(helpers),
+    initExpect: helpers.initExpect.bind(helpers),
     launchBrowser: helpers.launchBrowser.bind(helpers),
     createConfiguredPage: helpers.createConfiguredPage.bind(helpers),
     switchToGermanIfNeeded: helpers.switchToGermanIfNeeded.bind(helpers),

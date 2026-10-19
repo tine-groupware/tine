@@ -1,7 +1,5 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
 
 beforeAll(async () => {
     await lib.getBrowser('Adressbuch', 'Kontakte');
@@ -39,11 +37,11 @@ describe('Mainpage', () => {
         await popupWindow.waitForSelector('.x-menu-list', {visible: true});
         await popupWindow.waitForSelector('span' , {text: 'Im Dateimanager anzeigen', visible: true});
         await expectPuppeteer(popupWindow).toClick('span' , {text: 'Im Dateimanager anzeigen', visible: true});
-        await page.waitForSelector('.tine-dock .dock-item .ApplicationIconCls.FilemanagerIconCls');
+        await global.page.waitForSelector('.tine-dock .dock-item .ApplicationIconCls.FilemanagerIconCls');
 
     });
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });

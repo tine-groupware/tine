@@ -1,7 +1,5 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
 
 beforeAll(async () => {
     //expect.setDefaultOptions({timeout: 3000});
@@ -11,7 +9,7 @@ beforeAll(async () => {
 describe.skip('Mainpage', () => {
     let popupwindow;
     test('open frische fische record', async () => {
-        await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name',{text: "Frische Fische Gmbh & Co. KG"});
+        await global.page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name',{text: "Frische Fische Gmbh & Co. KG"});
         await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name',{text:'Frische Fische Gmbh & Co. KG', clickCount: 2});
         popupwindow = await lib.getNewWindow();
         await new Promise(r => setTimeout(r, 5000));
@@ -60,5 +58,5 @@ describe.skip('Mainpage', () => {
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });

@@ -1,5 +1,5 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
 
 // TODO: Create a dummy time account in the test setup, use it for testing instead of relying on existing data, and delete it again.
 
@@ -21,13 +21,15 @@ describe('Create and delete time sheet', () => {
     });
 
     test('Enter duration and end time', async() => {
-        // Try a lot of different formats.
-        // NOTE: This relates to a "spinner" input field, which does annoying ExtJS validation, requiring us to work around it (more delay between typing, see formFillInputField() method).
+        // Invalid duration first, see if validation works properly.
+        await lib.formFillInputField(popupWindow, {selector: 'input[name="duration"]', value: 'abcdef', expectedValue: '00:00', typingDelay: 100});
+
+        // Try different duration formats for 3h 30m.
         for (const val of ['03:30', '3:30', '3.5', '3,5']) {
             await lib.formFillInputField(popupWindow, {selector: 'input[name="duration"]', value: val, expectedValue: '03:30', typingDelay: 100});
         }
 
-        // Try a lot of different formats as well.
+        // Try different time formats for 8:30.
         for (const val of ['08:30', '8:30', '830']) {
             await lib.formFillInputField(popupWindow, {selector: 'input[name="start_time"]', value: val, expectedValue: '08:30'});
         }
@@ -57,13 +59,11 @@ describe('Create and delete time sheet', () => {
 
     test('Delete and confirm', async() => {
         // Click on entry and press Delete key.
-        await global.page.waitForSelector('div.x-grid3-col-description', {visible: true});
         await expectPuppeteer(global.page).toClick('div.x-grid3-col-description', {text: testDescription});
         await global.page.waitForSelector('.x-grid3-row-selected', { visible: true, timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE') });
         await global.page.keyboard.press('Delete');
 
         // Wait for modal confirmation dialog to appear, click on "Ja" and wait until the dialog disappears.
-        await global.page.waitForSelector('button.yes-button', {visible: true});
         await expectPuppeteer(global.page).toClick('button.yes-button', {text: 'Ja'});
         await expectPuppeteer(global.page).not.toMatchElement('div.modal.vue-message-box.show');
 

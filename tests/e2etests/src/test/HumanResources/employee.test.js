@@ -1,7 +1,5 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
 
 beforeAll(async () => {
     await lib.getBrowser('Human Resources');
@@ -274,7 +272,7 @@ describe('employee', () => {
         });
     });
     describe('edit contract', () => {
-        let employeeEditDialog, contractEditDialog
+        let employeeEditDialog, contractEditDialog, isMobile;
         test('edit dialog', async () => {
             await page.waitForNetworkIdle();
             await page.waitForFunction(() => {
@@ -366,10 +364,23 @@ describe('employee', () => {
             await expectPuppeteer(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Verträge'});
             await new Promise(r => setTimeout(r, 5000))
             await employeeEditDialog.waitForSelector('.x-grid3-cell-first .x-grid3-cell-inner.x-grid3-col-start_date');
-            await employeeEditDialog.click('.x-grid3-cell-first .x-grid3-cell-inner.x-grid3-col-start_date');
-            await new Promise(r => setTimeout(r, 5000));
-            contractEditDialog = await lib.getEditDialog('Bearbeiten', employeeEditDialog);
-            await new Promise(r => setTimeout(r, 5000));
+            await expectPuppeteer(employeeEditDialog).toClick('.x-grid3-cell-first .x-grid3-cell-inner.x-grid3-col-start_date', {timeout: 5000});
+
+            // Now we need to distinguish between mobile view edit form and regular view edit form (entirely different DOM locations).
+            isMobile = await employeeEditDialog.evaluate(() => !!document.querySelector('.tw-editdialog.x-hide-display'));
+            let buttonSelector = '.x-tab-panel-body .x-panel:not(.x-hide-offsets) .x-panel-bbar .x-toolbar-left td:nth-child(2) table.x-btn:not(.x-item-disabled) button';
+            let buttonLabel = 'Vertrag bearbeiten';
+            if (isMobile) {
+                buttonSelector = 'body > div > div.x-panel:not(.tw-editdialog) .x-toolbar-right button';
+                buttonLabel = 'Bearbeiten';
+            }
+
+            await employeeEditDialog.waitForSelector(buttonSelector);
+            contractEditDialog = await getContractEditDialog(employeeEditDialog, buttonLabel, buttonSelector);
+
+            await contractEditDialog.waitForSelector('.tine-viewport-waitcycle', {hidden: true, timeout: lib.getEnvInt('TEST_TIMEOUT_MASK')});
+            await contractEditDialog.waitForNetworkIdle({timeout: lib.getEnvInt('TEST_TIMEOUT_NETWORK_TIMEOUT'), idleTime: lib.getEnvInt('TEST_TIMEOUT_NETWORK_IDLE')});
+
             expect(await contractEditDialog.evaluate(() => document.querySelector('input[name=weekdays_0]').value)).toEqual('06:00');
             expect(await contractEditDialog.evaluate(() => document.querySelector('input[name=weekdays_1]').value)).toEqual('08:00');
             expect(await contractEditDialog.evaluate(() => document.querySelector('input[name=weekdays_2]').value)).toEqual('03:00');
@@ -379,11 +390,51 @@ describe('employee', () => {
                 .toEqual(' Wenn 06:00 Arbeitszeit überschritten sind, werden 01:00 Pausenzeit automatisch abgezogen. (Pausenzeit)');
             expect(await contractEditDialog.evaluate(() => document.querySelector('.x-grid3-body div:nth-child(2) .x-grid3-col-configRecord').textContent))
                 .toEqual(' Die Arbeitszeit wird von 06:00 bis 20:00 ausgewertet. (Arbeitszeitlimitierung)');
+            await expectPuppeteer(contractEditDialog).toClick('button.x-btn-text', {text: 'Abbrechen'});
+        });
 
-        })
+        test('delete contract via context menu', async () => {
+            if (isMobile) {
+                const backButtonSelector = 'body > div > div.x-panel:not(.tw-editdialog) .x-toolbar-left button';
+                await employeeEditDialog.waitForSelector(backButtonSelector);
+                await expectPuppeteer(employeeEditDialog).toClick(backButtonSelector, {text: 'Zurück',timeout: 5000});
+            }
+
+            // Attention: This does not work in mobile view!
+            // Click on entry, wait for bottom action buttons and click on "Vertrag löschen".
+            //await expectPuppeteer(employeeEditDialog).toClick('.x-grid3-cell-first .x-grid3-cell-inner.x-grid3-col-start_date', {timeout: 5000});
+            //await expectPuppeteer(employeeEditDialog).toMatchElement('button.x-btn-text', {text: 'Vertrag löschen', visible: true, timeout: 5000});
+            //await expectPuppeteer(employeeEditDialog).toClick('button.x-btn-text', {text: 'Vertrag löschen', timeout: 5000});
+
+            // Use context menu instead, it works for both:
+            await expectPuppeteer(employeeEditDialog).toClick('.x-grid3-cell-first .x-grid3-cell-inner.x-grid3-col-start_date', {button: 'right', timeout: 5000});
+            await employeeEditDialog.waitForSelector('.x-menu-floating .x-menu-list-item:not(.x-item-disabled) a img.x-menu-item-icon.action_delete');
+            await expectPuppeteer(employeeEditDialog).toClick('.x-menu-floating .x-menu-list-item:not(.x-item-disabled) a span', {text: 'Vertrag löschen', timeout: 5000});
+
+            // Wait for confirm dialog to be ready.
+            await employeeEditDialog.waitForSelector('.modal.vue-message-box.show button.yes-button');
+            await expectPuppeteer(employeeEditDialog).toClick('.modal.vue-message-box.show button.yes-button');
+            // Wait for confirm dialog to be gone.
+            await employeeEditDialog.waitForSelector('.modal.vue-message-box:not(.show)');
+            // Save and wait until the action is completed.
+            const windowClosed = new Promise((resolve) => {
+                employeeEditDialog.once('close', resolve);
+            });
+            await expectPuppeteer(employeeEditDialog).toClick('button', {text: 'Ok'});
+            await windowClosed;
+        });
     });
 });
 
+async function getContractEditDialog(page, btnText, btnSelector) {
+    const popupPromise = lib.getNewWindow();
+    await expectPuppeteer(page).toClick(btnSelector, {text: btnText});
+    const popupWindow = await popupPromise;
+    await lib.proxyConsole(popupWindow);
+
+    return popupWindow;
+}
+
 afterAll(async () => {
-    browser.close();
+    await global.browser.close();
 });

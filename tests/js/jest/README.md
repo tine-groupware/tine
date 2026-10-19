@@ -1,5 +1,9 @@
 # jest tests
 
+## requirements
+* Node.js ^14.15 || ^16.10 || >= 18 (Jest 29), LTS recommended
+* tests run inside the tine-dev Docker environment, which provides the Node/npm version
+
 ## run tests
 run all tests (using npm command)
 
