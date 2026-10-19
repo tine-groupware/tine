@@ -1,7 +1,5 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
 
 beforeAll(async () => {
     await lib.getSetup();
@@ -55,5 +53,5 @@ describe('Application Manager', () => {
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });

@@ -1,7 +1,7 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 beforeAll(async () => {
     //expect.setDefaultOptions({timeout: 1000});
@@ -45,5 +45,5 @@ describe('internal contacts', () => {
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });

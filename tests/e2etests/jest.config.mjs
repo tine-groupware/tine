@@ -1,7 +1,8 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
-module.exports = {
-    testRunner: 'jest-jasmine2',
+export default {
+    testEnvironment: 'node',
     globals: {
         browser: '',
         page: '',
@@ -21,4 +22,8 @@ module.exports = {
     maxWorkers: process.env.TEST_WORKER,
     testTimeout: 60000,
     setupFilesAfterEnv: ["expect-puppeteer", "<rootDir>/setupTests.js"],
+    // Helps resolve imports without .js extensions
+    moduleNameMapper: {
+        '^(\\.{1,2}/.*)\\.js$': '$1',
+    },
 };

@@ -1,6 +1,5 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
 let subject;
 
 beforeAll(async () => {
@@ -104,7 +103,7 @@ describe.skip('test action button of felamimail (grid)', () => {
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });
 
 async function sendMail(subject, newWindowPromis, user= false) {

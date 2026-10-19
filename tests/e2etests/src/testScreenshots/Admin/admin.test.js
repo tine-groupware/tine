@@ -1,6 +1,5 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
 
 beforeAll(async () => {
     //expect.setDefaultOptions({timeout: 1000});
@@ -10,7 +9,7 @@ beforeAll(async () => {
 describe('accounts', () => {
     test('User Mainpage', async () => {
         await new Promise(r => setTimeout(r, 1000));
-        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Benutzer'});
+        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west a span', {text: 'Benutzer*innen'});
         await lib.makeScreenshot(page, {path:'screenshots/Administration/1_admin_benutzertabelle.png'});
     });
     test('choose grid fields', async () => {
@@ -37,7 +36,7 @@ describe('accounts', () => {
     test('edit user', async () => {
         let row = await page.$$('#gridAdminUsers .x-grid3-row');
         let userDialog = lib.getNewWindow();
-        await row[3].click({clickCount: 2});
+        await row[3].click({count: 2});
         userDialog = await userDialog;
         await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(userDialog,{path: 'screenshots/Administration/5_admin_benutzer_editieren.png'});
@@ -231,7 +230,7 @@ describe('server info', () => {
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });
 
 async function getAppConfigDialog(text) {

@@ -1,7 +1,7 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 beforeAll(async () => {
     //expect.setDefaultOptions({timeout: 1000});
@@ -150,7 +150,7 @@ describe('filterBar', () => {
 
     test('details display', async () => {
         await lib.ensureFilterToolbarVisible(page, '.t-app-felamimail');
-        await expectPuppeteer(page).toMatchElement('button', {text: 'Suche starten', visible: true})
+        await expectPuppeteer(page).toMatchElement('.t-app-felamimail button', {text: 'Suche starten', visible: true})
         let arrowtrigger = await page.$$('.t-app-felamimail .tw-filtertoolbar .x-form-arrow-trigger');
         await arrowtrigger[0].click();
         await lib.makeScreenshot(page, {path: 'screenshots/StandardBedienhinweise/7_standardbedienhinweise_email_suchoptionen.png'});
@@ -238,5 +238,5 @@ describe.skip('write E-Mail', () => {
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });
