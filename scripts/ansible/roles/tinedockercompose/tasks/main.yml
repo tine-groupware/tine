@@ -4,6 +4,8 @@
     name: dockercomposeinstall
   tags:
     - basesetup
+  when:
+    - tinedockercompose_dockerinstall
 
 - name: Log into private registry
   docker_login:

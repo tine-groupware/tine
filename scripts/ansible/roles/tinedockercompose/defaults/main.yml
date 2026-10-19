@@ -1,4 +1,6 @@
 ---
+tinedockercompose_dockerinstall: true
+
 tinedockercompose_tine_image: "tinegroupware/tine:2025"
 tinedockercompose_tinesetupuser: "tinesetup"
 tinedockercompose_tinesetuppw: "movemetovault"
