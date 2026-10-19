@@ -110,9 +110,6 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
      */
     public function getDeviceList($deviceId, $listId, $authKey)
     {
-        /** @var Tinebase_Http_Request $request */
-        $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
-
         $deviceController = DFCom_Controller_Device::getInstance();
 
         $assertACLUsageCallbacks = [
@@ -122,11 +119,6 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
             HumanResources_Controller_FreeTimeType::getInstance()->assertPublicUsage(),
         ];
 
-        if ($request->getQuery('userId')) {
-            $currentUser = Tinebase_Core::getUser();
-            $user = Tinebase_Core::setUser(Tinebase_User::getInstance()->getUserById($request->getQuery('userId'), Tinebase_Model_FullUser::class));
-        }
-
         try {
             /** @var DFCom_Model_Device $device */
             $device = $deviceController->get($deviceId);
@@ -135,6 +127,14 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
                 $response = new \Zend\Diactoros\Response('php://memory', 401);
                 $response->getBody()->write('Device authentication failed');
                 return $response;
+            }
+
+            /** @var Tinebase_Http_Request $request */
+            $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
+            if ($request->getQuery('userId')) {
+                $currentUser = Tinebase_Core::getUser();
+                Tinebase_Core::setUser(Tinebase_User::getInstance()->getUserById($request->getQuery('userId'),
+                    Tinebase_Model_FullUser::class));
             }
 
             /** @var DFCom_Model_DeviceList $deviceList */
