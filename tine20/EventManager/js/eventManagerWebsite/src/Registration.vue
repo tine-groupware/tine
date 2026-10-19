@@ -438,6 +438,7 @@ const eventDetails = ref({
   registrationPossibleUntil: "",
   registerOthers: "",
   contactFields: [],
+  unlimitedPlaces: false,
 });
 
 const communicationPreferenceOptions = computed(() =>
@@ -1450,6 +1451,8 @@ const uploadFiles = async (eventId, registrationId) => {
   }
 };
 
+const isUnlimitedPlaces = computed(() => toBool(eventDetails.value.unlimited_places));
+
 const checkWaitingList = () => {
   if (isSubmitting.value || isSendingParentConsent.value) return;
   if (!checkValidationFields()) {
@@ -1461,14 +1464,14 @@ const checkWaitingList = () => {
     return;
   }
 
-  const registration_deadline = eventDetails.value.registration_possible_until;
-  const available_places = eventDetails.value.available_places;
+  const deadline = eventDetails.value.registration_possible_until;
+  isExpired.value = !!deadline && new Date(deadline).getTime() < Date.now();
 
-  if (registration_deadline && new Date(registration_deadline).getTime() < new Date().getTime()) {
-    isExpired.value = true;
-  }
+  const available = eventDetails.value.available_places;
+  const isFull = !isUnlimitedPlaces.value
+    && available !== null && available !== '' && Number(available) <= 0;
 
-  if (available_places && (available_places < 0 || isExpired.value)) {
+  if (isFull || isExpired.value) {
     const expiredMessage = isExpired.value
       ? `${formatMessage('The registration date for')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('has expired. If you register you will be on our waiting list. Do you still want to register?')}`
       : `${formatMessage('The event')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('is full. If you register you will be on our waiting list. Do you still want to register?')}`;

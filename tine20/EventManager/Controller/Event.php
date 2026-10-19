@@ -78,10 +78,11 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         $this->_handleDependentRecords = false;
         try {
-            if (static::$updateStatisticsCache[$event_id] ?? false) {
+            $cacheKey = $event_id . '|' . ($registration_id ?? '');
+            if (static::$updateStatisticsCache[$cacheKey] ?? false) {
                 return;
             }
-            static::$updateStatisticsCache[$event_id] = true;
+            static::$updateStatisticsCache[$cacheKey] = true;
 
             Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(fn()
             => $this->clearUpdateStatisticsCache());
@@ -103,32 +104,33 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 intval($event->{EventManager_Model_Event::FLD_TOTAL_PLACES}) -
                 intval($event->{EventManager_Model_Event::FLD_BOOKED_PLACES});
             $today = Tinebase_DateTime::today();
+            $unlimited = (bool) $event->{EventManager_Model_Event::FLD_UNLIMITED_PLACES};
+            $deadline = $event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL};
 
-            if (
-                $event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 0
-                || ($event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL}
-                && $event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL} < $today)
-            ) {
+            $isFull = !$unlimited
+                && $event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 0;
+            $isPastDeadline = $deadline && $deadline < $today;
+
+            if ($registration_id && ($isFull || $isPastDeadline)) {
                 foreach ($registrations as $registration) {
                     if (
-                        $registration->id === $registration_id
-                        && $registration->{EventManager_Model_Registration::FLD_STATUS} !== "3"
-                        && $registration->{EventManager_Model_Registration::FLD_STATUS} !== "2"
+                        $registration->id !== $registration_id
+                        || $registration->{EventManager_Model_Registration::FLD_STATUS} === "3"
+                        || $registration->{EventManager_Model_Registration::FLD_STATUS} === "2"
                     ) {
-                        if ($event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 0) {
-                            $registration->{EventManager_Model_Registration::FLD_STATUS} = 2;
-                            $registration->{EventManager_Model_Registration::FLD_REASON_WAITING} = 1;
-                        } elseif ($event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL} < $today) {
-                            if (!$is_update) {
-                                $registration->{EventManager_Model_Registration::FLD_STATUS} = 2;
-                            }
-                            $registration->{EventManager_Model_Registration::FLD_REASON_WAITING} = 2;
-                        } else {
-                            $registration->{EventManager_Model_Registration::FLD_STATUS} = 2;
-                            $registration->{EventManager_Model_Registration::FLD_REASON_WAITING} = 3;
-                        }
-                        EventManager_Controller_Registration::getInstance()->update($registration);
+                        continue;
                     }
+
+                    if ($isFull) {
+                        $registration->{EventManager_Model_Registration::FLD_STATUS} = "2";
+                        $registration->{EventManager_Model_Registration::FLD_REASON_WAITING} = 1;
+                    } else {
+                        if (!$is_update) {
+                            $registration->{EventManager_Model_Registration::FLD_STATUS} = "2";
+                        }
+                        $registration->{EventManager_Model_Registration::FLD_REASON_WAITING} = 2;
+                    }
+                    EventManager_Controller_Registration::getInstance()->update($registration);
                 }
             }
             $this->update($event);
