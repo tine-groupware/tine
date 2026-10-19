@@ -1,7 +1,5 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
 
 beforeAll(async () => {
     await lib.getBrowser('Crm');
@@ -20,7 +18,7 @@ describe('Edit Lead', () => {
         await editDialog.click('.x-menu-item-icon.contactIcon');
         await expectPuppeteer(editDialog).toMatchElement('.x-combo-list-item', {text: 'Partner'});
         await lib.makeScreenshot(editDialog,{path: 'screenshots/Crm/3_crm_lead_rolle.png'});
-        await editDialog.click('input[name=leadstate_id]', {count : 2, delay: 500});
+        await editDialog.click('input[name=leadstate_id]', {clickCount : 2, delay: 500});
         await expectPuppeteer(editDialog).toMatchElement('.x-combo-list-item', {text: 'akzeptiert'});
         await lib.makeScreenshot(editDialog,{path: 'screenshots/Crm/4_crm_lead_status.png'});
         await editDialog.keyboard.press('Escape');
@@ -58,5 +56,5 @@ describe('Edit Lead', () => {
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });

@@ -1,7 +1,5 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser')
-require('dotenv').config()
-let subject
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
 
 beforeAll(async () => {
   await lib.getBrowser('E-Mail')
@@ -15,19 +13,21 @@ describe('test email rendering', () => {
     for (let i=1; i<=4; i++) {
       let fileToUpload = 'src/test/Felamimail/Test '+i+'.eml'
 
-      await expectPuppeteer(page).toMatchElement('.x-btn-text', {text: 'Nachrichten importieren'});
-      await new Promise(r => setTimeout(r, 100)); // wait for btn to get active
-      await expectPuppeteer(page).toClick('.x-btn-text', {text: 'Nachrichten importieren'});
+      await expectPuppeteer(page).toMatchElement('.t-app-felamimail .x-toolbar-left-row .x-btn-text', {text: 'Nachrichten importieren'});
 
-      let elementHandle = await page.$("input[type=file]");
-      await elementHandle.uploadFile(fileToUpload);
+      const selector = '.t-app-felamimail .x-toolbar-left-row input[type="file"]';
+      const fileInput = await page.waitForSelector(selector, {timeout: 2000});
+      if (!fileInput) {
+        throw new Error(`File input not found: ${selector}`);
+      }
+      await fileInput.uploadFile(fileToUpload);
 
       try {
         // There might be a pop-up telling us that only .eml is allowed for no reason
         await page.waitForSelector('button.vue-button.ok-button', {timeout: 2000})
         await expectPuppeteer(page.toClick('button.vue-button.ok-button'))
       } catch (e) {}
-      await page.waitForSelector('.x-grid3-col-subject', {text: 'Test '+i})
+      await expectPuppeteer(page).toMatchElement('.t-app-felamimail .x-grid3-col-subject', {text: 'Test ' + i});
     }
   })
 
@@ -47,13 +47,13 @@ describe('test email rendering', () => {
   test('delete emails', async  () => {
     for (let i=1; i<=4; i++) {
       let title = 'Test ' + i
-      await page.waitForSelector('.x-grid3-col-subject', {text: title})
-      expect(page).toClick('.x-grid3-col-subject', {text: title})
+      await lib.waitForActionableButton(page, title, lib.getEnvInt('TEST_TIMEOUT_MASK'), '.t-app-felamimail .x-grid3-col-subject');
+      await expectPuppeteer(page).toClick('.t-app-felamimail .x-grid3-col-subject', {text: title});
 
       await waitForLoadmask(page)
 
-      await page.waitForSelector('.x-btn-text', {text: 'Löschen'})
-      await expectPuppeteer(page).toClick('.x-btn-text', {text: 'Löschen'});
+      await lib.waitForActionableButton(page, 'Löschen', lib.getEnvInt('TEST_TIMEOUT_MASK'), '.t-app-felamimail .x-btn-text');
+      await expectPuppeteer(page).toClick('.t-app-felamimail .x-btn-text', {text: 'Löschen'});
 
       await waitForLoadmask(page)
     }
@@ -61,22 +61,22 @@ describe('test email rendering', () => {
 });
 
 afterAll(async () => {
-  browser.close()
+  global.browser.close()
 });
 
 async function openEmailPreview (title){
-  await page.waitForSelector('.x-grid3-col-subject', {text: title})
-  expect(page).toClick('.x-grid3-col-subject', {text: title})
+  await lib.waitForActionableButton(page, title, lib.getEnvInt('TEST_TIMEOUT_MASK'), '.t-app-felamimail .x-grid3-col-subject');
+  await expectPuppeteer(page).toClick('.x-grid3-col-subject', {text: title})
 
-  await waitForLoadmask(page)
+  await page.waitForSelector('.x-border-panel .x-panel:not(.x-hide-display) .email-stapled-container');
 
   await page.waitForSelector('div.preview-panel-felamimail-headers > div:nth-child(1) > div.preview-panel-felamimail-header-row-right', {text: title, timeout: 2000})
   await page.waitForSelector('.preview-panel-felamimail-body')
 }
 
 async function openEmailResponse (title, filename){
-  await page.waitForSelector('.x-grid3-col-subject', {text: title})
-  expect(page).toClick('.x-grid3-col-subject', {text: title})
+  await lib.waitForActionableButton(page, title, lib.getEnvInt('TEST_TIMEOUT_MASK'), '.t-app-felamimail .x-grid3-col-subject');
+  await expectPuppeteer(page).toClick('.t-app-felamimail .x-grid3-col-subject', {text: title})
   let newPage = await lib.getEditDialog('Antworten')
 
   await waitForLoadmask(newPage)
@@ -86,9 +86,22 @@ async function openEmailResponse (title, filename){
   await newPage.close()
 }
 
-async function waitForLoadmask (p){
-  try {
-    await p.waitForSelector('.ext-el-mask', {timeout: 2000})
-  } catch {}
-  await p.waitForFunction(() => !document.querySelector('.ext-el-mask'))
+async function waitForLoadmask(p) {
+  const maskSelectors = ['.tine-viewport-waitcycle', '.ext-el-mask', '.x-mask-loading'];
+  const timeout = lib.getEnvInt('TEST_TIMEOUT_MASK');
+
+  await p.waitForFunction(
+    (masks) => {
+      const isSelectorVisible = (sel) => {
+        const el = document.querySelector(sel);
+        if (!el) return false;
+        const style = window.getComputedStyle(el);
+        if (style.display === 'none' || style.visibility === 'hidden') return false;
+        return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+      };
+      return masks.every((sel) => !isSelectorVisible(sel));
+    },
+    {timeout},
+    maskSelectors,
+    );
 }

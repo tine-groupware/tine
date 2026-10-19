@@ -39,7 +39,7 @@ Apps: Addressbook, Calendar, Felamimail, Tasks, Timetracker, Projects, Crm, File
 Set the path to your tine-dev checkout:
 
 ```bash
-export TINE_DEV_PATH=/path/to/your/tine-dev
+export TINE_DOCKER_PATH=/path/to/your/tine-dev
 ```
 
 On this sandbox, the path is `/tine-dev` when that repo is present.
@@ -65,7 +65,7 @@ Database updates: `php setup.php --update` from `tine20/`. For release/CLI-only 
 - MySQL 8.0.12–8.0.44 / MariaDB 10.4–12.2
 - Apache 2.4 / Nginx 1.26
 - Redis 7.0 / Valkey 9.0
-- Node.js 10.15.3 (`.nvmrc`)
+- Node.js 10.15.3 (`.nvmrc`, webpack build only) — E2E tests require Node.js >= 22.12 (see `tests/e2etests/README.md`)
 
 ## Running tests
 
@@ -76,18 +76,18 @@ PHPUnit and JS tests are normally run **via tine-dev's `console`**, not by invok
 Canonical docs: `docs/developers/server/phpunit.md` (keep in sync when editing).
 
 ```bash
-cd $TINE_DEV_PATH
+cd $TINE_DOCKER_PATH
 ./console tine:test <TestClassName>::<TestMethodName>
 ```
 
 Example:
 
 ```bash
-cd $TINE_DEV_PATH
+cd $TINE_DOCKER_PATH
 ./console tine:test Admin_Controller_SchedulerTaskTest::testCreateSchedulerTask
 ```
 
-- Run from `$TINE_DEV_PATH`.
+- Run from `$TINE_DOCKER_PATH`.
 - `tine:test` wraps PHPUnit.
 
 **CI (without Docker):** GitHub Actions installs tine in `tine20/`, then runs `tests/tine20/../../tine20/vendor/bin/phpunit --color GithubTests.php` (see `.github/workflows/php-unit-test.yml`). CI runs on PHP 8.3 and 8.4. `GithubTests.php` is a curated subset, not the full suite.
@@ -98,7 +98,7 @@ From `tine20/` you can also use Composer scripts: `composer test` / `composer ph
 
 ### JavaScript (Jest)
 
-See `tests/js/jest/Readme.md`.
+See `tests/js/jest/README.md`.
 
 ```bash
 cd $TINE_DOCKER_PATH
@@ -115,14 +115,11 @@ Jest config is at `/usr/share/tests/js/jest/jest.config.js` inside the Docker co
 
 ### E2E
 
-See `tests/e2etests/README.md`. Requires a running instance. Config via `.env` file or env variables (`TEST_URL`, `TEST_USERNAME`, `TEST_PASSWORD`, etc.).
+See `tests/e2etests/README.md` for setup and usage. See `tests/e2etests/AGENTS.md` for agent-specific guidance on writing and refactoring tests.
 
-```bash
-cd tests/e2etests
-npm install
-npm test                          # all tests
-npm test src/test/Addressbook/Addressbook.test.js  # single file
-```
+Requires a running tine instance. Config via `.env` file or env variables (`TEST_URL`, `TEST_USERNAME`, `TEST_PASSWORD`, `TEST_TIMEOUT_*`).
+
+Jest config: `tests/e2etests/jest.config.mjs`
 
 ## Code quality
 
@@ -166,6 +163,7 @@ Read `CONTRIBUTING.md` before opening PRs.
 | Build | `docs/developers/build.md` |
 | Translations | `docs/developers/translations_doku.md` |
 | ADRs | `docs/developers/adr/` |
+| E2E tests | `tests/e2etests/README.md`, `tests/e2etests/AGENTS.md` |
 | Operator / Docker | `docs/operators/docker/` |
 
 Published docs: https://docs.tine-groupware.de/
@@ -187,7 +185,7 @@ Edit with poedit, then remove line numbers: `./console src:langHelper -- '-u -l 
 1. Read relevant code and `docs/developers/` pages before changing behavior.
 2. Match existing patterns (naming, layers: `Model`, `Controller`, `Frontend`, etc.).
 3. Keep changes focused; avoid unrelated refactors.
-4. Run targeted tests via `cd $TINE_DEV_PATH && ./console tine:test …` when tine-dev is available.
+4. Run targeted tests via `cd $TINE_DOCKER_PATH && ./console tine:test …` when tine-dev is available.
 5. Run `composer phpcs` on touched PHP under `tine20/` when possible.
 6. Do not commit unless the user asks; follow conventional commit format when they do.
 7. Do not commit secrets (`config.inc.php` with credentials, license keys, etc.).

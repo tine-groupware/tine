@@ -1,5 +1,4 @@
-const lib = require('../../lib/browser');
-require('dotenv').config();
+import lib from '../../lib/browser.js';
 
 beforeAll(async () => {
     await lib.getBrowser('E-Mail');
@@ -96,5 +95,5 @@ describe.skip('grid adopts to folder selected', () => {
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });

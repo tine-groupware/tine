@@ -1,10 +1,10 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 beforeAll(async () => {
     await lib.getBrowser('E-Mail');
-
 });
 
 describe('message', () => {
@@ -42,9 +42,7 @@ describe('message', () => {
         await new Promise(r => setTimeout(r, 1000));
 
         const fileToUpload = 'src/test/Felamimail/attachment.txt';
-        let filePickerWindow = lib.getNewWindow();
-        await expectPuppeteer(popupWindow).toClick('.x-btn-text', {text: 'Datei hinzufügen'});
-        filePickerWindow = await filePickerWindow;
+        let filePickerWindow = await lib.getEditDialog('Datei hinzufügen', popupWindow);
         await expectPuppeteer(filePickerWindow).toMatchElement('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER});
         await expectPuppeteer(filePickerWindow).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, count: 2});
         await new Promise(r => setTimeout(r, 15000)); //musst wait!
@@ -157,7 +155,7 @@ describe('message', () => {
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });
 
 async function saveAttachment(page) {

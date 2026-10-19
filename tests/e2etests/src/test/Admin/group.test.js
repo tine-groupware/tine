@@ -1,7 +1,5 @@
-const { expect: expectPuppeteer } = require('expect-puppeteer');
-const lib = require('../../lib/browser');
-
-require('dotenv').config();
+import { expect as expectPuppeteer } from 'expect-puppeteer';
+import lib from '../../lib/browser.js';
 
 beforeAll(async () => {
     //expect.setDefaultOptions({timeout: 1000});
@@ -12,11 +10,11 @@ beforeAll(async () => {
 describe('gridField account only', () => {
     test('gridField account only', async () => {
         await expectPuppeteer(page).toMatchElement('.x-tree-node span', {text: 'Gruppen'})
-        await page.click('.x-tree-node-icon.tinebase-accounttype-group');
+        await global.page.click('.x-tree-node-icon.tinebase-accounttype-group');
         await expectPuppeteer(page).toMatchElement('.x-grid3-hd-account_only');
     })
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });
