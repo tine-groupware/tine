@@ -152,7 +152,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     {
         parent::_inspectAfterCreate($_createdRecord, $_record);
         $this->_processBookedOptionsAfterCreate($_record);
-        $this->_updateParentStatistics($_record);
+        $this->_updateParentStatistics($_record, false, true);
         $template = $this->_getTemplate($_record);
         $this->_sendProcessEmail($_record, $template);
     }
@@ -199,7 +199,10 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $this->_sendProcessEmail($_record, $template);
         }
 
-        $this->_updateParentStatistics($_updatedRecord, true);
+        $isReactivation = $_oldRecord->{EventManager_Model_Registration::FLD_STATUS} === '3'
+            && $_updatedRecord->{EventManager_Model_Registration::FLD_STATUS} !== '3';
+
+        $this->_updateParentStatistics($_updatedRecord, true, $isReactivation);
     }
 
     public function delete($_ids)
@@ -264,7 +267,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         if ($notificationData !== null) {
             $this->_sendProcessEmail($_record, 'SendDeregistrationEmail', $notificationData);
         }
-        $this->_updateParentStatistics($_record);
+        $this->_updateParentStatistics($_record, false, false);
     }
 
     public function _deleteBookedOptions($_record)
@@ -413,8 +416,10 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             ->get($_record->{EventManager_Model_Registration::FLD_EVENT_ID});
         $today = Tinebase_DateTime::today();
         if (!$sendConfirmationEmail) {
+            $unlimited = (bool) $event->{EventManager_Model_Event::FLD_UNLIMITED_PLACES};
             if (
-                $event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 1
+                !$unlimited
+                && $event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 1
             ) {
                 $template = 'SendWaitingListEmail';
             } elseif (
@@ -497,41 +502,24 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         }
     }
 
-    public function _updateParentStatistics(EventManager_Model_Registration $_record, bool $is_update = false)
-    {
-        if ($is_update) { // relevant for waiting list
-            Tinebase_TransactionManager::getInstance()->registerOnCommitCallback(
-                function ($_record, $is_update = true) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' Updating parent statistics...');
-                    }
-                    EventManager_Controller_Event::getInstance()
-                        ->updateStatistics(
-                            $_record->{EventManager_Model_Registration::FLD_EVENT_ID},
-                            $_record->{EventManager_Model_Registration::ID},
-                            $is_update
-                        );
-                },
-                [$_record]
-            );
-        } else {
-            Tinebase_TransactionManager::getInstance()->registerOnCommitCallback(
-                function ($_record, $is_update = false) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' Updating parent statistics...');
-                    }
-                    EventManager_Controller_Event::getInstance()
-                        ->updateStatistics(
-                            $_record->{EventManager_Model_Registration::FLD_EVENT_ID},
-                            $_record->{EventManager_Model_Registration::ID},
-                            $is_update
-                        );
-                },
-                [$_record]
-            );
-        }
+    public function _updateParentStatistics(
+        EventManager_Model_Registration $_record,
+        bool $is_update = false,
+        bool $assignWaitingList = false
+    ): void {
+        $eventId = (string) $_record->getIdFromProperty(EventManager_Model_Registration::FLD_EVENT_ID);
+        $registrationId = $assignWaitingList ? $_record->getId() : null;
+
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback(
+            function () use ($eventId, $registrationId, $is_update) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Updating parent statistics (registration: ' . ($registrationId ?? '-') . ')');
+                }
+                EventManager_Controller_Event::getInstance()
+                    ->updateStatistics($eventId, $registrationId, $is_update);
+            }
+        );
     }
 
     public function _handleRegistrationFileUpload(EventManager_Model_Registration $_registration)

@@ -16,10 +16,17 @@ Tine.EventManager.EventGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const col = this.gridConfig.cm.getColumnById('available_places');
         if (col) {
             col.renderer = function (value, meta, record) {
+                if (record.get('unlimited_places')) {
+                    const booked = record.get('booked_places') || 0;
+                    return Ext.ux.PercentRenderer({
+                        percent: 100,
+                        text: String(booked)
+                    });
+                }
+
                 const total = record.get('total_places') ? record.get('total_places') : 0;
                 const available = record.get('available_places') ? record.get('available_places') : 0;
-
-                const percent = Math.round((available / total) * 100);
+                const percent = total > 0 ? Math.round((available / total) * 100) : 0;
 
                 return Ext.ux.PercentRenderer({
                     percent: percent,
