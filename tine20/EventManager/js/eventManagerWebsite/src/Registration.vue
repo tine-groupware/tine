@@ -33,7 +33,7 @@
           {{ formatMessage('Please review the participant\'s details and complete the registration as the legal guardian.') }}
         </div>
         <b-form-checkbox
-          v-if="shouldShowRegistrantCheckbox"
+          v-if="showRegistrantCheckbox"
           v-model="isRegistrant"
           :disabled="isGuardianConsentFlow"
         >
@@ -410,6 +410,30 @@ const canRegisterAnother = computed(() =>
   canRegisterSomeoneNew.value
   && !!accountOwner.value?.id
   && !isGuardianConsentFlow.value
+);
+
+const REGISTER_OTHERS = {
+  ANYONE: '1',
+  ONLY_THEMSELVES: '2',
+  DEPENDANTS: '3',
+};
+
+const registerOthersSetting = computed(() => {
+  const v = eventDetails.value.register_others;
+  const id = v?.id ?? v;
+  return (id === null || id === undefined || id === '') ? REGISTER_OTHERS.ANYONE : String(id);
+});
+
+const canRegisterOnBehalf = computed(() =>
+  [REGISTER_OTHERS.ANYONE, REGISTER_OTHERS.DEPENDANTS].includes(registerOthersSetting.value)
+);
+
+const isOnBehalfAllowed = computed(() =>
+  canRegisterOnBehalf.value || isGuardianConsentFlow.value || (isAlreadyRegistered.value && isRegistrant.value)
+);
+
+const showRegistrantCheckbox = computed(() =>
+  shouldShowRegistrantCheckbox.value && isOnBehalfAllowed.value
 );
 
 const startNewRegistration = () => {
@@ -801,8 +825,12 @@ const handleNewParticipantFromAccount = async () => {
     isVerifyEmailRegistrant.value = true;
   }
 
-  isRegistrant.value = true;
-  shouldShowRegistrantCheckbox.value = true;
+  isRegistrant.value = canRegisterOnBehalf.value;
+  shouldShowRegistrantCheckbox.value = canRegisterOnBehalf.value;
+
+  if (!canRegisterOnBehalf.value && accountOwner.value) {
+    contactDetails.value = prefillParticipant(accountOwner.value);
+  }
 };
 
 const handleEditExistingRegistration = async (participantId) => {
@@ -847,7 +875,7 @@ const checkAndLoadExistingRegistration = async (participantId) => {
     }
 
   } else {
-    if (accountOwner.value.id === participantId) {
+    if (accountOwner.value.id === participantId || !canRegisterOnBehalf.value) {
       contactDetails.value = prefillParticipant(accountOwner.value);
     } else {
       isRegistrant.value = true;
@@ -1539,7 +1567,7 @@ const postRegistration = async () => {
     registrantDetails: pickFields(registrantDetails.value, visibleRegistrantContactFields.value),
     replies: filteredReplies,
     isAlreadyRegistered: isAlreadyRegistered.value,
-    isOnBehalf: isRegistrant.value,
+    isOnBehalf: isRegistrant.value && isOnBehalfAllowed.value,
     isLegalGuardian: isRegistrant.value && isLegalGuardian.value,
     communicationPreference: isRegistrant.value
       ? communicationPreference.value
