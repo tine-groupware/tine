@@ -184,19 +184,29 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
      */    
     public function toArray($_recursive = TRUE, $_resolveCreator = TRUE)
     {
+        static $accountNameCache = [];
+
         $result = parent::toArray($_recursive);
         
         // get creator
-        if ($this->created_by && $_resolveCreator) {
-            //resolve creator; return default NonExistentUser-Object if creator cannot be resolved =>
-            //@todo perhaps we should add a "getNonExistentUserIfNotExists" parameter to Tinebase_User::getUserById 
-            try {
-                $creator = Tinebase_User::getInstance()->getUserById($this->created_by);
+        if ($_resolveCreator && $creator = $this->created_by) {
+            if (!$creator instanceof Tinebase_Model_User) {
+                if (null !== ($accountNameCache[$creator] ?? null)) {
+                    $result['created_by'] = $accountNameCache[$creator];
+                    return $result;
+                }
+
+                //resolve creator; return default NonExistentUser-Object if creator cannot be resolved =>
+                //@todo perhaps we should add a "getNonExistentUserIfNotExists" parameter to Tinebase_User::getUserById
+                try {
+                    $creator = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $creator);
+                }
+                catch (Tinebase_Exception_NotFound) {
+                    $creator = Tinebase_User::getInstance()->getNonExistentUser();
+                }
             }
-            catch (Tinebase_Exception_NotFound) {
-                $creator = Tinebase_User::getInstance()->getNonExistentUser();
-            }
-             
+
+            $accountNameCache[$creator->getId()] = $creator->accountDisplayName;
             $result['created_by'] = $creator->accountDisplayName;
         }
         
