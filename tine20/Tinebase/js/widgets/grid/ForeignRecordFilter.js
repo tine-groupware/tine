@@ -768,6 +768,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 
                     if (!filter.formFields.value) {
                         value = new Ext.Button({
+                            variant: 'ftb',
                             text: i18n._(this.startDefinitionText),
                             width: el.getWidth() -10,
                             filter: filter,
