@@ -93,7 +93,16 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         ));
         $result = $this->search($filter);
 
-        $fileSystem = Tinebase_FileSystem::getInstance();
+        try {
+            $fileSystem = Tinebase_FileSystem::getInstance();
+        } catch (Tinebase_Exception_Backend $teb) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__
+                    . ' No filesystem available: ' . $teb->getMessage());
+            }
+            $fileSystem = null;
+        }
         $toRemove = new Tinebase_Record_RecordSet('Tinebase_Model_ImportExportDefinition');
         /** @var Tinebase_Model_ImportExportDefinition $definition */
         foreach ($result as $definition) {
@@ -106,7 +115,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                     $this->_removeDefinition($definition, $toRemove, $teia->getMessage());
                 }
                 if (!empty($config->template)) {
-                    if (!str_contains($config->template, 'tine20://')) {
+                    if (!$fileSystem || !str_contains($config->template, 'tine20://')) {
                         continue;
                     }
                     try {
@@ -120,7 +129,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                         $this->_removeDefinition($definition, $toRemove, $e->getMessage());
                     }
                 } elseif (!empty($config->templateFileId)) {
-                    if (false === $fileSystem->hasGrant(Tinebase_Core::getUser()->getId(), $config->templateFileId,
+                    if ($fileSystem && false === $fileSystem->hasGrant(Tinebase_Core::getUser()->getId(), $config->templateFileId,
                             Tinebase_Model_Grants::GRANT_READ)) {
                         $this->_removeDefinition($definition, $toRemove,
                             'user has no read grant on template file id ' . $config->templateFileId);
@@ -138,10 +147,12 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                                          Tinebase_Record_RecordSet $toRemove,
                                          string $message): void
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-            __METHOD__ . '::' . __LINE__
-            . ' Removing export definition ' . $definition->name . ' because'
-            . ' ' . $message);
+        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+            Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__
+                . ' Removing export definition ' . $definition->name . ' because'
+                . ' ' . $message);
+        }
         $toRemove->addRecord($definition);
     }
 
