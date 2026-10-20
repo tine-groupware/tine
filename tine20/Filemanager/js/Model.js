@@ -323,7 +323,8 @@ Tine.Filemanager.nodeBackendMixin = {
         
         var message = '',
             app = Tine.Tinebase.appMgr.get(this.appName);
-        
+        items = items ?? [];
+
         if(!params) {
         
             if(!target || !items || items.length < 1) {
@@ -498,7 +499,7 @@ Tine.Filemanager.nodeBackendMixin = {
 
             Tine.Filemanager.nodeBackend.handleRequestException(nodeData.data, failedRequest);
 
-            throw nodeData; // re-throw so callers can also catch failures if desired
+            return nodeData;
         }
     },
     
