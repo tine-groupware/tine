@@ -588,6 +588,88 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         }
     }
 
+    public function testCreateTsRecalcDailyWtrSeq(): void
+    {
+        $this->_createBasicData();
+
+        $lastMonth = Tinebase_DateTime::now()->subMonth(1);
+        $monthStart = new Tinebase_DateTime($lastMonth->format('Y-m-01') . ' 00:00:00');
+        $monthEnd = $monthStart->getClone()->addMonth(1)->subSecond(1);
+        $firstDay = $monthStart->format('Y-m-d');
+        $secondDay = $monthStart->getClone()->addDay(1)->format('Y-m-d');
+
+        // create the monthly WTR and make sure there is a daily WTR for each day of last month
+        $calcResult = HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee(
+            $this->employee,
+            $monthStart,
+            $monthEnd
+        );
+        self::assertEquals(0, $calcResult['errors'], print_r($calcResult, true));
+        self::assertEquals($monthStart->diff($monthEnd)->days + 1, $calcResult['created'], print_r($calcResult, true));
+
+        $monthlyWtr = HumanResources_Controller_MonthlyWTReport::getInstance()
+            ->getByEmployeeMonth($this->employee, $monthStart);
+        self::assertNotNull($monthlyWtr, 'no monthly WTR for last month');
+
+        $result = $this->_getReportsForEmployee($this->employee);
+        $day = $monthStart->getClone();
+        while ($day->isEarlierOrEquals($monthEnd)) {
+            self::assertNotNull(
+                $result->find('date', $day->format('Y-m-d') . ' 00:00:00'),
+                'no daily WTR for ' . $day->format('Y-m-d')
+            );
+            $day->addDay(1);
+        }
+
+        /** @var HumanResources_Model_DailyWTReport $firstDailyWtr */
+        $firstDailyWtr = $result->find('date', $firstDay . ' 00:00:00');
+        self::assertNotNull($firstDailyWtr);
+        $firstDailyWtrSeq = (int)$firstDailyWtr->seq;
+
+        // create a new TS on the second day of last month using the WTHR timeaccount
+        $wtTAid = HumanResources_Controller_WorkingTimeScheme::getInstance()
+            ->getWorkingTimeAccount($this->employee)->getId();
+        Timetracker_Controller_Timesheet::getInstance()->create(new Timetracker_Model_Timesheet([
+            'start_date' => $secondDay,
+            'start_time' => '09:00',
+            'end_time' => '10:00',
+            'duration' => 0,
+            'description' => 'unittest recalc',
+            'account_id' => $this->employee->account_id,
+            'timeaccount_id' => $wtTAid,
+        ]));
+
+        // recalculation as triggered after a new timesheet (event -> actionqueue -> calculateReportsForAccountId)
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForAccountId(
+            $this->employee->getIdFromProperty('account_id'),
+            $secondDay
+        );
+
+        $result = $this->_getReportsForEmployee($this->employee);
+
+        // second daily WTR got updated with the new data
+        /** @var HumanResources_Model_DailyWTReport $secondDailyWtr */
+        $secondDailyWtr = $result->find('date', $secondDay . ' 00:00:00');
+        self::assertNotNull($secondDailyWtr);
+        self::assertEquals(
+            3600,
+            (int)$secondDailyWtr->working_time_actual,
+            'second daily WTR does not contain the newly created timesheet'
+        );
+        self::assertCount(1, $secondDailyWtr->working_times);
+        self::assertEquals(3600, (int)$secondDailyWtr->working_times->getFirstRecord()->duration);
+
+        // first daily WTR of the month must not have been touched
+        /** @var HumanResources_Model_DailyWTReport $firstDailyWtr */
+        $firstDailyWtr = $result->find('date', $firstDay . ' 00:00:00');
+        self::assertNotNull($firstDailyWtr);
+        self::assertEquals(
+            $firstDailyWtrSeq,
+            (int)$firstDailyWtr->seq,
+            'seq of first daily WTR changed, it should not have been updated'
+        );
+    }
+
     public function testCalculateReportsForEmployeeTimesheetsWithoutStartAndEnd()
     {
         // @todo implement
