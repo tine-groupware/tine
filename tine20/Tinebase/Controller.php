@@ -1216,7 +1216,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
 
-            $routeCollector->get('/logo[/{type}[/{size}[/{mime}[/{colorSchema}]]]]', (new Tinebase_Expressive_RouteHandler(
+            $routeCollector->get('/logo[/{type}[/{size}[/{colorSchema}[/{mime:.*}]]]]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getLogo', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
                 Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
@@ -1935,7 +1935,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Zend_Cache_Exception
      */
-    public function getLogo($type = 'b', $size = '300x100', $mime='image/png', $colorSchema='light')
+    public function getLogo($type = 'b', $size = '300x100', $colorSchema='light', $mime='image/png')
     {
         if (! in_array($type, ['b', 'i'])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
@@ -1952,7 +1952,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $size = '135x50';
         }
 
-        $mime = urldecode((string) $mime);
         if (! in_array($mime, array_merge(\Tinebase_ImageHelper::getSupportedImageMimeTypes(), ['image/svg+xml']))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Unknown mime: ' . $mime
