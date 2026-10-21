@@ -205,8 +205,7 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
                     $creator = Tinebase_User::getInstance()->getNonExistentUser();
                 }
             }
-
-            $accountNameCache[$creator->getId()] = $creator->accountDisplayName;
+            $accountNameCache[$creator->getId() ?? ''] = $creator->accountDisplayName;
             $result['created_by'] = $creator->accountDisplayName;
         }
         
