@@ -60,25 +60,45 @@ class EventManager_Setup_Initialize extends Setup_Initialize
             } else {
                 $node = Tinebase_FileSystem::getInstance()->stat($prefix . $basePath);
             }
+            self::ensureEventFolderGrants($node);
 
-            $grants = Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($node);
-            $grants->addRecord(new Tinebase_Model_Grants([
-                'account_id' => Tinebase_User::getInstance()
-                    ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS)->getId(),
-                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                Tinebase_Model_Grants::GRANT_READ => true,
-                Tinebase_Model_Grants::GRANT_ADD => true,
-            ]));
-            $grants->addRecord(new Tinebase_Model_Grants([
-                'account_id' => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
-                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
-                Tinebase_Model_Grants::GRANT_READ => true,
-                Tinebase_Model_Grants::GRANT_ADD => true,
-            ]));
-            Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grants);
         } catch (Filemanager_Exception_NodeExists $e) {
             // This is fine
         };
+    }
+
+    public static function ensureEventFolderGrants(Tinebase_Model_Tree_Node $node): void
+    {
+        $grants = Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($node);
+        $accountsWithReadAndAdd = [
+            [
+                'account_id' => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+            ], [
+                'account_id' => Tinebase_User::getInstance()
+                    ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS)->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            ],
+        ];
+        $updateGrants = false;
+        foreach ($accountsWithReadAndAdd as $account) {
+            $grantsToCheck = $grants->filter('account_id', $account['account_id']);
+            foreach ([Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_ADD] as $grant) {
+                if (!$grantsToCheck->{$grant}) {
+                    $grants->addRecord(new Tinebase_Model_Grants([
+                        'account_id' => $account['account_id'],
+                        'account_type' => $account['account_type'],
+                        Tinebase_Model_Grants::GRANT_READ => true,
+                        Tinebase_Model_Grants::GRANT_ADD => true,
+                    ]));
+                    $updateGrants = true;
+                    break;
+                }
+            };
+        }
+        if ($updateGrants) {
+            Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grants);
+        }
     }
 
     protected function _initializeContainer()

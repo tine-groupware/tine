@@ -158,7 +158,6 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             ],
             self::FLD_EMPLOYEE      => [
                 self::TYPE              => self::TYPE_RECORD,
-                self::QUERY_FILTER      => true,
                 self::LABEL             => 'Employee for the event', // _('Employee for the event')
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -201,7 +200,6 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             ],
             self::FLD_LOCATION_RECORD      => [
                 self::TYPE              => self::TYPE_RECORD,
-                self::QUERY_FILTER      => true,
                 self::LABEL             => 'Location Record', // _('Location Record')
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -277,7 +275,6 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             ],
             self::FLD_OPTIONS       => [
                 self::TYPE              => self::TYPE_RECORDS,
-                self::QUERY_FILTER      => true,
                 self::LABEL             => 'Event Options', // _('Event Options')
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -301,7 +298,6 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             ],
             self::FLD_REGISTRATIONS     => [
                 self::TYPE                  => self::TYPE_RECORDS,
-                self::QUERY_FILTER          => true,
                 self::LABEL                 => 'Event Registrations', // _('Event Registrations')
                 self::NULLABLE              => true,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -328,7 +324,6 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             ],
             self::FLD_APPOINTMENTS  => [
                 self::TYPE              => self::TYPE_RECORDS,
-                self::QUERY_FILTER      => true,
                 self::LABEL             => 'Event Appointments', // _('Event Appointments')
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
