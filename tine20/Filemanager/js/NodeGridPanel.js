@@ -360,27 +360,36 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (allowed) {
             ed.alignment = 'l-l';
             ed.autoSize = 'none';
-
-            ed.on('startedit', (boundEl) => {
-                const inner = boundEl.dom; // .x-grid3-cell-inner
-                const textEl = inner.querySelector('.filemanager-thumbnail-name') || inner;
-                const innerBox = inner.getBoundingClientRect();
-                const textBox = textEl.getBoundingClientRect();
-
-                const range = document.createRange();
-                range.selectNodeContents(textEl);
-                const textWidth = range.getBoundingClientRect().width;
-
-                const maxWidth = innerBox.right - textBox.left;
-                const width = Math.min(textWidth + 20, maxWidth);
-
-                ed.field.el.dom.style.setProperty('width', `${Math.round(width)}px`, 'important');
-                ed.offsets = [Math.round(textBox.left - innerBox.left), 0];
-                ed.realign();
-            }, this, {single: true});
+            this.renameEditor = ed;
+            ed.on('startedit', this.alignRenameEditor, this, {single: true});
         }
 
         return allowed;
+    },
+
+    alignRenameEditor: function() {
+        const ed = this.renameEditor;
+        const grid = this.getGrid();
+        const record = grid.getSelectionModel().getSelected();
+        if (!ed?.editing || !record) return;
+
+        const row = this.store.indexOf(record);
+        const inner = grid.getView().getCell(row, ed.col)?.firstChild; // .x-grid3-cell-inner
+        if (!inner) return;
+
+        // row dom / record instance were replaced while editing
+        Object.assign(ed, {record, row, boundEl: Ext.get(inner)});
+
+        const textEl = inner.querySelector('.filemanager-thumbnail-name') || inner;
+        const offset = Math.round(textEl.getBoundingClientRect().left - inner.getBoundingClientRect().left);
+
+        const range = document.createRange();
+        range.selectNodeContents(textEl);
+        const width = Math.min(range.getBoundingClientRect().width + 20, inner.clientWidth - offset);
+
+        ed.field.el.dom.style.setProperty('width', `${Math.round(width)}px`, 'important');
+        ed.offsets = [offset, 0];
+        ed.realign();
     },
 
     /**
@@ -1130,6 +1139,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             textEl.className = 'filemanager-thumbnail-name';
             textEl.append(...cell.childNodes);
             cell.replaceChildren(thumbEl, textEl);
+            this.alignRenameEditor();
         }
 
         const img = thumbEl.querySelector('img'); // folders have none
