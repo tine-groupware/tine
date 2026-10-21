@@ -844,6 +844,23 @@ class Addressbook_ControllerTest extends TestCase
         static::assertGreaterThan($undidContentSequence, $uncreateContentSequence);
     }
 
+    public function testListPathWithRelation(): void
+    {
+        $contact = $this->_instance->get($this->_personas['sclever']->contact_id);
+        $lists = Addressbook_Controller_List::getInstance()->getMemberships($contact);
+        $this->assertSame(count($lists), count($contact->getPathNeighbours()['parents']));
+
+        $contact->relations[] = new Tinebase_Model_Relation([
+            'related_model' => Addressbook_Model_List::class,
+            'related_id' => $lists[0],
+            'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+            'related_degree' => Tinebase_Model_Relation::DEGREE_PARENT,
+            'type' => 'unittest',
+        ], true);
+        $contact = $this->_instance->update($contact);
+        $this->assertSame(count($lists), count($contact->getPathNeighbours()['parents']));
+    }
+
     public function testUpdateInternalContactHiddenListMembership()
     {
         $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();

@@ -1579,8 +1579,15 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         foreach ($listMemberRoles as $listMemberRole) {
             $lists->removeById($listMemberRole->list_id);
         }
+        $listIds = array_merge($lists->getArrayOfIds(), array_unique($listMemberRoles->list_id));
 
         $result = parent::getPathNeighbours();
+        foreach ($result['parents'] as $offset => $parent) {
+            if ($parent instanceof Tinebase_Model_Relation && $parent->related_model === Addressbook_Model_List::class
+                    && in_array($parent->related_id, $listIds)) {
+                unset($result['parents'][$offset]);
+            }
+        }
         $result['parents'] = array_merge($result['parents'], $lists->asArray(), $listMemberRoles->asArray());
 
         $listController->doContainerACLChecks($oldAclCheck);
