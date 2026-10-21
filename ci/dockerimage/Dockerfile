@@ -134,13 +134,10 @@ COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/noble.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
 RUN apt-mirror activate \
  && apt-get update \
- && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
-    software-properties-common \
-    gnupg2 \
-    apt-transport-https \
-    lsb-release \
-    ca-certificates \
- && add-apt-repository ppa:ondrej/php \
+ && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC  apt-get -y install lsb-release ca-certificates curl \
+ && curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
+ && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
+ && sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list' \
  && apt-mirror activate \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
