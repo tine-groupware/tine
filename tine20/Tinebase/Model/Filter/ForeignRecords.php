@@ -59,8 +59,22 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
 
             $db = $_backend->getAdapter();
             $orgField = $this->_field;
+
+            $isDeletedCondition = '';
+            foreach ($_select->getPart(\Zend_Db_Select::WHERE) as $where) {
+                if (str_contains($where, '`is_deleted` = 0')) {
+                    $this->_field = 'is_deleted';
+                    $isDeletedCondition = ' AND ' . $this->_getQuotedFieldName($_backend) . ' = 0';
+                    break;
+                }
+            }
+
             $this->_field = 'id';
             $not = str_starts_with($this->_operator, 'not');
+            $unquotedFieldName = $this->_getUNquotedFieldName($_backend);
+            if (!in_array($unquotedFieldName, $_select->getPart(\Zend_Db_Select::GROUP))) {
+                $_select->group($unquotedFieldName);
+            }
 
             try {
                 if ($this->_valueIsNull) {
@@ -69,7 +83,8 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
                         $_select->joinLeft(
                             [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
                             $this->_getQuotedFieldName($_backend) . ' = ' .
-                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']),
+                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']) .
+                            $isDeletedCondition,
                             []
                         );
                         $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NOT NULL');
@@ -77,7 +92,8 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
                         $_select->joinLeft(
                             [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
                             $this->_getQuotedFieldName($_backend) . ' = ' .
-                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']),
+                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']) .
+                            $isDeletedCondition,
                             []
                         );
                         $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NULL');
@@ -87,7 +103,8 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
                         $_select->joinLeft(
                             [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
                             $this->_getQuotedFieldName($_backend) . ' = ' .
-                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']),
+                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']) .
+                            $isDeletedCondition,
                             []
                         );
                         $groupSelect->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NOT NULL');
@@ -98,7 +115,7 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
                             [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
                             $this->_getQuotedFieldName($_backend) . ' = ' .
                             $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField'])
-                            . ($groupSql ? ' AND (' . $groupSql . ')' : ''),
+                            . ($groupSql ? ' AND (' . $groupSql . ')' : '') . $isDeletedCondition,
                             []
                         );
                         $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NULL');
