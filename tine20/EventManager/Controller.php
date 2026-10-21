@@ -163,6 +163,10 @@ class EventManager_Controller extends Tinebase_Controller_Event
                     EventManager_Setup_Initialize::createEventFolder();
                 }
 
+                // ensure anonymous user has addGrant and readGrant
+                $node = Tinebase_FileSystem::getInstance()->stat($prefix . $basePath);
+                EventManager_Setup_Initialize::ensureEventFolderGrants($node);
+
                 $completePath = '';
                 $allFolders = array_merge(
                     [EventManager_Controller_Event::getInstance()->getEventFolderPath($eventName)],
