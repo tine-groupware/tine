@@ -1685,10 +1685,21 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             $expander->expand(new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, [$this]));
         }
         $emailFields = array_keys(self::getEmailFields());
+        $filledFields = [];
+
         foreach ($emailFields as $emailField) {
-            if (empty($this[$emailField]) || ($preferredEmailOnly && $emailField !== $this->preferred_email && count($possibleAddresses) > 0)) {
-                continue;
+            if (!empty($this[$emailField])) {
+                $filledFields[] = $emailField;
             }
+        }
+
+        if ($preferredEmailOnly && count($filledFields) > 0) {
+            $filledFields = in_array($this->preferred_email, $filledFields)
+                ? [$this->preferred_email]
+                : [$filledFields[0]];
+        }
+
+        foreach ($filledFields as $emailField) {
             $possibleAddresses[] = [
                 "n_fileas" => $this->n_fileas ?? '',
                 "name" => $this->n_fn ?? '',
