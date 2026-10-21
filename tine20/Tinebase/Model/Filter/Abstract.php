@@ -414,18 +414,16 @@ abstract class Tinebase_Model_Filter_Abstract
      * 
      * @todo to be removed once we split filter model / backend
      */
-    protected function _getQuotedFieldName($_backend) {
+    protected function _getQuotedFieldName($_backend)
+    {
+        return $_backend->getAdapter()->quoteIdentifier($this->_getUNquotedFieldName($_backend));
+    }
+
+    protected function _getUNquotedFieldName($_backend)
+    {
         $tablename = $this->_options['tablename'] ?? $_backend->getTableName();
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Using tablename: ' . $tablename);
-
         $field = $this->_options['field'] ?? $this->_field;
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Using field: ' . $field);
-
-        return $_backend->getAdapter()->quoteIdentifier(
-            $tablename . '.' . $field
-        );
+        return $tablename . '.' . $field;
     }
     
     /**
