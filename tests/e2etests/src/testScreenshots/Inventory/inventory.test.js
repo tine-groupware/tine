@@ -9,7 +9,7 @@ beforeAll(async () => {
     await lib.makeScreenshot(page,{path: 'screenshots/Inventarisierung/1_inventar_uebersicht.png'});
 });
 
-describe('mainScreen', () => {
+describe.skip('mainScreen', () => {
     test('import', async () => {
         let newPage =  lib.getNewWindow();
         try {

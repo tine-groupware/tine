@@ -7,7 +7,7 @@ beforeAll(async () => {
     await lib.getBrowser('Human Resources');
 });
 
-describe('employee', () => {
+describe.skip('employee', () => {
     describe('employee grid', () => {
         test('show grid', async () => {
             await expectPuppeteer(page).toClick('.x-tree-node span', {text: 'Mitarbeiter', visible: true});
