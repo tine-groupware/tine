@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49819b7b7cf70f1840aeaa06ce3755a9",
+    "content-hash": "3df3edc9e7f3577d186c6dd01ef5d759",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -332,124 +332,6 @@
                 }
             ],
             "time": "2025-02-20T17:42:39+00:00"
-        },
-        {
-            "name": "clean/phpatlas",
-            "version": "0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/clean/phpatlas.git",
-                "reference": "4e74a8e646b289768e77500127389acf69bbeb71"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/clean/phpatlas/zipball/4e74a8e646b289768e77500127389acf69bbeb71",
-                "reference": "4e74a8e646b289768e77500127389acf69bbeb71",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "5.7.27"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clean\\PhpAtlas\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "support": {
-                "issues": "https://github.com/clean/phpatlas/issues",
-                "source": "https://github.com/clean/phpatlas/tree/0.2.0"
-            },
-            "time": "2019-12-06T08:40:56+00:00"
-        },
-        {
-            "name": "clean/phpdoc-md",
-            "version": "0.19.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/clean/phpdoc-md.git",
-                "reference": "46a07faa6cc69c8b02ddc1838acfeda6b811fc3f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/clean/phpdoc-md/zipball/46a07faa6cc69c8b02ddc1838acfeda6b811fc3f",
-                "reference": "46a07faa6cc69c8b02ddc1838acfeda6b811fc3f",
-                "shasum": ""
-            },
-            "require": {
-                "clean/phpatlas": "^0.2",
-                "clean/view": "^0.1",
-                "php": "^5.6|^7|^8",
-                "phpdocumentor/reflection-docblock": "^3|^4|^5"
-            },
-            "require-dev": {
-                "clean/mpr": "^1",
-                "phpunit/phpunit": ">5"
-            },
-            "bin": [
-                "bin/phpdoc-md"
-            ],
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/snippets.php"
-                ],
-                "psr-4": {
-                    "Clean\\PhpDocMd\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Parse PHP classes and writes documentation to markdown files",
-            "keywords": [
-                "markdown",
-                "phpdoc"
-            ],
-            "support": {
-                "issues": "https://github.com/clean/phpdoc-md/issues",
-                "source": "https://github.com/clean/phpdoc-md/tree/0.19.3"
-            },
-            "time": "2022-11-19T11:59:34+00:00"
-        },
-        {
-            "name": "clean/view",
-            "version": "0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/clean/view.git",
-                "reference": "34448b22810024781392d2c07564ded0e6e978ef"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/clean/view/zipball/34448b22810024781392d2c07564ded0e6e978ef",
-                "reference": "34448b22810024781392d2c07564ded0e6e978ef",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.2.*",
-                "scrutinizer/ocular": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Clean\\View\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "support": {
-                "issues": "https://github.com/clean/view/issues",
-                "source": "https://github.com/clean/view/tree/master"
-            },
-            "time": "2015-08-04T00:09:23+00:00"
         },
         {
             "name": "clue/socket-raw",
@@ -15613,7 +15495,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.2",
         "ext-spl": "8.2",
@@ -15638,5 +15520,5 @@
         "ext-xmlwriter": "8.2",
         "ext-zip": "8.2"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }

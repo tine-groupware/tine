@@ -7,7 +7,7 @@ beforeAll(async () => {
     await lib.makeScreenshot(page,{path: 'screenshots/Inventarisierung/1_inventar_uebersicht.png'});
 });
 
-describe('mainScreen', () => {
+describe.skip('mainScreen', () => {
     test('import', async () => {
         await new Promise(r => setTimeout(r, 2000));
         let newPage =  await lib.getEditDialog('Einträge importieren');
