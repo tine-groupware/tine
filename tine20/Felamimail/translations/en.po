@@ -338,9 +338,6 @@ msgstr "Redirecting emails to yourself is not allowed. Please change the recipie
 msgid "Redirects to external email domains are not allowed."
 msgstr "Redirects to external email domains are not allowed."
 
-msgid "You have new mail from "
-msgstr "You have new mail from "
-
 msgid "shared / adb_list accounts must have a password"
 msgstr "shared / adb_list accounts must have a password"
 
@@ -673,6 +670,18 @@ msgstr "IMAP Credentials for {0}"
 
 msgid "Credentials"
 msgstr "Credentials"
+
+msgid "Refreshing your inbox... "
+msgstr "Refreshing your inbox... "
+
+msgid "Please wait a moment while we refresh your inbox and search for the desired E-Mail."
+msgstr "Please wait a moment while we refresh your inbox and search for the desired E-Mail."
+
+msgid "The E-Mail was not found."
+msgstr "The E-Mail was not found."
+
+msgid "The E-Mail you requested is not in your inbox. It has probably been moved or deleted in the meantime."
+msgstr "The E-Mail you requested is not in your inbox. It has probably been moved or deleted in the meantime."
 
 msgid "Save As"
 msgstr "Save As"
@@ -1194,6 +1203,9 @@ msgstr "Bcc"
 msgid "Size (in byte)"
 msgstr "Size (in byte)"
 
+msgid "Message ID"
+msgstr "Message ID"
+
 msgid "INBOX"
 msgstr "INBOX"
 
@@ -1658,9 +1670,6 @@ msgstr "Message File Locations"
 msgid "Message ID Hash"
 msgstr "Message ID Hash"
 
-msgid "Message ID"
-msgstr "Message ID"
-
 msgid "Model"
 msgstr "Model"
 
@@ -1777,6 +1786,12 @@ msgstr "Only internal senders can send emails to this address: %1$s"
 
 msgid "Cannot combine \"allow external\" and \"allow only members\" options"
 msgstr "Cannot combine \"allow external\" and \"allow only members\" options"
+
+msgid "You have new mail from:"
+msgstr "You have new mail from:"
+
+msgid "You have received a new mail from %1$s"
+msgstr "You have received a new mail from %1$s"
 
 msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s."
 msgstr "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s."

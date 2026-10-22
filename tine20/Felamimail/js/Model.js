@@ -243,6 +243,7 @@ Tine.Felamimail.Model.Message.getFilterModel = function() {
         }},
         {label: app.i18n._('Received'),    field: 'received',      valueType: 'datetime', pastOnly: true},
         {label: app.i18n._('Size (in byte)'),   field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'},
+        {label: app.i18n._('Message ID'),   field: 'message_id',   operators: ['contains']},
         {filtertype: 'tinebase.tag', app: app},
     ];
 };
