@@ -1812,6 +1812,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         }
         $this->setFromArray($_data);
         $this->runConvertToRecord();
+        $this->_isDirty = false;
         unset($raii);
     }
 
