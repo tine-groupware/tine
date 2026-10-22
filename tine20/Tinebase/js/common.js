@@ -117,8 +117,10 @@ const common = {
      * @return {String} localised date and time
      */
     dateTimeRenderer: function ($_iso8601, metadata) {
-        const data = Tine.Tinebase.common.dateRenderer.call(this, $_iso8601, metadata) + ' '
-            + Tine.Tinebase.common.timeRenderer.call(this, $_iso8601, metadata);
+        const dateObj = $_iso8601 instanceof Date ? $_iso8601 : Date.parseDate($_iso8601, Date.patterns.ISO8601Long);
+
+        const data = Tine.Tinebase.common.dateRenderer.call(this, dateObj, metadata) + ' '
+            + Tine.Tinebase.common.timeRenderer.call(this, dateObj, metadata);
         if (metadata) metadata.css = 'tine-gird-cell-datetime';
         return data;
     },
@@ -134,7 +136,11 @@ const common = {
      */
     dateRenderer: function (date, metadata) {
         const format = this?.format ? (this.format?.Date || this.format) : ['wkday', 'medium'];
-        const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
+        const dateObj = date instanceof Date ? date :
+            Ext.form.DateField.prototype.parseDate.call(Object.assign({
+                format: Date.patterns.ISO8601Long
+            }, Ext.form.DateField.prototype), date);
+
         const formatDate = (key) => key === 'wkday'
             ? dateObj.format('l').substr(0, 2)
             : dateFormat(dateObj, Locale.getTranslationData('Date', key));
