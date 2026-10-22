@@ -9,18 +9,18 @@ beforeAll(async () => {
     await lib.makeScreenshot(page,{path: 'screenshots/Inventarisierung/1_inventar_uebersicht.png'});
 });
 
-describe.skip('mainScreen', () => {
+describe('mainScreen', () => {
     test('import', async () => {
-        let newPage =  lib.getNewWindow();
+        const newPagePromise = lib.getNewWindow();
         try {
             await page.waitForTimeout(2000);
             await expect(page).toClick('.t-app-inventory button', {text: 'Einträge importieren', visible: true});
         } catch (e) {
             await page.waitForTimeout(1000);
             await expect(page).toClick('.x-btn-image.x-toolbar-more-icon', {visible: true});
-            await page.click('.x-menu-item-icon action_import', {text: 'Einträge importieren', visible: true});
+            await page.click('.x-menu-item-icon.action_import');
         }
-        newPage = await newPage;
+        const newPage = await newPagePromise;
         await newPage.waitForXPath('//button');
         await lib.makeScreenshot(newPage,{path:'screenshots/Inventarisierung/5_inventar_import.png'});
         await newPage.keyboard.press('Escape')
