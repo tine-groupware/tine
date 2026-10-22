@@ -128,7 +128,6 @@
     "antibodies-online/bootstrap-email": "^1.0",
     "aschmelyun/basic-feeds": "^0.0.2",
     "benmorel/gsm-charset-converter": "^0.2",
-    "clean/phpdoc-md": "^0.19.3",
     "composer/semver": "*",
     "doctrine/dbal": "2.13.3pl2 as 2.13.3",
     "doctrine/orm": "^2",
