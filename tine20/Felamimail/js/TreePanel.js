@@ -506,17 +506,28 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * select inbox of account
      * @param {Record} account
      */
-    selectInbox: function(account) {
+    selectInbox: async function (account) {
         const accountId = (account) ? account.id : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
 
-        this.expandPath('/root/' + accountId + '/', null, function(success, parentNode) {
-            Ext.each(parentNode.childNodes, function(node) {
-                if (Ext.util.Format.lowercase(node.attributes.localname) === 'inbox' && !node.isSelected()) {
-                    node.select();
-                    return false;
+        const parentNode = await new Promise((resolve, reject) => {
+            this.expandPath('/root/' + accountId + '/', null, (success, node) => {
+                if (node) {
+                    resolve(node);
+                } else {
+                    resolve(false);
                 }
-            }, this);
+            });
         });
+
+        const inboxNode = parentNode ? parentNode.childNodes.find(node =>
+            Ext.util.Format.lowercase(node.attributes.localname) === 'inbox'
+        ) : null;
+
+        if (inboxNode && !inboxNode.isSelected()) {
+            inboxNode.select();
+        }
+
+        return inboxNode;
     },
 
     /**

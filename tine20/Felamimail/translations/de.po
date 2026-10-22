@@ -353,9 +353,6 @@ msgstr "Es ist nicht erlaubt, E-Mails an sich selbst weiterzuleiten. Bitte ände
 msgid "Redirects to external email domains are not allowed."
 msgstr "Weiterleitungen zu externen E-Mail-Konten sind nicht erlaubt."
 
-msgid "You have new mail from "
-msgstr "Sie haben eine neue Nachricht von "
-
 msgid "shared / adb_list accounts must have a password"
 msgstr "Gemeinsame Konten benötigen ein Passwort"
 
@@ -689,6 +686,18 @@ msgstr "Empfangsserver-Zugangsdaten (IMAP) für {0}"
 
 msgid "Credentials"
 msgstr "Zugangsdaten"
+
+msgid "Refreshing your inbox... "
+msgstr "Posteingang aktualisieren..."
+
+msgid "Please wait a moment while we refresh your inbox and search for the desired E-Mail."
+msgstr "Bitte warten sie kurz während wir ihre Posteingang aktualisieren und die gewünschte E-Mail suchen."
+
+msgid "The E-Mail was not found."
+msgstr "Die E-Mail wurde nicht gefunden."
+
+msgid "The E-Mail you requested is not in your inbox. It has probably been moved or deleted in the meantime."
+msgstr "Die gewünschte E-Mail ist nicht in ihrem Posteingang. Vermutlich wurde sie in der Zwischenzeit verschoben oder gelöscht."
 
 msgid "Save As"
 msgstr "Speichern als"
@@ -1212,6 +1221,9 @@ msgstr "Blindkopie"
 msgid "Size (in byte)"
 msgstr "Größe (in Byte)"
 
+msgid "Message ID"
+msgstr "Nachrichten ID"
+
 msgid "INBOX"
 msgstr "Posteingang"
 
@@ -1676,9 +1688,6 @@ msgstr "Nachrichten Ablageorte"
 msgid "Message ID Hash"
 msgstr "Nachrichten Hash ID"
 
-msgid "Message ID"
-msgstr "Nachrichten ID"
-
 msgid "Model"
 msgstr "Model"
 
@@ -1795,6 +1804,12 @@ msgstr "Nur interne Absender können E-Mails an diese Adresse senden: %1$s"
 
 msgid "Cannot combine \"allow external\" and \"allow only members\" options"
 msgstr "\"Externe E-Mails weiterleiten\" und \"Nur E-Mails von Gruppenmitgliedern weiterleiten\" können nicht kombiniert werden"
+
+msgid "You have new mail from:"
+msgstr "Sie haben eine neue E-Mail von:"
+
+msgid "You have received a new mail from %1$s"
+msgstr "Sie haben eine neue E-Mail von %1$s erhalten."
 
 msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s."
 msgstr "Hier ist die von Ihnen angeforderte Erinnerung. Leider war es uns nicht möglich, eine Antwort auf die angehängte E-Mail innerhalb der von Ihnen angegebenen Frist zu finden: %1$s."

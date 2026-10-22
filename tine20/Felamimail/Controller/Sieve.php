@@ -808,11 +808,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $this->setNotificationScripts($_accountId, $scriptParts);
             return;
         }
-        
+
         $fileSystem = Tinebase_FileSystem::getInstance();
-        $translate = Tinebase_Translation::getTranslation('Felamimail');
-        $locale = Tinebase_Core::getLocale();
-        $subject = $translate->_('You have new mail from ', $locale);
+
         if (empty($adminBounceEmail = Felamimail_Config::getInstance()->
                 {Felamimail_Config::SIEVE_ADMIN_BOUNCE_NOTIFICATION_EMAIL}) ||
                 !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $adminBounceEmail)) {
@@ -840,7 +838,23 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         if(!($notificationEmailAddress)) {
             $notificationEmailAddress = '';
         }
-        if($notificationEmailAddress !== '' && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $notificationEmailAddress)) {
+
+        $accountId = $_accountId instanceof Felamimail_Model_Account ? $_accountId->getId() : $_accountId;
+        $msgidToken = 'SIEVE_MSGID_TOKEN';
+        $locale = Tinebase_Core::getLocale();
+        $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME));
+        $template = $twig->load(Felamimail_Config::APP_NAME . '/views/emails/notification.html.twig');
+        $context = [
+            'from'  => $notificationEmailAddress,
+            'link'  => Tinebase_Core::getUrl() . "#/Felamimail/MessageGrid/Filter/account_id=$accountId&message_id=$msgidToken"
+        ];
+        $subject = $template->renderBlock('subject', $context);
+        $subject = trim(preg_replace('/\s+/', ' ', $subject));
+        $htmlBody = $template->renderBlock('body', $context);
+        $plainBody = trim(preg_replace("/\n{3,}/", "\n\n", Felamimail_Message::convertContentType(Zend_Mime::TYPE_HTML, Zend_Mime::TYPE_TEXT, $htmlBody)));
+        $encodedBody = str_replace($msgidToken, '${msgidenc}', rawurlencode($plainBody));
+
+        if($notificationEmailAddress && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $notificationEmailAddress)) {
             $notificationEmailAddress = ':from "' . $notificationEmailAddress . '"' . "\n\t\t";
         }
 
@@ -859,8 +873,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $notifyScript = '';
             $redirectScript = '';
             $emails = explode(',', $_email);
-            
+
             foreach ($emails as $email) {
+                $email = trim($email);
                 if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $email)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
@@ -868,7 +883,15 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                     }
                     continue;
                 }
-                $notifyScript .= "\n\t" . 'notify ' . $notificationEmailAddress . ':message "' . $subject. '${from}: ${subject}"' . "\n\t\t" . '"mailto:' . $email .'?body=${message}";' . "\n";
+                $notifyScript .=
+                    "\n\t" . 'set "msgid" "";'
+                    . "\n\t" . 'if header :matches "Message-ID" "*" { set :encodeurl "msgid" "${1}"; }'
+                    . "\n\t" . 'set :encodeurl "msgidenc" "${msgid}";'
+                    . "\n\t" . 'notify ' . $notificationEmailAddress
+                    . ':message "' . $subject . ' ${from}: ${subject}"' . "\n\t\t"
+                    . '"mailto:' . $email
+                    . '?body=' . $encodedBody . '";' . "\n";
+
                 $redirectScript .= "\n\t" . 'redirect :copy "' . $email . '";';
             }
 

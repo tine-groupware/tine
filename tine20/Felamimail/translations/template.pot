@@ -338,9 +338,6 @@ msgstr ""
 msgid "Redirects to external email domains are not allowed."
 msgstr ""
 
-msgid "You have new mail from "
-msgstr ""
-
 msgid "shared / adb_list accounts must have a password"
 msgstr ""
 
@@ -672,6 +669,18 @@ msgid "IMAP Credentials for {0}"
 msgstr ""
 
 msgid "Credentials"
+msgstr ""
+
+msgid "Refreshing your inbox... "
+msgstr ""
+
+msgid "Please wait a moment while we refresh your inbox and search for the desired E-Mail."
+msgstr ""
+
+msgid "The E-Mail was not found."
+msgstr ""
+
+msgid "The E-Mail you requested is not in your inbox. It has probably been moved or deleted in the meantime."
 msgstr ""
 
 msgid "Save As"
@@ -1194,6 +1203,9 @@ msgstr ""
 msgid "Size (in byte)"
 msgstr ""
 
+msgid "Message ID"
+msgstr ""
+
 msgid "INBOX"
 msgstr ""
 
@@ -1658,9 +1670,6 @@ msgstr ""
 msgid "Message ID Hash"
 msgstr ""
 
-msgid "Message ID"
-msgstr ""
-
 msgid "Model"
 msgstr ""
 
@@ -1776,6 +1785,12 @@ msgid "Only internal senders can send emails to this address: %1$s"
 msgstr ""
 
 msgid "Cannot combine \"allow external\" and \"allow only members\" options"
+msgstr ""
+
+msgid "You have new mail from:"
+msgstr ""
+
+msgid "You have received a new mail from %1$s"
 msgstr ""
 
 msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s."

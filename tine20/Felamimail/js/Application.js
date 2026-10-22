@@ -78,7 +78,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     unreadcountInDefaultInbox: 0,
 
     routes: {
-        'MailTo/:params': 'mailto'
+        'MailTo/:params': 'mailto',
+        'MessageGrid(.*)': 'showMessageInGrid',
     },
 
     /**
@@ -89,7 +90,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     getTitle: function() {
         return this.i18n._('Email');
     },
-    
+
     /**
      * start delayed task to init folder store / updateFolderStore
      */
@@ -1085,5 +1086,92 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             Tine.Tinebase.MainScreenPanel.show(this);
             Tine.Felamimail.MessageEditDialog.openWindow(params);
         });
-    }
+    },
+
+    showMessageInGrid: async function(paramString) {
+        const match = /^\/?Filter\/(.+)$/.exec(paramString || '');
+        if (!match) return;
+
+        const params = {};
+        match[1].split('&').forEach((pair) => {
+            const [key, ...rest] = pair.split('=');
+            const value = rest.join('=');
+            try {
+                params[key] = Ext.ux.util.urlCoder.decodeURIComponent(value);
+            } catch (e) {
+                params[key] = value;        // malformed escape (e.g. a bare "%"), use the raw value
+            }
+        });
+
+        const messageId = params.message_id;
+        if (!messageId) return;
+
+        await waitFor(() => !! this.getActiveAccount(), 5000);
+
+        const account = this.getAccountStore().getById(params.account_id) || this.getActiveAccount();
+
+        //@TODO: remove old url from popstate. its ugly!
+        Tine.Tinebase.MainScreenPanel.show(this);
+
+        Ext.MessageBox.wait(
+            this.i18n._('Refreshing your inbox... '),
+            this.i18n._('Please wait a moment while we refresh your inbox and search for the desired E-Mail.'),
+            { estimate: 10000 }
+        );
+
+        const grid = this.getMainScreen().getCenterPanel();
+        const folderStore = this.getFolderStore();
+        const inboxNode = await this.getMainScreen().getTreePanel().selectInbox(account);
+        const inbox = inboxNode && folderStore.getById(inboxNode.attributes.id);
+
+        if (!inbox) {
+            Ext.MessageBox.hide();
+            return;
+        }
+        // update the selected inbox cache and wait until it is complete (max 10s)
+        await new Promise((resolve) => {
+            const timer = setTimeout(done, 10000);
+            function done() {
+                clearTimeout(timer);
+                folderStore.un('update', onUpdate);
+                resolve();
+            }
+            function onUpdate(s, r) {
+                if (r.id === inbox.id && r.get('cache_status') === 'complete') done();
+            }
+            folderStore.on('update', onUpdate);
+            this.checkMails(inbox);
+        });
+
+        const records = await new Promise((resolve) => {
+            grid.store.on('load', function onLoad(s, recs, options) {
+                const filters = _.get(options, 'params.filter[0].filters[0].filters', []);
+                if (!_.find(filters, {field: 'message_id'})) return;   // ignore unrelated loads
+                grid.store.un('load', onLoad);
+                resolve(recs);
+            });
+
+            const ftb = grid.filterToolbar.activeFilterPanel;
+            ftb.setValue([
+                {field: 'message_id', operator: 'contains', value: messageId},
+                {field: 'path', operator: 'in', value: [inbox.get('path')]}
+            ]);
+            ftb.onFiltertrigger();
+        });
+
+        Ext.MessageBox.hide();
+
+        if (!grid.filterToolbar.isVisible()) {
+            grid.filterToolbar.quickFilterPlugin.setDetailsHidden(false);
+        }
+
+        if (records.length) {
+            grid.selectionModel.selectFirstRow();
+        } else {
+            Ext.MessageBox.alert(
+                this.i18n._('The E-Mail was not found.'),
+                this.i18n._('The E-Mail you requested is not in your inbox. It has probably been moved or deleted in the meantime.')
+            );
+        }
+    },
 });
