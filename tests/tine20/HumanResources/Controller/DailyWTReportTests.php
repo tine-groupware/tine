@@ -431,7 +431,7 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(get_class($report), $report->getId(), 'Sql', false);
         // update notes too now, one working time correction, one recalc
         $this->assertCount(5, $notes);
-        $note = $notes->find('seq', 5);
+        $note = $notes->find('seq', 4);
         $this->assertNotNull($note, 'recalc note not found');
         $added = Tinebase_Translation::getTranslation(Tinebase_Config::APP_NAME, Tinebase_Core::getLocale())->_('added');
         $wt = Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME, Tinebase_Core::getLocale())

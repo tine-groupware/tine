@@ -1309,6 +1309,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             static::$_isHydratingFromBackend = true;
         }
         $this->runConvertToRecord();
+        $this->_isDirty = false;
         unset($raii);
     }
 

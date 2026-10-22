@@ -88,13 +88,7 @@ class Tinebase_ApplicationTest extends TestCase
             'order'     => 99,
             'version'   => 1
         )));
-
-        // make the record dirty
-        $application->version = 2;
-        $application->version = 1;
-
         $this->assertTrue($application instanceof Tinebase_Model_Application);
-        
         return $application;
     }
     
