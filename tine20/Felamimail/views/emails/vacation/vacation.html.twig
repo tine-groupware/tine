@@ -1,0 +1,23 @@
+{% extends 'Tinebase/views/emails/base.html.twig' %}
+
+{% block body %}
+    <div class="text-start" style="white-space: pre-wrap;">
+{{ _('I am on vacation from %s until %s.')|format('{{ startDate }}', '{{ endDate }}') }}
+
+{{'{% if representative1 is empty and representative2 is empty %}'}}
+{{ _('Please contact other colleagues.') }}
+{{'{% endif %}'}}
+
+{{'{% if representative1 != \'\' %}'}}
+{{ _('Please contact %s (%s) %s')|format('{{ representative1.n_fn }}', '{{ representative1.email }}', '{{ representative1.tel_work }}') }}
+{{'{% endif %}'}}
+
+{{'{% if representative2 != \'\' %}'}}
+{{ _('or %s (%s) %s instead.')|format('{{ representative2.n_fn }}', '{{ representative2.email }}', '{{ representative2.tel_work }}') }}
+{{'{% endif %}'}}
+
+{{'{% if ownContact.n_fn != \'\' %}'}}
+{{ '{{ ownContact.n_fn }}' }}
+{{'{% endif %}'}}
+    </div>
+{% endblock %}

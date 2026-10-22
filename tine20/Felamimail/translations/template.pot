@@ -1513,6 +1513,12 @@ msgstr ""
 msgid "Incoming mails will be answered with this text:"
 msgstr ""
 
+msgid "Overwrite Custom Template?"
+msgstr ""
+
+msgid "You already have a custom template. Would you like to overwrite it with the new one?"
+msgstr ""
+
 msgid "Status"
 msgstr ""
 
@@ -1520,6 +1526,9 @@ msgid "I am available (vacation message disabled)"
 msgstr ""
 
 msgid "I am not available (vacation message enabled)"
+msgstr ""
+
+msgid "Custom Template"
 msgstr ""
 
 msgid "Start Date"
@@ -1550,6 +1559,9 @@ msgid "Message Template"
 msgstr ""
 
 msgid "Choose Template..."
+msgstr ""
+
+msgid "Loading Vacation Template..."
 msgstr ""
 
 msgid "Signatures"
@@ -1794,6 +1806,24 @@ msgid "You have received a new mail from %1$s"
 msgstr ""
 
 msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s."
+msgstr ""
+
+#, python-format
+msgid "I am on vacation from %s until %s."
+msgstr ""
+
+msgid "Please contact other colleagues."
+msgstr ""
+
+#, python-format
+msgid "Please contact %s (%s) %s"
+msgstr ""
+
+#, python-format
+msgid "or %s (%s) %s instead."
+msgstr ""
+
+msgid "Hello"
 msgstr ""
 
 msgid "Forwarding and forwarded email as .eml in attachment"

@@ -1531,6 +1531,12 @@ msgstr "Nur alle X Tage an denselben Absender oder dieselbe Absenderin schicken"
 msgid "Incoming mails will be answered with this text:"
 msgstr "Eingehende E-Mails werden mit folgendem Text beantwortet:"
 
+msgid "Overwrite Custom Template?"
+msgstr "Benutzerdefinierte Vorlage überschreiben?"
+
+msgid "You already have a custom template. Would you like to overwrite it with the new one?"
+msgstr "Sie verfügen bereits über eine benutzerdefinierte Vorlage. Möchten Sie diese durch die neue Vorlage ersetzen?"
+
 msgid "Status"
 msgstr "Status"
 
@@ -1539,6 +1545,9 @@ msgstr "Ich bin verfügbar (Abwesenheitsnotiz inaktiv)"
 
 msgid "I am not available (vacation message enabled)"
 msgstr "Ich bin nicht verfügbar (Abwesenheitsnotiz aktiv)"
+
+msgid "Custom Template"
+msgstr "Benutzerdefinierte Vorlage"
 
 msgid "Start Date"
 msgstr "Startdatum"
@@ -1569,6 +1578,9 @@ msgstr "Abwesenheitsnotizvorlage"
 
 msgid "Choose Template..."
 msgstr "Abwesenheitsnotizvorlage auswählen..."
+
+msgid "Loading Vacation Template..."
+msgstr ""
 
 msgid "Signatures"
 msgstr "Signaturen"
@@ -1814,6 +1826,24 @@ msgstr "Sie haben eine neue E-Mail von %1$s erhalten."
 msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s."
 msgstr "Hier ist die von Ihnen angeforderte Erinnerung. Leider war es uns nicht möglich, eine Antwort auf die angehängte E-Mail innerhalb der von Ihnen angegebenen Frist zu finden: %1$s."
 
+#, python-format
+msgid "I am on vacation from %s until %s."
+msgstr "Ich bin vom %s bis zum %s im Urlaub."
+
+msgid "Please contact other colleagues."
+msgstr "Bitte kontaktieren Sie andere Kollegen."
+
+#, python-format
+msgid "Please contact %s (%s) %s"
+msgstr "Bitte kontaktieren Sie %s (%s) %s"
+
+#, python-format
+msgid "or %s (%s) %s instead."
+msgstr "oder %s (%s) %s"
+
+msgid "Hello"
+msgstr "Hallo"
+
 msgid "Forwarding and forwarded email as .eml in attachment"
 msgstr "Weiterleitung und weitergeleitete E-Mail als .eml im Anhang"
 
@@ -1823,3 +1853,14 @@ msgstr "Nur weitergeleitete E-Mail als .eml im Anhang"
 msgid "Depending on content format"
 msgstr "Abhängig vom Format"
 
+#~ msgid "I am on vacation from {{ startDate }} until {{ endDate }}."
+#~ msgstr "Ich bin vom {{ startDate }} bis zum {{ endDate }} im Urlaub."
+
+#~ msgid "I am on vacation from %1$s until %2$s."
+#~ msgstr "Ich bin vom %1$s bis zum %2$s im Urlaub."
+
+#~ msgid "Please contact %1$s (%2$s) %3$s"
+#~ msgstr "Bitte kontaktieren Sie %1$s (%2$s) %3$s"
+
+#~ msgid "or %1$s (%2$s) %3$s instead."
+#~ msgstr "oder %1$s (%2$s) %3$s"

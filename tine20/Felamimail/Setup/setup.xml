@@ -977,7 +977,7 @@
         </table>
         <table>
             <name>felamimail_sieve_vacation</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1039,6 +1039,15 @@
                     <type>boolean</type>
                     <default>false</default>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>contact_ids</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>template_id</name>
+                    <type>text</type>
+                    <length>255</length>
                 </field>
                 <index>
                     <name>id</name>

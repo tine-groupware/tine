@@ -95,6 +95,48 @@ class Felamimail_Sieve_Vacation
     protected ?string $_subject = null;
 
     /**
+     * the subject for the vacation message
+     *
+     * @var ?string
+     */
+    protected ?string $_template_id = null;
+
+    /**
+     * email addresses which belong to the recipient
+     *
+     * @var array
+     */
+    protected array $_contact_ids = [];
+
+    /**
+     * vacation accountId
+     *
+     * @var ?string
+     */
+    protected ?string $_account_id = null;
+
+    /**
+     * vacation signature
+     *
+     * @var ?string
+     */
+    protected ?string $_signature = null;
+
+
+    /**
+     * set from
+     *
+     * @param $account_id
+     * @return  Felamimail_Sieve_Vacation
+     */
+    public function setAccountId($account_id)
+    {
+        $this->_account_id = $account_id;
+
+        return $this;
+    }
+
+    /**
      * set from
      *
      * @param   string  $from   the from address
@@ -116,6 +158,19 @@ class Felamimail_Sieve_Vacation
     public function setSubject($subject)
     {
         $this->_subject = $subject;
+
+        return $this;
+    }
+
+    /**
+     * set signature
+     *
+     * @param $signature
+     * @return  Felamimail_Sieve_Vacation
+     */
+    public function setSignature($signature)
+    {
+        $this->_signature = $signature;
 
         return $this;
     }
@@ -165,9 +220,35 @@ class Felamimail_Sieve_Vacation
     }
 
     /**
+     * set contactIds
+     *
+     * @param $contactIds
+     * @return  Felamimail_Sieve_Vacation
+     */
+    public function setContacts($contactIds)
+    {
+        $this->_contact_ids = is_array($contactIds) ? $contactIds : [];
+
+        return $this;
+    }
+
+    /**
+     * set templateId
+     *
+     * @param $templateId
+     * @return  Felamimail_Sieve_Vacation
+     */
+    public function setTemplateId($templateId)
+    {
+        $this->_template_id = $templateId;
+
+        return $this;
+    }
+
+    /**
      * set mime type
      *
-     * @param   string  $reason     the mime type of the message
+     * @param $mime
      * @return  Felamimail_Sieve_Vacation
      */
     public function setMime($mime)
@@ -269,7 +350,7 @@ class Felamimail_Sieve_Vacation
             $subject = null;
         }
 
-        $reason = $this->_reason;
+        $reason = $this->_getReason();
         $plaintextReason = $this->_getPlaintext($reason);
         $formattedHTMLBody = $this->_getFormattedHTMLBody($reason);
 
@@ -355,6 +436,72 @@ class Felamimail_Sieve_Vacation
     }
 
     /**
+     * @return string
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\SyntaxError
+     */
+    protected function _getReason(): string
+    {
+        $locale = Tinebase_Core::getLocale();
+        $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME));
+        $representatives = ($this->_contact_ids) ? Addressbook_Controller_Contact::getInstance()->getMultiple($this->_contact_ids) : array();
+
+        if ($this->_contact_ids && count($representatives) > 0) {
+            // sort and expand representatives
+            $representativesArray = array();
+            foreach ($this->_contact_ids as $id) {
+                if ($contact = $representatives->getById($id)) {
+                    $representativesArray[] = $contact;
+                }
+            }
+        }
+
+        try {
+            if (empty($this->_account_id)) {
+                $this->_account_id = Felamimail_Controller_Account::getInstance()->getSystemAccount();
+            }
+            $account = $this->_account_id instanceof Felamimail_Model_Account ? $this->_account_id :
+                Felamimail_Controller_Account::getInstance()->get($this->_account_id);
+            $ownContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($account->user_id);
+
+            if ($account && empty($this->_signature)) {
+                $default = array_filter($account->signatures->toArray(), function ($signature) {
+                    if ($signature['is_default']) {
+                        return true;
+                    }
+                });
+                if (count($default) > 0) {
+                    $defaultSignature = array_pop($default);
+                    $this->_signature = $defaultSignature['signature'];
+                }
+            }
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+            $ownContact = NULL;
+        }
+
+        $context = array(
+            'ownContact' => $ownContact,
+            'representative1' => $representativesArray[0] ?? '',
+            'representative2' => $representativesArray[1] ?? '',
+            'startDate'     =>  $this->_startdate,
+            'endDate'     =>  $this->_enddate,
+            'signature'   =>  !empty($this->_signature) ? Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes(
+                preg_replace("/\\r|\\n/", '', $this->_signature)) : null
+        );
+
+        $template = $this->_reason ?? '';
+
+        if (!empty($this->_template_id) && $this->_template_id !== 'custom') {
+            $template = $twig->load($this->_template_id, $locale);
+            $template = $template->render($context);
+        }
+
+        $message = $twig->getEnvironment()->createTemplate($template)->render($context);
+        return $message;
+    }
+
+    /**
      * quote string for usage in Sieve script
      *
      * @todo generalize this
@@ -405,7 +552,9 @@ class Felamimail_Sieve_Vacation
             'mime'                  => $this->_mime,
             'start_date'            => $this->_startdate,
             'end_date'              => $this->_enddate,
-            'date_enabled'          => $this->_dateEnabled
+            'date_enabled'          => $this->_dateEnabled,
+            'contact_ids'           => $this->_contact_ids,
+            'template_id'           => $this->_template_id,
         );
     }
 }

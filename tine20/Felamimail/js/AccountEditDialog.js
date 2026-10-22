@@ -1215,25 +1215,19 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * load vacation record
      *
      */
-    loadSieve: function() {
-        if (! this.isSystemAccount()) {
-            return ;
+    loadSieve: async function () {
+        if (!this.isSystemAccount()) {
+            return;
         }
 
         let me = this;
-
         me.vacationRecord = Tine.Tinebase.data.Record.setFromJson(this.record.data?.sieve_vacation, Tine.Felamimail.Model.Vacation);
 
-        // mime type is always multipart/alternative
-        me.vacationRecord.set('mime', 'multipart/alternative');
-        if (me.record && me.record.get('signature')) {
-            me.vacationRecord.set('signature', me.record.get('signature'));
-        }
-
         me.getForm().loadRecord(me.vacationRecord);
+        me.vacationPanel.loadRecord(me.vacationRecord);
 
         me.ruleRecords = this.record.data?.sieve_rules === '' ? [] : this.record.data?.sieve_rules;
-        Ext.each(me.ruleRecords, function(item) {
+        Ext.each(me.ruleRecords, function (item) {
             const record = Tine.Tinebase.data.Record.setFromJson(item, Tine.Felamimail.Model.Rule);
             me.rulesGridPanel.store.addSorted(record);
         });
@@ -1242,7 +1236,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         // load sieve notification emails
         const data = this.record.data.sieve_notification_email.split(',');
-        this.sieveNotifyGrid.setStoreFromArray(data.map((e) => {return {'email': e}}));
+        this.sieveNotifyGrid.setStoreFromArray(data.map((e) => {
+            return {'email': e}
+        }));
     },
 
     /**
@@ -1302,32 +1298,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * update vacation record
      *
      */
-    updateSieve: async function() {
+    updateSieve: function() {
         if (this.record.id && this.vacationRecord && this.vacationPanel) {
-            let form = this.getForm();
-            const contactIds = [];
-
-            form.updateRecord(this.vacationRecord);
-
-            Ext.each(['contact_id1', 'contact_id2'], function (field) {
-                if (form.findField(field) && form.findField(field).getValue() !== '') {
-                    contactIds.push(form.findField(field).getValue());
-                }
-            }, this);
-
-            let template = form.findField('template_id') ? form.findField('template_id').getValue() : '';
-
-            this.vacationRecord.set('contact_ids', contactIds);
-            this.vacationRecord.set('template_id', template);
-
-            if (template !== '') {
-                try {
-                    const response = await Tine.Felamimail.getVacationMessage(this.vacationRecord.data);
-                    this.vacationPanel.reasonEditor.setValue(response?.message);
-                } catch (e) {
-                    Tine.Felamimail.handleRequestException(e);
-                }
-            }
+            this.vacationPanel.onRecordUpdate();
         }
 
         let rules = [];
@@ -1337,7 +1310,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.record.set('sieve_rules', rules);
-        this.record.set('sieve_vacation', this.vacationRecord);
+        this.record.set('sieve_vacation', this.vacationPanel.record);
 
         // update sieve notification emails
         const notifyEmails = this.sieveNotifyGrid.getFromStoreAsArray();

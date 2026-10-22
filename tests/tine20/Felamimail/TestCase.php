@@ -92,13 +92,6 @@ abstract class Felamimail_TestCase extends TestCase
     protected $_testSieveScriptName = NULL;
 
     /**
-     * sieve vacation template file name
-     *
-     * @var string
-     */
-    protected $_sieveVacationTemplateFile = 'vacation_template.tpl';
-
-    /**
      * test email domain
      *
      * @var string
