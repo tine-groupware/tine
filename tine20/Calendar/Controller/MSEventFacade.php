@@ -1356,6 +1356,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $events = $this->search($_filter, _action: $_action);
         $events = $events->filter(fn(Calendar_Model_Event $event) => $event->hasExternalOrganizer() || $event->{$_grant});
 
+        if ($events->count() > 1) {
+            Tinebase_Exception::log(new Tinebase_Exception(__METHOD__ . ' found multiple candidate events'));
+        }
+
         /** @var Calendar_Model_Event $event */
         foreach ($events as $event) {
             if (!$event->hasExternalOrganizer()) {
