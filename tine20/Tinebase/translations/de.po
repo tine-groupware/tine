@@ -4794,14 +4794,14 @@ msgstr "Vorschau"
 msgid "Turn on Dark or Light Mode."
 msgstr "Schalten Sie Dunkler Modus oder Heller Modus ein."
 
-msgid "Main Menu"
-msgstr "Hauptmenü"
+msgid "User settings"
+msgstr "Benutzereinstellungen"
 
 msgid "Search for applications."
 msgstr "Suche nach Applikationen."
 
-msgid "All chosen applications"
-msgstr "Auswahl aller Applikationen"
+msgid "Left sidebar. All chosen applications"
+msgstr "Linke Seitenleiste. Auswahl aller Applikationen"
 
 msgid "Choose from all applications."
 msgstr "Wählen Sie aus allen Applikationen die Benötigten aus."
@@ -4850,6 +4850,27 @@ msgstr "wurde geöffnet"
 
 msgid ". Clicking this button will open the content in a new window."
 msgstr ". Klicken dieses Knopfes öffnet den Inhalt in einem neuen Fenster."
+
+msgid "no entry"
+msgstr "kein Eintrag"
+
+msgid "global functions"
+msgstr "Globale Funktionen"
+
+msgid "modules and filters"
+msgstr "Module und Filter"
+
+msgid "banner"
+msgstr "Kopfzeile"
+
+msgid "action bar"
+msgstr "Aktionsleiste"
+
+msgid "row"
+msgstr "Zeile"
+
+msgid "Main content"
+msgstr "Hauptinhalt"
 
 msgid "is empty. There is no data to be shown."
 msgstr "ist leer. Es können keine Daten angezeigt werden."

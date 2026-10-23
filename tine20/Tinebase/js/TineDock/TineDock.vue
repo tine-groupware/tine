@@ -17,8 +17,8 @@
     @dragstart.stop
   >
     <div class="w-100 h-100 tine-dock" ref="tineDockRef">
-      <div class="docked-app-container" ref="dockContainerRef" tabindex="0" role="navigation"
-           :aria-label="window.i18n._('All chosen applications')">
+      <aside class="docked-app-container" ref="dockContainerRef" tabindex="0" role="navigation"
+           :aria-label="window.i18n._('Left sidebar. All chosen applications')">
         <div
           v-for="(app, idx) in dockedAppsInternal"
           :key="app.name"
@@ -56,7 +56,7 @@
             <span class="dock-item__label">{{getTitle(app.text)}}</span>
           </div>
         </div>
-      </div>
+      </aside>
       <div class="arrow arrow__up" v-if="isOverflowing && !arrivedState.top" @click="y -= 100"/>
       <div class="arrow arrow__down" v-if="isOverflowing && !arrivedState.bottom" @click="y += 100"/>
       <TMenu
