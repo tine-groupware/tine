@@ -25,28 +25,21 @@ class Calendar_Frontend_iMIP
         $_iMIP->getEvents();
 
         // replies are always auto processed
+        // cancellations are always auto processed, only event where own attendee is present will be changed
+        // requests are only auto processed if there is at least one existing event with own attendee present, only existing event instances with own attendee already present will handled (reschedules)
         // counter-replies maybe to be added later
-        if ($_iMIP->method === Calendar_Model_iMIP::METHOD_REPLY) {
-            $this->process($_iMIP, _retry: $_retry);
-            return;
+        switch ((string)$_iMIP->method) {
+            case Calendar_Model_iMIP::METHOD_REQUEST:
+                if (! $this->_hasExistingExternalEventWithOwnAttendee($_iMIP)) {
+                    break;
+                }
+            case Calendar_Model_iMIP::METHOD_REPLY:
+            case Calendar_Model_iMIP::METHOD_CANCEL:
+                $this->process($_iMIP, _retry: $_retry);
         }
-
-        // requests are auto processed if they refer to an existing external event
-        // (e.g. the organizer rescheduled an accepted invitation) - the attendance
-        // status is not changed, so the user has to review the update
-        if ($_iMIP->method !== Calendar_Model_iMIP::METHOD_REQUEST || ! $this->_hasExistingExternalEvent($_iMIP)) {
-            return;
-        }
-
-        $this->process($_iMIP, _retry: $_retry);
     }
 
-    /**
-     * checks if the iMIP requests refer to an existing event with an external organizer
-     *
-     * @return boolean
-     */
-    protected function _hasExistingExternalEvent(Calendar_Model_iMIP $_iMIP): bool
+    protected function _hasExistingExternalEventWithOwnAttendee(Calendar_Model_iMIP $_iMIP): bool
     {
         foreach ($_iMIP->getEvents() as $event) {
             $existingEvent = $_iMIP->getExistingEvent($event);
@@ -92,6 +85,7 @@ class Calendar_Frontend_iMIP
             });
         }
 
+        $aggregatedException = null;
         $_iMIP->event = null;
         /** @var Calendar_Model_Event $imipEvent */
         foreach ($_iMIP->getEvents() as $imipEvent) {
@@ -111,16 +105,28 @@ class Calendar_Frontend_iMIP
                     continue;
                 }
                 try {
-                    $this->_process($_iMIP, $event, $_status);
-                } catch (Zend_Db_Statement_Exception $zdbse) {
-                    if ($_retry && strpos($zdbse->getMessage(), 'Deadlock') !== false) {
+                    try {
                         $this->_process($_iMIP, $event, $_status);
+                    } catch (Zend_Db_Statement_Exception $zdbse) {
+                        if ($_retry && strpos($zdbse->getMessage(), 'Deadlock') !== false) {
+                            $this->_process($_iMIP, $event, $_status);
+                        } else {
+                            throw $zdbse;
+                        }
+                    }
+                } catch (Calendar_Exception_iMIP $e) {
+                    if (null === $aggregatedException) {
+                        $aggregatedException = $e;
                     } else {
-                        throw $zdbse;
+                        $aggregatedException = new Calendar_Exception_iMIP($aggregatedException->getMessage() . ' ' . $e->getMessage());
                     }
                 }
             }
             $imipEvent->exdate = $exdates;
+        }
+
+        if (null !== $aggregatedException) {
+            throw $aggregatedException;
         }
 
         $_iMIP->existing_events = null;

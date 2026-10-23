@@ -1384,7 +1384,7 @@ CREATED:20240613T160230Z', $iMIP->ics);
      * A recurring invitation from an external organizer whose email address is
      * also listed on the current user's contact must still be processed as an
      * external invitation.
-     */
+     *
     public function testRecurringRequestFromOrganizerWithOwnContactEmail(): void
     {
         // add email address 'X' to the current user's contact
@@ -1444,7 +1444,7 @@ CREATED:20240613T160230Z', $iMIP->ics);
      * listed on a contact in another user's personal addressbook (which the
      * importer has no access to) must still be processed as an external
      * invitation without resolving the organizer to that inaccessible contact.
-     */
+     *
     public function testRecurringRequestFromOrganizerWithEmailInOtherUsersAddressbook(): void
     {
         $organizerEmail = 'external.organizer@example.org';
@@ -1518,7 +1518,7 @@ CREATED:20240613T160230Z', $iMIP->ics);
         $ownAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
         $this->assertNotNull($ownAttender, 'own attender missing');
         $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION, $ownAttender->status);
-    }
+    } */
 
     /**
      * external organizer moves a single event of an accepted recurring series by one hour.
@@ -1622,6 +1622,145 @@ CREATED:20240613T160230Z', $iMIP->ics);
         $this->assertNotNull($exceptionOwnAttender, 'own attender missing on event exception');
         $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION, $exceptionOwnAttender->status,
             'attendance status of the moved event must be NEEDS-ACTION, not ACCEPTED');
+    }
+
+    /**
+     * external organizer cancels the whole series of a recurring invitation that has one exception.
+     * the cancelation iMIP contains the base event and the exception.
+     * we only auto process the cancelation:
+     *  - the base event and the exception must be canceled
+     */
+    public function testAutoProcessCancelWithRecurExceptionFromExternalOrganizer(): void
+    {
+        $organizerEmail = 'external.organizer@example.org';
+        $uid = Tinebase_Record_Abstract::generateUID();
+        $getAttendees = function() {
+            return new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
+                'user_email' => Tinebase_Core::getUser()->accountEmailAddress,
+                'user_type'  => Calendar_Model_Attender::USERTYPE_EMAIL,
+                'role'       => Calendar_Model_Attender::ROLE_REQUIRED,
+            ]]);
+        };
+
+        // iMIP: a recurring event with one exception from an external organizer
+        $dtstart = Tinebase_DateTime::now()->setTime(10, 0);
+        $exceptionRecurid = $dtstart->getClone()->addDay(1);
+        $baseEvent = new Calendar_Model_Event([
+            'summary'               => 'Recurring external event',
+            'dtstart'               => $dtstart->getClone(),
+            'dtend'                 => $dtstart->getClone()->addHour(1),
+            'creation_time'         => Tinebase_DateTime::now(),
+            'rrule'                 => 'FREQ=DAILY;INTERVAL=1;COUNT=3',
+            'uid'                   => $uid,
+            'external_seq'          => 1,
+            'organizer_email'       => $organizerEmail,
+            'organizer_type'        => Calendar_Model_Event::ORGANIZER_TYPE_EMAIL,
+            'organizer_displayname' => 'External Organizer',
+            'attendee'              => $getAttendees(),
+        ]);
+        $exceptionEvent = new Calendar_Model_Event([
+            'summary'               => 'Recurring external event',
+            'dtstart'               => $exceptionRecurid->getClone()->addHour(1),
+            'dtend'                 => $exceptionRecurid->getClone()->addHour(2),
+            'creation_time'         => Tinebase_DateTime::now(),
+            'recurid'               => $exceptionRecurid,
+            'uid'                   => $uid,
+            'external_seq'          => 1,
+            'organizer_email'       => $organizerEmail,
+            'organizer_type'        => Calendar_Model_Event::ORGANIZER_TYPE_EMAIL,
+            'organizer_displayname' => 'External Organizer',
+            'attendee'              => $getAttendees(),
+        ]);
+        $ics = (new Calendar_Convert_Event_VCalendar_Generic())->fromTine20RecordSet(
+            new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$baseEvent, $exceptionEvent], true, false)
+        )->serialize();
+
+        $iMIP = new Calendar_Model_iMIP([
+            'id'         => Tinebase_Record_Abstract::generateUID(),
+            'ics'        => $ics,
+            'method'     => Calendar_Model_iMIP::METHOD_REQUEST,
+            'originator' => $organizerEmail,
+        ]);
+
+        // we process the invitation
+        $this->_iMIPFrontend->process($iMIP);
+
+        $this->assertEmpty($iMIP->preconditions, 'no preconditions should be raised');
+
+        $invitation = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'equals',
+                'value' => Calendar_Controller::getInstance()->getInvitationContainer(null, $organizerEmail)->getId()],
+            ['field' => 'uid', 'operator' => 'equals', 'value' => $uid],
+            ['field' => 'recurid', 'operator' => 'isnull', 'value' => null],
+        ]))->getFirstRecord();
+        $this->assertNotNull($invitation, 'base event must have been created');
+        $this->assertNotEmpty($invitation->rrule, 'base event must be recurring');
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($invitation->attendee);
+        $this->assertNotNull($ownAttender, 'own attender missing on base event');
+        $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION, $ownAttender->status,
+            'attendance status of the base event must be NEEDS-ACTION');
+
+        $localException = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'base_event_id', 'operator' => 'equals', 'value' => $invitation->getId()],
+        ]))->getFirstRecord();
+        $this->assertNotNull($localException, 'event exception must have been created');
+        $exceptionOwnAttender = Calendar_Model_Attender::getOwnAttender($localException->attendee);
+        $this->assertNotNull($exceptionOwnAttender, 'own attender missing on event exception');
+        $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION, $exceptionOwnAttender->status,
+            'attendance status of the event exception must be NEEDS-ACTION');
+
+        // iMIP: the external organizer cancels the whole series,
+        // the cancelation contains the base event and the exception
+        $cancelBaseEvent = new Calendar_Model_Event([
+            'summary'               => 'Recurring external event',
+            'dtstart'               => $dtstart->getClone(),
+            'dtend'                 => $dtstart->getClone()->addHour(1),
+            'creation_time'         => Tinebase_DateTime::now(),
+            'rrule'                 => 'FREQ=DAILY;INTERVAL=1;COUNT=3',
+            'uid'                   => $uid,
+            'external_seq'          => 2,
+            'status'                => Calendar_Model_Event::STATUS_CANCELED,
+            'organizer_email'       => $organizerEmail,
+            'organizer_type'        => Calendar_Model_Event::ORGANIZER_TYPE_EMAIL,
+            'organizer_displayname' => 'External Organizer',
+            'attendee'              => $getAttendees(),
+        ]);
+        $cancelExceptionEvent = new Calendar_Model_Event([
+            'summary'               => 'Recurring external event',
+            'dtstart'               => $exceptionRecurid->getClone()->addHour(1),
+            'dtend'                 => $exceptionRecurid->getClone()->addHour(2),
+            'creation_time'         => Tinebase_DateTime::now(),
+            'recurid'               => $exceptionRecurid,
+            'uid'                   => $uid,
+            'external_seq'          => 2,
+            'status'                => Calendar_Model_Event::STATUS_CANCELED,
+            'organizer_email'       => $organizerEmail,
+            'organizer_type'        => Calendar_Model_Event::ORGANIZER_TYPE_EMAIL,
+            'organizer_displayname' => 'External Organizer',
+            'attendee'              => $getAttendees(),
+        ]);
+        $ics = (new Calendar_Convert_Event_VCalendar_Generic())->fromTine20RecordSet(
+            new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$cancelBaseEvent, $cancelExceptionEvent], true, false)
+        )->serialize();
+
+        $iMIP = new Calendar_Model_iMIP([
+            'id'         => Tinebase_Record_Abstract::generateUID(),
+            'ics'        => $ics,
+            'method'     => Calendar_Model_iMIP::METHOD_CANCEL,
+            'originator' => $organizerEmail,
+        ]);
+
+        // we only auto process the cancelation
+        $this->_iMIPFrontend->autoProcess($iMIP);
+
+        $this->assertEmpty($iMIP->preconditions, 'no preconditions should be raised');
+
+        $canceledInvitation = Calendar_Controller_Event::getInstance()->get($invitation->getId());
+        $this->assertSame(Calendar_Model_Event::STATUS_CANCELED, $canceledInvitation->status,
+            'base event must be canceled');
+        $canceledException = Calendar_Controller_Event::getInstance()->get($localException->getId());
+        $this->assertSame(Calendar_Model_Event::STATUS_CANCELED, $canceledException->status,
+            'event exception must be canceled');
     }
 
     /**
