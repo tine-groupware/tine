@@ -1521,6 +1521,110 @@ CREATED:20240613T160230Z', $iMIP->ics);
     }
 
     /**
+     * external organizer moves a single event of an accepted recurring series by one hour.
+     * we only auto process the update, we do not accept it yet:
+     *  - a local event exception must have been created
+     *  - our attendance status for the moved event must be NEEDS-ACTION instead of ACCEPTED
+     */
+    public function testAutoProcessRequestWithRecurExceptionFromExternalOrganizer(): void
+    {
+        $organizerEmail = 'external.organizer@example.org';
+        $uid = Tinebase_Record_Abstract::generateUID();
+
+        // iMIP: a recurring event from an external organizer, the current user is invited
+        $event = new Calendar_Model_Event([
+            'summary'               => 'Recurring external event',
+            'dtstart'               => Tinebase_DateTime::now()->setTime(10, 0),
+            'dtend'                 => Tinebase_DateTime::now()->setTime(11, 0),
+            'creation_time'         => Tinebase_DateTime::now(),
+            'rrule'                 => 'FREQ=DAILY;INTERVAL=1;COUNT=3',
+            'uid'                   => $uid,
+            'external_seq'          => 1,
+            'organizer_email'       => $organizerEmail,
+            'organizer_type'        => Calendar_Model_Event::ORGANIZER_TYPE_EMAIL,
+            'organizer_displayname' => 'External Organizer',
+            'attendee'              => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
+                'user_email' => Tinebase_Core::getUser()->accountEmailAddress,
+                'user_type'  => Calendar_Model_Attender::USERTYPE_EMAIL,
+                'role'       => Calendar_Model_Attender::ROLE_REQUIRED,
+            ]]),
+        ]);
+        $ics = (new Calendar_Convert_Event_VCalendar_Generic())->fromTine20Model($event)->serialize();
+
+        $iMIP = new Calendar_Model_iMIP([
+            'id'         => Tinebase_Record_Abstract::generateUID(),
+            'ics'        => $ics,
+            'method'     => Calendar_Model_iMIP::METHOD_REQUEST,
+            'originator' => $organizerEmail,
+        ]);
+
+        // we process and accept the invitation
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $this->assertEmpty($iMIP->preconditions, 'no preconditions should be raised');
+        $invitation = Calendar_Controller_Event::getInstance()->get($iMIP->getEvents()->getFirstRecord()->getId());
+        $this->assertNotEmpty($invitation->rrule, 'event must be recurring');
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($invitation->attendee);
+        $this->assertNotNull($ownAttender, 'own attender missing');
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status,
+            'invitation must be accepted');
+
+        // the external organizer moves the second occurrence of the series by one hour
+        $originalDtstart = $invitation->dtstart->getClone()->addDay(1);
+        $exceptionEvent = new Calendar_Model_Event([
+            'summary'               => 'Recurring external event',
+            'dtstart'               => $originalDtstart->getClone()->addHour(1),
+            'dtend'                 => $originalDtstart->getClone()->addHour(2),
+            'creation_time'         => Tinebase_DateTime::now(),
+            'recurid'               => $originalDtstart,
+            'uid'                   => $uid,
+            'external_seq'          => 2,
+            'organizer_email'       => $organizerEmail,
+            'organizer_type'        => Calendar_Model_Event::ORGANIZER_TYPE_EMAIL,
+            'organizer_displayname' => 'External Organizer',
+            'attendee'              => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
+                'user_email' => Tinebase_Core::getUser()->accountEmailAddress,
+                'user_type'  => Calendar_Model_Attender::USERTYPE_EMAIL,
+                'role'       => Calendar_Model_Attender::ROLE_REQUIRED,
+            ]]),
+        ]);
+        $ics = (new Calendar_Convert_Event_VCalendar_Generic())->fromTine20Model($exceptionEvent)->serialize();
+
+        $iMIP = new Calendar_Model_iMIP([
+            'id'         => Tinebase_Record_Abstract::generateUID(),
+            'ics'        => $ics,
+            'method'     => Calendar_Model_iMIP::METHOD_REQUEST,
+            'originator' => $organizerEmail,
+        ]);
+
+        // we only auto process the update, we do not accept it yet
+        $this->_iMIPFrontend->autoProcess($iMIP);
+
+        $this->assertEmpty($iMIP->preconditions, 'no preconditions should be raised');
+
+        // a local event exception for the moved occurrence must have been created
+        $exceptions = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'uid', 'operator' => 'equals', 'value' => $uid],
+            ['field' => 'base_event_id', 'operator' => 'equals', 'value' => $invitation->getId()],
+        ]));
+        $this->assertCount(1, $exceptions, 'a local event exception must have been created');
+
+        $localException = Calendar_Controller_Event::getInstance()->get($exceptions->getFirstRecord()->getId());
+        $this->assertTrue($localException->isRecurException(), 'local event must be an event exception');
+        $expectedDtstart = $invitation->dtstart->getClone()->addDay(1)->addHour(1);
+        $this->assertTrue($localException->dtstart->equals($expectedDtstart),
+            'event exception must be moved by one hour');
+        $this->assertSame(Calendar_Controller::getInstance()->getInvitationContainer(null, $organizerEmail)->getId(),
+            $localException->container_id, 'event exception must be in the invitation container');
+
+        // our attendance status for the moved event must be NEEDS-ACTION, not ACCEPTED
+        $exceptionOwnAttender = Calendar_Model_Attender::getOwnAttender($localException->attendee);
+        $this->assertNotNull($exceptionOwnAttender, 'own attender missing on event exception');
+        $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION, $exceptionOwnAttender->status,
+            'attendance status of the moved event must be NEEDS-ACTION, not ACCEPTED');
+    }
+
+    /**
      * testInvitationExternalReply
      */
     public function testInvitationExternalReply()

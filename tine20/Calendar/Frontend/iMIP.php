@@ -24,11 +24,48 @@ class Calendar_Frontend_iMIP
         // to fill method
         $_iMIP->getEvents();
 
-        // replies
+        // replies are always auto processed
         // counter-replies maybe to be added later
-        if ($_iMIP->method !== Calendar_Model_iMIP::METHOD_REPLY) return;
+        if ($_iMIP->method === Calendar_Model_iMIP::METHOD_REPLY) {
+            $this->process($_iMIP, _retry: $_retry);
+            return;
+        }
+
+        // requests are auto processed if they refer to an existing external event
+        // (e.g. the organizer rescheduled an accepted invitation) - the attendance
+        // status is not changed, so the user has to review the update
+        if ($_iMIP->method !== Calendar_Model_iMIP::METHOD_REQUEST || ! $this->_hasExistingExternalEvent($_iMIP)) {
+            return;
+        }
 
         $this->process($_iMIP, _retry: $_retry);
+    }
+
+    /**
+     * checks if the iMIP requests refer to an existing event with an external organizer
+     *
+     * @return boolean
+     */
+    protected function _hasExistingExternalEvent(Calendar_Model_iMIP $_iMIP): bool
+    {
+        foreach ($_iMIP->getEvents() as $event) {
+            $existingEvent = $_iMIP->getExistingEvent($event);
+            if (null === $existingEvent && $event->isRecurException()) {
+                // a new exception of an existing series
+                $baseEvent = clone $event;
+                $baseEvent->recurid = null;
+                $existingEvent = $_iMIP->getExistingEvent($baseEvent);
+            }
+            if (null === $existingEvent || ! $existingEvent->hasExternalOrganizer()) {
+                continue;
+            }
+            // only auto process updates to events we already attend, not new invitations
+            // (or events we were just added to) - those need manual processing
+            if (null !== Calendar_Model_Attender::getOwnAttender($existingEvent->attendee)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
