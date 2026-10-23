@@ -1440,6 +1440,87 @@ CREATED:20240613T160230Z', $iMIP->ics);
     }
 
     /**
+     * A recurring invitation from an external organizer whose email address is
+     * listed on a contact in another user's personal addressbook (which the
+     * importer has no access to) must still be processed as an external
+     * invitation without resolving the organizer to that inaccessible contact.
+     */
+    public function testRecurringRequestFromOrganizerWithEmailInOtherUsersAddressbook(): void
+    {
+        $organizerEmail = 'external.organizer@example.org';
+
+        // add email address 'X' to a contact in sclever's personal addressbook
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        Calendar_Controller_MSEventFacade::unsetInstance();
+        $personalAdressbook = Tinebase_Container::getInstance()->getPersonalContainer($this->_personas['sclever'],
+            Addressbook_Model_Contact::class, $this->_personas['sclever'])->getFirstRecord();
+        $hiddenContact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'container_id' => $personalAdressbook->getId(),
+            'email'        => $organizerEmail,
+        ]), true);
+
+        // process the iMIP as pwulf, who has no access to sclever's personal addressbook
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        Calendar_Controller_MSEventFacade::unsetInstance();
+        Calendar_Controller_Event::unsetInstance();
+
+        try {
+            Addressbook_Controller_Contact::getInstance()->get($hiddenContact->getId());
+            $this->fail('importer must not have access to the contact in the other users personal addressbook');
+        } catch (Tinebase_Exception_AccessDenied $e) {
+        }
+
+        // iMIP: a simple recurring event with an external organizer using email
+        // 'X' and the current user's contact email address as attendee
+        $event = new Calendar_Model_Event([
+            'summary'               => 'Recurring external event',
+            'dtstart'               => Tinebase_DateTime::now()->setTime(10, 0),
+            'dtend'                 => Tinebase_DateTime::now()->setTime(11, 0),
+            'creation_time'         => Tinebase_DateTime::now(),
+            'rrule'                 => 'FREQ=DAILY;INTERVAL=1;COUNT=3',
+            'uid'                   => Tinebase_Record_Abstract::generateUID(),
+            'organizer_email'       => $organizerEmail,
+            'organizer_type'        => Calendar_Model_Event::ORGANIZER_TYPE_EMAIL,
+            'organizer_displayname' => 'External Organizer',
+            'attendee'              => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
+                'user_email' => Tinebase_Core::getUser()->accountEmailAddress,
+                'user_type'  => Calendar_Model_Attender::USERTYPE_EMAIL,
+                'role'       => Calendar_Model_Attender::ROLE_REQUIRED,
+            ]]),
+        ]);
+        $ics = (new Calendar_Convert_Event_VCalendar_Generic())->fromTine20Model($event)->serialize();
+
+        $iMIP = new Calendar_Model_iMIP([
+            'id'         => Tinebase_Record_Abstract::generateUID(),
+            'ics'        => $ics,
+            'method'     => Calendar_Model_iMIP::METHOD_REQUEST,
+            'originator' => $organizerEmail,
+        ]);
+
+        $this->_iMIPFrontend->process($iMIP);
+
+        $this->assertEmpty($iMIP->preconditions, 'no preconditions should be raised');
+
+        $imipEvent = $iMIP->getEvents()->getFirstRecord();
+        $this->assertNotEmpty($imipEvent->rrule, 'event must be recurring');
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($imipEvent->getId());
+        $createdOrganizerId = $createdEvent->organizer instanceof Tinebase_Record_Interface
+            ? $createdEvent->organizer->getId()
+            : $createdEvent->organizer;
+        $this->assertSame($organizerEmail, $createdEvent->organizer_email);
+        $this->assertNotSame($hiddenContact->getId(), $createdOrganizerId,
+            'organizer must not be resolved to a contact the importer has no access to');
+        $this->assertTrue($createdEvent->hasExternalOrganizer(), 'organizer must be treated as external');
+        $this->assertSame(Calendar_Controller::getInstance()->getInvitationContainer(null, $organizerEmail)->getId(),
+            $createdEvent->container_id);
+
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        $this->assertNotNull($ownAttender, 'own attender missing');
+        $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION, $ownAttender->status);
+    }
+
+    /**
      * testInvitationExternalReply
      */
     public function testInvitationExternalReply()
