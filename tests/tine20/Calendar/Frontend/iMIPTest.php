@@ -1381,6 +1381,65 @@ CREATED:20240613T160230Z', $iMIP->ics);
     }
 
     /**
+     * A recurring invitation from an external organizer whose email address is
+     * also listed on the current user's contact must still be processed as an
+     * external invitation.
+     */
+    public function testRecurringRequestFromOrganizerWithOwnContactEmail(): void
+    {
+        // add email address 'X' to the current user's contact
+        $organizerEmail = 'external.organizer@example.org';
+        $contact = Addressbook_Controller_Contact::getInstance()->get(Tinebase_Core::getUser()->contact_id);
+        $contact->email_home = $organizerEmail;
+        $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
+        $this->assertSame($organizerEmail, $contact->email_home);
+
+        // iMIP: a simple recurring event with an external organizer using email
+        // 'X' and the current user's contact email address as attendee
+        $event = new Calendar_Model_Event([
+            'summary'               => 'Recurring external event',
+            'dtstart'               => Tinebase_DateTime::now()->setTime(10, 0),
+            'dtend'                 => Tinebase_DateTime::now()->setTime(11, 0),
+            'creation_time'         => Tinebase_DateTime::now(),
+            'rrule'                 => 'FREQ=DAILY;INTERVAL=1;COUNT=3',
+            'uid'                   => Tinebase_Record_Abstract::generateUID(),
+            'organizer_email'       => $organizerEmail,
+            'organizer_type'        => Calendar_Model_Event::ORGANIZER_TYPE_EMAIL,
+            'organizer_displayname' => 'External Organizer',
+            'attendee'              => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
+                'user_email' => Tinebase_Core::getUser()->accountEmailAddress,
+                'user_type'  => Calendar_Model_Attender::USERTYPE_EMAIL,
+                'role'       => Calendar_Model_Attender::ROLE_REQUIRED,
+            ]]),
+        ]);
+        $ics = (new Calendar_Convert_Event_VCalendar_Generic())->fromTine20Model($event)->serialize();
+
+        $iMIP = new Calendar_Model_iMIP([
+            'id'         => Tinebase_Record_Abstract::generateUID(),
+            'ics'        => $ics,
+            'method'     => Calendar_Model_iMIP::METHOD_REQUEST,
+            'originator' => $organizerEmail,
+        ]);
+
+        $this->_iMIPFrontend->process($iMIP);
+
+        $this->assertEmpty($iMIP->preconditions, 'no preconditions should be raised');
+
+        $imipEvent = $iMIP->getEvents()->getFirstRecord();
+        $this->assertNotEmpty($imipEvent->rrule, 'event must be recurring');
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->get($imipEvent->getId());
+        $this->assertSame($organizerEmail, $createdEvent->organizer_email);
+        $this->assertTrue($createdEvent->hasExternalOrganizer(), 'organizer must be treated as external');
+        $this->assertSame(Calendar_Controller::getInstance()->getInvitationContainer(null, $organizerEmail)->getId(),
+            $createdEvent->container_id);
+
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($createdEvent->attendee);
+        $this->assertNotNull($ownAttender, 'own attender missing');
+        $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION, $ownAttender->status);
+    }
+
+    /**
      * testInvitationExternalReply
      */
     public function testInvitationExternalReply()
