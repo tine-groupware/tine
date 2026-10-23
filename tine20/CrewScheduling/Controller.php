@@ -111,9 +111,6 @@ class CrewScheduling_Controller extends Tinebase_Controller_Event implements
             'CrewScheduling/js/pollClient/src/index.es6.js'
         ];
 
-        $path = Tinebase_Core::get(Tinebase_Core::REQUEST)->getRequestUri();
-        Tinebase_Expressive_Middleware_CheckRouteAuth::loginFor($path);
-
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, CrewScheduling_Config::APP_NAME, context: [
             'initialData' => [
                 'pollId' => $pollId,
