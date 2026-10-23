@@ -1037,6 +1037,10 @@ $localized-badge-height: 18px;
 
 .tinebase-download-link b {
     color: black;
+    padding-left: 14px;
+    background-image:url(../../images/icon-set/icon_paperclip.svg);
+    background-repeat: no-repeat;
+    background-position: left center;
 }
 
 span:hover.tinebase-download-link {
