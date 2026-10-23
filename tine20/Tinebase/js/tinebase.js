@@ -439,3 +439,39 @@ module.exports = {
     vue: vue,
     mitt: mitt
 };
+
+// checks if user uses keyboard or mouse
+(function() {
+    const html = document.documentElement;
+    const synchronizedFocus = function() {
+        if (sessionStorage.getItem('focus-mode') === 'keyboard') {
+            html.classList.add('user-on-keyboard');
+        } else {
+            html.classList.remove('user-on-keyboard');
+        }
+    };
+    synchronizedFocus();
+
+    window.addEventListener('keydown', function(e) {
+        if (!['Control', 'Alt', 'Shift', 'Meta'].includes(e.key)) {
+            //for now: no focus when enter on login
+            if (e.target && (
+                e.target.name === 'username' ||
+                e.target.name === 'password' ||
+                window.location.href.includes('login')
+            )) {
+                return;
+            }
+            sessionStorage.setItem('focus-mode', 'keyboard');
+            synchronizedFocus();
+        }
+    }, true);
+
+    window.addEventListener('mousedown', function() {
+        sessionStorage.setItem('focus-mode', 'mouse');
+        synchronizedFocus();
+    }, true);
+
+    window.addEventListener('storage', synchronizedFocus);
+})();
+

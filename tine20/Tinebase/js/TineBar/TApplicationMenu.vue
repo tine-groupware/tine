@@ -18,6 +18,7 @@
   >
     <div class="tine-application-menu"
          :class="{ 'is-mouse': mouseClicked }"
+         @keydown.up.down.left.right.stop.prevent="moveFocusAround($event)"
     >
       <div class="container">
         <BFormInput :aria-label="window.i18n._('Search for applications.')" tabindex="0" class="mb-3 mt-2" v-model="searchTerm" ref="searchField" autocomplete="off"/>
@@ -150,19 +151,25 @@ const moveFocusAround = (e) => {
 
     nextTick(() => {
       const el = appRefs.value[targetIdx]
-      if (el) el.focus()
+      if (el) el.focus?.() || el.$el?.focus?.()
     })
   }
 
   switch (e.key) {
     case 'ArrowLeft':
-      moveFocusToIdx(appInFocus.value - 1)
+      if (appInFocus.value % 3 > 0) {
+        moveFocusToIdx(appInFocus.value - 1)
+      }
       break
     case 'ArrowRight':
-      moveFocusToIdx(appInFocus.value + 1)
+      if (appInFocus.value % 3 < 2) {
+        moveFocusToIdx(appInFocus.value + 1)
+      }
       break
     case 'ArrowUp':
-      moveFocusToIdx(appInFocus.value - 3)
+      if (appInFocus.value >= 3) {
+        moveFocusToIdx(appInFocus.value - 3)
+      }
       break
     case 'ArrowDown':
       moveFocusToIdx(appInFocus.value + 3)

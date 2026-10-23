@@ -141,6 +141,78 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
             cls: 'attendance-recorder',
             width: 300,
             height: 450,
+                listeners: {
+                    show(menu) {
+                        menu._currentIdx = 0;
+
+                        if (menu && menu.el) {
+                            menu.el.dom.setAttribute('role', 'menu');
+                        }
+
+                        menu._globalWindowNav = (e) => {
+                            if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+
+                            e.preventDefault();
+                            e.stopPropagation();
+                            e.stopImmediatePropagation();
+
+                            const buttons = menu.el?.query('button');
+                            if (!buttons?.length) return;
+
+                            let dir = 0;
+                            switch(e.key){
+                                case 'ArrowRight': dir = 1; break;
+                                case 'ArrowLeft':  dir = -1; break;
+                                case 'ArrowDown':  dir = 3; break;
+                                case 'ArrowUp':    dir = -3; break;
+                            }
+
+                            menu._currentIdx = (menu._currentIdx + dir + buttons.length) % buttons.length;
+
+                            buttons.forEach((btn, idx) => {
+                                if (idx === menu._currentIdx) {
+                                    btn.setAttribute('tabindex', '0');
+                                    setTimeout(() => {
+                                        btn.focus();
+                                    }, 10);
+                                } else {
+                                    btn.setAttribute('tabindex', '-1');
+                                }
+                            });
+                        };
+
+                        window.addEventListener('keydown', menu._globalWindowNav, true);
+
+                        if (menu && menu.el) {
+                            const allFocusables = menu.el.query('button, [tabindex], .x-component');
+                            if (allFocusables) {
+                                allFocusables.forEach(el => {
+                                    el.setAttribute('tabindex', '-1');
+                                });
+                            }
+
+                            const buttons = menu.el.query('button');
+                            if (buttons && buttons.length > 0) {
+                                buttons.forEach((btn, idx) => {
+                                    btn.setAttribute('tabindex', idx === 0 ? '0' : '-1');
+                                    btn.setAttribute('role', 'menuitem');
+                                });
+
+                                if (menu.focusEl) {
+                                    menu.focus();
+                                }
+                                buttons[0].focus();
+                            }
+                        }
+                    },
+
+                    hide: function(menu) {
+                        if (menu._globalWindowNav) {
+                            window.removeEventListener('keydown', menu._globalWindowNav, true);
+                            delete menu._globalWindowNav;
+                        }
+                    }
+                },
             items: new Ext.Container({
                 layout: 'vbox',
                 layoutConfig: {
