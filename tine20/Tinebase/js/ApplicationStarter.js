@@ -211,6 +211,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
         }
         const filterOptions = _.get(fieldconfig, 'config.filterOptions', {});
         Object.assign(filterconfig, _.get(fieldconfig, 'uiconfig.filterOptions', {}));
+        Object.assign(filterconfig, filterconfig.jsConfig); // filterconfig from modelConfig->filterModel
 
         const appName = modelConfig.appName;
         const modelName = modelConfig.modelName;
@@ -237,14 +238,15 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation')));
 
         if (
-            ! label ||
+            !filterconfig.filtertype && (! label ||
             _.get(fieldconfig, 'disabled') ||
             _.get(fieldconfig, 'uiconfig.disabled') ||
             _.get(filterOptions, 'disabled') ||
-            _.get(filterconfig, 'disabled')
+            _.get(filterconfig, 'disabled'))
         ) {
             return null;
         }
+
         // prepare filter
         var filter = {
             label,
@@ -261,10 +263,10 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             }
             // if js filter is defined in filterconfig.options, take this and return
             if (filterconfig.hasOwnProperty('jsConfig')) {
-                Ext.apply(filter, filterconfig.jsConfig);
+                Object.assign(filter, filterconfig);
                 return filter;
-            } 
-            
+            }
+
             try {
                 filter = this.filterMap(fieldTypeKey, fieldconfig, filter, filterconfig, appName, modelName, modelConfig);
             } catch (e) {
@@ -397,7 +399,6 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                         }, this);
                     }
 
-
                     // create recordProxy
                     var recordProxyName = modelName.toLowerCase() + 'Backend';
                     if (! Tine[appName].hasOwnProperty(recordProxyName)) {
@@ -496,12 +497,14 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                             recordClass: Tine[appName].Model[modelName],
                             listenMessageBus: true
                         }, modelConfig.uiconfig);
-                        
+
                     if (! Tine[appName].hasOwnProperty(gridPanelName)) {
                         Tine[appName][gridPanelName] = Ext.extend(Tine.widgets.grid.GridPanel, gpConfig);
                     } else {
                         Ext.apply(Tine[appName][gridPanelName].prototype, gpConfig);
                     }
+                    // 2026-10-23 - cweiss - note to future me: we relay on this xtype on some places (e.g. Sales.ContractEditDialog)
+                    //                       i removed it for some reason i forgot - if i find it again i need to fix it an other way!
                     const xtype = `${appName}.${gridPanelName}`;
                     Ext.ComponentMgr.isRegistered(xtype) ? null : Ext.reg(xtype, Tine[appName][gridPanelName]);
 
