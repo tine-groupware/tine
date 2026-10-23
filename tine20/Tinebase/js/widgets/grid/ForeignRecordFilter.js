@@ -123,6 +123,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             this.field = this.ownField;
         }
 
+        this.fieldConfig = Object.assign(this.fieldConfig || {}, _.get(this.ownRecordClass?.getModelConfiguration(), `fields.${this.field}`));
         if (_.get(this.foreignRecordClass?.getModelConfiguration(), 'denormalizationOf')) {
             this.foreignRefIdField = 'original_id';
         }
@@ -542,7 +543,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             filter.toolbar = new Tine.widgets.grid.FilterToolbar({
                 app: this.app,
                 recordClass: foreignRecordClass,
-                title: this.crossRecordForeignField || this.metaDataForField ? this.label : null,
+                title: _.indexOf(['record', 'records'], this.fieldConfig?.type) >= 0 ? this.label : null,
                 filterModels: filterModels,
                 defaultFilter: filterModel ? (filterModel[defaultFilter] ? defaultFilter : Object.keys(filterModel)[0]) : (defaultFilter || 'query')
             });

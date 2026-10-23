@@ -23,8 +23,9 @@ Tine.Tinebase.SiteFilter = Ext.extend(Tine.widgets.grid.ForeignRecordFilter, {
      * @private
      */
     initComponent: function() {
-        this.label = i18n._('Site');
-        this.gender = i18n._('GENDER_Site');
+        const app = Tine.Tinebase.appMgr.get(this.owningAppName);
+        this.label = this.label ? app.i18n._(this.label) : i18n._('Site');
+        this.gender = this.gender ? app.i18n._(this.gender) : i18n._('GENDER_Site');
         this.pickerConfig = {
             emptyText: i18n._('no site association'),
             allowBlank: true,

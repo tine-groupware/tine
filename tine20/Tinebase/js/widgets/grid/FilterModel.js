@@ -137,7 +137,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
 
         this.recordClass = this.recordClass || Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
         this.modelConfiguration = this.recordClass?.getModelConfiguration();
-        this.fieldConfig = this.modelConfiguration?.fields[this.field] || {};
+        this.fieldConfig = Object.assign(this.fieldConfig || {}, this.modelConfiguration?.fields[this.field] || {});
 
         if (this.app) {
             this.itemName = this.itemName || this.label;
