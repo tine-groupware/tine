@@ -2620,7 +2620,68 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // do not catch modified keys (CTRL, ALT)
         if (e.ctrlKey || e.altKey) return;
 
+        const g = this.grid,
+            sm = g.getSelectionModel(),
+            view = g.getView(),
+            cm = g.getColumnModel();
+
+        const key = e.getKey(),
+            row = sm.lastActive || 0;
+        if (!view.activeCell) {
+            view.activeCell = { cell: -1 };
+        }
+        const col = view.activeCell.cell;
+
         switch (e.getKey()) {
+            case e.RIGHT:
+                e.stopEvent();
+                var nextCol = (col === -1) ? 0 : col + 1;
+
+                while (nextCol < cm.getColumnCount()) {
+                    if (!cm.isHidden(nextCol)) {
+                        var cellInner = view.getCell(row, nextCol)?.querySelector('.x-grid3-cell-inner');
+                        if (cellInner) {
+                            cellInner.focus();
+                            view.activeCell.cell = nextCol;
+                            sm.selectRow(row);
+                            break;
+                        }
+                    }
+                    nextCol++;
+                }
+                break;
+            case e.LEFT:
+                e.stopEvent();
+                if (col <= 0) {
+                    view.getRow(row)?.focus();
+                    view.activeCell.cell = -1;
+                    break;
+                }
+                var prevCol = col - 1;
+                while (prevCol >= 0) {
+                    if (!cm.isHidden(prevCol)) {
+                        var cellInner = view.getCell(row, prevCol)?.querySelector('.x-grid3-cell-inner');
+                        if (cellInner) {
+                            cellInner.focus();
+                            view.activeCell.cell = prevCol;
+                            sm.selectRow(row);
+                            break;
+                        }
+                    }
+                    prevCol--;
+                }
+                break;
+            case e.DOWN:
+            case e.UP:
+                if (Tine.widgets.grid.GridPanel.superclass.onKeyDown) {
+                    Tine.widgets.grid.GridPanel.superclass.onKeyDown.apply(this, arguments);
+                }
+                (function() {
+                    var newRow = sm.lastActive || 0;
+                    view.getRow(newRow)?.focus();
+                    view.activeCell = { cell: -1 };
+                }).defer(50);
+                break;
             case e.A:
                 // select only current page
                 this.grid.getSelectionModel().selectAll(true);

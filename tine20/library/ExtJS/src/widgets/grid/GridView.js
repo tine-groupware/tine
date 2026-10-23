@@ -260,7 +260,7 @@ viewConfig: {
         var ts = this.templates || {};
         if(!ts.master){
             ts.master = new Ext.Template(
-                    '<div class="x-grid3" hidefocus="true">',
+                    '<div class="x-grid3" hidefocus="true" role="grid">',
                         '<div class="x-grid3-viewport">',
                             '<div class="x-grid3-header"><div class="x-grid3-header-inner"><div class="x-grid3-header-offset" style="{ostyle}">{header}</div></div><div class="x-clear"></div></div>',
                             '<div class="x-grid3-scroller"><div class="x-grid3-body" style="{bstyle}">{body}</div><a href="#" class="x-grid3-focus" tabIndex="-1"></a></div>',
@@ -273,15 +273,15 @@ viewConfig: {
 
         if(!ts.header){
             ts.header = new Ext.Template(
-                    '<table role="navigation" aria-label="' + window.i18n._('Column Headers') + '" border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
-                    '<thead><tr class="x-grid3-hd-row">{cells}</tr></thead>',
+                    '<table role="presentation" aria-label="' + window.i18n._('Column Headers') + '" border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
+                    '<thead role="rowgroup"><tr class="x-grid3-hd-row" role="row">{cells}</tr></thead>',
                     '</table>'
                     );
         }
 
         if(!ts.hcell){
             ts.hcell = new Ext.Template(
-                    '<td class="x-grid3-hd x-grid3-cell x-grid3-td-{id} {css}" style="{style}"><div  tabindex="0" {tooltip} {attr} class="x-grid3-hd-inner x-grid3-hd-{id}" unselectable="on" style="{istyle}">', this.grid.enableHdMenu ? '<a class="x-grid3-hd-btn" href="#"></a>' : '',
+                    '<td id="header-{id}" tabindex="0" aria-label="{tooltip_clean}" class="x-grid3-hd x-grid3-cell x-grid3-td-{id} {css}" style="{style}"><div {tooltip} {attr} class="x-grid3-hd-inner x-grid3-hd-{id}" unselectable="on" style="{istyle}">', this.grid.enableHdMenu ? '<a class="x-grid3-hd-btn" href="#"></a>' : '',
                     '{value}<img class="x-grid3-sort-icon" src="', Ext.BLANK_IMAGE_URL, '" />',
                     '</div></td>'
                     );
@@ -293,8 +293,8 @@ viewConfig: {
 
         if(!ts.row){
             ts.row = new Ext.Template(
-                    '<div class="x-grid3-row {alt}" role="row" tabIndex="0" style="{tstyle}"><table class="x-grid3-row-table" border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
-                    '<tbody><tr>{cells}</tr>',
+                    '<div class="x-grid3-row {alt}" tabindex="0" role="row" style="{tstyle}"><table role="presentation" class="x-grid3-row-table" border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
+                    '<tbody><tr role="presentation">{cells}</tr>',
                     (this.enableRowBody ? '<tr class="x-grid3-row-body-tr" style="{bodyStyle}"><td colspan="{cols}" class="x-grid3-body-cell" hidefocus="on"><div class="x-grid3-row-body">{body}</div></td></tr>' : ''),
                     '</tbody></table></div>'
                     );
@@ -302,8 +302,8 @@ viewConfig: {
 
         if(!ts.cell){
             ts.cell = new Ext.Template(
-                    '<td class="x-grid3-col x-grid3-cell x-grid3-td-{id} {css}"  role="gridcell" style="{style}" {cellAttr}>',
-                    '<div class="x-grid3-cell-inner x-grid3-col-{id}" unselectable="on" {attr}>{value}</div>',
+                    '<td class="x-grid3-col x-grid3-cell x-grid3-td-{id} {css}" role="gridcell" style="{style}">',
+                    '<div tabindex="0" class="x-grid3-cell-inner x-grid3-col-{id}" unselectable="on" {attr} {cellAttr}>{value}</div>',
                     '</td>'
                     );
         }
@@ -617,6 +617,7 @@ viewConfig: {
                 this.transformMetaData(r.data[c.name], p, r, rowIndex, i, ds)
                 p.value = c.renderer.call(c.scope, r.data[c.name], p, r, rowIndex, i, ds);
                 p.style = c.style;
+                this.makeTableReadable(p, rowIndex, i, c);
                 if(Ext.isEmpty(p.value)){
                     p.value = '&#160;';
                 }
@@ -641,6 +642,43 @@ viewConfig: {
             buf[buf.length] =  rt.apply(rp);
         }
         return buf.join('');
+    },
+
+    //lets screenreader announce header + cell
+    makeTableReadable: function (p, rowIndex, columnIndex, columnConfig) {
+        if (!columnConfig || !this.getHeaderCell) {
+            return;
+        }
+        const headerCell = this.getHeaderCell(columnIndex);
+        if (!headerCell) {
+            return;
+        }
+        const headerDomId = headerCell?.id || `header-${columnConfig.id}`;
+
+        const rawValue = p.value;
+        const cellId = `sr-content-${columnConfig.id}-r${rowIndex}-c${columnIndex}`;
+        const pauseId = `sr-pause-${columnConfig.id}-r${rowIndex}-c${columnIndex}`;
+
+        let cellText = Ext.isEmpty(rawValue) || rawValue === ' ' || rawValue === ' ' ? window.i18n._('no entry') : rawValue;
+        if (typeof rawValue === 'string' && !Ext.isEmpty(rawValue)) {
+            try {
+                const doc = new DOMParser().parseFromString(rawValue, 'text/html');
+                const iconLabels = Array.from(doc.querySelectorAll('[aria-label]')).map(el => el.getAttribute('aria-label')).filter(Boolean);
+                cellText = doc.body.textContent || '';
+                if (iconLabels.length) cellText = cellText ? `${cellText}, ${iconLabels.join(', ')}` : iconLabels.join(', ');
+            } catch (e) {
+                cellText = Ext.util.Format.stripTags(rawValue.match(/aria-label=["']([^"']+)["']\]/)?.[1] || rawValue);
+            }
+        }
+
+        let cellTextString = String(cellText).replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ').trim();
+
+        const hiddenTextDiv = `<div id="${cellId}" class="x-hidden-accessible" aria-label="${Ext.util.Format.htmlEncode(cellTextString)}" style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;"></div>`;
+        const pauseDiv = `<div id="${pauseId}" class="x-hidden-accessible" aria-label="," style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;"></div>`;
+
+        p.value = p.value + '<div>' + hiddenTextDiv + pauseDiv + '</div>';
+
+        p.cellAttr = `${p.cellAttr || ''} aria-labelledby="${headerDomId} ${pauseId} ${cellId}"`;
     },
 
     transformMetaData: function (value, metaData, record, rowIndex, colIndex, store) {
@@ -735,6 +773,39 @@ viewConfig: {
 
         // get mousedowns early
         Ext.fly(this.innerHd).on('click', this.handleHdDown, this);
+
+        //get keyboard input
+        Ext.fly(this.innerHd).on('keydown', function(e, t) {
+            var hd = this.findHeaderCell(t);
+
+            if ((e.getKey() === e.ENTER || e.getKey() === e.SPACE) && hd) {
+                e.stopEvent();
+                var idx = this.getCellIndex(hd);
+
+                this.grid.getView().on('refresh', function() {
+                    setTimeout(function() {
+                        var target = Ext.fly(this.grid.getView().getHeaderCell(idx))?.child('.x-grid3-hd-inner')?.dom;
+                        if (target) {
+                            target.setAttribute('tabindex', '0');
+                            target.focus();
+                        }
+                    }.bind(this), 150);
+                }, this, {single: true});
+
+                if (e.getKey() === e.ENTER) {
+                    this.onHeaderClick(this.grid, idx);
+                    if (menuBtn) {
+                        this.handleHdDown(e, menuBtn);
+                    }
+                } else if (e.getKey() === e.SPACE) {
+                    var menuBtn = Ext.fly(hd).child('.x-grid3-hd-btn')?.dom;
+                    if (menuBtn) {
+                        this.handleHdDown(e, menuBtn);
+                    }
+                }
+            }
+        }, this);
+
         this.mainHd.on({
             scope: this,
             mouseover: this.handleHdOver,
@@ -1501,6 +1572,11 @@ viewConfig: {
         this.layout();
         this.applyEmptyText();
         this.fireEvent('refresh', this);
+
+        const rows = this.getRows();
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].setAttribute('aria-label', window.i18n._('row') + (i + 1));
+        }
     },
 
     // private

@@ -234,6 +234,15 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             activeItem: 0,
             height: this.northHeight,
             border: false,
+            listeners: {
+                afterrender: function(panel) {
+                    const el = panel.getEl()?.dom;
+                    if (el) {
+                        el.setAttribute('role', 'complementary');
+                        el.setAttribute('aria-label', window.i18n._('action bar'));
+                    }
+                }
+            },
             items: []
         }, {
             ref: 'centerCardPanel',
@@ -263,40 +272,60 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             listeners: {
                 scope: this,
                 resize: this.saveState,
-                afterrender: function(panel) {
+                afterrender: function (panel) {
                     if (panel && panel.body) {
                         Ext.dd.ScrollManager.register(panel.body);
                     }
+
+                    panel.on('afterlayout', function () {
+                        const el = panel.getEl()?.dom;
+                        if (el) {
+                            const firstFocusableElement = el.querySelector('[tabindex="1"]') || el.querySelector('.x-panel-header-text');
+                            if (firstFocusableElement) {
+                                firstFocusableElement.setAttribute('role', 'complementary');
+                                firstFocusableElement.setAttribute('aria-label', window.i18n._('modules and filters'));
+                            }
+                        }
+                    }, this, {single: true});
 
                     panel.el.on('keydown', function(e) {
                         if (e.getKey() === e.ENTER) {
                             var folderName = e.getTarget() ? e.getTarget().innerText.split('\n')[0].trim() : window.i18n._('Folder');
 
-                            setTimeout(function() {
+                            var triggerFocus = function() {
                                 var cp = this.getCenterPanel();
                                 var grid = (cp && typeof cp.getGrid === 'function') ? cp.getGrid() : null;
 
                                 if (grid && grid.getView) {
-                                    var row = grid.getView().getRow(0);
-                                    if (row) {
-                                        var el = Ext.get(row);
-                                        el.dom.setAttribute('tabindex', '-1');
+                                    var view = grid.getView();
+                                    var doFocus = function() {
+                                        var row = (typeof view.getRow === 'function') ? view.getRow(0) : grid.getView().getRow(0);
+                                        if (row) {
+                                            var el = Ext.get(row);
+                                            if (el && el.dom) {
+                                                el.dom.setAttribute('tabindex', '0');
+                                                grid.getSelectionModel().selectFirstRow();
 
-                                        grid.getSelectionModel().selectFirstRow();
+                                                (function () {
+                                                    if (el.dom) el.focus();
+                                                }).defer(50);
+                                            }
 
-                                        setTimeout( function(){
-                                            el.focus();
-                                        },500)
-
-
-                                        var announcer = document.getElementById('tine-live-announcer');
-                                        if (announcer) announcer.innerText = folderName + ' ' + this.app.i18n._('has been opened');
-                                    }else{
-                                        var announcer = document.getElementById('tine-live-announcer');
-                                        if (announcer) announcer.innerText = folderName +  ' ' + this.app.i18n._('is empty. There is no data to be shown.');
+                                            var announcer = document.getElementById('tine-live-announcer');
+                                            if (announcer) announcer.innerText = folderName + ' ' + this.app.i18n._('has been opened');
+                                        } else {
+                                            var announcer = document.getElementById('tine-live-announcer');
+                                            if (announcer) announcer.innerText = folderName + ' ' + this.app.i18n._('is empty. There is no data to be shown.');
+                                        }
+                                    }.createDelegate(this);
+                                    if (cp && typeof cp.on === 'function') {
+                                        cp.on('afterlayout', doFocus, this, {single: true, delay: 100});
+                                    } else {
+                                        view.on('refresh', doFocus, this, {single: true});
                                     }
                                 }
-                            }.createDelegate(this), 600);
+                            }.createDelegate(this);
+                            triggerFocus.defer(400);
                         }
                     }, this);
                 }
@@ -646,7 +675,88 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         } else {
             console.warn("Could not create responsive quicksearch: quickfilter plugin not found")
         }
+        this.setMainForScreenreader(panel);
+    },
 
+    /**
+     * sets the main element everytime the app is changed, so it can be accessed by screenreader shortcuts
+     * redirects to first element in table (exceptions needed for apps with different layout like Calendar)
+     * setting main directly on a table is not allowed, so we have to redirect the focus
+     *
+     * @param {Ext.Panel} item Panel
+     */
+    setMainForScreenreader: function(panel) {
+        if (!panel) return;
+
+        const isCenterPanel = panel.ownerCt === this.centerCardPanel || panel.ownerCt?.ref === 'centerCardPanel' || panel.ownerCt?.cls?.indexOf('tine-mainscreen-centerpanel-center') !== -1;
+        if (!isCenterPanel) {
+            if (this._lastActivePanel === panel) panel.getEl()?.dom?.removeAttribute('role');
+            return;
+        }
+
+        if (this._lastActivePanel && this._lastActivePanel !== panel) {
+            this._lastActivePanel.getEl()?.dom?.removeAttribute('role');
+        }
+        this._lastActivePanel = panel;
+        if (this._accessibilityTimer) clearInterval(this._accessibilityTimer);
+        let attempts = 0;
+
+        this._accessibilityTimer = setInterval(() => {
+            const mainEl = panel.getEl()?.dom;
+            if (mainEl && mainEl.style.display !== 'none' && mainEl.style.left !== '-10000px') {
+                clearInterval(this._accessibilityTimer);
+
+                setTimeout(() => {
+                    const finalMainEl = panel.getEl()?.dom;
+                    if (!finalMainEl) return;
+
+                    let actualMainContainer = finalMainEl;
+                    if (typeof panel.getGrid === 'function') {
+                        actualMainContainer = panel.getGrid().getView().getEl?.()?.dom || finalMainEl;
+                    }
+                    actualMainContainer.setAttribute('role', 'main');
+
+                    let bridge = finalMainEl.querySelector('.focus-bridge');
+                    if (!bridge) {
+                        bridge = Object.assign(document.createElement('div'), { className: 'focus-bridge', tabIndex: 0 });
+                        bridge.style.cssText = 'position:absolute; width:1px; height:1px; overflow:hidden; opacity:0;';
+                        bridge.setAttribute('aria-label', window.i18n._('Main content'));
+                        finalMainEl.insertBefore(bridge, finalMainEl.firstChild);
+
+                        bridge.addEventListener('focus', () => {
+
+                            // main element specific for calendar
+                            if (typeof panel.getGrid !== 'function') {
+                                const dom = panel.getEl()?.dom;
+                                const mainElement = dom.getElementsByClassName("cal-daysviewpanel-dayheader-day-wrap cal-daysviewpanel-dayheader-today")[0] ||
+                                    dom.getElementsByClassName("cal-monthview-daycell cal-monthview-daycell-today")[0];
+                                if (mainElement) {
+                                    mainElement.setAttribute('tabindex', '0');
+                                    setTimeout(() => mainElement.focus(), 150);
+                                }
+                                // main element for apps with a table in the center
+                            } else {
+                                var grid = panel.getGrid();
+                                var view = grid.getView();
+                                var sm = grid.getSelectionModel();
+
+                                if (grid && view && sm) {
+                                    sm.selectRow(0);
+                                    setTimeout(() => {
+                                        var rowEl = view.getRow(0);
+                                        if (rowEl) {
+                                            rowEl.focus();
+                                        }
+                                    }, 50);
+                                }
+                            }
+                        }, {passive: true});
+                    }
+                }, 100);
+            } else if (++attempts >= 50) {
+                clearInterval(this._accessibilityTimer);
+            }
+        }, 50);
     },
 
     /**

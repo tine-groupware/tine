@@ -8,6 +8,7 @@
  */
 -->
 <template>
+  <header role="banner" :aria-label="window.i18n._('banner')">
   <div
     class="bootstrap-scope tine-bar"
     style="height: 100%; width: 100%"
@@ -35,7 +36,7 @@
         <div class="tine-favicon mx-2"/>
         <span class="tine-bar__active-app ms-3">{{currentActiveApp }}</span>
       </div>
-      <div class="me-3 d-flex">
+      <nav class="me-3 d-flex" :aria-label="window.i18n._('global functions')">
         <Component
           v-for="(item, idx) in _barItems"
           :is="item.__component"
@@ -56,9 +57,10 @@
           :mainMenuItems="mainMenuItems"
           @hide="hideMenu($event)"
         />
-      </div>
+      </nav>
     </div>
   </div>
+  </header>
 </template>
 
 <script setup>

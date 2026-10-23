@@ -8,7 +8,7 @@
  */
 -->
 <template>
-  <b-button class="account-btn" variant="primary" tabindex="0" :aria-label="window.i18n._('Main Menu')">
+  <b-button class="account-btn" variant="primary" tabindex="0" :aria-label="window.i18n._('User settings')">
   <div class="account-user-avatar">
     <img v-if='imgSrc' class="account-user-avatar__image" :src='imgSrc'>
     <div v-else class="account-user-avatar__image_alt text-center d-flex align-items-center justify-content-center">
