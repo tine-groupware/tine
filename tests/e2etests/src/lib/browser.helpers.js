@@ -1,3 +1,4 @@
+import pageErrors from './pageErrors.js';
 import puppeteer from 'puppeteer';
 import { expect as expectPuppeteer } from 'expect-puppeteer';
 import dotenv from 'dotenv';
@@ -20,10 +21,16 @@ const priorities = {
     WAR: 4,  // Warning: warning conditions
     NOT: 5,  // Notice: normal but significant condition
     INF: 6,  // Informational: informational messages
-    DEB: 7,   // Debug: debug messages
+    LOG: 7,  // Debug: debug messages
+    DEB: 7,  // Debug: debug messages
+    DBG: 7,  // Debug: debug messages
     TRA: 8   // Debug: debug messages
 };
 const defaultTypingDelay = 50;
+const proxiedPages = new WeakSet();
+
+// TODO: Verify that all waitFor.. and clickOn... functions display proper and useful error messages.
+// TODO: Add regression tests for the above functions.
 
 export default {
     /**
@@ -39,6 +46,8 @@ export default {
      * @returns {Promise<string>} A promise that resolves to the filename of the downloaded file.
      */
     waitForFileToDownload: async function (fs, downloadPath, timeout = this.getEnvInt('TEST_TIMEOUT_DOWNLOAD')) {
+        this.assertNotAborted('waitForFileToDownload');
+
         const startTime = Date.now();
         const POLL_INTERVAL = 500;
 
@@ -66,42 +75,346 @@ export default {
      *
      * @param {puppeteer.Page} page - Page or frame context
      * @param {string} text - Visible button text to match
-     * @param {number} [timeout=7000] - Timeout in ms
+     * @param {number} [timeout=TEST_TIMEOUT_ACTIONABLE] - Timeout in ms
      * @param {string} [labelSelector='.x-btn-text'] - Selector to find the text element (optional)
      * @returns {Promise<void>}
      */
-    waitForActionableButton: async function (page, text, timeout = 7000, labelSelector = '.x-btn-text') {
+    waitForActionableButton: async function (page, text, timeout = this.getEnvInt('TEST_TIMEOUT_ACTIONABLE'), labelSelector = '.x-btn-text') {
+        this.assertNotAborted('waitForActionableButton');
+
         // Runs in page context: uses window.getComputedStyle and DOM checks
-        await page.waitForFunction(
-            (labelSelectorInner, textInner) => {
-                const nodes = Array.from(document.querySelectorAll(labelSelectorInner || '.x-btn-text'));
-                const el = nodes.find(e => e.textContent && e.textContent.trim() === textInner);
-                if (!el) return false;
-                const btn = el.closest('button') || el.parentElement;
-                if (!btn) return false;
-                const style = window.getComputedStyle(btn);
-                // offsetParent !== null -> element is laid out; ensure not hidden or disabled
-                return btn.offsetParent !== null &&
-                    style.display !== 'none' &&
-                    !btn.disabled &&
-                    !btn.classList.contains('x-item-disabled');
-            },
-            {timeout},
-            labelSelector,
-            text
+        try {
+            await page.waitForFunction(
+                (labelSelectorInner, textInner) => {
+                    const nodes = Array.from(document.querySelectorAll(labelSelectorInner || '.x-btn-text'));
+                    const el = nodes.find(e => e.textContent && e.textContent.trim() === textInner);
+                    if (!el) return false;
+                    const btn = el.closest('button') || el.parentElement;
+                    if (!btn) return false;
+                    const style = window.getComputedStyle(btn);
+                    // offsetParent !== null -> element is laid out; ensure not hidden or disabled
+                    return btn.offsetParent !== null &&
+                        style.display !== 'none' &&
+                        !btn.disabled &&
+                        !btn.classList.contains('x-item-disabled');
+                },
+                {timeout},
+                labelSelector,
+                text
+            );
+        } catch (err) {
+            const error = new Error(`waitForActionableButton: timed out after ${timeout}ms waiting for actionable button "${text}" (${labelSelector})`);
+            error.cause = err;
+            throw error;
+        }
+    },
+
+    /**
+     * Waits until the main application (dock + bar) is present.
+     *
+     * @param {puppeteer.Page} page
+     * @param {number} timeout
+     * @returns {Promise<void>}
+     */
+    waitForPageHeader: async function (page, timeout = this.getEnvInt('TEST_TIMEOUT_CONTENT_READY')) {
+        this.assertNotAborted('waitForPageHeader');
+
+        await this.raceWithPageError(
+            page.waitForFunction(
+                () => !!document.querySelector('.tine-dock') && !!document.querySelector('.tine-bar'),
+                {timeout}
+            ),
+            'waitForPageHeader'
         );
     },
 
     /**
      * Wait until loading indicators have disappeared, no more network traffic is ongoing, and tine header is available.
+     *
      * @param {puppeteer.Page} page
+     * @param {number} timeout
      * @returns {Promise<void>}
      */
-    waitForAppReady: async function (page) {
-        await page.waitForSelector('.tine-viewport-waitcycle', {hidden: true, timeout: this.getEnvInt('TEST_TIMEOUT_MASK')});
-        await page.waitForSelector('.ext-el-mask', {hidden: true, timeout: this.getEnvInt('TEST_TIMEOUT_MASK')});
-        await page.waitForNetworkIdle({timeout: this.getEnvInt('TEST_TIMEOUT_NETWORK_TIMEOUT'), idleTime: this.getEnvInt('TEST_TIMEOUT_NETWORK_IDLE')});
-        await page.waitForSelector('.tine-dock', {timeout: this.getEnvInt('TEST_TIMEOUT_CONTENT_READY')});
+    waitForAppReady: async function (page, timeout = this.getEnvInt('TEST_TIMEOUT_MASK')) {
+        this.assertNotAborted('waitForAppReady');
+
+        // Define all selectors of possible masks and loading indicators.
+        const maskSelectors = ['.tine-viewport-waitcycle', '.ext-el-mask', '.x-mask-loading'];
+        await this.raceWithPageError(
+            (async () => {
+                await page.waitForFunction(
+                    (masks) => {
+                        const isSelectorVisible = (sel) => {
+                            const el = document.querySelector(sel);
+                            if (!el) return false;
+                            const style = window.getComputedStyle(el);
+                            if (style.display === 'none' || style.visibility === 'hidden') return false;
+                            return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+                        };
+                        return masks.every((sel) => !isSelectorVisible(sel));
+                    },
+                    { timeout },
+                    maskSelectors
+                );
+
+                await page.waitForNetworkIdle({
+                    timeout: this.getEnvInt('TEST_TIMEOUT_NETWORK_TIMEOUT'),
+                    idleTime: this.getEnvInt('TEST_TIMEOUT_NETWORK_IDLE')
+                });
+            })(),
+            'waitForAppReady'
+        );
+    },
+
+    /**
+     * Races a wait promise against the page-error abort signal. If an uncaught
+     * page error is recorded while the wait is in progress, the returned promise
+     * rejects immediately with the recorded error(s) instead of waiting for the
+     * wait to time out.
+     *
+     * @param {Promise<*>} waitPromise - The wait to race against the page error.
+     * @param {string} context - Label used in the error message.
+     * @returns {Promise<*>}
+     */
+    raceWithPageError: async function (waitPromise, context) {
+        if (!this.getEnvBool('TEST_THROW_ON_PAGE_ERROR')) {
+            return waitPromise;
+        }
+        return Promise.race([
+            waitPromise,
+            pageErrors.onAbort().then(() => {
+                throw new Error(`${context}: uncaught page error(s) occurred:\n${pageErrors.format()}`);
+            })
+        ]);
+    },
+
+    /**
+     * Throws immediately if an uncaught page error has been recorded, so that
+     * test bodies fail fast (instead of running on and producing cascading
+     * timeouts / TypeErrors) once the page is known to be broken.
+     *
+     * @param {string} context - Label used in the error message.
+     */
+    assertNotAborted: function (context) {
+        if (this.getEnvBool('TEST_THROW_ON_PAGE_ERROR') && pageErrors.isAborted()) {
+            const error = new Error(`${context}: aborted due to uncaught page error(s):\n${pageErrors.format()}`);
+            // TODO: Always including stacktrace for now, make it configurable later.
+            //error.stack = '';
+            throw error;
+        }
+    },
+
+    /**
+     * Waits for an element without a specific label to be visible (first match!), and clicks on it.
+     *
+     * @param {puppeteer.Page} page
+     * @param {string} selector
+     * @param {Object} [options] - Optional settings.
+     * @param {number} [options.timeout=5000] - this.getEnvInt('TEST_TIMEOUT_ACTIONABLE')
+     * @param {number} [options.clickCount=1]
+     * @param {string} [options.button=left]
+     * @returns {Promise<void>}
+     */
+    clickOnElement: async function (page, selector, options) {
+        this.assertNotAborted('clickOnElement');
+
+        const timeout = options && options.timeout ? options.timeout : this.getEnvInt('TEST_TIMEOUT_ACTIONABLE');
+        const clickCount = options && options.clickCount ? options.clickCount : 1;
+        const button = options && options.button ? options.button : 'left';
+
+        try {
+            await page.waitForSelector(selector, {visible: true, timeout});
+        } catch (err) {
+            const error = new Error(`clickOnElement: timed out after ${timeout}ms waiting for visible element "${selector}"`);
+            error.cause = err;
+            throw error;
+        }
+        await expectPuppeteer(page).toClick(selector, {count: clickCount, button});
+    },
+
+    /**
+     * Waits for an element matching `selector` whose textContent exactly equals `label`
+     * (whitespace-normalized) and is laid out, then clicks it.
+     * If the element is re-rendered (detached from the document) between lookup and click,
+     * the lookup is repeated until the timeout is reached.
+     *
+     * TODO: Combine with clickOnElement().
+     *
+     * @param {puppeteer.Page} page
+     * @param {string} selector - CSS selector to search within
+     * @param {string} label - Exact textContent to match (whitespace-normalized)
+     * @param {Object} [options] - Optional settings.
+     * @param {number} [options.timeout=TEST_TIMEOUT_ACTIONABLE] - Max time in ms to wait for the element to appear.
+     * @param {number} [options.clickCount=1] - Amount of times to click the element.
+     * @param {string} [options.button=left] - Mouse button to click on the element.
+     * @returns {Promise<void>}
+     */
+    clickOnElementWithLabel: async function (page, selector, label, options) {
+        this.assertNotAborted('clickOnElementWithLabel');
+
+        const timeout = options && options.timeout ? options.timeout : this.getEnvInt('TEST_TIMEOUT_ACTIONABLE');
+        const clickCount = options && options.clickCount ? options.clickCount : 1;
+        const button = options && options.button ? options.button : 'left';
+        const target = (label || '').replace(/\s+/g, ' ').trim();
+        const deadline = Date.now() + timeout;
+
+        for (;;) {
+            const remaining = deadline - Date.now();
+            if (remaining <= 0) {
+                throw new Error(`clickOnElementWithLabel: timed out after ${timeout}ms looking for "${selector}" with exact text "${label}"`);
+            }
+
+            let handle;
+            try {
+                handle = await page.waitForFunction(
+                    (sel, lab) => Array.from(document.querySelectorAll(sel)).find((el) => {
+                        const t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+                        const r = el.getBoundingClientRect();
+                        return t === lab && r.width > 0 && r.height > 0;
+                    }) || null,
+                    {timeout: remaining},
+                    selector, target
+                );
+            } catch (err) {
+                // waitForFunction timed out: element never appeared (label mismatch,
+                // element not rendered, or invalid selector). Surface a descriptive
+                // error instead of Puppeteer's generic "Waiting failed: Xms exceeded".
+                const error = new Error(`clickOnElementWithLabel: timed out after ${timeout}ms looking for "${selector}" with exact text "${label}"`);
+                error.cause = err;
+                throw error;
+            }
+
+            const el = handle.asElement();
+            if (!el) {
+                throw new Error(`clickOnElementWithLabel: no element found for "${selector}" with exact text "${label}"`);
+            }
+
+            try {
+                await el.click({count: clickCount, button, timeout: remaining});
+                return;
+            } catch (err) {
+                // The app may re-render (and thus detach the element) between lookup and click: retry.
+                const message = String(err && err.message);
+                if (!/detached from document|not clickable or not an Element/i.test(message)) {
+                    throw err;
+                }
+                if (Date.now() >= deadline) {
+                    throw err;
+                }
+                await new Promise(r => setTimeout(r, 200));
+            }
+        }
+    },
+
+    /**
+     * Waits for at least one element to match the given selector.
+     * If options.visible is set to "true", wait until all matching elements are visible.
+     * If options.hidden is set to "true", wait until all matching elements are hidden.
+     *
+     * @param {puppeteer.Page} page
+     * @param {string} selector
+     * @param {Object} [options] - Optional settings.
+     * @param {boolean} [options.visible=false]
+     * @param {boolean} [options.hidden=false]
+     * @param {number} [options.timeout=TEST_TIMEOUT_ACTIONABLE]
+     * @returns {Promise<void>}
+     */
+    waitForElement: async function (page, selector, options) {
+        this.assertNotAborted('waitForElement');
+
+        const mode = options && options.visible ? 'visible' : (options && options.hidden ? 'hidden' : 'exists');
+        const timeout = options && options.timeout ? options.timeout : this.getEnvInt('TEST_TIMEOUT_ACTIONABLE');
+
+        try {
+            await page.waitForFunction(
+                (sel, m) => {
+                    const isNodeVisible = (el) => {
+                        const style = window.getComputedStyle(el);
+                        if (style.display === 'none' || style.visibility === 'hidden') return false;
+                        return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+                    };
+                    const elements = Array.from(document.querySelectorAll(sel));
+                    if (m === 'visible') return elements.length > 0 && elements.every(isNodeVisible);
+                    if (m === 'hidden') return elements.every((el) => !isNodeVisible(el));
+                    return elements.length > 0;
+                },
+                {timeout},
+                selector,
+                mode
+            );
+        } catch (err) {
+            const error = new Error(`waitForElement: timed out after ${timeout}ms waiting for "${selector}" to be ${mode}`);
+            error.cause = err;
+            throw error;
+        }
+    },
+
+    /**
+     * Returns true if the element at `selector` is actually on top at its center
+     * (i.e. not covered by a modal backdrop or loading mask).
+     *
+     * @param {puppeteer.Page} page
+     * @param {string} selector
+     * @returns {Promise<*>}
+     */
+    isElementUnblocked: async function (page, selector) {
+        this.assertNotAborted('isElementUnblocked');
+
+        return await page.evaluate((sel) => {
+            const el = document.querySelector(sel);
+            if (!el) return false;
+            const r = el.getBoundingClientRect();
+            const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+            return !!top && (top === el || el.contains(top));
+        }, selector);
+    },
+
+    /**
+     * Waits for an element without a specific label to be visible (first match!), clicks on it,
+     * and then waits until the page is closed (e.g. a popup after saving).
+     *
+     * @param {puppeteer.Page} page - The page that is expected to close.
+     * @param {string} selector - CSS selector of the element to click.
+     * @param {string} label - Exact textContent of the element to click (whitespace-normalized).
+     * @param {Object} [options] - Optional settings.
+     * @param {number} [options.clickCount=1] - Amount of times to click the element.
+     * @param {string} [options.button=left] - Mouse button to click on the element.
+     * @param {number} [options.timeout=TEST_TIMEOUT_ACTIONABLE] - Max time in ms to wait for the element to appear.
+     * @param {number} [options.closeTimeout=TEST_TIMEOUT_POPUP_CLOSE] - Max time in ms to wait for the page to close.
+     * @returns {Promise<void>}
+     */
+    clickOnElementWaitPageClosed: async function (page, selector, label, options = {}) {
+        this.assertNotAborted('clickOnElementWaitPageClosed');
+
+        const closeTimeout = options && options.closeTimeout ? options.closeTimeout : this.getEnvInt('TEST_TIMEOUT_POPUP_CLOSE');
+
+        // Wait for the page to be fully closed, so all changes are persisted.
+        const pageClosed = new Promise((resolve, reject) => {
+            let timer = null;
+            const onClose = () => {
+                if (timer !== null) {
+                    clearTimeout(timer);
+                }
+                resolve();
+            };
+            page.once('close', onClose);
+            if (closeTimeout > 0) {
+                timer = setTimeout(() => {
+                    page.off('close', onClose);
+                    reject(new Error(`clickOnElementWaitPageClosed: page did not close within ${closeTimeout}ms`));
+                }, closeTimeout);
+            }
+        });
+
+        try {
+            await this.clickOnElementWithLabel(page, selector, label, options);
+            await pageClosed;
+        } catch (err) {
+            // If the click failed, the close-watcher is orphaned: silence its
+            // eventual timeout rejection so it cannot surface as an unhandled rejection.
+            pageClosed.catch(() => {});
+            throw err;
+        }
     },
 
     /**
@@ -136,7 +449,7 @@ export default {
                 await page.setViewport(resolution);
                 await page.waitForFunction(
                     (m) => document.body.className.includes(`${m}-mode`),
-                    { timeout: 2000 },
+                    {timeout: this.getEnvInt('TEST_TIMEOUT_ACTIONABLE')},
                     mode
                 );
 
@@ -148,25 +461,48 @@ export default {
     },
 
     /**
-     * Proxies console messages from the given page to the main console, filtering by log level and ignoring messages related to 'sockjs-node'.
+     * Proxies console messages from the given page to the main console, filtering by log level
+     * and ignoring messages related to 'sockjs-node'.
+     * Uncaught page errors are recorded in pageErrors and, if TEST_PAGE_ERROR_STACKTRACE is
+     * enabled, their (Puppeteer-reconstructed) stack trace is printed as well.
+     * Idempotent: calling it multiple times for the same page has no effect.
      *
      * @param {puppeteer.Page} page
      * @returns {Promise<void>}
      */
     proxyConsole: async function (page) {
+        this.assertNotAborted('proxyConsole');
+
+        if (proxiedPages.has(page)) {
+            return;
+        }
+        proxiedPages.add(page);
+
         const logLevel = this.getEnvInt('LOGLEVEL', {defaultValue: priorities['DEB']});
+        const printStacktraces = this.getEnvBool('TEST_PAGE_ERROR_STACKTRACE');
         page
             .on('console', message => {
                 const type = message.type().substr(0, 3).toUpperCase()
                 const messageText = message.text();
-                if (logLevel >= priorities[type] && !messageText.match('sockjs-node')) {
+                // Unknown types (e.g. 'LOG', 'DBG', 'TRC') are treated as INF.
+                if (logLevel >= (priorities[type] ?? priorities['INF']) && !messageText.match('sockjs-node')) {
                     const color = colors[type] || blue
                     simpleConsole.log(color(`${type} ${messageText}`))
                 }
             })
-            .on('pageerror', ({message}) => {
-                if (logLevel >= priorities['ERR'] && !message.match('sockjs-node')) {
-                    simpleConsole.log(red(message))
+            .on('pageerror', err => {
+                const message = err instanceof Error ? err.message : String(err);
+                if (message.match('sockjs-node')) {
+                    return;
+                }
+                pageErrors.add(message);
+                if (logLevel >= priorities['ERR']) {
+                    simpleConsole.log(red('PAGE ERROR: ' + message));
+                    // Puppeteer reconstructs the in-page stack on the error object
+                    // (up to Error.stackTraceLimit frames).
+                    if (printStacktraces && err instanceof Error && err.stack) {
+                        simpleConsole.log(red(err.stack));
+                    }
                 }
             })
             .on('response', response => {
@@ -235,6 +571,8 @@ export default {
      * @returns {Promise<puppeteer.Page>} A promise that resolves to the configured page object.
      */
     createConfiguredPage: async function (browser, {auth} = {}) {
+        this.assertNotAborted('createConfiguredPage');
+
         if (!browser) {
             throw new Error('createConfiguredPage: browser is not initialized');
         }
@@ -263,6 +601,8 @@ export default {
      * @returns {Promise<void>} A promise that resolves when the language switch is complete.
      */
     switchToGermanIfNeeded: async function (page) {
+        this.assertNotAborted('switchToGermanIfNeeded');
+
         if (this.getEnvStr('TEST_MODE') === 'debug' && this.getEnvStr('TEST_BROWSER_LANGUAGE') !== 'de') {
             console.log('switching to German');
             const langSelector = '#langChooser input[type=text]';
@@ -284,6 +624,8 @@ export default {
      * @returns {Promise<void>} A promise that resolves when the login process is complete.
      */
     login: async function (page, { user, pass }) {
+        this.assertNotAborted('login');
+
         await page.waitForSelector('input[name=username]', { timeout: this.getEnvInt('TEST_TIMEOUT_CONTENT_READY') });
         await page.focus('input[name=username]');
         await page.waitForFunction(() => {
@@ -307,15 +649,19 @@ export default {
      * @returns {Promise<void>} A promise that resolves when the throttling has been applied.
      */
     applyThrottling: async function (page, opts) {
+        this.assertNotAborted('applyThrottling');
+
         opts = { mode: 'main', displayInfo: '', ...opts };
 
         // Object representing the network conditions to apply (see TEST_NETWORK_CONDITIONS_*), or null to skip network throttling.
         const envNetwork = this.getEnvJson(`TEST_NETWORK_CONDITIONS_${opts.mode.toUpperCase()}`, {defaultValue: null, skipValidation: true});
 
         // Number representing the CPU throttling rate to apply (see TEST_CPU_THROTTLING_RATE_*), or 0 to skip CPU throttling.
-        const envCpuThrottling = this.getEnvInt('TEST_CPU_THROTTLING_RATE_MAIN', {skipValidation: true});
+        const envCpuThrottling = this.getEnvInt(`TEST_CPU_THROTTLING_RATE_${opts.mode.toUpperCase()}`, {skipValidation: true});
 
-        if ((!envNetwork) && !envCpuThrottling) return;
+        if (!envNetwork && !envCpuThrottling) {
+            return;
+        }
 
         const DEFAULT_THROUGHPUT = 10 * 1024 * 1024; // 10 MB/s
         const DEFAULT_LATENCY = 20;
@@ -531,6 +877,8 @@ export default {
      * @returns {Promise<boolean>} true if the patch was applied by this call
      */
     freezeDurationSpinnerReformat: async function (page) {
+        this.assertNotAborted('freezeDurationSpinnerReformat');
+
         return page.evaluate(() => {
             const proto = Ext.ux.form.DurationSpinner.prototype;
             if (proto._originalGetValue) {
@@ -558,6 +906,8 @@ export default {
      * @returns {Promise<void>}
      */
     thawDurationSpinnerReformat: async function (page) {
+        this.assertNotAborted('thawDurationSpinnerReformat');
+
         return page.evaluate(() => {
             const proto = Ext.ux.form.DurationSpinner.prototype;
             if (proto._originalGetValue) {
@@ -590,6 +940,8 @@ export default {
      * @returns {Promise<void>}
      */
     formFillField: async function (page, options) {
+        this.assertNotAborted('formFillField');
+
         const {
             selector,
             value,
@@ -748,41 +1100,64 @@ export default {
      *
      * @param {puppeteer.Page} page - The page object to perform the actions on.
      * @param {string} appSelector - The selector of the current app, e.g. ".t-app-timetracker".
+     * @param {number} timeout=TEST_TIMEOUT_GRID_UPDATED - Time in ms to wait for the grid to be updated.
      * @returns {Promise<void>}
      */
-    formRefreshGrid: async function (page, appSelector) {
+    refreshGridAndWaitForReady: async function (page, appSelector, timeout = this.getEnvInt('TEST_TIMEOUT_GRID_UPDATED')) {
+        this.assertNotAborted('refreshGridAndWaitForReady');
+
         // Click on "refresh" button to update the grid.
         const buttonSelector = `${appSelector} .x-btn-image.x-tbar-loading`;
-        await page.click(buttonSelector);
+        await this.clickOnElement(page, buttonSelector);
 
         // Wait until the refresh button is actionable again:
         // - The button doesn't contain the class "x-item-disabled".
         // - None of the ancestors until and including a table element contain the class "x-item-disabled".
-        await page.waitForFunction(
-            (sel) => {
-                const el = document.querySelector(sel);
-                if (!el) return false;
-                const btn = el.closest('button') || el.parentElement;
-                if (!btn) return false;
-                const style = window.getComputedStyle(btn);
+        try {
+            await page.waitForFunction(
+                (sel) => {
+                    const el = document.querySelector(sel);
+                    if (!el) return false;
+                    const btn = el.closest('button') || el.parentElement;
+                    if (!btn) return false;
+                    const style = window.getComputedStyle(btn);
 
-                // Check disabled state: traverse up to the nearest <table> ancestor
-                let ancestor = btn;
-                while (ancestor && ancestor.tagName !== 'TABLE') {
-                    if (ancestor.classList.contains('x-item-disabled')) {
-                        return false;
+                    // Check disabled state: traverse up to the nearest <table> ancestor
+                    let ancestor = btn;
+                    while (ancestor && ancestor.tagName !== 'TABLE') {
+                        if (ancestor.classList.contains('x-item-disabled')) {
+                            return false;
+                        }
+                        ancestor = ancestor.parentElement;
                     }
-                    ancestor = ancestor.parentElement;
-                }
 
-                return btn.offsetParent !== null &&
-                    style.display !== 'none' &&
-                    !btn.disabled &&
-                    ancestor !== null && ancestor.tagName === 'TABLE';
-            },
-            {timeout: this.getEnvInt('TEST_TIMEOUT_GRID_UPDATED')},
-            buttonSelector
-        );
+                    return btn.offsetParent !== null &&
+                        style.display !== 'none' &&
+                        !btn.disabled &&
+                        ancestor !== null && ancestor.tagName === 'TABLE';
+                },
+                {timeout},
+                buttonSelector
+            );
+        } catch (err) {
+            const error = new Error(`refreshGridAndWaitForReady: timed out after ${timeout}ms waiting for grid to be ready (refresh button "${buttonSelector}")`);
+            error.cause = err;
+            throw error;
+        }
+    },
+
+    /**
+     * Clicks on the grid refresh button and waits until the grid is fully loaded again.
+     *
+     * Alias for refreshGridAndWaitForReady() to ensure compatibility with old tests.
+     *
+     * @param {puppeteer.Page} page - The page object to perform the actions on.
+     * @param {string} appSelector - The selector of the current app, e.g. ".t-app-timetracker".
+     * @param {number} timeout=TEST_TIMEOUT_GRID_UPDATED - Time in ms to wait for the grid to be updated.
+     * @returns {Promise<void>}
+     */
+    formRefreshGrid: async function (page, appSelector, timeout = this.getEnvInt('TEST_TIMEOUT_GRID_UPDATED')) {
+        await this.refreshGridAndWaitForReady(page, appSelector, timeout);
     },
 
     /**
@@ -791,17 +1166,36 @@ export default {
      *
      * @param {Page} page - The Puppeteer page instance.
      * @param {string} appSelector - The selector of the current app, e.g. ".t-app-addressbook".
-     * @param {boolean} visible - Whether the filter toolbar should be visible.
+     * @param {Object} [options]
+     * @param {boolean} [options.visible=true] - Whether the filter toolbar should be visible.
+     * @param {number} [options.timeout=TEST_TIMEOUT_ACTIONABLE] - Time in ms to wait for the filter toolbar to become visible or hidden.
      * @returns {Promise<void>}
      */
-    ensureFilterToolbarVisible: async function (page, appSelector, visible = true) {
+    ensureFilterToolbarVisible: async function (page, appSelector, options) {
+        this.assertNotAborted('ensureFilterToolbarVisible');
+
+        const visible = options?.visible ?? true;
+        const timeout = options?.timeout ?? this.getEnvInt('TEST_TIMEOUT_ACTIONABLE');
         const toggleSelector = `${appSelector} table.x-btn:has(.action_filter)`;
         const stateSelector = `${toggleSelector}${visible ? '.x-btn-pressed' : ':not(.x-btn-pressed)'}`;
 
-        await page.waitForSelector(toggleSelector, {visible: true, timeout: this.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
-        if (! await page.$(stateSelector)) {
+        try {
+            await page.waitForSelector(toggleSelector, {visible: true, timeout});
+        } catch (err) {
+            const error = new Error(`ensureFilterToolbarVisible: timed out after ${timeout}ms waiting for filter toolbar toggle "${toggleSelector}"`);
+            error.cause = err;
+            throw error;
+        }
+
+        if (!await page.$(stateSelector)) {
             await page.click(`${toggleSelector} button`);
-            await page.waitForSelector(stateSelector, {timeout: this.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
+            try {
+                await page.waitForSelector(stateSelector, {timeout});
+            } catch (err) {
+                const error = new Error(`ensureFilterToolbarVisible: timed out after ${timeout}ms waiting for filter toolbar to become ${visible ? 'visible' : 'hidden'} (state "${stateSelector}")`);
+                error.cause = err;
+                throw error;
+            }
         }
     },
 };

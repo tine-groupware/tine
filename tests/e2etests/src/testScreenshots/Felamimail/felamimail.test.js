@@ -130,7 +130,7 @@ describe('context menu', () => {
 describe('filterBar', () => {
 
     test('default search', async () => {
-        await lib.ensureFilterToolbarVisible(page, '.t-app-felamimail', false);
+        await lib.ensureFilterToolbarVisible(page, '.t-app-felamimail', {visible: false});
         await lib.makeScreenshot(
             page, {path: 'screenshots/StandardBedienhinweise/8_standardbedienhinweise_suchfilter.png'
             , clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}}
@@ -238,5 +238,5 @@ describe.skip('write E-Mail', () => {
 });
 
 afterAll(async () => {
-    global.browser.close();
+    await lib.closeBrowser();
 });

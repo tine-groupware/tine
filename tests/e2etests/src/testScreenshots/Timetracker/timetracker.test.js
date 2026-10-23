@@ -15,21 +15,18 @@ describe('timeaccount', () => {
     describe('Edit Timeaccount', () => {
         let editDialog;
         test('mainpage Zeitkonten', async () => {
-
-            await expectPuppeteer(global.page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Zeitkonten'});
+            await lib.clickOnElementWithLabel(global.page, '.t-app-timetracker .tine-mainscreen-centerpanel-west-modules a span', 'Zeitkonten');
         });
         test('open Zeitkonto hinzufügen popup dialog', async () => {
-            editDialog = await lib.getEditDialog('Zeitkonto hinzufügen');
+            editDialog = await lib.getEditDialog('Zeitkonto hinzufügen', global.page, {selector: '.t-app-timetracker .tine-mainscreen-centerpanel-north .x-btn-text'});
             await lib.makeScreenshot(editDialog,{path: 'screenshots/Zeiterfassung/2_zeiterfassung_zeitkonto_neu.png'});
         });
 
         test('permissions tab', async () => {
-
-            await expectPuppeteer(editDialog).toClick('.x-tab-panel-header .x-tab-strip-text', {text: 'Zugriffsrechte'});
+            await lib.clickOnElementWithLabel(editDialog, '.x-tab-panel-header .x-tab-strip-text', 'Zugriffsrechte');
             await editDialog.waitForSelector('.x-grid3-viewport', { visible: true, timeout: lib.getEnvInt('TEST_TIMEOUT_CONTENT_READY') });
             await lib.makeScreenshot(editDialog,{path: 'screenshots/Zeiterfassung/3_zeiterfassung_zeitkonto_rechte.png'});
-
-            await expectPuppeteer(editDialog).toClick('button', {text: 'Abbrechen'});
+            await lib.clickOnElementWaitPageClosed(editDialog, 'button', 'Abbrechen');
         })
     });
 });
@@ -38,19 +35,17 @@ describe('timetracker', () => {
     describe('Edit Timesheet', () => {
         let editDialog;
         test('mainpage Stundenzettel', async () => {
-
-            await expectPuppeteer(global.page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Stundenzettel'});
+            await lib.clickOnElementWithLabel(global.page, '.t-app-timetracker .tine-mainscreen-centerpanel-west-modules a span', 'Stundenzettel');
         });
 
         test('open Stundenzettel hinzufügen popup dialog', async () => {
-            editDialog = await lib.getEditDialog('Stundenzettel hinzufügen');
+            editDialog = await lib.getEditDialog('Stundenzettel hinzufügen', global.page, {selector: '.t-app-timetracker .tine-mainscreen-centerpanel-north .x-btn-text'});
             await lib.makeScreenshot(editDialog,{path: 'screenshots/Zeiterfassung/4_zeiterfassung_stundenzettel_neu.png'});
-
-            await expectPuppeteer(editDialog).toClick('button', {text: 'Abbrechen'});
+            await lib.clickOnElementWaitPageClosed(editDialog, 'button', 'Abbrechen');
         });
     });
 });
 
 afterAll(async () => {
-    global.browser.close();
+    await lib.closeBrowser();
 });

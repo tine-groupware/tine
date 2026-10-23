@@ -13,7 +13,7 @@ describe.skip('mainScreen', () => {
         let newPage =  await lib.getEditDialog('Einträge importieren');
         await expectPuppeteer(newPage).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei aus, die Ihre Inventargegenstände enthält'});
         await lib.makeScreenshot(newPage,{path:'screenshots/Inventarisierung/5_inventar_import.png'});
-        await expectPuppeteer(newPage).toClick('button', {text: 'Abbrechen'});
+        await lib.clickOnElementWaitPageClosed(newPage, 'button', 'Abbrechen');
     })
 });
 
@@ -32,9 +32,10 @@ describe('Edit Inventory Item', () => {
     test('accounting', async () => {
         await expectPuppeteer(newPage).toClick('span', {text: 'Buchhaltung'});
         await lib.makeScreenshot(newPage,{path: 'screenshots/Inventarisierung/4_inventar_gegenstand_buchhaltung.png'});
+        await newPage.close();
     })
 });
 
 afterAll(async () => {
-    global.browser.close();
+    await lib.closeBrowser();
 });

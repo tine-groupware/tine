@@ -15,25 +15,23 @@ describe('Contacts', () => {
             await page.click('.t-app-addressbook .ext-ux-grid-gridviewmenuplugin-menuBtn');
             await page.waitForSelector('.x-menu-list');
             await lib.makeScreenshot(page,{path: 'screenshots/Adressbuch/9_adressbuch_mit_spaltenauswahl.png'});
+            await page.keyboard.press('Escape');
         });
 
         test('Import', async () => {
             let importDialog ;
-            await expectPuppeteer(page).toMatchElement('.x-btn-text', {text: 'Kontakte importieren'});
-            await new Promise(r => setTimeout(r, 100)); // wait for btn to get active
-            importDialog = lib.getNewWindow();
-            await expectPuppeteer(page).toClick('.x-btn-text', {text: 'Kontakte importieren'});
-            importDialog = await importDialog;
+            importDialog = await lib.getEditDialog('Kontakte importieren', page, {selector: '.t-app-addressbook .x-btn-text'});
 
             await expectPuppeteer(importDialog).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei aus, die Ihre Kontakte enthält'});
             await lib.uploadFile(importDialog, 'src/testScreenshots/Addressbook/test.csv');
-            await expectPuppeteer(importDialog).toMatchElement('button', {text: new RegExp('test.csv.*'), timeout:10000})
+            await expectPuppeteer(importDialog).toMatchElement('button', {text: new RegExp('test\\.csv.*'), timeout:10000})
             await lib.makeScreenshot(importDialog,{path: 'screenshots/Adressbuch/1_adressbuch_importfenster.png'});
             await expectPuppeteer(importDialog).toClick('button', {text: 'Vorwärts'});
             await lib.makeScreenshot(importDialog,{path: 'screenshots/Adressbuch/4_adressbuch_mit_import_optionen_setzen.png.png'});
             await expectPuppeteer(importDialog).toClick('button', {text: 'Vorwärts'});
             await expectPuppeteer(importDialog).toMatchElement('span', {text: 'Zusammenfassung'});
             await lib.makeScreenshot(importDialog,{path: 'screenshots/Adressbuch/8_adressbuch_mit_import_zusammenfassung.png'});
+            // TODO: "Ende" closes the popup already. Wait until popup is closed and don't forcefully close it.
             await expectPuppeteer(importDialog).toClick('button', {text: 'Ende'});
             await importDialog.close();
         });
@@ -41,11 +39,8 @@ describe('Contacts', () => {
         test('Import conflicts', async () => {
             let importDialog ;
             await new Promise(r => setTimeout(r, 500));
-            await expectPuppeteer(page).toMatchElement('.x-btn-text', {text: 'Kontakte importieren'});
-            await new Promise(r => setTimeout(r, 100)); // wait for btn to get active
-            importDialog = lib.getNewWindow();
-            await expectPuppeteer(page).toClick('.x-btn-text', {text: 'Kontakte importieren'});
-            importDialog = await importDialog;
+            importDialog = await lib.getEditDialog('Kontakte importieren', page, {selector: '.t-app-addressbook .x-btn-text'});
+
             await expectPuppeteer(importDialog).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei aus, die Ihre Kontakte enthält'});
             await lib.uploadFile(importDialog, 'src/testScreenshots/Addressbook/test.csv');
             await expectPuppeteer(importDialog).toMatchElement('button', {text: new RegExp('test.csv.*')})
@@ -53,16 +48,17 @@ describe('Contacts', () => {
             await expectPuppeteer(importDialog).toClick('button', {text: 'Vorwärts'});
             await expectPuppeteer(importDialog).toMatchElement('span', {text: 'Konflikte auflösen'});
             await lib.makeScreenshot(importDialog,{path: 'screenshots/Adressbuch/7_adressbuch_mit_import_konflikte_aufloesen.png'});
+            // TODO: Wait for the popup to be fully closed.
             await importDialog.close();
         });
 
         test.skip('Import conflicts', async () => {
             let importDialog ;
             await new Promise(r => setTimeout(r, 500));
-            await expectPuppeteer(page).toMatchElement('.x-btn-text', {text: 'Kontakte importieren'});
+            await expectPuppeteer(page).toMatchElement('.t-app-addressbook .x-btn-text', {text: 'Kontakte importieren'});
             await new Promise(r => setTimeout(r, 100)); // wait for btn to get active
             importDialog = lib.getNewWindow();
-            await expectPuppeteer(page).toClick('.x-btn-text', {text: 'Kontakte importieren'});
+            await expectPuppeteer(page).toClick('.t-app-addressbook .x-btn-text', {text: 'Kontakte importieren'});
             importDialog = await importDialog;
             await expectPuppeteer(importDialog).toMatchElement('.x-btn-text', {text: 'Wählen Sie die Datei aus, die Ihre Kontakte enthält'});
             await lib.uploadFile(importDialog, 'src/testScreenshots/Addressbook/test_fail.csv');
@@ -261,6 +257,7 @@ describe('Contacts', () => {
             await expectPuppeteer(popupWindow).toClick('button.btn-close');
         });
 
+        // NOTE: Unskipping this test will break the 'save' test.
         test.skip('add Tag', async () => {
             let arrowtrigger = await popupWindow.$$('.x-form-arrow-trigger');
             // TODO we should not make this dependent on the number of arrow triggers
@@ -272,10 +269,14 @@ describe('Contacts', () => {
             await popupWindow.waitForSelector('.ext-mb-input');
             await expectPuppeteer(popupWindow).toFill('.ext-mb-input', 'Persönlicher Tag');
             await lib.makeScreenshot(popupWindow,{path: 'screenshots/Adressbuch/16_adressbuch_persoenlicher_tag_hinzu.png'});
+            // TODO: Use lib.clickOnElementWaitPageClosed().
             await expectPuppeteer(popupWindow).toClick('button', {text: 'Abbrechen'});
         });
 
         test('save', async () => {
+            // Note: After clicking on "Ok" a dialog opens asking for "Datenherkunft", which is supposed to prevent the popup from closing.
+            // But this is the last thing happening in this test file, so the browser gets forcefully closed, ignoring the open dialog.
+            // That is why lib.clickOnElementWaitPageClosed() CANNOT be used here - it waits until the popup is closed, what never happens, and lets this test fail.
             await expectPuppeteer(popupWindow).toClick('button', {text: 'Ok'});
             await new Promise(r => setTimeout(r, 1000));
         });
@@ -286,7 +287,7 @@ describe('Contacts', () => {
 describe.skip('Group', () => {
     describe('Mainscreen', () => {
         test('go to Mainscreen', async () => {
-            await expectPuppeteer(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Gruppen'});
+            await expectPuppeteer(page).toClick('.t-app-addressbook .tine-mainscreen-centerpanel-west .x-tree-node a span', {text: 'Gruppen'});
             await new Promise(r => setTimeout(r, 500));
             await lib.makeScreenshot(page,{path: 'screenshots/Adressbuch/22_adressbuch_gruppen_uebersicht.png'});
             await lib.makeScreenshot(page,{path: 'screenshots/Adressbuch/23_adressbuch_gruppen_modul.png'});
@@ -300,7 +301,7 @@ describe.skip('Group', () => {
 
 
 afterAll(async () => {
-    global.browser.close();
+    await lib.closeBrowser();
 });
 
 async function selectTab(popupWindow, regEx) {
