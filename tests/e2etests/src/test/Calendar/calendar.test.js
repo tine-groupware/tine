@@ -104,7 +104,7 @@ describe.skip('changeViews', () => {
 });
 
 afterAll(async () => {
-    global.browser.close();
+    await lib.closeBrowser();
 });
 
 

@@ -12,7 +12,7 @@ describe('Create and delete time sheet', () => {
     let popupWindow = null;
 
     test('Open dialog', async () => {
-        popupWindow = await lib.getEditDialog('Stundenzettel hinzufügen');
+        popupWindow = await lib.getEditDialog('Stundenzettel hinzufügen', global.page, {selector: '.t-app-timetracker .tine-mainscreen-centerpanel-north .x-btn-text'});
         await expectPuppeteer(popupWindow).toMatchElement('span.x-tab-strip-text', {text: 'Stundenzettel'});
     });
 
@@ -44,35 +44,34 @@ describe('Create and delete time sheet', () => {
     });
 
     test('Confirm', async() => {
-        await expectPuppeteer(popupWindow).toClick('button', {text: 'Ok'});
+        await lib.clickOnElementWaitPageClosed(popupWindow, 'button', 'Ok');
     });
 
     test('Check values in the grid', async() => {
         // Refresh grid and compare the values.
-        await lib.formRefreshGrid(global.page, '.t-app-timetracker');
-        await expectPuppeteer(global.page).toMatchElement('div.x-grid3-col-timeaccount_id', {text: '1 - Test Timeaccount 1', visible: true});
-        await expectPuppeteer(global.page).toMatchElement('div.x-grid3-col-description', {text: testDescription, visible: true});
-        await expectPuppeteer(global.page).toMatchElement('div.x-grid3-col-duration span.duration-renderer-medium', {text: '3 Stunden, 30 Minuten'});
-        await expectPuppeteer(global.page).toMatchElement('div.x-grid3-col-duration span.duration-renderer-small', {text: '3:30'});
-        await expectPuppeteer(global.page).toMatchElement('div.x-grid3-col-accounting_time span.duration-renderer-medium', {text: '3 Stunden, 30 Minuten'});
+        await lib.refreshGridAndWaitForReady(global.page, '.t-app-timetracker');
+        await expectPuppeteer(global.page).toMatchElement('.t-app-timetracker div.x-grid3-col-timeaccount_id', {text: '1 - Test Timeaccount 1', visible: true});
+        await expectPuppeteer(global.page).toMatchElement('.t-app-timetracker div.x-grid3-col-description', {text: testDescription, visible: true});
+        await expectPuppeteer(global.page).toMatchElement('.t-app-timetracker div.x-grid3-col-duration span.duration-renderer-medium', {text: '3 Stunden, 30 Minuten'});
+        await expectPuppeteer(global.page).toMatchElement('.t-app-timetracker div.x-grid3-col-duration span.duration-renderer-small', {text: '3:30'});
+        await expectPuppeteer(global.page).toMatchElement('.t-app-timetracker div.x-grid3-col-accounting_time span.duration-renderer-medium', {text: '3 Stunden, 30 Minuten'});
     });
 
     test('Delete and confirm', async() => {
         // Click on entry and press Delete key.
-        await expectPuppeteer(global.page).toClick('div.x-grid3-col-description', {text: testDescription});
-        await global.page.waitForSelector('.x-grid3-row-selected', { visible: true, timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE') });
+        await lib.clickOnElementWithLabel(global.page, '.t-app-timetracker div.x-grid3-col-description', testDescription);
+        await global.page.waitForSelector('.t-app-timetracker .x-grid3-row-selected', { visible: true, timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE') });
         await global.page.keyboard.press('Delete');
 
         await verifyGridPanelDeleteRecordsWorks();
 
         // Wait for modal confirmation dialog to appear, click on "Ja" and wait until the dialog disappears.
-        await expectPuppeteer(global.page).toClick('button.yes-button', {text: 'Ja'});
-        await expectPuppeteer(global.page).not.toMatchElement('div.modal.vue-message-box.show');
+        await lib.clickOnElement(global.page, '.modal.vue-message-box button.yes-button');
+        await lib.waitForElement(global.page, '.modal.vue-message-box', {hidden: true});
 
         // Refresh grid and check for absence of the entry.
-        // TODO: Workaround to let the CI pass this test, proper fix will be implemented soon.
-        //await lib.formRefreshGrid(global.page, '.t-app-timetracker');
-        //await expectPuppeteer(global.page).not.toMatchElement('div.x-grid3-col-description', {text: testDescription});
+        await lib.refreshGridAndWaitForReady(global.page, '.t-app-timetracker');
+        await expectPuppeteer(global.page).not.toMatchElement('.t-app-timetracker div.x-grid3-col-description', {text: testDescription});
     });
 });
 
@@ -97,5 +96,5 @@ async function verifyGridPanelDeleteRecordsWorks() {
 }
 
 afterAll(async () => {
-    global.browser.close();
+    await lib.closeBrowser();
 });
