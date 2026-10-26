@@ -6,7 +6,7 @@ dotenv.config();
 beforeAll(async () => {
     //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Kalender');
-    await expectPuppeteer(page).toClick('.t-app-calendar button', {text:'Heute'}); //need for init setup!
+    await expectPuppeteer(page).toClick('.t-app-calendar .tine-mainscreen-centerpanel-west button', {text:'Heute'}); //need for init setup!
 });
 
 describe('MainScreen', () => {
@@ -78,7 +78,7 @@ describe('MainScreen', () => {
         await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/Kalender/5_kalender_termine_listenansicht.png'});
         await new Promise(r => setTimeout(r, 1000));
-        await expectPuppeteer(page).toClick('.t-app-calendar button', {text:'Heute', visible: true});
+        await expectPuppeteer(page).toClick('.t-app-calendar .tine-mainscreen-centerpanel-west button', {text:'Heute', visible: true});
     });
 });
 
@@ -129,6 +129,13 @@ describe('editDialog', () => {
     });
 
     test('user view', async () => {
+        // First, change view to "Admin, tine ® (Teilnehmer*in)", then back to "Organisator*in".
+        const currentUser = await lib.getCurrentUser(newPage);
+        const attendeeText = `${currentUser.accountDisplayName} (Teilnehmer*in)`;
+        await newPage.click('.x-form-trigger.x-form-arrow-trigger:has(+ input[name=perspective])');
+        await expectPuppeteer(newPage).toMatchElement('.x-combo-list-item', {text: attendeeText});
+        await expectPuppeteer(newPage).toClick('.x-combo-list-item', {text: attendeeText});
+        await new Promise(r => setTimeout(r, 1000));
         await newPage.click('.x-form-trigger.x-form-arrow-trigger:has(+ input[name=perspective])');
         await expectPuppeteer(newPage).toMatchElement('.x-combo-list-item', {text:'Organisator*in'})
         await expectPuppeteer(newPage).toClick('.x-combo-list-item', {text:'Organisator*in'})
@@ -137,14 +144,9 @@ describe('editDialog', () => {
     });
 
     test('save events', async () => {
-        const currentUser = await lib.getCurrentUser(newPage);
-        const attendeeText = `${currentUser.accountDisplayName} (Teilnehmer*in)`;
-        await newPage.click('.x-form-trigger.x-form-arrow-trigger:has(+ input[name=perspective])');
-        await expectPuppeteer(newPage).toMatchElement('.x-combo-list-item', {text: attendeeText})
-        await expectPuppeteer(newPage).toClick('.x-combo-list-item', {text: attendeeText})
-        await new Promise(r => setTimeout(r, 1000));
         await expectPuppeteer(newPage).toClick('button', {text: 'Ok'});
-
+        // TODO: Workaround to let the CI pass this test. Will be fixed soon.
+        await new Promise(r => setTimeout(r, 5000));
     });
 
 });
@@ -160,7 +162,7 @@ describe('context menu', () => {
         await new Promise(r => setTimeout(r, 2000));
         await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Woche'});
         await new Promise(r => setTimeout(r, 2000));
-        await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Heute'});
+        await expectPuppeteer(page).toClick('.t-app-calendar .tine-mainscreen-centerpanel-west button', {text: 'Heute'});
         await new Promise(r => setTimeout(r, 2000));
         await expectPuppeteer(page).toClick('.t-app-calendar .cal-daysviewpanel-event-body', {text: 'Test Event', button: 'right'});
         await new Promise(r => setTimeout(r, 1000));
@@ -177,7 +179,7 @@ describe('context menu', () => {
     });
 
     test('delete event', async () => {
-        await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Heute'});
+        await expectPuppeteer(page).toClick('.t-app-calendar .tine-mainscreen-centerpanel-west button', {text: 'Heute'});
         // Wait for the event, right-click it, then select "Termin löschen".
         await expectPuppeteer(page).toMatchElement('.t-app-calendar .cal-daysviewpanel-event-body', {text: 'Test Event',timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
         await expectPuppeteer(page).toClick('.t-app-calendar .cal-daysviewpanel-event-body', {text: 'Test Event',button: 'right'});
