@@ -54,7 +54,11 @@ export default {
             await expectPuppeteer(page).toMatchElement('.action_menu.application-menu-btn', {visible: true});
             await expectPuppeteer(page).toClick('.action_menu.application-menu-btn');
             await page.waitForSelector('.application-menu-item');
-            await expectPuppeteer(page).toClick('.application-menu-item__text', { text: app });
+
+            // TODO: Workaround to let CI pass the tests. Will be fixed soon.
+            await this.temporaryFixMenuClick(page, app);
+            //await expectPuppeteer(page).toClick('.application-menu-item__text', { text: app });
+
             await expectPuppeteer(page).toMatchElement('title', { text: `${this.getEnvStr('TEST_BRANDING_TITLE')} - ${app}` });
             await new Promise(r => setTimeout(r, 1500));
         }
@@ -95,6 +99,27 @@ export default {
         });
 
         await helpers.waitForAppReady(page);
+    },
+
+    temporaryFixMenuClick: async function (page, app) {
+        // The app menu is a floating popover that animates in and can briefly re-render,
+        // so the item may have a zero box (not clickable) or be detached when clicked.
+        // Retry the click (re-opening the menu if it closed) until it lands.
+        const deadline = Date.now() + this.getEnvInt('TEST_TIMEOUT_ACTIONABLE');
+        for (;;) {
+            try {
+                await expectPuppeteer(page).toClick('.application-menu-item__text', { text: app, visible: true });
+                break;
+            } catch (err) {
+                const retryable = /detached from document|not clickable or not an Element/i.test(String(err && err.message));
+                if (!retryable || Date.now() >= deadline) throw err;
+                if (await page.evaluate(() => !document.querySelector('.application-menu-item'))) {
+                    await expectPuppeteer(page).toClick('.action_menu.application-menu-btn');
+                    await page.waitForSelector('.application-menu-item');
+                }
+                await new Promise(r => setTimeout(r, 200));
+            }
+        }
     },
 
     /**
