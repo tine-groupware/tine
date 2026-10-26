@@ -590,6 +590,62 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     }
 
     /**
+     * testCancelRecurSeriesWithPersistentException - the cancellation mail of a recurring series
+     * with one persistent exception must contain an ics with the base event and the exception
+     */
+    public function testCancelRecurSeriesWithPersistentException()
+    {
+        $dtstart = Tinebase_DateTime::now()->addDay(1)->setTime(10, 0);
+        $event = new Calendar_Model_Event(array(
+            'summary'      => 'Recurring event with exception',
+            'dtstart'      => $dtstart,
+            'dtend'        => $dtstart->getClone()->addHour(1),
+            'rrule'        => 'FREQ=DAILY;INTERVAL=1;COUNT=5',
+            'container_id' => $this->_getTestCalendar()->getId(),
+            'attendee'     => $this->_getPersonaAttendee('pwulf'),
+        ));
+
+        self::flushMailer();
+        $persistentEvent = $this->_eventController->create($event);
+
+        // reschedule the second occurrence -> persistent exception
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions,
+            $dtstart->getClone()->subDay(1), $dtstart->getClone()->addDay(5));
+        $recurSet[1]->last_modified_time = $this->_eventController->getRecurBaseEvent($recurSet[1])->last_modified_time;
+        $recurSet[1]->dtstart->addHour(2);
+        $recurSet[1]->dtend->addHour(2);
+        self::flushMailer();
+        $this->_eventController->createRecurException($recurSet[1], FALSE, FALSE);
+
+        // cancel the whole series
+        self::flushMailer();
+        $this->_eventController->delete($persistentEvent->getId(), Calendar_Model_Event::RANGE_ALL);
+
+        // the cancellation mail for pwulf must contain the ics
+        $pwulfEmail = $this->_getPersona('pwulf')->accountEmailAddress;
+        $ics = null;
+        foreach (self::getMessages() as $message) {
+            if (Tinebase_Helper::array_value(0, $message->getRecipients()) != $pwulfEmail) {
+                continue;
+            }
+            $part = quoted_printable_decode($message->getParts()[0]->getContent());
+            if (strpos($part, 'STATUS:CANCELLED') === false) {
+                continue;
+            }
+            $ics = $part;
+            break;
+        }
+        $this->assertNotNull($ics, 'no cancellation mail with ics for pwulf');
+
+        // the ics must contain the base event (rrule) and the exception (recurrence-id)
+        $this->assertEquals(2, substr_count($ics, 'BEGIN:VEVENT'),
+            'ics must contain the base event and the exception: ' . $ics);
+        $this->assertStringContainsString('RRULE:FREQ=DAILY', $ics, 'base event missing in ics: ' . $ics);
+        $this->assertStringContainsString('RECURRENCE-ID', $ics, 'exception missing in ics: ' . $ics);
+    }
+
+    /**
      * testRecurExceptionIcsContainsOnlyException
      *
      * Verifies that the iCal attachment in notification emails for recurring event
