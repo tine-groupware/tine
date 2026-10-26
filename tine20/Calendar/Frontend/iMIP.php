@@ -24,11 +24,41 @@ class Calendar_Frontend_iMIP
         // to fill method
         $_iMIP->getEvents();
 
-        // replies
+        // replies are always auto processed
+        // cancellations are always auto processed, only event where own attendee is present will be changed
+        // requests are only auto processed if there is at least one existing event with own attendee present, only existing event instances with own attendee already present will handled (reschedules)
         // counter-replies maybe to be added later
-        if ($_iMIP->method !== Calendar_Model_iMIP::METHOD_REPLY) return;
+        switch ((string)$_iMIP->method) {
+            case Calendar_Model_iMIP::METHOD_REQUEST:
+                if (! $this->_hasExistingExternalEventWithOwnAttendee($_iMIP)) {
+                    break;
+                }
+            case Calendar_Model_iMIP::METHOD_REPLY:
+            case Calendar_Model_iMIP::METHOD_CANCEL:
+                $this->process($_iMIP, _retry: $_retry);
+        }
+    }
 
-        $this->process($_iMIP, _retry: $_retry);
+    protected function _hasExistingExternalEventWithOwnAttendee(Calendar_Model_iMIP $_iMIP): bool
+    {
+        foreach ($_iMIP->getEvents() as $event) {
+            $existingEvent = $_iMIP->getExistingEvent($event);
+            if (null === $existingEvent && $event->isRecurException()) {
+                // a new exception of an existing series
+                $baseEvent = clone $event;
+                $baseEvent->recurid = null;
+                $existingEvent = $_iMIP->getExistingEvent($baseEvent);
+            }
+            if (null === $existingEvent || ! $existingEvent->hasExternalOrganizer()) {
+                continue;
+            }
+            // only auto process updates to events we already attend, not new invitations
+            // (or events we were just added to) - those need manual processing
+            if (null !== Calendar_Model_Attender::getOwnAttender($existingEvent->attendee)) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
@@ -55,6 +85,7 @@ class Calendar_Frontend_iMIP
             });
         }
 
+        $aggregatedException = null;
         $_iMIP->event = null;
         /** @var Calendar_Model_Event $imipEvent */
         foreach ($_iMIP->getEvents() as $imipEvent) {
@@ -74,16 +105,28 @@ class Calendar_Frontend_iMIP
                     continue;
                 }
                 try {
-                    $this->_process($_iMIP, $event, $_status);
-                } catch (Zend_Db_Statement_Exception $zdbse) {
-                    if ($_retry && strpos($zdbse->getMessage(), 'Deadlock') !== false) {
+                    try {
                         $this->_process($_iMIP, $event, $_status);
+                    } catch (Zend_Db_Statement_Exception $zdbse) {
+                        if ($_retry && strpos($zdbse->getMessage(), 'Deadlock') !== false) {
+                            $this->_process($_iMIP, $event, $_status);
+                        } else {
+                            throw $zdbse;
+                        }
+                    }
+                } catch (Calendar_Exception_iMIP $e) {
+                    if (null === $aggregatedException) {
+                        $aggregatedException = $e;
                     } else {
-                        throw $zdbse;
+                        $aggregatedException = new Calendar_Exception_iMIP($aggregatedException->getMessage() . ' ' . $e->getMessage());
                     }
                 }
             }
             $imipEvent->exdate = $exdates;
+        }
+
+        if (null !== $aggregatedException) {
+            throw $aggregatedException;
         }
 
         $_iMIP->existing_events = null;
