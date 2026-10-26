@@ -9,6 +9,8 @@
 const buffered = {};
 const throttled = {};
 const openTransactions = [];
+const recentlyCommitted = [];
+const RECENTLY_COMMITTED_TTL = 10000;
 
 const constrainedRand = (min, max) => {
     return Math.max(max, Math.round(Math.random() * max) + min);
@@ -120,9 +122,22 @@ const init = async () => {
     };
 };
 
+const recordCommitted = (verb, model, recordId) => {
+    recentlyCommitted.push({ verb, model, recordId, ts: Date.now() });
+    const cutoff = Date.now() - RECENTLY_COMMITTED_TTL;
+    while (recentlyCommitted.length && recentlyCommitted[0].ts < cutoff) {
+        recentlyCommitted.shift();
+    }
+};
+
 const isOwnEvent = async (data) => {
-    if(openTransactions.find((t) => { return t.verb === data.verb && t.model === data.model && t.recordId === data.recordId })) {
+    if (openTransactions.find((t) => { return t.verb === data.verb && t.model === data.model && t.recordId === data.recordId })) {
         // own delete, update or create with fixed id
+        return true;
+    }
+
+    if (recentlyCommitted.find((t) => { return t.verb === data.verb && t.model === data.model && t.recordId === data.recordId })) {
+        // own event whose transaction was already committed (late-arriving broadcast)
         return true;
     }
 
@@ -168,12 +183,14 @@ const startTransaction = (record, action, timeout) => {
         wait(timeout || 2000).then(() => { return record; })
     ]);
 
-    transaction.commitPromise.finally((record) => {
+    transaction.commitPromise.then((record) => {
+        recordCommitted(transaction.verb, transaction.model, record.getId());
+    }).finally((record) => {
         const idx = openTransactions.indexOf(transaction);
         if (idx >= 0) {
             openTransactions.splice(idx, 1);
         }
-    })
+    });
 
     return commitFn;
 };
