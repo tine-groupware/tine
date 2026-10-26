@@ -5,7 +5,7 @@ beforeAll(async () => {
     await lib.getBrowser('Human Resources');
 });
 
-describe.skip('employee', () => {
+describe('employee', () => {
     describe('employee grid', () => {
         test('show grid', async () => {
             await expectPuppeteer(page).toClick('.x-tree-node span', {text: 'Mitarbeitende', visible: true});
@@ -128,7 +128,7 @@ describe.skip('employee', () => {
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
 
 
@@ -209,7 +209,7 @@ describe.skip('employee', () => {
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled');
-                    await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled');
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled');
 
                     await new Promise(r => setTimeout(r, 5000));
