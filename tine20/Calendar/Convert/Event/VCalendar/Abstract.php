@@ -225,7 +225,10 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             if (null === $_mainEvent && $event->base_event_id) {
                 $oldAclVal = Calendar_Controller_Event::getInstance()->doContainerACLChecks(false);
                 try {
-                    $_mainEvent = Calendar_Controller_Event::getInstance()->get($event->base_event_id);
+                    // the base event might be soft-deleted already (e.g. when a 'deleted' notification
+                    // is converted after the series was deleted)
+                    $_mainEvent = Calendar_Controller_Event::getInstance()
+                        ->get($event->base_event_id, null, false, true);
                 } finally {
                     Calendar_Controller_Event::getInstance()->doContainerACLChecks($oldAclVal);
                 }
