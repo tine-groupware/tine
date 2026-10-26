@@ -689,11 +689,23 @@ class Calendar_Frontend_iMIP
             return;
         }
 
+        // we are only uninvited if we are no longer an attendee of the incoming event
+        // NOTE: has to be checked before create(), as the current user is asserted as attendee there
+        $ownAttenderInvited = Calendar_Model_Attender::getOwnAttender($_event->attendee);
+
         $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
         $notificationRaii = new Tinebase_RAII(fn() => Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications));
         if (!$existingEvent) {
             // create a [to be] cancelled event
-            $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->create($_event);
+            if ($_event->isRecurException()) {
+                // link the new exception to the existing event series
+                $baseEvent = clone $_event;
+                $baseEvent->recurid = null;
+                if (null !== ($existingBaseEvent = $_iMIP->getExistingEvent($baseEvent, _getDeleted: true))) {
+                    $_event->base_event_id = $existingBaseEvent->getId();
+                }
+            }
+            $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->create($_event, true);
         }
 
         if (! $existingEvent->is_deleted) {
@@ -702,15 +714,20 @@ class Calendar_Frontend_iMIP
                     $existingEvent->status = Calendar_Model_Event::STATUS_CANCELED;
                     Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
                 }
-            } else {
-                // Attendee cancelled
+            } elseif (null === $ownAttenderInvited) {
+                // Attendee cancelled: we are no longer an attendee of the incoming event -> uninvite
                 if ($ownAttendee = Calendar_Model_Attender::getOwnAttender($existingEvent->attendee)) {
                     $existingEvent->attendee->removeRecord($ownAttendee);
-                    $oldValue = Calendar_Controller_MSEventFacade::getInstance()->getEventController()->useExternalOrganizerContainer(false);
+                    $eventController = Calendar_Controller_MSEventFacade::getInstance()->getEventController();
+                    $oldValue = $eventController->useExternalOrganizerContainer(false);
+                    // once uninvited we have no read grant on the event anymore, so internal reads
+                    // during the update would only return free/busy information
+                    $oldAclChecks = $eventController->doContainerACLChecks(false);
                     try {
                         Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
                     } finally {
-                        Calendar_Controller_MSEventFacade::getInstance()->getEventController()->useExternalOrganizerContainer($oldValue);
+                        $eventController->doContainerACLChecks($oldAclChecks);
+                        $eventController->useExternalOrganizerContainer($oldValue);
                     }
                 }
             }
