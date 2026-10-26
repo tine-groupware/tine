@@ -886,13 +886,14 @@ Record.clone = function(record) {
 
 Record.modlogFields = [
     { name: 'creation_time',      type: 'date', dateFormat: ISO8601Long, omitDuplicateResolving: true },
-    { name: 'created_by',                                                              omitDuplicateResolving: true },
+    { name: 'created_by',                                                omitDuplicateResolving: true },
     { name: 'last_modified_time', type: 'date', dateFormat: ISO8601Long, omitDuplicateResolving: true },
-    { name: 'last_modified_by',                                                        omitDuplicateResolving: true },
-    { name: 'is_deleted',         type: 'boolean',                                     omitDuplicateResolving: true },
+    { name: 'last_modified_by',                                          omitDuplicateResolving: true },
+    { name: 'is_deleted',         type: 'boolean',                       omitDuplicateResolving: true },
     { name: 'deleted_time',       type: 'date', dateFormat: ISO8601Long, omitDuplicateResolving: true },
-    { name: 'deleted_by',                                                              omitDuplicateResolving: true },
-    { name: 'seq',                                                                     omitDuplicateResolving: true }
+    { name: 'deleted_by',                                                omitDuplicateResolving: true },
+    { name: 'purge_date',         type: 'date', dateFormat: ISO8601Long, omitDuplicateResolving: true },
+    { name: 'seq',                                                       omitDuplicateResolving: true }
 ];
 
 /**
@@ -900,7 +901,7 @@ Record.modlogFields = [
  * generic Record fields
  */
 Record.genericFields = Record.modlogFields.concat([
-    { name: 'container_id', header: 'Container',                                       omitDuplicateResolving: false}
+    { name: 'container_id', header: 'Container',                         omitDuplicateResolving: false}
 ]);
 
 
