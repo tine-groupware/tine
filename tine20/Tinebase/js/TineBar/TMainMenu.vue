@@ -27,7 +27,7 @@
       @keydown.esc="hideMenu"
     >
       <div class="main-menu-item__icon" :class="action.iconCls"></div>
-      <div class="ms-2">
+      <div class="main-menu-item__text ms-2" :title="action.text">
         {{action.text}}
       </div>
     </li>
@@ -84,12 +84,24 @@ const hideMenuEmit = (e) => {
 .main-menu-item{
   font-size: 15px;
   /*height: 22px;*/
-  width: 320px;
+  // grow with the longest item (product name may vary) - the popover limits it to the available width
+  min-width: min(320px, 100%);
   cursor: pointer;
+  // reserve the space of the hover/focus border - otherwise the text gets narrower (and wraps) on hover
+  border-left: transparent solid 2px;
 
   &__icon{
+    flex: none;
     width: 20px;
     height: 20px;
+  }
+
+  &__text{
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &:focus{
