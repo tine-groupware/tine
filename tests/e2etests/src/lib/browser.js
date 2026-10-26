@@ -121,27 +121,6 @@ export default {
         }
     },
 
-    temporaryFixMenuClick: async function (page, app) {
-        // The app menu is a floating popover that animates in and can briefly re-render,
-        // so the item may have a zero box (not clickable) or be detached when clicked.
-        // Retry the click (re-opening the menu if it closed) until it lands.
-        const deadline = Date.now() + this.getEnvInt('TEST_TIMEOUT_ACTIONABLE');
-        for (;;) {
-            try {
-                await expectPuppeteer(page).toClick('.application-menu-item__text', { text: app, visible: true });
-                break;
-            } catch (err) {
-                const retryable = /detached from document|not clickable or not an Element/i.test(String(err && err.message));
-                if (!retryable || Date.now() >= deadline) throw err;
-                if (await page.evaluate(() => !document.querySelector('.application-menu-item'))) {
-                    await expectPuppeteer(page).toClick('.action_menu.application-menu-btn');
-                    await page.waitForSelector('.application-menu-item');
-                }
-                await new Promise(r => setTimeout(r, 200));
-            }
-        }
-    },
-
     /**
      * Downloads a file by clicking the specified selector and returns the path to the downloaded file.
      * The file will be downloaded to a temporary directory created for each download.
