@@ -445,8 +445,9 @@ export default {
                     );
                 }, mode);
 
-                const resolution = this.getEnvJson('TEST_RESOLUTION');
-                await page.setViewport(resolution);
+                if (!this.isConnectedBrowser()) {
+                    await page.setViewport(this.getEnvJson('TEST_RESOLUTION'));
+                }
                 await page.waitForFunction(
                     (m) => document.body.className.includes(`${m}-mode`),
                     {timeout: this.getEnvInt('TEST_TIMEOUT_ACTIONABLE')},
@@ -520,13 +521,13 @@ export default {
 
     /**
      * Initializes expect-puppeteer with default options.
-     * Sets a default timeout of 5000ms for all expect-puppeteer actions.
+     * Sets a default timeout for all expect-puppeteer actions (see TEST_TIMEOUT_DEFAULT).
      *
      * @param {function} setDefaultOptions - The function to set default options for expect-puppeteer.
      * @returns void
      */
     initExpect: function (setDefaultOptions) {
-        setDefaultOptions({timeout: 5000});
+        setDefaultOptions({timeout: this.getEnvInt('TEST_TIMEOUT_DEFAULT')});
     },
 
     /**
@@ -535,6 +536,10 @@ export default {
      * @returns {Promise<puppeteer.Browser>}
      */
     launchBrowser: async function () {
+        if (this.isConnectedBrowser()) {
+            return await this.connectBrowser();
+        }
+
         const args = [
             '--lang=de-DE,de',
             '--no-sandbox',
@@ -561,6 +566,58 @@ export default {
     },
 
     /**
+     * Returns true if the tests use an already running browser (TEST_BROWSER_URL) instead of launching one.
+     *
+     * @returns {boolean}
+     */
+    isConnectedBrowser: function () {
+        return !!this.getEnvStr('TEST_BROWSER_URL', {skipValidation: true});
+    },
+
+    /**
+     * Connects to the running browser given by TEST_BROWSER_URL (e.g. http://127.0.0.1:9222).
+     * browser.close() only disconnects, so the browser and its final state stay visible.
+     *
+     * @returns {Promise<puppeteer.Browser>}
+     */
+    connectBrowser: async function () {
+        let browser;
+        try {
+            browser = await puppeteer.connect({
+                browserURL: this.getEnvStr('TEST_BROWSER_URL'),
+                defaultViewport: null
+            });
+        } catch (err) {
+            throw new Error(`Failed to connect to browser via ${this.getEnvStr('TEST_BROWSER_URL')}\nIs Chrome browser with remote debugging started?`);
+        }
+        browser.close = browser.disconnect.bind(browser);
+        return browser;
+    },
+
+    /**
+     * Returns the first tab showing TEST_URL of a connected browser, or a new tab.
+     * Cookies and storage of TEST_URL are cleared, so the test starts logged out.
+     *
+     * @param {puppeteer.Browser} browser
+     * @returns {Promise<puppeteer.Page>}
+     */
+    getConnectedPage: async function (browser) {
+        const testUrl = this.getEnvStr('TEST_URL');
+        const pages = await browser.pages();
+        const page = pages.find(p => p.url().startsWith(testUrl)) || await browser.newPage();
+
+        const session = await page.createCDPSession();
+        await session.send('Storage.clearDataForOrigin', {
+            origin: new URL(testUrl).origin,
+            storageTypes: 'cookies,local_storage,session_storage,indexeddb,cache_storage,service_workers'
+        });
+        await session.detach();
+        await page.bringToFront();
+
+        return page;
+    },
+
+    /**
      * Creates a new page in the browser and configures it with necessary settings.
      * Sets up console logging, HTTP headers, viewport size, and optional authentication.
      *
@@ -576,14 +633,17 @@ export default {
         if (!browser) {
             throw new Error('createConfiguredPage: browser is not initialized');
         }
-        const page = await browser.newPage();
+        const connected = this.isConnectedBrowser();
+        const page = connected ? await this.getConnectedPage(browser) : await browser.newPage();
         await this.proxyConsole(page);
 
         await page.setExtraHTTPHeaders({
             'Accept-Language': 'de'
         });
 
-        await page.setViewport(this.getEnvJson('TEST_RESOLUTION'));
+        if (!connected) {
+            await page.setViewport(this.getEnvJson('TEST_RESOLUTION'));
+        }
         if (auth) {
             await page.authenticate(auth);
         }
