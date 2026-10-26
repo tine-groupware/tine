@@ -4,39 +4,118 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+@use "../../bootstrap-vue/variables" as bs;
+
+// NOTE: Ext.menu.Menu is styled like a bootstrap dropdown (.dropdown-menu/-item/-divider/-header).
+//       The dropdown css vars are only defined on .dropdown-menu, so we define them on .x-menu as well.
 .x-menu {
-    background-color:#f0f0f0;
+    --bs-dropdown-min-width: #{bs.$dropdown-min-width};
+    --bs-dropdown-padding-x: #{bs.$dropdown-padding-x};
+    --bs-dropdown-padding-y: #{bs.$dropdown-padding-y};
+    --bs-dropdown-font-size: #{bs.$dropdown-font-size};
+    --bs-dropdown-color: #{bs.$dropdown-color};
+    --bs-dropdown-bg: #{bs.$dropdown-bg};
+    --bs-dropdown-border-color: #{bs.$dropdown-border-color};
+    --bs-dropdown-border-radius: #{bs.$dropdown-border-radius};
+    --bs-dropdown-border-width: #{bs.$dropdown-border-width};
+    --bs-dropdown-box-shadow: #{bs.$dropdown-box-shadow};
+    --bs-dropdown-divider-bg: #{bs.$dropdown-divider-bg};
+    --bs-dropdown-divider-margin-y: #{bs.$dropdown-divider-margin-y};
+    --bs-dropdown-link-color: #{bs.$dropdown-link-color};
+    --bs-dropdown-link-hover-color: #{bs.$dropdown-link-hover-color};
+    --bs-dropdown-link-hover-bg: #{bs.$dropdown-link-hover-bg};
+    --bs-dropdown-link-disabled-color: #{bs.$dropdown-link-disabled-color};
+    --bs-dropdown-item-padding-x: #{bs.$dropdown-item-padding-x};
+    --bs-dropdown-item-padding-y: #{bs.$dropdown-item-padding-y};
+    --bs-dropdown-header-color: #{bs.$dropdown-header-color};
+    --bs-dropdown-header-padding-x: #{bs.$dropdown-header-padding-x};
+    --bs-dropdown-header-padding-y: #{bs.$dropdown-header-padding-y};
+    // icons sit in the left item padding, the (submenu) arrow in the right one
+    --x-menu-icon-size: 16px;
+    --x-menu-icon-gap: #{bs.$spacer * .5};
+    --x-menu-arrow-size: 12px;
+
+    min-width: var(--bs-dropdown-min-width);
+    color: var(--bs-dropdown-color);
+    background-color: var(--bs-dropdown-bg);
+    background-image: none;
 }
 
-.x-menu-floating{
-    border-color:#718bb7;
+// NOTE: the menus have no (ext) shadow element (see extFixes) - it doesn't follow the border radius
+.x-menu-floating {
+    background-clip: padding-box;
+    border: var(--bs-dropdown-border-width) solid var(--bs-dropdown-border-color);
+    border-radius: var(--bs-dropdown-border-radius);
+    box-shadow: var(--bs-dropdown-box-shadow);
 }
 
 .x-menu-nosep {
 	background-image:none;
 }
 
-.x-menu-list-item{
+.x-menu-list {
+    padding: var(--bs-dropdown-padding-y) var(--bs-dropdown-padding-x);
+    background-color: transparent;
+}
+
+// .dropdown-item
+.x-menu-list-item {
 	font-weight: normal;
-	font-size: 11px;
+	font-size: var(--bs-dropdown-font-size);
+    padding: 0;
 }
 
-.x-menu-sep {
-    background-color:#e0e0e0;
-	border-bottom-color:#fff;
+// NOTE: .x-menu - more specific than the (dark-mode) link colors
+.x-menu a.x-menu-item {
+    padding: var(--bs-dropdown-item-padding-y)
+        calc(var(--bs-dropdown-item-padding-x) + var(--x-menu-arrow-size))
+        var(--bs-dropdown-item-padding-y)
+        calc(var(--bs-dropdown-item-padding-x) + var(--x-menu-icon-size) + var(--x-menu-icon-gap));
+    line-height: bs.$line-height-base;
+	color: var(--bs-dropdown-link-color);
 }
 
-a.x-menu-item {
-	color:#222;
+.x-menu-item-icon {
+    left: var(--bs-dropdown-item-padding-x);
+    top: calc(50% - var(--x-menu-icon-size) / 2);
+    width: var(--x-menu-icon-size);
+    height: var(--x-menu-icon-size);
 }
 
+.x-menu-item-arrow {
+    background-image: url(../../../../images/icon-set/icon_arrow_full_right.svg) !important;
+    background-position: right calc(var(--bs-dropdown-item-padding-x) / 2) center;
+    background-size: var(--x-menu-arrow-size);
+}
+
+// NOTE: only the colors change - the item must not change its size (and the menu its layout) on hover
 .x-menu-item-active {
-	background-color: #dbecf4;
-    border-color:#aaccf6;
+	background-color: var(--bs-dropdown-link-hover-bg);
+
+    a.x-menu-item {
+        color: var(--bs-dropdown-link-hover-color);
+    }
 }
 
-.x-menu-item-active a.x-menu-item {
-	border-color:#aaccf6;
+.x-menu-list-item.x-item-disabled {
+    opacity: 1;
+
+    a.x-menu-item {
+        color: var(--bs-dropdown-link-disabled-color);
+    }
+    .x-menu-item-icon {
+        opacity: .5;
+    }
+}
+
+// .dropdown-divider
+.x-menu-sep {
+    height: 0;
+    margin: var(--bs-dropdown-divider-margin-y) 0;
+    background: none;
+    border: 0;
+    border-top: 1px solid var(--bs-dropdown-divider-bg);
+    opacity: 1;
 }
 
 .x-menu-check-item .x-menu-item-icon{
@@ -56,7 +135,7 @@ a.x-menu-item {
 }
 
 .x-menu-plain {
-	background-color:#f0f0f0 !important;
+	background-color: var(--bs-dropdown-bg) !important;
     background-image: none;
 }
 
@@ -81,16 +160,16 @@ a.x-menu-item {
     background-image:url(Tinebase/js/node_modules/@tabler/icons/icons/filled/caret-down.svg) !important;
 }
 
-/* only included in expamples :-(*/
-.x-menu-title {
-  background: #D6E3F2;
-  border-style: solid;
-  border-color:#DAE6F4 #99bbe8 #99bbe8 #DAE6F4;
-  border-width: 1px;
-  margin:-2px -2px 0;
-  color:#15428b;
-  font-weight: bold;
-  font-size: 10px;
-  display:block;
-  padding:3px;
+// .dropdown-header
+.x-menu-title,
+.x-ux-menu-title {
+    display: block;
+    margin: 0;
+    padding: var(--bs-dropdown-header-padding-y) var(--bs-dropdown-header-padding-x);
+    font-size: bs.$font-size-sm;
+    font-weight: normal;
+    color: var(--bs-dropdown-header-color);
+    white-space: nowrap;
+    background: none;
+    border: 0;
 }

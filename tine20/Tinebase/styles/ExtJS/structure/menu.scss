@@ -24,7 +24,6 @@
 }
 
 .x-menu-list{
-    padding: 2px;
 	background:transparent;
 	border:0 none;
     overflow:hidden;
@@ -47,7 +46,6 @@
 .x-menu-list-item{
     white-space: nowrap;
 	display:block;
-	padding:1px;
 }
 
 .x-menu-item{
@@ -64,8 +62,6 @@
 	display:block;
 	font-size:1px;
 	line-height:1px;
-	margin: 2px 3px;
-	border-bottom:1px solid;
     overflow:hidden;
 }
 
@@ -89,40 +85,19 @@
 a.x-menu-item {
     cursor: pointer;
     display: block;
-    line-height: 16px;
     outline-color: -moz-use-text-color;
     outline-style: none;
     outline-width: 0;
-    padding: 3px 21px 3px 27px;
     position: relative;
     text-decoration: none;
     white-space: nowrap;
 }
 
-.x-menu-item-active {
-    background-repeat: repeat-x;
-    background-position: left bottom;
-    border-style:solid;
-    border-width: 1px 0;
-    margin:0 1px;
-	padding: 0;
-}
-
-.x-menu-item-active a.x-menu-item {
-    border-style:solid;
-    border-width:0 1px;
-    margin:0 -1px;
-}
-
 .x-menu-item-icon {
 	border: 0 none;
-	height: 16px;
 	padding: 0;
 	vertical-align: top;
-	width: 16px;
 	position: absolute;
-    left: 3px;
-    top: 3px;
     margin: 0;
     background-position:center;
 }
@@ -131,8 +106,7 @@ a.x-menu-item {
     left: -24px;
 }
 .ext-strict .x-menu-item-icon {
-    left: 3px;
-    background-size: 16px 16px !important;
+    background-size: var(--x-menu-icon-size, 16px) var(--x-menu-icon-size, 16px) !important;
 }
 
 .ext-ie6 .x-menu-item-icon {
@@ -235,6 +209,7 @@ a.x-menu-item {
     line-height: 10px;
 }
 
+// components (e.g. fields) in menus - aligned with the item texts
 .x-menu-list-item-indent{
-    padding-left: 27px;
+    padding-left: calc(var(--bs-dropdown-item-padding-x, 0px) + var(--x-menu-icon-size, 16px) + var(--x-menu-icon-gap, 0px));
 }
