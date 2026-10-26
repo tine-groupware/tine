@@ -593,25 +593,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     emptyText: 'password',
                     xtype: 'tw-passwordTriggerField',
                     clipboard: false,
-                    // TODO generalize this -> Tine.Tinebase.widgets.form.PasswordTriggerField
-                    revealPasswordFn: async () => {
-                        return new Promise((fulfill, reject) => {
-                            if (this.record.id === 0) {
-                                return reject('none existing account');
-                            }
-                            
-                            Ext.Msg.confirm(this.app.i18n._('Reveal Password?'),
-                                this.app.i18n._('You are about to reveal the password. This action will be logged. Proceed?'),
-                                async (button) => {
-                                    if (button === 'yes') {
-                                        const result = await Tine.Tinebase.revealPassword('Admin_Model_EmailAccount', this.record.id ?? '');
-                                        fulfill(result['password']);
-                                    } else {
-                                        reject('canceled');
-                                    }
-                                });
-                        });
-                    },
+                    enableRevealPassword: true,
+                    revealPasswordModel: 'Admin_Model_EmailAccount',
                     listeners: {
                         scope: this,
                         keyup: (field) => {

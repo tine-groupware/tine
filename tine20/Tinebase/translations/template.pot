@@ -333,12 +333,6 @@ msgstr ""
 msgid "Sync user contact data from sync backend"
 msgstr ""
 
-msgid "Sync contact photo from sync backend"
-msgstr ""
-
-msgid "Sync user contact photo from sync backend"
-msgstr ""
-
 msgid "Sync deleted users from sync backend"
 msgstr ""
 
@@ -1013,6 +1007,18 @@ msgstr ""
 msgid "Quota Monitoring"
 msgstr ""
 
+msgid "Monitoring Emails"
+msgstr ""
+
+msgid "Email addresses to send monitoring notifications to"
+msgstr ""
+
+msgid "Monitoring Emails Threshold"
+msgstr ""
+
+msgid "Minimum monitoring result level to trigger email notification (0=OK, 1=WARN, 2=CRIT)"
+msgstr ""
+
 msgid "Tine20 URL"
 msgstr ""
 
@@ -1158,6 +1164,9 @@ msgid "Maximum number of users reached."
 msgstr ""
 
 msgid "The new password must be different from the old one."
+msgstr ""
+
+msgid "WebDAV issues notification"
 msgstr ""
 
 msgid "Bank Holiday Calendar"
@@ -2210,6 +2219,12 @@ msgstr ""
 msgid "A problem with the translations was detected. Trying to reload the client..."
 msgstr ""
 
+msgid "Uploads"
+msgstr ""
+
+msgid ". Clicking this button will open the content in a new window."
+msgstr ""
+
 msgid "Total    Uploads"
 msgstr ""
 
@@ -2384,6 +2399,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "To use manual sorting, you need to sort by column \"{0}\""
+msgstr ""
+
+msgid "Choose more column categories."
 msgstr ""
 
 msgid "Export Records from these Positions"
@@ -3078,12 +3096,6 @@ msgstr ""
 msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
 msgstr ""
 
-msgid "Set password"
-msgstr ""
-
-msgid "Generate password"
-msgstr ""
-
 msgid "Admin Mode"
 msgstr ""
 
@@ -3196,6 +3208,12 @@ msgid "Invalid State"
 msgstr ""
 
 msgid "State data for \"{ key }\" is not valid. You need to fix the errors first."
+msgstr ""
+
+msgid "Set password"
+msgstr ""
+
+msgid "Generate password"
 msgstr ""
 
 msgid "Back"
@@ -3311,7 +3329,16 @@ msgid_plural "Models"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Value needs to start with { prefix }"
+msgstr ""
+
 msgid "Cleartext/Hidden"
+msgstr ""
+
+msgid "Reveal Password?"
+msgstr ""
+
+msgid "You are about to reveal the password. This action will be logged. Proceed?"
 msgstr ""
 
 msgid "No record"
@@ -3734,6 +3761,12 @@ msgstr ""
 msgid "Setting new language..."
 msgstr ""
 
+msgid "has been opened"
+msgstr ""
+
+msgid "is empty. There is no data to be shown."
+msgstr ""
+
 msgid "Save current view as favorite"
 msgstr ""
 
@@ -3750,6 +3783,12 @@ msgid "Title"
 msgstr ""
 
 msgid "Shared Favorite (visible by other users)"
+msgstr ""
+
+msgid "Show total count of found records"
+msgstr ""
+
+msgid "fetch result count in background"
 msgstr ""
 
 msgid "The grant to see and use this filter"
@@ -3771,6 +3810,9 @@ msgid "Edit Favorite"
 msgstr ""
 
 msgid "Overwrite Favorite"
+msgstr ""
+
+msgid "Last updated"
 msgstr ""
 
 #, python-brace-format
@@ -4339,7 +4381,7 @@ msgid_plural "Instances"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Flag Icon File"
+msgid "Flag Icon URL/File"
 msgstr ""
 
 msgid "LogEntry"
