@@ -63,7 +63,7 @@ describe('Create and delete time sheet', () => {
         await global.page.waitForSelector('.t-app-timetracker .x-grid3-row-selected', { visible: true, timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE') });
         await global.page.keyboard.press('Delete');
 
-        // TODO: Add regression test here once the GridPanel.deleteRecords issue is fixed.
+        await verifyGridPanelDeleteRecordsWorks();
 
         // Wait for modal confirmation dialog to appear, click on "Ja" and wait until the dialog disappears.
         await lib.clickOnElement(global.page, '.modal.vue-message-box button.yes-button');
@@ -74,6 +74,26 @@ describe('Create and delete time sheet', () => {
         await expectPuppeteer(global.page).not.toMatchElement('.t-app-timetracker div.x-grid3-col-description', {text: testDescription});
     });
 });
+
+async function verifyGridPanelDeleteRecordsWorks() {
+    // Wait for the confirmation modal to open (ensures the selected records are captured before the reload below).
+    await global.page.waitForSelector('.modal.vue-message-box', {visible: true, timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
+
+    // Regression guard: simulate the broadcast-leak grid reload that detaches the selected record
+    // before the delete is confirmed (guards the GridPanel.deleteRecords scope fix).
+    const markerSet = await global.page.evaluate(() => {
+        window.__e2eReloadMarker = document.querySelector('.t-app-timetracker .x-grid3-row-selected');
+        window.postal.publish({channel: 'recordchange', topic: 'Timetracker.Timesheet.bulk', data: []});
+        return !!window.__e2eReloadMarker;
+    });
+    if (!markerSet) {
+        throw new Error('Regression guard: no selected row found to mark for reload');
+    }
+    // Wait until the grid re-rendered (old row node removed), proving the record was detached.
+    await global.page.waitForFunction(() => {
+        return window.__e2eReloadMarker && !document.contains(window.__e2eReloadMarker);
+    }, {timeout: lib.getEnvInt('TEST_TIMEOUT_GRID_UPDATED')});
+}
 
 afterAll(async () => {
     await lib.closeBrowser();

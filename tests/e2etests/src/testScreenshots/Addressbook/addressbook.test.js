@@ -254,7 +254,7 @@ describe('Contacts', () => {
                 'Max Mustermann Beispielweg 1 354234 Musterdorf !'
             );
             await lib.makeScreenshot(popupWindow,{path: 'screenshots/Adressbuch/11_adressbuch_kontakt_neu_einlesen.png'});
-            await expectPuppeteer(popupWindow).toClick('button.btn-close');
+            await expectPuppeteer(popupWindow).toClick('button.btn-close', {visible: true});
         });
 
         // NOTE: Unskipping this test will break the 'save' test.

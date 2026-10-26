@@ -150,7 +150,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (Ext.isArray(records)) {
             Ext.each(records, function(record) {
                 this.store.remove(record);
-            });
+            }, this);
             // if nested in an editDialog, just change the parent record
             if (this.editDialog) {
                 var items = [];
