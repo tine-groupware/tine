@@ -1400,12 +1400,23 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     public function prepareAttendeesView(Calendar_Model_Event &$event, Calendar_Model_Attender $attendee): void
     {
         if ($event->isRecurException() || $event->rrule) {
-            $oldAclCheck = $this->getEventController()->doContainerACLChecks(false);
+            $eventController = $this->getEventController();
+            $oldAclCheck = $eventController->doContainerACLChecks(false);
+            // the event might be soft-deleted already (e.g. 'deleted' notifications are sent after
+            // the series was deleted), so fetch deleted records as well
+            $oldModlogActive = $eventController->modlogActive(false);
             try {
                 $baseEvent = $this->getExdateResolvedEvents(new Calendar_Model_EventFilter([
                     ['field' => 'id', 'operator' => 'equals', 'value' => $event->isRecurException() ? $event->base_event_id : $event->getId()],
                 ]), 'get')->getFirstRecord();
                 if ($baseEvent && Calendar_Model_Attender::getAttendee($baseEvent->attendee, $attendee)) {
+                    // the series and its exceptions might be soft-deleted already ('deleted'
+                    // notifications are sent after the series was deleted) - show them in the
+                    // notification as regular events
+                    $baseEvent->is_deleted = false;
+                    foreach ($baseEvent->exdate as $exdate) {
+                        $exdate->is_deleted = false;
+                    }
                     $event = $baseEvent;
                     if ($baseEvent->exdate) {
                         $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
@@ -1434,7 +1445,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             } catch (Tinebase_Exception_NotFound $tenf) {
             } catch (Tinebase_Exception_AccessDenied $tead) {
             } finally {
-                $this->getEventController()->doContainerACLChecks($oldAclCheck);
+                $eventController->doContainerACLChecks($oldAclCheck);
+                $eventController->modlogActive($oldModlogActive);
             }
         }
     }

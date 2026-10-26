@@ -996,6 +996,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $attachments = $this->getAttachments($message);
         $message->has_attachment = (count($attachments) > 0) ? true : false;
 
+        $this->prepareAndProcessParts($message);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Adding message to cache: ' . print_r($message->toArray(), true));
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
