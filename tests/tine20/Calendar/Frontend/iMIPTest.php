@@ -1764,6 +1764,232 @@ CREATED:20240613T160230Z', $iMIP->ics);
     }
 
     /**
+     * recurring event series from an external organizer with three internal attendees
+     * (current user, sclever, pwulf). The invitation is accepted.
+     * The external organizer uninvites the attendees one after another via cancel iMIP messages
+     * that are only auto processed:
+     *  - the first attendee is uninvited from a single occurrence (new exception without him),
+     *    he still attends the rest of the series
+     *  - the second attendee is uninvited from the whole series (base event and exception)
+     *  - the third attendee is uninvited from the series, but not from the exception
+     */
+    public function testAutoProcessUninviteAttendeeWithRecurException(): void
+    {
+        $organizerEmail = 'external.organizer@example.org';
+        $uid = Tinebase_Record_Abstract::generateUID();
+        $sclever = $this->_personas['sclever'];
+        $pwulf = $this->_personas['pwulf'];
+        $ownContactId = Tinebase_Core::getUser()->contact_id;
+        $dtstart = Tinebase_DateTime::now()->setTime(10, 0);
+        $calCtrl = Calendar_Controller_Event::getInstance();
+
+        // a user that is no longer an attendee of an event only gets its free/busy information
+        // -> disable acl checks to assert the actual attendee state of such events
+        $readWithoutAclCheck = function (callable $fn) use ($calCtrl) {
+            $oldAclCheck = $calCtrl->doContainerACLChecks(false);
+            try {
+                return $fn();
+            } finally {
+                $calCtrl->doContainerACLChecks($oldAclCheck);
+            }
+        };
+
+        $getAttendees = function (array $contactIds) {
+            $attendees = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class);
+            foreach ($contactIds as $contactId) {
+                $attendees->addRecord(new Calendar_Model_Attender([
+                    'user_id'   => $contactId,
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+                ]));
+            }
+            return $attendees;
+        };
+
+        $getEvent = function (array $overrides) use ($organizerEmail, $uid) {
+            return new Calendar_Model_Event(array_merge([
+                'summary'               => 'Recurring external event',
+                'creation_time'         => Tinebase_DateTime::now(),
+                'uid'                   => $uid,
+                'organizer_email'       => $organizerEmail,
+                'organizer_type'        => Calendar_Model_Event::ORGANIZER_TYPE_EMAIL,
+                'organizer_displayname' => 'External Organizer',
+            ], $overrides));
+        };
+
+        // iMIP: a recurring event from an external organizer with three internal attendees
+        $baseEvent = $getEvent([
+            'dtstart'      => $dtstart->getClone(),
+            'dtend'        => $dtstart->getClone()->addHour(1),
+            'rrule'        => 'FREQ=DAILY;INTERVAL=1;COUNT=3',
+            'external_seq' => 1,
+            'attendee'     => $getAttendees([$ownContactId, $sclever->contact_id, $pwulf->contact_id]),
+        ]);
+        $ics = (new Calendar_Convert_Event_VCalendar_Generic())->fromTine20Model($baseEvent)->serialize();
+        $iMIP = new Calendar_Model_iMIP([
+            'id'         => Tinebase_Record_Abstract::generateUID(),
+            'ics'        => $ics,
+            'method'     => Calendar_Model_iMIP::METHOD_REQUEST,
+            'originator' => $organizerEmail,
+        ]);
+
+        // we process and accept the invitation
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        $this->assertEmpty($iMIP->preconditions, 'no preconditions should be raised');
+
+        $invitation = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'equals',
+                'value' => Calendar_Controller::getInstance()->getInvitationContainer(null, $organizerEmail)->getId()],
+            ['field' => 'uid', 'operator' => 'equals', 'value' => $uid],
+            ['field' => 'recurid', 'operator' => 'isnull', 'value' => null],
+        ]))->getFirstRecord();
+        $this->assertNotNull($invitation, 'base event must have been created');
+        $this->assertCount(3, $invitation->attendee, 'all three internal attendees must be invited');
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($invitation->attendee);
+        $this->assertNotNull($ownAttender, 'own attender missing on base event');
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status,
+            'invitation must be accepted');
+
+        // the external organizer uninvites the first internal attendee from the first occurrence only:
+        // a cancel iMIP containing the exception without the first attendee
+        $cancelExceptionEvent = $getEvent([
+            'dtstart'      => $dtstart->getClone(),
+            'dtend'        => $dtstart->getClone()->addHour(1),
+            'recurid'      => $dtstart->getClone(),
+            'external_seq' => 2,
+            'attendee'     => $getAttendees([$sclever->contact_id, $pwulf->contact_id]),
+        ]);
+        $ics = (new Calendar_Convert_Event_VCalendar_Generic())->fromTine20Model($cancelExceptionEvent)->serialize();
+        $iMIP = new Calendar_Model_iMIP([
+            'id'         => Tinebase_Record_Abstract::generateUID(),
+            'ics'        => $ics,
+            'method'     => Calendar_Model_iMIP::METHOD_CANCEL,
+            'originator' => $organizerEmail,
+        ]);
+
+        // we only auto process the cancelation
+        $this->_iMIPFrontend->autoProcess($iMIP);
+        $this->assertEmpty($iMIP->preconditions, 'no preconditions should be raised');
+
+        $localException = $calCtrl->search(new Calendar_Model_EventFilter([
+            ['field' => 'base_event_id', 'operator' => 'equals', 'value' => $invitation->getId()],
+        ]))->getFirstRecord();
+        $this->assertNotNull($localException, 'event exception must have been created');
+        $localException = $readWithoutAclCheck(fn() => $calCtrl->get($localException->getId()));
+        $this->assertCount(2, $localException->attendee, 'exception must only have the remaining attendees');
+        $this->assertNull(Calendar_Model_Attender::getOwnAttender($localException->attendee),
+            'first attendee must be uninvited from the exception');
+
+        $invitation = $calCtrl->get($invitation->getId());
+        $this->assertNotNull(Calendar_Model_Attender::getOwnAttender($invitation->attendee),
+            'first attendee must still attend the rest of the series');
+
+        // the external organizer uninvites the second internal attendee from the whole series:
+        // a cancel iMIP containing base event and exception without the second attendee
+        Tinebase_Core::setUser($sclever);
+        try {
+            $cancelBaseEvent = $getEvent([
+                'dtstart'      => $dtstart->getClone(),
+                'dtend'        => $dtstart->getClone()->addHour(1),
+                'rrule'        => 'FREQ=DAILY;INTERVAL=1;COUNT=3',
+                'external_seq' => 3,
+                'attendee'     => $getAttendees([$ownContactId, $pwulf->contact_id]),
+            ]);
+            $cancelExceptionEvent = $getEvent([
+                'dtstart'      => $dtstart->getClone(),
+                'dtend'        => $dtstart->getClone()->addHour(1),
+                'recurid'      => $dtstart->getClone(),
+                'external_seq' => 3,
+                'attendee'     => $getAttendees([$pwulf->contact_id]),
+            ]);
+            $ics = (new Calendar_Convert_Event_VCalendar_Generic())->fromTine20RecordSet(
+                new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$cancelBaseEvent, $cancelExceptionEvent], true, false)
+            )->serialize();
+            $iMIP = new Calendar_Model_iMIP([
+                'id'         => Tinebase_Record_Abstract::generateUID(),
+                'ics'        => $ics,
+                'method'     => Calendar_Model_iMIP::METHOD_CANCEL,
+                'originator' => $organizerEmail,
+            ]);
+
+            // we only auto process the cancelation
+            $this->_iMIPFrontend->autoProcess($iMIP);
+            $this->assertEmpty($iMIP->preconditions, 'no preconditions should be raised');
+        } finally {
+            Tinebase_Core::setUser($this->_originalTestUser);
+        }
+
+        $scleverAttender = new Calendar_Model_Attender([
+            'user_id'   => $sclever->contact_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+        ]);
+        $this->assertNull(Calendar_Model_Attender::getAttendee(
+            $calCtrl->get($invitation->getId())->attendee, $scleverAttender),
+            'second attendee must be uninvited from the base event');
+        $this->assertNull(Calendar_Model_Attender::getAttendee(
+            $readWithoutAclCheck(fn() => $calCtrl->get($localException->getId()))->attendee, $scleverAttender),
+            'second attendee must be uninvited from the exception');
+
+        // the external organizer uninvites the third internal attendee from the series,
+        // but not from the previously created exception:
+        // a cancel iMIP containing the base event without the third attendee
+        // and the exception with the third attendee
+        Tinebase_Core::setUser($pwulf);
+        try {
+            $cancelBaseEvent = $getEvent([
+                'dtstart'      => $dtstart->getClone(),
+                'dtend'        => $dtstart->getClone()->addHour(1),
+                'rrule'        => 'FREQ=DAILY;INTERVAL=1;COUNT=3',
+                'external_seq' => 4,
+                'attendee'     => $getAttendees([$ownContactId]),
+            ]);
+            $cancelExceptionEvent = $getEvent([
+                'dtstart'      => $dtstart->getClone(),
+                'dtend'        => $dtstart->getClone()->addHour(1),
+                'recurid'      => $dtstart->getClone(),
+                'external_seq' => 4,
+                'attendee'     => $getAttendees([$pwulf->contact_id]),
+            ]);
+            $ics = (new Calendar_Convert_Event_VCalendar_Generic())->fromTine20RecordSet(
+                new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$cancelBaseEvent, $cancelExceptionEvent], true, false)
+            )->serialize();
+            $iMIP = new Calendar_Model_iMIP([
+                'id'         => Tinebase_Record_Abstract::generateUID(),
+                'ics'        => $ics,
+                'method'     => Calendar_Model_iMIP::METHOD_CANCEL,
+                'originator' => $organizerEmail,
+            ]);
+
+            // we only auto process the cancelation
+            $this->_iMIPFrontend->autoProcess($iMIP);
+            $this->assertEmpty($iMIP->preconditions, 'no preconditions should be raised');
+        } finally {
+            Tinebase_Core::setUser($this->_originalTestUser);
+        }
+
+        $finalBaseEvent = $calCtrl->get($invitation->getId());
+        $finalException = $readWithoutAclCheck(fn() => $calCtrl->get($localException->getId()));
+        $pwulfAttender = new Calendar_Model_Attender([
+            'user_id'   => $pwulf->contact_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+        ]);
+
+        // the base event must only have the first attendee left
+        $this->assertCount(1, $finalBaseEvent->attendee, 'base event must only have the first attendee');
+        $this->assertNotNull(Calendar_Model_Attender::getOwnAttender($finalBaseEvent->attendee),
+            'first attendee must still attend the series');
+        $this->assertNull(Calendar_Model_Attender::getAttendee($finalBaseEvent->attendee, $pwulfAttender),
+            'third attendee must be uninvited from the base event');
+
+        // the exception must only have the third attendee left
+        $this->assertCount(1, $finalException->attendee, 'exception must only have the third attendee');
+        $this->assertNull(Calendar_Model_Attender::getOwnAttender($finalException->attendee),
+            'first attendee must be uninvited from the exception');
+        $this->assertNotNull(Calendar_Model_Attender::getAttendee($finalException->attendee, $pwulfAttender),
+            'third attendee must still attend the exception');
+    }
+
+    /**
      * testInvitationExternalReply
      */
     public function testInvitationExternalReply()
