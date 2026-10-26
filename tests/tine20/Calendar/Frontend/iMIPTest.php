@@ -1622,6 +1622,12 @@ CREATED:20240613T160230Z', $iMIP->ics);
         $this->assertNotNull($exceptionOwnAttender, 'own attender missing on event exception');
         $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION, $exceptionOwnAttender->status,
             'attendance status of the moved event must be NEEDS-ACTION, not ACCEPTED');
+
+
+        $invitation = Calendar_Controller_Event::getInstance()->get($invitation->getId());
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($invitation->attendee);
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender?->status,
+            'invitation must be accepted');
     }
 
     /**
