@@ -9,6 +9,8 @@ beforeAll(async () => {
     await expectPuppeteer(page).toClick('.t-app-calendar .tine-mainscreen-centerpanel-west button', {text:'Heute'}); //need for init setup!
 });
 
+let appointmentHasConflict = false;
+
 describe('MainScreen', () => {
     test('favorite', async () => {
         await new Promise(r => setTimeout(r, 2000));
@@ -143,16 +145,18 @@ describe('editDialog', () => {
         await lib.makeScreenshot(newPage, {path: 'screenshots/Kalender/10_kalender_termin_anderer_organisator.png'});
     });
 
-    test('save events', async () => {
-        await expectPuppeteer(newPage).toClick('button', {text: 'Ok'});
-        // TODO: Workaround to let the CI pass this test. Will be fixed soon.
-        await new Promise(r => setTimeout(r, 5000));
+    test('save event', async () => {
+        // TODO: Get rid of this pause.
+        await new Promise(r => setTimeout(r, 1000));
+        await lib.clickOnElementWaitPageClosed(newPage, 'button', 'Ok');
+        appointmentHasConflict = await checkForAppointmentConflict(page);
+        if (appointmentHasConflict) throw new Error('Appointment "Test Event" already exists !!');
     });
-
 });
 
 describe('context menu', () => {
     test('email', async () => {
+        if (appointmentHasConflict) throw new Error('appointment conflict, skipping this test');
         try {
             await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Blatt'});
         } catch (e) {
@@ -164,12 +168,14 @@ describe('context menu', () => {
         await new Promise(r => setTimeout(r, 2000));
         await expectPuppeteer(page).toClick('.t-app-calendar .tine-mainscreen-centerpanel-west button', {text: 'Heute'});
         await new Promise(r => setTimeout(r, 2000));
-        await expectPuppeteer(page).toClick('.t-app-calendar .cal-daysviewpanel-event-body', {text: 'Test Event', button: 'right'});
+        await lib.clickOnElementWithLabel(page, '.t-app-calendar .cal-daysviewpanel-event-body', 'Test Event', {button: 'right'});
+
         await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/Kalender/11_kalender_termin_kontextmenue.png'});
     });
 
     test('set answer', async () => {
+        if (appointmentHasConflict) throw new Error('appointment conflict, skipping this test');
         let answer = await expectPuppeteer(page).toMatchElement('.x-menu.x-menu-floating:not(.x-hide-offsets) .x-menu-item-text', {text: 'Meine Antwort setzen'});
         await answer.hover();
         answer = await expectPuppeteer(page).toMatchElement('.x-menu.x-menu-floating:not(.x-hide-offsets) .x-menu-item-text', {text: 'Keine Antwort'});
@@ -179,10 +185,21 @@ describe('context menu', () => {
     });
 
     test('delete event', async () => {
+        if (appointmentHasConflict) throw new Error('appointment conflict, skipping this test');
+        try {
+            await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Blatt'});
+        } catch (e) {
+            await expectPuppeteer(page).toClick('.t-app-calendar .x-btn-image.x-toolbar-more-icon',{visible: true});
+            await expectPuppeteer(page).toClick('.t-app-calendar .x-menu-item-text', {text: 'Blatt', visible: true});
+        }
+        await page.waitForSelector('.ext-el-mask', {hidden: true, timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
+        await expectPuppeteer(page).toClick('.t-app-calendar button', {text: 'Woche'});
+        await page.waitForSelector('.ext-el-mask', {hidden: true, timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
         await expectPuppeteer(page).toClick('.t-app-calendar .tine-mainscreen-centerpanel-west button', {text: 'Heute'});
+        await page.waitForSelector('.ext-el-mask', {hidden: true, timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
+
         // Wait for the event, right-click it, then select "Termin löschen".
-        await expectPuppeteer(page).toMatchElement('.t-app-calendar .cal-daysviewpanel-event-body', {text: 'Test Event',timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
-        await expectPuppeteer(page).toClick('.t-app-calendar .cal-daysviewpanel-event-body', {text: 'Test Event',button: 'right'});
+        await lib.clickOnElementWithLabel(page, '.t-app-calendar .cal-daysviewpanel-event-body', 'Test Event', {button: 'right'});
         const menuSelector = '.x-menu.x-menu-floating:not(.x-hide-offsets)';
         await page.waitForSelector(menuSelector, {timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')});
         await expectPuppeteer(page).toClick(`${menuSelector} .x-menu-item-text`, {text: 'Termin löschen'});
@@ -205,6 +222,17 @@ describe('poll client', () => {
     })
 });
 
+async function checkForAppointmentConflict(page) {
+    try {
+        await page.waitForSelector('.modal.vue-message-box.show', {
+            timeout: lib.getEnvInt('TEST_TIMEOUT_MODAL_DIALOG'),
+        });
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 afterAll(async () => {
-    global.browser.close();
+    await lib.closeBrowser();
 });

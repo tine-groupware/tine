@@ -31,7 +31,7 @@ export default {
         global.page = await helpers.createConfiguredPage(global.browser);
         const page = global.page;
 
-        await page.goto(this.getEnvStr('TEST_URL'), { waitUntil: 'networkidle0', timeout: this.getEnvInt('TEST_TIMEOUT_BROWSER') });
+        await page.goto(this.getEnvStr('TEST_URL'), { waitUntil: 'domcontentloaded', timeout: this.getEnvInt('TEST_TIMEOUT_BROWSER') });
         await expectPuppeteer(page).toMatchElement('title', { text: this.getEnvStr('TEST_BRANDING_TITLE') });
 
         await helpers.switchToGermanIfNeeded(page);
@@ -41,28 +41,27 @@ export default {
             pass: this.getEnvStr('TEST_PASSWORD')
         });
 
-        await helpers.waitForAppReady(page);
+        await this.waitForPageHeader(page);
 
-        // TODO: This seems to never appear, does it still work?
-        if (this.getEnvBool('MFA')) {
-            await expectPuppeteer(page).toMatchElement('.x-window-header-text', {text: 'Multi Faktor Authentifikation'});
-            const mfaDialog = await this.getEditDialog('OK');
-            await expectPuppeteer(mfaDialog).toClick('button', {text: "Abbrechen"});
-        }
+        // Close modal dialogs which are blocking the menu button, and wait for the DOM to calm down.
+        await this.closeModalDialogs(page);
+        await this.waitForAppReady(page);
 
         if (app) {
-            await expectPuppeteer(page).toMatchElement('.action_menu.application-menu-btn', {visible: true});
-            await expectPuppeteer(page).toClick('.action_menu.application-menu-btn');
-            await page.waitForSelector('.application-menu-item');
+            // Open App menu and click on desired menu item.
+            await this.openAppMenu(page);
+            await expectPuppeteer(page).toClick('div.application-menu-item__text', {text: app});
 
-            // TODO: Workaround to let CI pass the tests. Will be fixed soon.
-            await this.temporaryFixMenuClick(page, app);
-            //await expectPuppeteer(page).toClick('.application-menu-item__text', { text: app });
+            await this.closeModalDialogs(page);
+            await this.waitForAppReady(page);
 
-            await expectPuppeteer(page).toMatchElement('title', { text: `${this.getEnvStr('TEST_BRANDING_TITLE')} - ${app}` });
-            await new Promise(r => setTimeout(r, 1500));
+            // Make sure the app is loaded and we got the right one.
+            await expectPuppeteer(page).toMatchElement('title', {
+                text: `${this.getEnvStr('TEST_BRANDING_TITLE')} - ${app}`,
+                timeout: this.getEnvInt('TEST_TIMEOUT_CONTENT_READY')
+            });
         }
-        if (module) {
+        if (app && module) {
             await expectPuppeteer(page).toMatchElement('.tine-mainscreen-centerpanel-west-modules span', { text: 'Module' });
             await expectPuppeteer(page).toClick('.tine-mainscreen-centerpanel-west .x-tree-node a span', {text: module});
         }
@@ -98,26 +97,26 @@ export default {
             pass: this.getEnvStr('SETUP_PASSWORD')
         });
 
-        await helpers.waitForAppReady(page);
+        await this.waitForAppReady(page);
     },
 
-    temporaryFixMenuClick: async function (page, app) {
-        // The app menu is a floating popover that animates in and can briefly re-render,
-        // so the item may have a zero box (not clickable) or be detached when clicked.
-        // Retry the click (re-opening the menu if it closed) until it lands.
-        const deadline = Date.now() + this.getEnvInt('TEST_TIMEOUT_ACTIONABLE');
-        for (;;) {
+    /**
+     * Closes all open pages of the current browser and then the browser itself.
+     * TODO: Find out why sometimes this error appears: "Could not close all open browser pages, error: ProtocolError: Protocol error (Target.closeTarget): No target with given id found"
+     *
+     * @returns {Promise<void>}
+     */
+    closeBrowser: async function () {
+        if (global.browser) {
             try {
-                await expectPuppeteer(page).toClick('.application-menu-item__text', { text: app, visible: true });
-                break;
-            } catch (err) {
-                const retryable = /detached from document|not clickable or not an Element/i.test(String(err && err.message));
-                if (!retryable || Date.now() >= deadline) throw err;
-                if (await page.evaluate(() => !document.querySelector('.application-menu-item'))) {
-                    await expectPuppeteer(page).toClick('.action_menu.application-menu-btn');
-                    await page.waitForSelector('.application-menu-item');
-                }
-                await new Promise(r => setTimeout(r, 200));
+                // Close all pages to ensure clean shutdown
+                const pages = await global.browser.pages();
+                await Promise.all(pages.map(p => p.close()));
+            } catch (error) {
+                console.warn(`Could not close all open browser pages, error: ${error}`);
+            } finally {
+                // Close the browser instance
+                await global.browser.close();
             }
         }
     },
@@ -135,6 +134,7 @@ export default {
      * @returns {Promise<string>} A promise that resolves to the path of the downloaded file.
      */
     download: async function (page, selector, option = {}) {
+        helpers.assertNotAborted('download');
 
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
@@ -168,6 +168,8 @@ export default {
      * @returns {Promise<void>} A promise that resolves when the file has been set for upload.
      */
     uploadFile: async function (page, file) {
+        helpers.assertNotAborted('uploadFile');
+
         let inputUploadHandle;
 
         inputUploadHandle = await page.$('input[type=file]');
@@ -178,84 +180,100 @@ export default {
      * Waits for a new window to be opened and returns the corresponding page object.
      * Rejects if no new window is opened within TEST_TIMEOUT_POPUP_OPEN ms or if the target is not a page.
      *
+     * @param {number} [timeout=TEST_TIMEOUT_POPUP_OPEN] - Timeout in milliseconds, defaults to TEST_TIMEOUT_POPUP_OPEN.
      * @returns {Promise<puppeteer.Page>} A promise that resolves to the new page object.
      */
-    getNewWindow: function () {
+    getNewWindow: function (timeout = this.getEnvInt('TEST_TIMEOUT_POPUP_OPEN')) {
+        this.assertNotAborted('getNewWindow');
+
+        if (!global.browser) {
+            return Promise.reject(new Error('getNewWindow: global browser is not initialized'));
+        }
+
         return new Promise((resolve, reject) => {
-            if (!global.browser) {
-                reject(new Error('getNewWindow: global browser is not initialized'));
-                return;
-            }
-
             let timer = null;
-            if (this.getEnvInt('TEST_TIMEOUT_POPUP_OPEN') > 0) {
-                timer = setTimeout(() => {
-                    reject(new Error('getNewWindow: waiting for new window reached timeout'));
-                }, this.getEnvInt('TEST_TIMEOUT_POPUP_OPEN'));
-            }
-
-            // Note: puppeteer v24-compatible API (targetcreated event is deprecated).
-            const listener = async (target) => {
+            const onTarget = async (target) => {
                 if (target.type() !== 'page') {
                     return; // Skip service workers, shared workers, etc.
                 }
-
-                // Remove listener so we only capture the first page target
-                global.browser.off('targetcreated', listener);
-
+                global.browser.off('targetcreated', onTarget);
+                if (timer !== null) {
+                    clearTimeout(timer);
+                    timer = null;
+                }
                 try {
                     const newPage = await target.page();
                     if (!newPage) {
-                        clearTimeout(timer);
                         reject(new Error('getNewWindow: target is not a page'));
                         return;
                     }
-                    clearTimeout(timer);
-
+                    // Attach the console/pageerror proxy as early as possible so that
+                    // errors during the initial load are not missed (idempotent).
+                    await this.proxyConsole(newPage);
                     // Simulate slow network and CPU throttling.
                     await this.applyThrottling(newPage, {mode: 'popup', displayInfo: 'New Window'});
-
                     resolve(newPage);
                 } catch (err) {
-                    clearTimeout(timer);
                     reject(err);
                 }
             };
-            global.browser.on('targetcreated', listener);
+            if (timeout > 0) {
+                timer = setTimeout(() => {
+                    global.browser.off('targetcreated', onTarget);
+                    reject(new Error('getNewWindow: waiting for new window reached timeout'));
+                }, timeout);
+            }
+            global.browser.on('targetcreated', onTarget);
         });
     },
 
     /**
-     * Clicks a button with the specified text and waits for a new window to open.
+     * Clicks a button / element with the specified text and waits for a new window to open.
      * Also waits for any loading indicators to disappear and for the new window to be fully loaded.
+     * Recommended: Provide page object (or "null" for main page) and a proper and clear selector option that does not match other apps.
      *
-     * @param {string} btnText - The text of the button to click.
-     * @param {puppeteer.Page} [page] - The page object to search for the button. Defaults to the main page.
+     * @param {string} text - Inner text of the button / element to click on.
+     * @param {puppeteer.Page} [page] - The page object, defaults to the main page.
+     * @param {Object} [options] - Optional settings.
+     * @param {number} [options.clickCount=1] - How many times to click, default is only once.
+     * @param {string} [options.selector='.x-btn-text'] - Selector to find the button / element, defaults to typical ExtJS button.
+     * @param {number} [options.timeout] - Amount of ms to wait for the new popup window to open.
      * @returns {Promise<puppeteer.Page>} A promise that resolves to the new page object of the opened window.
      */
-    getEditDialog: async function (btnText, page = null) {
+    getEditDialog: async function (text, page = null, options = {}) {
+        this.assertNotAborted('getEditDialog');
+
         const ctx = page || (typeof global.page !== 'undefined' ? global.page : null);
-        if (!ctx) throw new Error('getEditDialog: no page/context available');
+        if (!ctx) {
+            throw new Error('getEditDialog: no page/context available');
+        }
+        const clickCount = options && options.clickCount ? options.clickCount : 1;
+        const selector = options && options.selector ? options.selector : '.x-btn-text';
+        const timeoutNewWindow = options && options.timeout ? options.timeout : this.getEnvInt('TEST_TIMEOUT_POPUP_OPEN');
 
-        // Find the desired button and wait until it is actionable.
-        await helpers.waitForActionableButton(ctx, btnText, this.getEnvInt('TEST_TIMEOUT_ACTIONABLE'), '.x-btn-text');
-
-        const popupPromise = this.getNewWindow();
-        await expectPuppeteer(ctx).toClick('.x-btn-text', {text: btnText});
-        const popupWindow = await popupPromise;
-        await helpers.proxyConsole(popupWindow);
-
-        // Wait until the loading masks have disappeared.
+        // Find the desired button / element and wait until it is actionable.
         try {
-            await popupWindow.waitForSelector('.tine-viewport-waitcycle', {hidden: true, timeout: this.getEnvInt('TEST_TIMEOUT_MASK')});
-            await popupWindow.waitForSelector('.ext-el-mask', {hidden: true, timeout: this.getEnvInt('TEST_TIMEOUT_MASK')});
+            await ctx.waitForFunction(
+                (sel) => Array.from(document.querySelectorAll(sel))
+                    .some((el) => getComputedStyle(el).display !== 'none'),
+                {timeout: this.getEnvInt('TEST_TIMEOUT_ACTIONABLE')},
+                selector
+            );
         } catch (err) {
-            // If waiting for mask removal times out, we log and continue; subsequent waits will fail clearly.
-            console.warn('getEditDialog: waiting for loading masks timed out - continuing', err);
+            const error = new Error(`getEditDialog: timed out after ${this.getEnvInt('TEST_TIMEOUT_ACTIONABLE')}ms waiting for "${selector}" to be visible`);
+            error.cause = err;
+            throw error;
         }
 
-        // Wait for the dialog content to be ready (form/grid/window).
-        await popupWindow.waitForSelector('.x-window, .x-window-body, .x-form-item, .x-grid3-viewport, .x-panel', {visible: true, timeout: this.getEnvInt('TEST_TIMEOUT_CONTENT_READY')});
+        const popupPromise = this.getNewWindow(timeoutNewWindow);
+        // If the click below fails, the pending getNewWindow() promise must not
+        // reject unhandled after its timeout.
+        popupPromise.catch(() => {
+        });
+        await this.clickOnElementWithLabel(ctx, selector, text, {clickCount});
+        const popupWindow = await popupPromise;
+        // proxyConsole was already attached by getNewWindow() (idempotent).
+        await this.waitForAppReady(popupWindow);
 
         return popupWindow;
     },
@@ -269,6 +287,7 @@ export default {
      * @returns {Promise<*>}
      */
     getElement: async function (type, page, text) {
+        helpers.assertNotAborted('getElement');
         return page.$x("//" + type + "[contains(., '" + text + "')]");
     },
 
@@ -279,7 +298,82 @@ export default {
      * @returns {Promise<*>}
      */
     getCurrentUser: async function (page) {
+        helpers.assertNotAborted('getCurrentUser');
         return page.evaluate(() => Tine.Tinebase.registry.get('currentAccount'));
+    },
+
+    /**
+     * Checks if any modal dialogs are open and visible.
+     * Does for each: clicks on the close button and waits for it to disappear.
+     * Multiple tries until the timeout is reached.
+     *
+     * @param {puppeteer.Page} page
+     * @param {number} timeoutOverall
+     * @param {number} timeoutDialogClosed
+     * @returns {Promise<void>}
+     */
+    closeModalDialogs: async function (page, timeoutOverall = this.getEnvInt('TEST_TIMEOUT_CONTENT_READY'), timeoutDialogClosed = this.getEnvInt('TEST_TIMEOUT_MODAL_DIALOG')) {
+        helpers.assertNotAborted('closeModalDialogs');
+
+        const start = Date.now();
+        while (true) {
+            // Click the visible modal's close button in-page (no-op if none).
+            await page.evaluate(() => {
+                const shown = Array.from(document.querySelectorAll('.modal.vue-message-box'))
+                    .find((el) => getComputedStyle(el).display !== 'none');
+                shown?.querySelector('.btn-close')?.click();
+            });
+
+            // Wait until there is no modal dialog visible anymore; its outcome is the exit signal.
+            const closed = await page.waitForFunction(
+                () => !Array.from(document.querySelectorAll('.modal.vue-message-box'))
+                    .some((el) => getComputedStyle(el).display !== 'none'),
+                {timeout: timeoutDialogClosed},
+            ).then(() => true).catch(() => false);
+            if (closed) {
+                return;
+            }
+
+            // A modal is still visible (no close button, or slow to close): retry until the overall timeout.
+            if (Date.now() - start >= timeoutOverall) {
+                return;
+            }
+            await new Promise(r => setTimeout(r, 500));
+        }
+    },
+
+    /**
+     * Opens the application menu robustly: dismisses any blocking modal, ensures
+     * the menu button is on top, clicks it, and confirms the menu items rendered.
+     * Retries a few times to tolerate the modal appearing late (e.g. under CPU
+     * throttling).
+     *
+     * @param {puppeteer.Page} page
+     * @param {number} attempts
+     * @returns {Promise<void>}
+     */
+    openAppMenu: async function (page, attempts = 4) {
+        helpers.assertNotAborted('openAppMenu');
+
+        for (let i = 1; i <= attempts; i++) {
+
+            if (await this.isElementUnblocked(page, 'div.action_menu.application-menu-btn')) {
+                await expectPuppeteer(page).toClick('div.action_menu.application-menu-btn');
+                try {
+                    const opts = {visible: true, timeout: this.getEnvInt('TEST_TIMEOUT_ACTIONABLE')};
+                    await page.waitForSelector('.application-menu-item', opts);
+                    return;
+                } catch (err) {
+                    console.warn(`openAppMenu: menu did not open (attempt ${i})`);
+                }
+            } else {
+                console.warn(`openAppMenu: menu button still blocked (attempt ${i})`);
+            }
+
+            await page.keyboard.press('Escape').catch(() => {});
+            await new Promise(r => setTimeout(r, 500));
+        }
+        throw new Error('openAppMenu: could not open the application menu');
     },
 
     /**
@@ -291,6 +385,8 @@ export default {
      * @returns {Promise<void>}
      */
     reloadRegistry: async function (page) {
+        helpers.assertNotAborted('reloadRegistry');
+
         await page.evaluate(() => Tine.Tinebase.common.reload({
             clearCache: true
         }));
@@ -312,7 +408,8 @@ export default {
     },
 
     /**
-     * TODO make this work / see tests/e2etests/src/test/Felamimail/grid.test.js:9 ('grid adopts to folder selected')
+     * TODO: make this work / see tests/e2etests/src/test/Felamimail/grid.test.js:9 ('grid adopts to folder selected')
+     * TODO: Rename to e.g. assertDisplayOfElement()
      *
      * @param {puppeteer.Page} page
      * @param selector
@@ -320,52 +417,23 @@ export default {
      * @returns {Promise<unknown>}
      */
     checkDisplayOfElement: async function (page, selector, visible) {
-        // TODO allow to pass selector to querySelector
-        const el_display = await page.evaluate((selector) => document.querySelector(selector).style.display);
-        if (visible && el_display === 'none') {
-            return Promise.reject('Error: ' + selector + ' still visible');
-        } else if (!visible && el_display !== 'none') {
-            return Promise.reject('Error: ' + selector + ' still invisible');
+        helpers.assertNotAborted('checkDisplayOfElement');
+
+        const elementDisplay = await page.evaluate((sel) => {
+            const el = document.querySelector(sel);
+            if (!el) return null;
+            return window.getComputedStyle(el).display;
+        }, selector);
+        if (elementDisplay === null) {
+            return Promise.reject('Error: "' + selector + '" does not exist');
+        }
+        if (visible && elementDisplay === 'none') {
+            return Promise.reject('Error: "' + selector + '" is still visible');
+        } else if (!visible && elementDisplay !== 'none') {
+            return Promise.reject('Error: "' + selector + '" is still invisible');
         }
 
         return Promise.resolve();
-    },
-
-    /**
-     * TODO: This method is not used anywhere - check if it can be removed.
-     *
-     * Sets a preference for a specific app in the Tine20 application and reloads the registry afterwards.
-     *
-     * @param {puppeteer.Page} page - the page object to perform the actions on
-     * @param {string} appName - The name of the app for which the preference should be set (e.g. 'Calendar').
-     * @param {string} preference - The name of the preference to set.
-     * @param {string} value - The value to set for the preference.
-     * @returns {Promise<void>}
-     */
-    setPreference: async function (page, appName, preference, value) {
-        console.log('setting preference ' + preference + ' of app '
-            + appName + ' to "' + value + '"');
-
-        await page.waitForSelector('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
-        await page.click('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
-        const frame = await expectPuppeteer(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
-        await expectPuppeteer(frame).toClick('.x-menu-item-icon.action_adminMode');
-        const preferencePopup = await this.getNewWindow();
-        await preferencePopup.waitForSelector('.x-tree-node');
-        //wait for finish load dialog
-        await expectPuppeteer(preferencePopup).toMatchElement('input[name=timezone]');
-        await expectPuppeteer(preferencePopup).toClick('span', {text: appName});
-        // change setting to YES
-        await expectPuppeteer(preferencePopup).toMatchElement('input[name=' + preference + ']');
-        await expectPuppeteer(preferencePopup).toFill('input[name=' + preference + ']', value);
-        await new Promise(r => setTimeout(r, 500));
-        await preferencePopup.keyboard.press('Enter');
-        await new Promise(r => setTimeout(r, 500));
-        await expectPuppeteer(preferencePopup).toClick('button', {text: 'Ok'});
-        await new Promise(r => setTimeout(r, 1000));
-
-        await this.reloadRegistry(page);
-        await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
     },
 
     /**
@@ -376,6 +444,8 @@ export default {
      * @returns {Promise<void>}
      */
     clickSplitButton: async function (page, text) {
+        helpers.assertNotAborted('clickSplitButton');
+
         return await page.evaluate((text) => {
             const btn = document.evaluate('//em[button[text()="' + text + '"]]', document).iterateNext();
             const box = btn.getBoundingClientRect();
@@ -393,7 +463,15 @@ export default {
     // --- Include helper methods from browser.helpers.js ---
     waitForFileToDownload: helpers.waitForFileToDownload.bind(helpers),
     waitForActionableButton: helpers.waitForActionableButton.bind(helpers),
+    waitForPageHeader: helpers.waitForPageHeader.bind(helpers),
     waitForAppReady: helpers.waitForAppReady.bind(helpers),
+    raceWithPageError: helpers.raceWithPageError.bind(helpers),
+    assertNotAborted: helpers.assertNotAborted.bind(helpers),
+    clickOnElement: helpers.clickOnElement.bind(helpers),
+    clickOnElementWithLabel: helpers.clickOnElementWithLabel.bind(helpers),
+    waitForElement: helpers.waitForElement.bind(helpers),
+    isElementUnblocked: helpers.isElementUnblocked.bind(helpers),
+    clickOnElementWaitPageClosed: helpers.clickOnElementWaitPageClosed.bind(helpers),
     makeScreenshot: helpers.makeScreenshot.bind(helpers),
     proxyConsole: helpers.proxyConsole.bind(helpers),
     initExpect: helpers.initExpect.bind(helpers),
@@ -409,9 +487,12 @@ export default {
     getEnvBool: helpers.getEnvBool.bind(helpers),
     getEnvJson: helpers.getEnvJson.bind(helpers),
     safeNumber: helpers.safeNumber.bind(helpers),
+    freezeDurationSpinnerReformat: helpers.freezeDurationSpinnerReformat.bind(helpers),
+    thawDurationSpinnerReformat: helpers.thawDurationSpinnerReformat.bind(helpers),
     formFillField: helpers.formFillField.bind(helpers),
     formFillInputField: helpers.formFillInputField.bind(helpers),
     formFillComboField: helpers.formFillComboField.bind(helpers),
+    refreshGridAndWaitForReady: helpers.refreshGridAndWaitForReady.bind(helpers),
     formRefreshGrid: helpers.formRefreshGrid.bind(helpers),
     ensureFilterToolbarVisible: helpers.ensureFilterToolbarVisible.bind(helpers),
 };
