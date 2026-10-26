@@ -72,7 +72,7 @@ def on_pre_build(config) -> None:
                 _copy_if_changed(icon_src, icons_dir / icon_src.name)
                 icon_ref = f'{base_path}/assets/icons/{icon_src.name}'
 
-        tiles.append({'href': page_path.stem + '/', 'title': title, 'icon': icon_ref})
+        tiles.append({'href': page_path.stem + '.html', 'title': title, 'icon': icon_ref})
 
     _write_index(manual_dir / 'index.md', tiles)
     log.info(f'[manual-index] {len(tiles)} tiles written')
