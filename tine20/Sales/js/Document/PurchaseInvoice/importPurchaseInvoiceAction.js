@@ -7,6 +7,7 @@
  */
 
 import PurchaseInvoice from '../../Model/Document/PurchaseInvoice'
+import PurchaseInvoicePosition from '../../Model/DocumentPosition/PurchaseInvoice'
 import { get } from 'lodash'
 
 Promise.all([Tine.Tinebase.appMgr.isInitialised('Purchasing'),
