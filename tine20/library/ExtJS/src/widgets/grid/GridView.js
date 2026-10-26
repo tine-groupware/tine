@@ -881,7 +881,10 @@ viewConfig: {
 
         // inherit autoHeight from ownerCt, but revert once it drops it again (e.g. after responsive stacking)
         if (g.__ownAutoHeight === undefined) g.__ownAutoHeight = !!g.autoHeight;
-        if (g.enableResponsive) g.autoHeight = g.__ownAutoHeight || !!g.ownerCt.autoHeight
+        // NOTE: grids with an explicit height keep it and scroll on their own (same as in AnchorLayout) - otherwise
+        //       the view grows with its rows while the panel stays at its height and clips them
+        if (g.enableResponsive) g.autoHeight = g.__ownAutoHeight
+            || (!!g.ownerCt.autoHeight && !Ext.isNumber(g.initialConfig.height));
 
         const csize = c.getSize(true);
         const vw = csize.width;
