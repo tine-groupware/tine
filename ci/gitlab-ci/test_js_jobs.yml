@@ -58,8 +58,9 @@
   after_script:
     - |
       export now=$(date +%s000);
-      export start=$(date -d '-2 hour' +%s000);
-      echo tine20 log: "${GRAFANA_URL}&left=%5B%22${start}%22,%22${now}%22,%22Loki%22,%7B%22refId%22:%22A%22,%22expr%22:%22%7Bapp%3D%5C%22${HOSTNAME}%5C%22,%20container%3D%5C%22${TINE_CONTAINER_NAME}%5C%22%7D%22%7D%5D"
+      export start=$(date -d '-1 day' +%s000);
+      echo tine20 log: "${GRAFANA_URL}&panes=%7B%223r6%22:%7B%22datasource%22:%22loki-se%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22expr%22:%22%7Bnamespace%3D%5C%22gitlab-runner-tine%5C%22%7D%20%7C%20gitlab_runner_job_id%3D%60${CI_JOB_ID}%60%20%7C%20container%3D%60tine%60%20%22,%22datasource%22:%7B%22type%22:%22loki%22,%22uid%22:%22loki-se%22%7D,%22editorMode%22:%22code%22,%22queryType%22:%22range%22,%22direction%22:%22backward%22%7D%5D,%22ravnge%22:%7B%22from%22:%221792485001500%22,%22to%22:%221793536197500%22%7D,%22panelsState%22:%7B%22logs%22:%7B%22logs%22:%7B%22visualisationType%22:%22logs%22%7D,%22sortOrder%22:%22Descending%22%7D%7D,%22compact%22:false%7D%7D&orgId=1"
+    
     - cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/e2etests/junit.xml ${CI_PROJECT_DIR}/junit.xml
     - !reference [.lib, script]
     - docs_update_screenshots
