@@ -48,12 +48,13 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
             if ($parsedBody['password'] ?? false) {
                 $parsedBody['password'] = '*****';
             }
+            $bodyString = !empty($parsedBody) ? PHP_EOL . ' Parsed Body: ' . print_r($parsedBody, true) : '';
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                 . __LINE__ . " FastRoute dispatching:\n" . $request->getMethod() . ' '
                 . $uri . array_reduce(array_keys($request->getHeaders()), fn($headers, $name) => $headers .= PHP_EOL
                     . $name . ': ' . ('authorization' === strtolower((string) $name)
                         ? '*****' : $request->getHeaderLine($name)), ''
-                ) . PHP_EOL . ' Parsed Body: ' . print_r($parsedBody, true));
+                ) . $bodyString);
         }
 
         return $dispatcher->dispatch($request->getMethod(), $uri);
