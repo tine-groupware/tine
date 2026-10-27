@@ -12,6 +12,7 @@ import { getType, getTypes } from "../Calendar/Model/eventType";
 import { getRole } from "./schedulingRole";
 import Record from "data/Record";
 import Event from 'Calendar/Model/Event'
+import { validateEventRoleConfigCapability } from './AttendeeValidation'
 
 const actionOrder = ['none', 'tentative', 'forbidden'];
 
