@@ -1991,3 +1991,9 @@ msgstr "The definite event is scheduled for \"%1$s\""
 
 msgid "You can review the poll results here:"
 msgstr "You can review the poll results here:"
+
+msgid "Enables all CalDAV clients for writing. Note: Use at your own risk. Non-official clients are not supported."
+msgstr "Enables all CalDAV clients for writing. Note: Use at your own risk. Non-official clients are not supported."
+
+msgid "Allow generic CalDAV clients"
+msgstr "Allow generic CalDAV clients"
