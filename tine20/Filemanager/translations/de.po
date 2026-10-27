@@ -104,8 +104,23 @@ msgstr "Ziel hat den gleichen Pfad"
 msgid "The destination has the same path as the source. No action has been performed."
 msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausgeführt."
 
+msgid "Invalid Characters Found"
+msgstr "Ungültige Zeichen gefunden"
+
 msgid "Quarantined File"
 msgstr "In Quarantäne gestellte Datei"
+
+msgid "The Download link has expired"
+msgstr "Der Download Link ist abgelaufen"
+
+msgid "Filemanager"
+msgstr "Dateimanager"
+
+msgid "Show in Filemanager"
+msgstr "Im Dateimanager anzeigen"
+
+msgid "Save locally"
+msgstr "Lokal speichern"
 
 msgid "Loading"
 msgstr "Laden"
@@ -207,15 +222,6 @@ msgstr "Beim Erstellen dieses Ordners ist ein Fehler aufgetreten"
 
 msgid "An item with this name already exists!"
 msgstr "Ein Item mit diesem Namen ist schon vorhanden!"
-
-msgid "Filemanager"
-msgstr "Dateimanager"
-
-msgid "Show in Filemanager"
-msgstr "Im Dateimanager anzeigen"
-
-msgid "Save locally"
-msgstr "Lokal speichern"
 
 msgid "Select a file"
 msgstr "Wähle eine Datei"
@@ -483,12 +489,6 @@ msgstr "Datentresor wird geöffnet..."
 msgid "Close the Data Safe"
 msgstr "Datentresor schließen"
 
-msgid "Upload Failed"
-msgstr "Hochladen fehlgeschlagen"
-
-msgid "It is not permitted to store files in this folder!"
-msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
-
 msgid "Notification"
 msgstr "Benachrichtigung"
 
@@ -546,6 +546,12 @@ msgstr "Dieser Ordner hat eigene Benachrichtigungseinstellungen"
 msgid "path"
 msgstr "Pfad"
 
+msgid "Native Browser Preview"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
 msgid "Whole Filemanager"
 msgstr "Gesamter Dateimanager"
 
@@ -566,6 +572,15 @@ msgstr "Revisionen limitieren auf"
 
 msgid "Hold-back in months"
 msgstr "Vorhalten in Monaten"
+
+msgid "Upload Failed"
+msgstr "Hochladen fehlgeschlagen"
+
+msgid "It is not permitted to store files in this folder!"
+msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
+
+msgid "The following file names contain characters that are not allowed. Please rename the files and try again."
+msgstr "Der Dateiname enthält Zeichen, die nicht erlaubt sind. Bitte entfernen Sie diese und versuchen Sie es erneut."
 
 msgid "Usage"
 msgstr "Verbrauch"
@@ -611,6 +626,9 @@ msgstr[1] ""
 msgid "GENDER_File Location"
 msgstr ""
 
+msgid "File not found!"
+msgstr "Datei nicht gefunden!"
+
 msgid "Action"
 msgstr "Aktion"
 
@@ -620,17 +638,9 @@ msgstr "Keine Dateien gefunden"
 msgid "This folder appears to be empty."
 msgstr "Dieser Ordner scheint leer zu sein."
 
-msgid "File not found!"
-msgstr "Datei nicht gefunden!"
-
 msgid "Password required for download"
 msgstr "Zum Herunterladen Passwort eingeben"
 
 msgid "Submit"
 msgstr "Abschicken"
 
-msgid "The Download link has expired"
-msgstr "Der Download Link ist abgelaufen"
-
-msgid "Download link has expired:"
-msgstr "Der Download Link ist abgelaufen:"
