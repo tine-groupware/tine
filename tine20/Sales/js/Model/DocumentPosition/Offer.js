@@ -3,23 +3,19 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import Record from 'data/Record'
 import AbstractMixin from './AbstractMixin'
+import Delivery from "../Document/Delivery";
 
-Ext.ns('Tine.Sales.Model')
+const Offer = Record.create([], Object.assign({}, AbstractMixin, {
+    appName: 'Sales',
+    modelName: 'DocumentPosition_Offer'
+}))
 
-Tine.Sales.Model.DocumentPosition_OfferMixin = {
-    parent() {
-        console.error('child');
-    },
-    statics: {
-        parent() {
-            console.error('childStatic');
-        },
-    }
-};
+Object.assign(Offer, AbstractMixin.statics)
 
-// @TODO this should be done by modelConfig!
-_.defaultsDeep(Tine.Sales.Model.DocumentPosition_OfferMixin, AbstractMixin);
+export default Offer
+
