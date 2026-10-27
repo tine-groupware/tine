@@ -122,8 +122,8 @@ class GDPR_Controller extends Tinebase_Controller_Event implements
         });
     }
 
-
-    public function publicApiMainScreen($path = null) {
+    public function publicApiMainScreen($path = null)
+    {
         $locale = $this->getLocale();
         $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=GDPR";
 
