@@ -15,6 +15,8 @@ import PositionGridPanel from "./PositionGridPanel";
 import TaxByRateField from "../TaxByRateField";
 import { PersonaContainer, Personas } from "ux/vue/PersonaContainer";
 import RecordEditFieldTriggerPlugin from "widgets/form/RecordEditFieldTriggerPlugin";
+import PurchaseInvoice from '../../Model/Document/PurchaseInvoice'
+import PurchaseInvoicePosition from '../../Model/DocumentPosition/PurchaseInvoice'
 
 Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_AbstractEditDialog, {
     windowWidth: 1240,

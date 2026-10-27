@@ -7,6 +7,7 @@
  */
 
 import PositionGridPanel from "../DocumentPosition/AbstractGridPanel";
+import AbstractMixin from "../Model/Document/AbstractMixin";
 
 const TaxByRateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     autoHeight: true,
@@ -45,7 +46,7 @@ const TaxByRateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
         originalValues[e.field] = e.originalValue
 
-        const toFixed = Tine.Sales.Model.DocumentPosition_PurchaseInvoice.toFixed
+        const toFixed = AbstractMixin.statics.toFixed
         let net_amount, tax_rate, tax_amount, gross_amount
         switch (e.field) {
             case 'net_amount':
