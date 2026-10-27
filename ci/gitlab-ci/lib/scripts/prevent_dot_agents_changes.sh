@@ -7,7 +7,7 @@ function prevent_dot_agents_changes() {
 
     git config user.email "ci@gitlab.metaways.net"
     git config user.name "ci"
-    git rebase origin/$downstream
+    git rebase origin/$downstream || return
 
     changes="$(git diff --name-only -r --diff-filter=a origin/$downstream -- ./.agents/)"
 
