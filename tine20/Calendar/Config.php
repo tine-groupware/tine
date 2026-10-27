@@ -25,6 +25,14 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FIXED_CALENDARS = 'fixedCalendars';
 
     /**
+     * ALLOW_GENERIC_CALDAV_CLIENT
+     *
+     * Enables all CalDAV clients.
+     * Note: Use at your own risk. Non-official clients are not supported.
+     */
+    const ALLOW_GENERIC_CALDAV_CLIENT = 'allowGenericCalDAVClient';
+
+    /**
      * Event Status Available
      *
      * @var string
@@ -284,6 +292,18 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'type'                  => 'array',
             'contents'              => 'string', // in fact this are ids of Tinebase_Model_Container of app Calendar and we might what to have te ui to autocreate pickers panel here? x-type? -> later
             'clientRegistryInclude' => TRUE
+        ),
+        self::ALLOW_GENERIC_CALDAV_CLIENT => array(
+            //_('Allow generic CalDAV clients')
+            'label'                 => 'Allow generic CalDAV clients',
+            //_('Enables all CalDAV clients. Note: Use at your own risk. Non-official clients are not supported.')
+            'description'           => 'Enables all CalDAV clients. Note: Use at your own risk. Non-official clients are not supported.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
+            'default'               => false
+
         ),
         self::CROP_DAYS_VIEW => array(
                                    //_('Crop Days')
