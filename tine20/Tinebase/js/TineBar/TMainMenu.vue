@@ -14,20 +14,22 @@
     :visible="visibleInternal"
     @hide="hideMenuEmit($event)"
     tabindex="0"
+    class="t-main-menu"
   >
-    <ul role="menu" class="p-0 m-0" style="list-style: none;">
+    <!-- bootstrap dropdown (as in navbars) - the popover only positions it -->
+    <ul role="menu" class="main-menu dropdown-menu show">
     <li
       v-for="action in userActionsInternal"
       role="menuitem"
       :key="action.text"
-      class="main-menu-item px-3 py-1 d-flex align-items-center pe-5"
+      class="main-menu-item dropdown-item d-flex align-items-center gap-2"
       @click="menuItemClicked(action, $event)"
       @keydown.enter="menuItemClicked(action, $event)"
       tabindex="0"
       @keydown.esc="hideMenu"
     >
       <div class="main-menu-item__icon" :class="action.iconCls"></div>
-      <div class="main-menu-item__text ms-2" :title="action.text">
+      <div class="main-menu-item__text" :title="action.text">
         {{action.text}}
       </div>
     </li>
@@ -81,14 +83,16 @@ const hideMenuEmit = (e) => {
 
 <style scoped lang="scss">
 
+// the popover positions the menu - the dropdown is in its flow and grows with the longest item (product name
+// may vary), the popover limits it to the available width
+.main-menu.dropdown-menu{
+  position: static;
+  margin: 0;
+  border: 0;
+}
+
 .main-menu-item{
-  font-size: 15px;
-  /*height: 22px;*/
-  // grow with the longest item (product name may vary) - the popover limits it to the available width
-  min-width: min(320px, 100%);
   cursor: pointer;
-  // reserve the space of the hover/focus border - otherwise the text gets narrower (and wraps) on hover
-  border-left: transparent solid 2px;
 
   &__icon{
     flex: none;
@@ -99,21 +103,23 @@ const hideMenuEmit = (e) => {
   &__text{
     flex: 1 1 auto;
     min-width: 0;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+</style>
 
-  &:focus{
-    background-color: #d9d9d9;
-    border-left: #a6a6a6 solid 2px;
-  }
+<style lang="scss">
+// the popover is just the frame of the dropdown - take over its look
+// NOTE: the --bs-dropdown-* vars are defined on .dropdown-menu only, these are their defaults
+.tmenu.t-main-menu{
+  --bs-popover-border-color: var(--bs-border-color-translucent);
+  --bs-popover-border-radius: var(--bs-border-radius);
+  // max-width (available width) includes the border
+  box-sizing: border-box;
 
-  @media (hover: hover) {
-    &:hover{
-      background-color: #d9d9d9;
-      border-left: #a6a6a6 solid 2px;
-    }
+  .popover-body{
+    padding: 0;
   }
 }
 </style>

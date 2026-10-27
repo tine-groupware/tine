@@ -828,6 +828,8 @@ Ext.override(Ext.tree.TreePanel, {
 });
 
 Ext.override(Ext.menu.Menu, {
+    // styled like a bootstrap dropdown (box-shadow, border-radius) - see ExtJS/visual/menu.scss
+    shadow: false,
     setActive: Ext.emptyFn,
     setZIndex: Ext.emptyFn,
     showAt: Ext.menu.Menu.prototype.showAt.createSequence(function () {
