@@ -633,18 +633,17 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param boolean $_valueIsRegExp
      * @return array
      */
-    protected function _getMatchingRecords($_field, $_value, $_valueIsRegExp = FALSE)
+    protected function _getMatchingRecords($_field, $_value, $_valueIsRegExp = false)
     {
         if (!is_string($_field) && is_callable($_field)) {
             $matchingRecords = array_filter($this->_listOfRecords, $_field);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Filtering field '$_field' of '{$this->_recordClass}' without indices, expecting slow results");
             $valueMap = $this->$_field;
             
             if ($_valueIsRegExp) {
                 $matchingMap = preg_grep($_value,  $valueMap);
             } else {
-                $matchingMap = array_flip((array)array_keys($valueMap, $_value));
+                $matchingMap = array_flip(array_keys($valueMap, $_value));
             }
             
             $matchingRecords = array_intersect_key($this->_listOfRecords, $matchingMap);
