@@ -53,11 +53,6 @@ const AbstractMixin = {
 }
 
 Ext.ns('Tine.Sales.Model');
-Tine.Sales.Model.Document_OfferMixin = AbstractMixin
-Tine.Sales.Model.Document_OrderMixin = AbstractMixin
-Tine.Sales.Model.Document_DeliveryMixin = AbstractMixin
-Tine.Sales.Model.Document_PurchaseInvoiceMixin = AbstractMixin
-Tine.Sales.Model.Document_InvoiceMixin = AbstractMixin
 Tine.Sales.Model.InvoiceMixin = AbstractMixin
 
 export default AbstractMixin

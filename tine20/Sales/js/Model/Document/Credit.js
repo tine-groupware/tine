@@ -7,12 +7,13 @@
  */
 
 import Record from 'data/Record'
+import AbstractMixin from './AbstractMixin'
 
-const Credit = Record.create([], {
+const Credit = Record.create([], Object.assign({}, AbstractMixin, {
     appName: 'Sales',
     modelName: 'Document_Credit'
-})
+}))
 
-Credit.toFixed = Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed
+Object.assign(Credit, AbstractMixin.statics)
 
 export default Credit
