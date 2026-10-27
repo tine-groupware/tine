@@ -266,12 +266,15 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
             EventManager_Model_Option::class,
         ]);
 
-        try {
-            EventManager_Setup_EventTemplates::getInstance()->createEventForOptionTemplates();
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            $this->applyPrimaryModlogs();
-            EventManager_Setup_EventTemplates::getInstance()->createEventForOptionTemplates();
-        }
+        // TODO does not work because replication creates the filemanager folder but not the event and causes replication fails ...
+        //      maybe events should be replicable, too?
+        //      moved createEventForOptionTemplates to CLI for the moment ->
+//        try {
+//            EventManager_Setup_EventTemplates::getInstance()->createEventForOptionTemplates();
+//        } catch (Tinebase_Exception_NotFound $tenf) {
+//            $this->applyPrimaryModlogs();
+//            EventManager_Setup_EventTemplates::getInstance()->createEventForOptionTemplates();
+//        }
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.12', self::RELEASE019_UPDATE012);
     }

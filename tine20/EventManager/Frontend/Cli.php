@@ -8,7 +8,7 @@ declare(strict_types=1);
  * @subpackage  Frontend
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
@@ -28,7 +28,6 @@ class EventManager_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     protected $_applicationName = 'EventManager';
 
-
     /**
      * import events
      *
@@ -37,5 +36,12 @@ class EventManager_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function import($_opts)
     {
         parent::_import($_opts);
+    }
+
+    public function createEventForOptionTemplates(): int
+    {
+        EventManager_Setup_EventTemplates::getInstance()->createEventForOptionTemplates();
+
+        return 0;
     }
 }

@@ -96,7 +96,7 @@ class EventManager_Setup_EventTemplates extends EventManager_Setup_DemoData
         }
     }
 
-    public static function hasOptionTemplatesBeenRun()
+    public static function hasOptionTemplatesBeenRun(): bool
     {
         try {
             $containerName = EventManager_Config::getInstance()
@@ -308,9 +308,18 @@ Waldspiele, Schwimmen, Küchen- & Klodienst';
         }
     }
 
+    /**
+     * TODO should be translated
+     *
+     * @return void
+     */
     public function createEventForOptionTemplates(): void
     {
         if (self::hasOptionTemplatesBeenRun()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' OptionTemplatesHasBeenRun');
+            }
             return;
         }
         $this->_templateContext = null;
