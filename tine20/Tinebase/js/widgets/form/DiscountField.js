@@ -5,6 +5,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import AbstractMixin from "../../../../Sales/js/Model/Document/AbstractMixin";
+
 Ext.ns('Tine.widgets.form');
 
 Tine.widgets.form.DiscountField = Ext.extend(Ext.ux.form.MoneyField, {
@@ -95,7 +97,7 @@ Tine.widgets.form.DiscountField = Ext.extend(Ext.ux.form.MoneyField, {
     },
 
     autoValues(record, form, config) {
-        const toFixed = Tine.Sales.Model.DocumentPosition_PurchaseInvoice.toFixed;
+        const toFixed = AbstractMixin.statics.toFixed;
 
         const autoValues = {};
 

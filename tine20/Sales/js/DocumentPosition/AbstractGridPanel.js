@@ -8,6 +8,7 @@
 
 import './AbstractEditDialog';
 import DDSortPlugin from 'ux/grid/DDSortPlugin';
+import AbstractMixin from "../Model/Document/AbstractMixin";
 
 const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     autoHeight: true,
@@ -421,7 +422,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 });
 
 const getSums = function(positions) {
-    const toFixed = Tine.Sales.Model.DocumentPosition_PurchaseInvoice.toFixed
+    const toFixed = AbstractMixin.statics.toFixed
 
     const sums = positions.reduce((a, pos) => {
         a.document_price_type = a.document_price_type === 'gross' && pos.unit_price_type === 'gross' ? 'gross' : 'net';
