@@ -629,25 +629,10 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             targetNodeId = treeNodeAttribute.nodeValue;
             targetNode = treePanel.getNodeById(targetNodeId);
             targetNodePath = targetNode.attributes.path;
-
         }
 
         let files = fileSelector.getFileList();
-        const folderList = _.uniq(_.map(files, (fo) => {
-            return fo.fullPath.replace(/\/[^/]*$/, '');
-        }));
-
-
-        if (folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', targetNode.attributes.nodeRecord, _.map(files, Tine.Filemanager.Model.Node.createFromFile))) {
-            Ext.MessageBox.alert(
-                i18n._('Upload Failed'),
-                app.i18n._('It is not permitted to store files in this folder!')
-            );
-
-            return;
-        }
-
-        await upload(targetNodePath, files);
+        await upload(targetNode.attributes.nodeRecord, files);
     },
 
 

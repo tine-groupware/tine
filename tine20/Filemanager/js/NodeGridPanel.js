@@ -1386,28 +1386,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             let files = fileSelector.getFileList();
             
             if (files.length === 0) return;
-            
-            const folderList = _.uniq(_.map(files, (fo) => {
-                return fo.fullPath.replace(/\/[^/]*$/, '');
-            }));
-
-            if((folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'file'}]))
-                || (_.compact(folderList).length && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', nodeRecord, [{type: 'folder'}]))) {
-                const app = Tine.Tinebase.appMgr.get('Filemanager');
-                Ext.MessageBox.alert(
-                    i18n._('Upload Failed'),
-                    app.i18n._('It is not permitted to store files in this folder!')
-                );
-        
-                return;
-            }
-    
             if (! this.loadMask) {
                 this.loadMask = new Ext.LoadMask(this.getEl(), {msg: String.format(this.app.i18n._('Processing files...'), files.length)});
             }
             this.loadMask.show.defer(100, this.loadMask);
-    
-            await upload(this.targetFolderPath, files);
+
+            await upload(nodeRecord, files);
     
             if (this.loadMask) {
                 this.loadMask.hide.defer(100, this.loadMask);

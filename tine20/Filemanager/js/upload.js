@@ -18,7 +18,46 @@
  * - files have progress and info about transitional state (the (empty) file is not yet created)
  * - folders have transitional state only (not yet created, just in uploadManager)
  */
-async function upload(targetFolderPath, files) {
+async function upload(targetNodeRecord, files) {
+    const folderList = _.uniq(_.map(files, (fo) => {
+        return fo.fullPath.replace(/\/[^/]*$/, '');
+    }));
+    const app = Tine.Tinebase.appMgr.get('Filemanager');
+    if((folderList.includes('') && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', targetNodeRecord, [{type: 'file'}]))
+        || (_.compact(folderList).length && !Tine.Filemanager.nodeActionsMgr.checkConstraints('create', targetNodeRecord, [{type: 'folder'}]))) {
+
+        Ext.MessageBox.alert(
+            i18n._('Upload Failed'),
+            app.i18n._('It is not permitted to store files in this folder!')
+        );
+        return;
+    }
+
+    const esc = Ext.util.Format.htmlEncode;
+    const items = files.reduce((acc, file) => {
+        const found = Tine.Filemanager.Model.Node.checkForInvalidChars(file.name);
+        if (found) {
+            let html = '';
+            for (const c of file.name) {
+                html += found.includes(c) ? '<span class="bg-danger-subtle text-danger-emphasis rounded">' + esc(c) + '</span>' : esc(c);
+            }
+            acc.push('<div class="text-break">' + html + '</div>');
+        }
+        return acc;
+    }, []);
+
+    if (items.length > 0) {
+        Ext.Msg.alert(
+            app.i18n._('Invalid Characters Found'),
+            '<p>' + app.i18n._('The following file names contain characters that are not allowed. Please rename the files and try again.') + '</p>'
+            + '<div class="overflow-auto" style="max-height:100px;">'
+            + items.join('')
+            + '</div>'
+        );
+        return;
+    }
+
+    const targetFolderPath = targetNodeRecord.get('path');
     const batchID = Ext.id();
     files.forEach((file) => {file.batchID = batchID});
     await createTasks(targetFolderPath, files, batchID);
