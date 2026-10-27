@@ -3,11 +3,18 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import Record from 'data/Record'
 import AbstractMixin from './AbstractMixin'
 
-Ext.ns('Tine.Sales.Model')
+const Delivery = Record.create([], Object.assign({}, AbstractMixin, {
+    appName: 'Sales',
+    modelName: 'DocumentPosition_Delivery'
+}))
 
-Tine.Sales.Model.DocumentPosition_DeliveryMixin = AbstractMixin
+Object.assign(Delivery, AbstractMixin.statics)
+
+export default Delivery
+

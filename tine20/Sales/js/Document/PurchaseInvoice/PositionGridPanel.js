@@ -1,6 +1,5 @@
 import AbstractGridPanel from "../../DocumentPosition/AbstractGridPanel";
 import AbstractMixin from "../../Model/DocumentPosition/AbstractMixin";
-import PurchaseInvoicePosition from "../../Model/DocumentPosition/PurchaseInvoice";
 
 const PositionGridPanel = Ext.extend(AbstractGridPanel, {
     quickaddMode: 'sorted',

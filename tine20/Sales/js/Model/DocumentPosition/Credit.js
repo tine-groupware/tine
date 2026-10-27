@@ -6,13 +6,16 @@
  * @copyright   Copyright (c) 2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import Record from 'data/Record'
 import AbstractMixin from './AbstractMixin'
+import Delivery from "../Document/Delivery";
 
-Ext.ns('Tine.Sales.Model')
+const Credit = Record.create([], Object.assign({}, AbstractMixin, {
+    appName: 'Sales',
+    modelName: 'DocumentPosition_Credit'
+}))
 
-Tine.Sales.Model.DocumentPosition_CreditMixin = {
+Object.assign(Credit, AbstractMixin.statics)
 
-};
+export default Credit
 
-// @TODO this should be done by modelConfig!
-_.defaultsDeep(Tine.Sales.Model.DocumentPosition_CreditMixin, AbstractMixin);
