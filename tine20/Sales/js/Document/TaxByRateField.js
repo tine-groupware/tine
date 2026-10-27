@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import TaxByRateGridPanel from "./TaxByRateGridPanel";
+import AbstractMixin from "../Model/Document/AbstractMixin";
 
 const EMPTY_VALUES = [null, undefined, false, '', NaN];
 
@@ -87,15 +88,15 @@ const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
 
             const tax_rate = withDefault(this.parseValue(r, 'tax_rate'), Tine.Tinebase.configManager.get('salesTax'))
             const tax_amount = this.parseValue(t, 'tax_amount') || 0
-            const net_amount = Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed(tax_amount / tax_rate * 100)
-            const gross_amount = Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed(net_amount + tax_amount)
+            const net_amount = AbstractMixin.statics.toFixed(tax_amount / tax_rate * 100)
+            const gross_amount = AbstractMixin.statics.toFixed(net_amount + tax_amount)
 
             return a.concat({ net_amount, tax_rate, tax_amount, gross_amount })
         }, [])
 
         if (value?.length !== this.currentValue?.length || _.reduce(value, (a,v) => {
             const existing = _.find(this.currentValue, {tax_rate: v.tax_rate})
-            return a || !existing || Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed(existing.tax_amount) !== v.tax_amount
+            return a || !existing || AbstractMixin.statics.toFixed(existing.tax_amount) !== v.tax_amount
         }, false)) {
             const oldValue = this.currentValue
             this.currentValue = value
