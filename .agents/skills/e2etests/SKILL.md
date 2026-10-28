@@ -34,6 +34,27 @@ npm test                          # all tests
 npm test src/test/Addressbook/Addressbook.test.js  # single file
 ```
 
+## Debugging Tests in a Shared Browser
+
+Tests can run in an already running Chrome that the agent also controls via the Claude in Chrome
+extension (`mcp__claude-in-chrome__*`). Setup for the user is described in `tests/e2etests/README.md`
+("Debug in a Running Browser"): a separate Chrome instance with its own `--user-data-dir` and
+`--remote-debugging-port=9222`, with the extension installed there.
+
+Workflow:
+
+1. **Check the debug port:** `curl -s http://127.0.0.1:9222/json/version`. If it does not answer, ask the user to start the instance (command in README).
+2. **Use the right extension instance:** several browsers may be connected (e.g. the user's normal Chrome). Verify by opening a tab via the extension and checking it appears in `node scripts/cdp-inspect.js list`. If not, let the user pick with `switch_browser`.
+3. **Open the test tab first:** navigate an extension tab to `TEST_URL`. `getConnectedPage()` reuses the first tab whose URL starts with `TEST_URL`; otherwise the test opens a new tab outside the extension's tab group, which the agent can't see.
+4. **Run the test** with `TEST_BROWSER_URL=http://127.0.0.1:9222` (set in `.env` or inline). The test clears cookies/storage of `TEST_URL`, logs in and only disconnects at the end, so the final state stays visible.
+5. **Inspect:** main tab via the extension (screenshot, console, `javascript_tool` for `Tine`/`Ext` state). Popup windows (edit dialogs) are not in the tab group, so use `node scripts/cdp-inspect.js screenshot all` / `eval <index> '<js>'`.
+
+Pitfalls:
+
+- **Node version:** puppeteer 25 needs Node >= 22.12. The agent shell does not load nvm, so call it via path, e.g. `PATH=$HOME/.nvm/versions/node/v24.<x>/bin:$PATH npm test <file>` (`ls ~/.nvm/versions/node`).
+- **MFA:** a login stuck in a FIDO2/WebAuthn dialog means MFA is active for the test user; ask the user to disable it.
+- Keep the test tab open after the run, so the next run can reuse it.
+
 ## Core Principles
 
 1. **No Hardcoded Delays**: Eliminate `setTimeout`. Use dynamic waiting (`waitForSelector`, `waitForFunction`).

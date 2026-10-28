@@ -4,6 +4,8 @@
 
 Guide agents working on E2E tests in `tests/e2etests/`. Covers project structure, core library, patterns, and refactoring legacy tests.
 
+You can find extra details in `.agents/skills/e2etests/SKILL.md`.
+
 ## Project Overview
 
 E2E tests verify workflows from the end-user's perspective using Jest + Puppeteer. They run against a live tine instance configured via `.env`.

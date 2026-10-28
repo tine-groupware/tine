@@ -97,6 +97,7 @@ E2E tests are configured via `tests/e2etests/.env` or environment variables:
 | `TEST_TIMEOUT_*` | Override default timeouts (e.g., `TEST_TIMEOUT_FORM_VALUE_CHANGED`) |
 | `TEST_NETWORK_CONDITIONS_*` | Simulates slow network speed and high latency |
 | `TEST_CPU_THROTTLING_RATE_*` | Simulates slow CPU |
+| `TEST_BROWSER_URL` | Connect to a running Chrome instead of launching one, see [Debug in a Running Browser](#debug-in-a-running-browser)<br>Implicitly sets `TEST_MODE=debug` |
 
 More variables and documentation in `tests/e2etests/.env`.
 
@@ -118,6 +119,48 @@ npm test src/test/Admin/                    # all files within a directory
 ```
 
 Jest config: `tests/e2etests/jest.config.mjs`
+
+### Debug in a Running Browser
+
+Instead of launching its own browser, the tests can connect to an already running Chrome. This way you
+(or an AI agent using the Claude in Chrome extension) can watch and inspect the test while it runs.
+
+Since Chrome 136 remote debugging is not possible with the default user data dir, so start a separate
+Chrome instance with its own data dir (it is a complete separate profile, install extensions there once).
+
+MacOS:
+
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --user-data-dir="$HOME/Library/Application Support/Google/Chrome-e2etests" \
+  --remote-debugging-port=9222 --ignore-certificate-errors --window-size=1920,1080
+```
+
+Linux:
+
+```bash
+google-chrome \
+  --user-data-dir="$HOME/.config/google-chrome-e2etests" \
+  --remote-debugging-port=9222 --ignore-certificate-errors --window-size=1920,1080
+```
+
+Then set `TEST_BROWSER_URL=http://127.0.0.1:9222` in `.env` and run the tests as usual.  
+Doing this ignores TEST_MODE, so it implicitly sets `TEST_MODE=debug`.
+
+The tests:
+
+- reuse an open tab showing `TEST_URL` (or open a new one) instead of a fresh browser
+- clear cookies and storage of `TEST_URL` before logging in
+- use the real window size instead of `TEST_RESOLUTION`
+- only disconnect on `browser.close()`, the browser keeps running
+
+All pages, including popup windows (edit dialogs), can be inspected from the command line:
+
+```bash
+node scripts/cdp-inspect.js list
+node scripts/cdp-inspect.js screenshot all        # -> screenshots/cdp/<index>.png
+node scripts/cdp-inspect.js eval 0 'Tine.Tinebase.registry.get("currentAccount")'
+```
 
 ## Tech Stack
 
