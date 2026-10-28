@@ -228,8 +228,10 @@
             throw new Tinebase_Exception_NotFound('Could not execute action, invalid message/action param');
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __LINE__ . '::' . __METHOD__ . " executing action: '{$message['action']}'");
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . " executing action: '{$message['action']}'");
+        }
         
         [$appName, $actionName] = explode('.', (string) $message['action']);
         $controller = Tinebase_Core::getApplicationInstance($appName, '', true);
@@ -266,8 +268,10 @@
     {
         $user = Tinebase_Core::getUser();
         if (! is_object($user)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
-                __METHOD__ . '::' . __LINE__ . " Not Queueing action: '{$action}' because no valid user object found");
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(
+                    __METHOD__ . '::' . __LINE__ . " Not Queueing action: '{$action}' because no valid user object found");
+            }
             return null;
         }
 
