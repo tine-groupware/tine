@@ -102,6 +102,8 @@ export default {
 
     /**
      * Closes all open pages of the current browser and then the browser itself.
+     * When the browser was already running (TEST_BROWSER_URL is set), the browser will not close but only disconnect from the running e2etest.
+     *
      * TODO: Find out why sometimes this error appears: "Could not close all open browser pages, error: ProtocolError: Protocol error (Target.closeTarget): No target with given id found"
      *
      * @returns {Promise<void>}
@@ -109,13 +111,16 @@ export default {
     closeBrowser: async function () {
         if (global.browser) {
             try {
-                // Close all pages to ensure clean shutdown
-                const pages = await global.browser.pages();
-                await Promise.all(pages.map(p => p.close()));
+                // Close all pages to ensure clean shutdown, except when the browser was already running (TEST_BROWSER_URL is set).
+                if (!helpers.isConnectedBrowser()) {
+                    const pages = await global.browser.pages();
+                    await Promise.all(pages.map(p => p.close()));
+                }
             } catch (error) {
                 console.warn(`Could not close all open browser pages, error: ${error}`);
             } finally {
-                // Close the browser instance
+                // Close the browser instance.
+                // Note: When TEST_BROWSER_URL is set, the browser will not close but only disconnect from the running e2etest.
                 await global.browser.close();
             }
         }
