@@ -812,7 +812,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                     . "\n\t" . 'notify ' . $notificationEmailAddress
                     . ':message "' . $subject . ' ${from}: ${subject}"' . "\n\t\t"
                     . '"mailto:' . $email
-                    . '?body=' . $encodedBody . '";' . "\n";
+                    . '?body=' . '${message}' . rawurlencode("\n\n") . $encodedBody . '";' . "\n";
 
                 $redirectScript .= "\n\t" . 'redirect :copy "' . $email . '";';
             }

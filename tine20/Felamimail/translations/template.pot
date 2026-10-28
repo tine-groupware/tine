@@ -439,12 +439,6 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-msgid "Reveal Password?"
-msgstr ""
-
-msgid "You are about to reveal the password. This action will be logged. Proceed?"
-msgstr ""
-
 msgid "Test IMAP Connection"
 msgstr ""
 
@@ -1802,7 +1796,7 @@ msgstr ""
 msgid "You have new mail from:"
 msgstr ""
 
-msgid "You have received a new mail from %1$s"
+msgid "You have received this mail notification from %1$s"
 msgstr ""
 
 msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s."

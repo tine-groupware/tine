@@ -439,12 +439,6 @@ msgstr "Username"
 msgid "Password"
 msgstr "Password"
 
-msgid "Reveal Password?"
-msgstr "Reveal Password?"
-
-msgid "You are about to reveal the password. This action will be logged. Proceed?"
-msgstr "You are about to reveal the password. This action will be logged. Proceed?"
-
 msgid "Test IMAP Connection"
 msgstr "Test IMAP Connection"
 
@@ -1802,8 +1796,8 @@ msgstr "Cannot combine \"allow external\" and \"allow only members\" options"
 msgid "You have new mail from:"
 msgstr "You have new mail from:"
 
-msgid "You have received a new mail from %1$s"
-msgstr "You have received a new mail from %1$s"
+msgid "You have received this mail notification from %1$s"
+msgstr "You have received this mail notification from %1$s"
 
 msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s."
 msgstr "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s."
