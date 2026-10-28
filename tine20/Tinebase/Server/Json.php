@@ -276,12 +276,15 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 }
 
                 if ($serverCacheId = $cache->load($cacheId)) {
-                    if (function_exists('apcu_fetch') && $server = apcu_fetch($serverCacheId)) {
+                    if (function_exists('apcu_fetch')
+                        && is_string($serverCacheId)
+                        && $server = apcu_fetch($serverCacheId)
+                    ) {
                         return $server;
                     }
                     $server = $cache->load($serverCacheId);
                     if ($server instanceof Zend_Json_Server) {
-                        if (function_exists('apcu_add')) {
+                        if (function_exists('apcu_add') && is_string($serverCacheId)) {
                             apcu_add($serverCacheId, $server, $lifetime);
                         }
                         return $server;
@@ -295,8 +298,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' setting up json server ...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' setting up json server ...');
+        }
         
         $server = new Tinebase_Server_ZendJsonWrapper();
         $server->setAutoEmitResponse(false);

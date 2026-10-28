@@ -96,7 +96,11 @@ Manchmal kommt der Worker im Container bei einem Update aus dem Tritt. Dann hilf
 docker exec tine-docker_web_1 sh -c "supervisorctl restart worker"
 ```
 
-Es empfiehlt sich, das nach einem Major-Update in jedem Fall einmal auszuführen (oder den Container neu zu Starten).
+Es empfiehlt sich, das nach einem Major-Update in jedem Fall einmal auszuführen (oder den Container neu zu starten).
+
+Ausserdem sollte der tine-Cache beim Update geleert werden. Die CLI-Funktion `setup.php --update` macht das für den
+Server, auf dem sie ausgeführt wird. Wenn das tine-Setup aber aus mehreren VMs / Containern besteht, muss auf jedem
+Node `setup.php --clear_cache` ausgeführt werden (wenn apcu-Caching aktiviert ist).
 
 ## SSL / Reverse Proxy
 
