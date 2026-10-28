@@ -47,13 +47,11 @@ describe('test email rendering', () => {
   test('delete emails', async  () => {
     for (let i=1; i<=4; i++) {
       let title = 'Test ' + i
-      await lib.waitForActionableButton(page, title, lib.getEnvInt('TEST_TIMEOUT_MASK'), '.t-app-felamimail .x-grid3-col-subject');
-      await expectPuppeteer(page).toClick('.t-app-felamimail .x-grid3-col-subject', {text: title});
+      await lib.clickOnElementWithLabel(page, '.t-app-felamimail .x-grid3-col-subject', title);
 
       await waitForLoadmask(page)
 
-      await lib.waitForActionableButton(page, 'Löschen', lib.getEnvInt('TEST_TIMEOUT_MASK'), '.t-app-felamimail .x-btn-text');
-      await expectPuppeteer(page).toClick('.t-app-felamimail .x-btn-text', {text: 'Löschen'});
+      await lib.clickOnElementWithLabel(page, '.t-app-felamimail .x-btn-text', 'Löschen');
 
       await waitForLoadmask(page)
     }
@@ -61,12 +59,11 @@ describe('test email rendering', () => {
 });
 
 afterAll(async () => {
-  global.browser.close()
+  await lib.closeBrowser();
 });
 
 async function openEmailPreview (title){
-  await lib.waitForActionableButton(page, title, lib.getEnvInt('TEST_TIMEOUT_MASK'), '.t-app-felamimail .x-grid3-col-subject');
-  await expectPuppeteer(page).toClick('.x-grid3-col-subject', {text: title})
+  await lib.clickOnElementWithLabel(page, '.t-app-felamimail .x-grid3-col-subject', title);
 
   await page.waitForSelector('.x-border-panel .x-panel:not(.x-hide-display) .email-stapled-container');
 
@@ -75,15 +72,17 @@ async function openEmailPreview (title){
 }
 
 async function openEmailResponse (title, filename){
-  await lib.waitForActionableButton(page, title, lib.getEnvInt('TEST_TIMEOUT_MASK'), '.t-app-felamimail .x-grid3-col-subject');
-  await expectPuppeteer(page).toClick('.t-app-felamimail .x-grid3-col-subject', {text: title})
+  await lib.clickOnElementWithLabel(page, '.t-app-felamimail .x-grid3-col-subject', title);
   let newPage = await lib.getEditDialog('Antworten')
 
   await waitForLoadmask(newPage)
 
   await newPage.waitForSelector('input[name="subject"]')
   await lib.makeScreenshot(newPage,{path: 'screenshots/Felamimail/'+filename})
-  await newPage.close()
+  // TODO: Add wrapper function to helpers lib.
+  await newPage.close();
+  await page.bringToFront();
+  await waitForLoadmask(page);
 }
 
 async function waitForLoadmask(p) {
