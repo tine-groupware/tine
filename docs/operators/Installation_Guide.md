@@ -97,6 +97,10 @@ docker exec tine-docker_web_1 sh -c "supervisorctl restart worker"
 
 You should run this, if you are updating to a new major version.
 
+You should also clear the tine cache when updating. The CLI command `setup.php --update` clears the cache on the node
+running the command. If the tine setup consists of multiple nodes, you need to run `setup.php --clear_cache` on
+each node (if apcu-caching is active).
+
 ## SSL / Reverse Proxy
 
 ### NGINX
