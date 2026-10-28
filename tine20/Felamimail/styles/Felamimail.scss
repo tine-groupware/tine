@@ -474,10 +474,49 @@
 /*    background-repeat: no-repeat;*/
 /*}*/
 
-.x-grid3-cell-inner.x-grid3-col-address {
-    background-color: #fff;
+.felamimail-recipient-grid {
+    --row-h: 24px;
+}
+
+.felamimail-recipient-grid .x-grid3-row {
+    border: 0 !important;
+    margin: 1px 0;
+}
+
+/* type and address cells: same height, content centered */
+.felamimail-recipient-grid .x-grid3-col-type,
+.felamimail-recipient-grid .x-grid3-col-address {
     display: flex;
     align-items: center;
+    height: var(--row-h);
+    box-sizing: border-box;
+}
+
+.felamimail-recipient-grid .x-grid3-col-type {
+    font-size: 12px;
+    padding-right: 10px;
+}
+
+/* wrapper holding "An:" and the hint arrow */
+.felamimail-recipient-grid .x-grid3-col-type > div:first-child {
+    flex: 1;
+}
+
+.felamimail-recipient-grid .x-grid3-col-address {
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    background: #fff;
+    border-radius: var(--bs-border-radius);
+}
+
+/* editor: layer, wrapper and input share the row height */
+.felamimail-recipient-grid .x-grid-editor,
+.felamimail-recipient-grid .x-grid-editor .x-form-field-wrap {
+    height: var(--row-h);
+    overflow: hidden;
+}
+
+.felamimail-recipient-grid .x-grid-editor .x-form-text {
+    height: 100%;
 }
 
 /***** sieve rules ******/
