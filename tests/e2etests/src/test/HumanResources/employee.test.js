@@ -83,7 +83,9 @@ describe('employee', () => {
                 });
                 
                 test('vacation is saved', async () => {
-                    await lib.clickOnElementWaitPageClosed(freetimeEditDialog, '.x-toolbar-right-row button', 'Ok');
+                    // Saving vacation takes very long, so give it some more time.
+                    const closeOptions = {closeTimeout: lib.getEnvInt('TEST_TIMEOUT_POPUP_CLOSE') * 2};
+                    await lib.clickOnElementWaitPageClosed(freetimeEditDialog, '.x-toolbar-right-row button', 'Ok', closeOptions);
 
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
