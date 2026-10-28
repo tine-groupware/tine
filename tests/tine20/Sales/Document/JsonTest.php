@@ -544,6 +544,86 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->_instance->saveDocument_Offer($document->toArray(true));
     }
 
+    public function testOfferDocumentPositionTags(): void
+    {
+        $customer = $this->_createCustomer();
+        $customerData = $customer->toArray();
+        $product = $this->_createProduct();
+        $tagA = $this->_createSharedTag(['name' => 'positionTagA']);
+        $tagB = $this->_createSharedTag(['name' => 'positionTagB']);
+
+        $document = $this->_instance->saveDocument_Offer((new SMDOffer([
+            SMDOffer::FLD_CUSTOMER_ID => $customerData,
+            SMDOffer::FLD_RECIPIENT_ID => $customerData[SMC::FLD_DEBITORS][0][SMDN::FLD_DELIVERY][0],
+            SMDOffer::FLD_OFFER_STATUS => SMDOffer::STATUS_DRAFT,
+            SMDOffer::FLD_POSITIONS => [
+                [
+                    Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'ipsum',
+                    Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray(),
+                    Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX_RATE => 19,
+                    'tags' => [$tagA->toArray()],
+                ]
+            ],
+        ]))->toArray(true));
+
+        // unbooked: tags of positions are saved with the document
+        $this->assertSame(['positionTagA'], array_column($document[SMDOffer::FLD_POSITIONS][0]['tags'], 'name'));
+
+        $document[SMDOffer::FLD_POSITIONS][0]['tags'][] = $tagB->toArray();
+        $document = $this->_instance->saveDocument_Offer($document);
+        $this->assertEqualsCanonicalizing(['positionTagA', 'positionTagB'],
+            array_column($document[SMDOffer::FLD_POSITIONS][0]['tags'], 'name'));
+
+        // book document
+        $document[SMDOffer::FLD_OFFER_STATUS] = SMDOffer::STATUS_MANUAL_DISPATCH;
+        $document = $this->_instance->saveDocument_Offer($document);
+        $this->assertSame(SMDOffer::STATUS_MANUAL_DISPATCH, $document[SMDOffer::FLD_OFFER_STATUS]);
+
+        // booked: tags of positions are still changeable, other position fields are not
+        $document[SMDOffer::FLD_POSITIONS][0]['tags'] = [$tagB->toArray()];
+        $document[SMDOffer::FLD_POSITIONS][0][Sales_Model_DocumentPosition_Offer::FLD_TITLE] = 'changed';
+        $document = $this->_instance->saveDocument_Offer($document);
+        $this->assertSame('ipsum', $document[SMDOffer::FLD_POSITIONS][0][Sales_Model_DocumentPosition_Offer::FLD_TITLE]);
+        $this->assertSame(['positionTagB'], array_column($document[SMDOffer::FLD_POSITIONS][0]['tags'], 'name'));
+
+        $document = $this->_instance->getDocument_Offer($document['id']);
+        $this->assertSame(['positionTagB'], array_column($document[SMDOffer::FLD_POSITIONS][0]['tags'], 'name'));
+
+        // booked: tags of the document itself are changeable, too
+        $document['tags'] = [$tagA->toArray()];
+        $document = $this->_instance->saveDocument_Offer($document);
+        $this->assertSame(['positionTagA'], array_column($document['tags'], 'name'));
+    }
+
+    public function testOfferDocumentPositionTagsAddToUntagged(): void
+    {
+        $customer = $this->_createCustomer();
+        $customerData = $customer->toArray();
+        $tag = $this->_createSharedTag(['name' => 'positionTagNew']);
+
+        $document = $this->_instance->saveDocument_Offer((new SMDOffer([
+            SMDOffer::FLD_CUSTOMER_ID => $customerData,
+            SMDOffer::FLD_RECIPIENT_ID => $customerData[SMC::FLD_DEBITORS][0][SMDN::FLD_DELIVERY][0],
+            SMDOffer::FLD_OFFER_STATUS => SMDOffer::STATUS_DRAFT,
+            SMDOffer::FLD_POSITIONS => [
+                [
+                    Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'text position',
+                    Sales_Model_DocumentPosition_Offer::FLD_TYPE => Sales_Model_DocumentPosition_Offer::POS_TYPE_TEXT,
+                ]
+            ],
+        ]))->toArray(true));
+        $this->assertEmpty($document[SMDOffer::FLD_POSITIONS][0]['tags']);
+
+        // only tags of the position change
+        $document[SMDOffer::FLD_POSITIONS][0]['tags'] = [$tag->toArray()];
+        $document = $this->_instance->saveDocument_Offer($document);
+        $this->assertSame(['positionTagNew'], array_column($document[SMDOffer::FLD_POSITIONS][0]['tags'], 'name'));
+
+        $document[SMDOffer::FLD_POSITIONS][0]['tags'] = [];
+        $document = $this->_instance->saveDocument_Offer($document);
+        $this->assertEmpty($document[SMDOffer::FLD_POSITIONS][0]['tags']);
+    }
+
     public function testOfferToOrderToInvoiceTransition()
     {
         $customer = $this->_createCustomer();

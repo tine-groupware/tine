@@ -583,6 +583,30 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         return $result;
     }
 
+    public function testSaveTagWithContextModels()
+    {
+        $salesAppId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
+        $tagData = $this->_getTagData();
+        $tagData['contexts'] = [$salesAppId];
+        $tagData['context_models'] = [Sales_Model_DocumentPosition_Offer::class];
+        $tag = $this->_json->saveTag($tagData);
+        $tag = $this->_json->getTag($tag['id']);
+        $this->assertSame([$salesAppId], $tag['contexts']);
+        $this->assertSame([Sales_Model_DocumentPosition_Offer::class], $tag['context_models']);
+
+        $tag['context_models'] = [Sales_Model_DocumentPosition_Offer::class, Sales_Model_DocumentPosition_Order::class];
+        $tag = $this->_json->saveTag($tag);
+        $tag = $this->_json->getTag($tag['id']);
+        $this->assertSame([Sales_Model_DocumentPosition_Offer::class, Sales_Model_DocumentPosition_Order::class],
+            $tag['context_models']);
+
+        $tag['context_models'] = [];
+        $tag = $this->_json->saveTag($tag);
+        $tag = $this->_json->getTag($tag['id']);
+        $this->assertSame([], $tag['context_models']);
+        $this->assertSame([$salesAppId], $tag['contexts']);
+    }
+
     /**
      * try to save tag without view right
      */

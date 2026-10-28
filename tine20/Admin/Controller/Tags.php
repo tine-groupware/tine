@@ -109,6 +109,7 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
         
         $tag->rights =  Tinebase_Tags::getInstance()->getRights($_id);
         $tag->contexts = Tinebase_Tags::getInstance()->getContexts($_id);
+        $tag->context_models = Tinebase_Tags::getInstance()->getContextModels($_id);
         
         return $tag;
     }  
@@ -134,7 +135,11 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
         $this->_setTagRights($_record, $_createdRecord->getId());
-        Tinebase_Tags::getInstance()->setContexts($_record->contexts, $_createdRecord->getId());
+        Tinebase_Tags::getInstance()->setContexts(
+            $_record->contexts,
+            $_createdRecord->getId(),
+            (array)$_record->context_models
+        );
     }
 
     /**
@@ -149,7 +154,11 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
     {
         $this->_setTagRights($record, $record->getId(), TRUE);
         Tinebase_Tags::getInstance()->purgeContexts($record->getId());
-        Tinebase_Tags::getInstance()->setContexts($record->contexts, $record->getId());
+        Tinebase_Tags::getInstance()->setContexts(
+            $record->contexts,
+            $record->getId(),
+            (array)$record->context_models
+        );
     }
     
     /**

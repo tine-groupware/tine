@@ -40,6 +40,7 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
 
         'owner'                => array('allowEmpty' => true),
         'application'          => array('allowEmpty' => true),
+        'model'                => array('allowEmpty' => true), // restrict to tags allowed for this model
         'name'                 => array('allowEmpty' => true), // contains!
         'description'          => array('allowEmpty' => true),
         'type'                 => array('presence'   => 'required',
@@ -68,18 +69,35 @@ class Tinebase_Model_TagFilter extends Tinebase_Record_Abstract
             ->where($db->quoteIdentifier('is_deleted') . ' = 0')
             ->order('name');
         
-        if (!empty($this->application)) {
-            $applicationId = $this->application instanceof Tinebase_Model_Application 
-                ? $this->application->getId() 
-                : Tinebase_Application::getInstance()->getApplicationByName($this->application)->getId();
-            
+        $application = $this->application;
+        if (empty($application) && !empty($this->model)) {
+            $application = Tinebase_Application::extractAppAndModel($this->model)['appName'];
+        }
+        if (!empty($application)) {
+            $applicationId = $application instanceof Tinebase_Model_Application
+                ? $application->getId()
+                : Tinebase_Application::getInstance()->getApplicationByName($application)->getId();
+
             $select->join(
-                array('context' => SQL_TABLE_PREFIX . 'tags_context'), 
+                array('context' => SQL_TABLE_PREFIX . 'tags_context'),
                 $db->quoteIdentifier('tags.id') . ' = ' . $db->quoteIdentifier('context.tag_id'),
                 array()
-            )->where($db->quoteInto($db->quoteIdentifier('context.application_id') . ' IN (?)', array('0', $applicationId)));
+            );
+            if (!empty($this->model)) {
+                // tags of the whole application or restricted to the given model
+                $appIdCol = $db->quoteIdentifier('context.application_id');
+                $select->where($db->quoteInto($appIdCol . ' = ?', '0')
+                    . ' OR (' . $db->quoteInto($appIdCol . ' = ?', $applicationId)
+                    . ' AND ' . $db->quoteInto($db->quoteIdentifier('context.model') . ' IN (?)', ['', $this->model])
+                    . ')');
+            } else {
+                $select->where($db->quoteInto(
+                    $db->quoteIdentifier('context.application_id') . ' IN (?)',
+                    ['0', $applicationId]
+                ));
+            }
         }
-        
+
         $orWhere = array();
         if (!empty($this->name)) {
             $orWhere[] = $db->quoteInto($db->quoteIdentifier('tags.name') . ' LIKE ?', '%' . $this->name . '%');

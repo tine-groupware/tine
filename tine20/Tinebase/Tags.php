@@ -89,8 +89,10 @@ class Tinebase_Tags
             Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
         }
         
-        if (isset($_filter->application)) {
-            $app = Tinebase_Application::getInstance()->getApplicationByName($_filter->application);
+        $appName = !empty($_filter->application) ? $_filter->application : (!empty($_filter->model)
+            ? Tinebase_Application::extractAppAndModel($_filter->model)['appName'] : null);
+        if ($appName) {
+            $app = Tinebase_Application::getInstance()->getApplicationByName($appName);
             $this->_filterSharedOnly($select, $app->getId());
         }
         
@@ -101,6 +103,59 @@ class Tinebase_Tags
         $tags = new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $this->_db->fetchAssoc($select));
         
         return $tags;
+    }
+
+    /**
+     * returns all tags the current user may use, with their contexts
+     *
+     * NOTE: used by the client side tags cache, which filters by application and model
+     *       (personal tags need the use_personal_tags right of the application)
+     *
+     * @return array tag data with 'usage_contexts' => [['application_id' => '0'|appId, 'model' => ''|model], ...]
+     */
+    public function getUsableTags(): array
+    {
+        $tags = $this->searchTags(new Tinebase_Model_TagFilter([
+            'grant' => Tinebase_Model_TagRight::USE_RIGHT,
+            'type'  => '',
+        ]));
+        if (0 === count($tags)) {
+            return [];
+        }
+
+        $contexts = [];
+        $select = $this->_db->select()
+            ->from(['tags_context' => SQL_TABLE_PREFIX . 'tags_context'], ['tag_id', 'application_id', 'model'])
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' IN (?)', $tags->getArrayOfIds()));
+        foreach ($this->_db->fetchAll($select) as $row) {
+            $contexts[$row['tag_id']][] = [
+                'application_id' => (string)$row['application_id'],
+                'model'          => (string)$row['model'],
+            ];
+        }
+
+        $result = [];
+        foreach ($tags as $tag) {
+            $result[] = array_merge($tag->toArray(), ['usage_contexts' => $contexts[$tag->getId()] ?? []]);
+        }
+        return $result;
+    }
+
+    /**
+     * notify clients (broadcasthub) about changed tags, e.g. to update their tag caches
+     *
+     * @param string $verb create|update|delete
+     * @param string|array $tagIds
+     */
+    protected function _notifyBroadcastHub(string $verb, string|array $tagIds): void
+    {
+        $bchub = Tinebase_BroadcastHub::getInstance();
+        if (! $bchub->isActive()) {
+            return;
+        }
+        foreach (array_unique((array)$tagIds) as $tagId) {
+            $bchub->pushAfterCommit($verb, Tinebase_Model_Tag::class, (string)$tagId, null);
+        }
     }
 
     /**
@@ -319,6 +374,8 @@ class Tinebase_Tags
         } else {
             $oldContexts = [];
         }
+        $oldContextModels = $_tag->context_models;
+        unset($_tag->context_models);
 
         switch ($_tag->type) {
             case Tinebase_Model_Tag::TYPE_PERSONAL:
@@ -355,7 +412,10 @@ class Tinebase_Tags
         if ($_tag->has('contexts')) {
             $_tag->contexts = $oldContexts;
         }
-        
+        $_tag->context_models = $oldContextModels;
+
+        $this->_notifyBroadcastHub('create', $newId);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Created new tag ' . $_tag->name);
 
@@ -406,6 +466,7 @@ class Tinebase_Tags
                 'last_modified_by'   => $currentAccountId,
                 'last_modified_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             ), $this->_db->quoteInto($this->_db->quoteIdentifier('id').'= ?', $tagId));
+            $this->_notifyBroadcastHub('update', $tagId);
 
             $tags = $this->getTagsById($tagId, null, true);
             return $tags[0];
@@ -474,6 +535,7 @@ class Tinebase_Tags
                 'deleted_by'   => $currentAccountId,
                 'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             ), $this->_db->quoteInto($this->_db->quoteIdentifier('id').' IN (?)', $tags->getArrayOfIds()));
+            $this->_notifyBroadcastHub('delete', $tags->getArrayOfIds());
         }
     }
 
@@ -1000,6 +1062,7 @@ class Tinebase_Tags
         $this->_db->delete(SQL_TABLE_PREFIX . 'tags_acl', array(
             $this->_db->quoteIdentifier('tag_id') . ' = ?' => $_tagId
         ));
+        $this->_notifyBroadcastHub('update', (string)$_tagId);
     }
 
     /**
@@ -1037,6 +1100,7 @@ class Tinebase_Tags
                     ));
                 }
             }
+            $this->_notifyBroadcastHub('update', (string)$right->tag_id);
         }
     }
 
@@ -1064,6 +1128,26 @@ class Tinebase_Tags
     }
 
     /**
+     * returns the models a given tag is restricted to
+     *
+     * NOTE: an application context without models means the whole application
+     *
+     * @param  string $_tagId
+     * @return array  array of model names
+     */
+    public function getContextModels($_tagId): array
+    {
+        $select = $this->_db->select()
+            ->distinct()
+            ->from(array('tags_context' => SQL_TABLE_PREFIX . 'tags_context'), array('model'))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('tag_id') . ' = ?', $_tagId))
+            ->where($this->_db->quoteIdentifier('model') . ' <> ' . $this->_db->quote(''))
+            ->order('model');
+
+        return $this->_db->fetchCol($select);
+    }
+
+    /**
      * purges (removes from tabel) all contexts of a given tag
      *
      * @param  string $_tagId
@@ -1076,34 +1160,57 @@ class Tinebase_Tags
         $this->_db->delete(SQL_TABLE_PREFIX . 'tags_context', array(
             $this->_db->quoteIdentifier('tag_id') . ' = ?' => $_tagId
         ));
+        $this->_notifyBroadcastHub('update', (string)$_tagId);
     }
 
     /**
      * sets all given contexts for a given tag
      *
+     * - models restrict the tag to these models within their application
+     * - applications without models are allowed as a whole
+     * - 'any' with models means all applications, the applications of the models are restricted
+     *
      * @param   array  $_contexts array of application ids (0 or 'any' for all apps)
      * @param   string $_tagId
+     * @param   array  $_models array of model names (e.g. Sales_Model_DocumentPosition_Offer)
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setContexts(array $_contexts, $_tagId)
+    public function setContexts(array $_contexts, $_tagId, array $_models = [])
     {
         if (!$_tagId) {
             throw new Tinebase_Exception_InvalidArgument('A $_tagId is mandentory.');
         }
+        $tagId = $_tagId instanceof Tinebase_Model_Tag ? $_tagId->getId() : $_tagId;
 
-        if (in_array('any', $_contexts, true) || in_array(0, $_contexts, true)) {
-            $_contexts = array(0);
+        $modelsByApp = [];
+        foreach (array_unique(array_filter($_models)) as $model) {
+            $appName = Tinebase_Application::extractAppAndModel($model)['appName'];
+            if (! class_exists($model) || ! Tinebase_Application::getInstance()->isInstalled($appName)) {
+                throw new Tinebase_Exception_InvalidArgument('Invalid tag context model ' . $model);
+            }
+            $modelsByApp[Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()][] = $model;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting tag contexts: ' . print_r($_contexts, true));
-
-        foreach ($_contexts as $context) {
-            $this->_db->insert(SQL_TABLE_PREFIX . 'tags_context', array(
-                'tag_id'         => $_tagId instanceof Tinebase_Model_Tag ? $_tagId->getId() : $_tagId,
-                'application_id' => $context
-            ));
+        if (in_array('any', $_contexts, true) || in_array(0, $_contexts, true) || in_array('0', $_contexts, true)) {
+            $_contexts = empty($modelsByApp) ? [0] :
+                Tinebase_Application::getInstance()->getApplications()->getArrayOfIds();
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting tag contexts: '
+                . print_r($_contexts, true) . ' models: ' . print_r($modelsByApp, true));
+        }
+
+        foreach (array_unique(array_merge($_contexts, array_keys($modelsByApp))) as $context) {
+            foreach ($modelsByApp[$context] ?? [''] as $model) {
+                $this->_db->insert(SQL_TABLE_PREFIX . 'tags_context', array(
+                    'tag_id'         => $tagId,
+                    'application_id' => $context,
+                    'model'          => $model,
+                ));
+            }
+        }
+        $this->_notifyBroadcastHub('update', (string)$tagId);
     }
 
     /**

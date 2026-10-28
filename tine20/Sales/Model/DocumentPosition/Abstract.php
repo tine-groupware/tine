@@ -158,6 +158,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         self::RECORDS_NAME                  => 'Positions', // gettext('GENDER_Position')
         self::MODLOG_ACTIVE                 => true,
         self::HAS_XPROPS                    => true,
+        self::HAS_TAGS                      => true,
         self::EXPOSE_JSON_API               => true,
         self::EXPOSE_HTTP_API               => true,
         self::HAS_SYSTEM_CUSTOM_FIELDS      => true,

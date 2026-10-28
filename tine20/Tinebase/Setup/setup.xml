@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>20.0</version>
+    <version>20.1</version>
     <order>0</order>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
@@ -1378,7 +1378,7 @@
 
         <table>
             <name>tags_context</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>tag_id</name>
@@ -1392,6 +1392,13 @@
                     <length>40</length>
                     <notnull>true</notnull>
                 </field>
+                <field>
+                    <name>model</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <notnull>true</notnull>
+                    <default/>
+                </field>
                 <index>
                     <name>tag_id-application_id</name>
                     <primary>true</primary>
@@ -1400,6 +1407,9 @@
                     </field>
                     <field>
                         <name>application_id</name>
+                    </field>
+                    <field>
+                        <name>model</name>
                     </field>
                 </index>
                 <index>

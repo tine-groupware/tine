@@ -133,6 +133,10 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
                 //'type'                          => '!?',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
+            'context_models'                => [
+                //'type'                          => '!?',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
         ],
     ];
     

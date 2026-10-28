@@ -751,6 +751,17 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             $ownField = $this->__get($fieldName);
             $recordField = $_record->$fieldName;
 
+            // tags might be given as array (e.g. from json) -> compare as record set
+            $fieldType = static::$_configurationObject->getFields()[$fieldName][Tinebase_ModelConfiguration_Const::TYPE]
+                ?? null;
+            if ($ownField instanceof Tinebase_Record_RecordSet && is_array($recordField)
+                    && Tinebase_ModelConfiguration_Const::TYPE_TAG === $fieldType) {
+                $recordField = new Tinebase_Record_RecordSet($ownField->getRecordClassName(), array_map(
+                    fn($tag) => is_scalar($tag) ? ['id' => $tag] : $tag,
+                    $recordField
+                ), true);
+            }
+
             if ($fieldName == 'customfields' && is_array($ownField) && is_array($recordField)) {
                 // special handling for customfields, remove empty customfields from array
                 foreach (array_keys($recordField, '', true) as $key) {

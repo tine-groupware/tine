@@ -486,6 +486,10 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                 foreach ($_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $position) {
                     if ($oldPosition = $_oldRecord->{Sales_Model_Document_Abstract::FLD_POSITIONS}->getById($position->getId())) {
                         $oldPosition->{Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED} = $position->{Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED};
+                        // tags of positions may be changed in booked documents, too
+                        if ($position->has('tags') && null !== $position->tags) {
+                            $oldPosition->tags = $position->tags;
+                        }
                     }
                 }
                 $_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} = $_oldRecord->{Sales_Model_Document_Abstract::FLD_POSITIONS};
