@@ -1128,6 +1128,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             Ext.MessageBox.hide();
             return;
         }
+        // force overrwite the selected inbox to state first
+        await this.getMainScreen().getTreePanel().saveState();
+
         // update the selected inbox cache and wait until it is complete (max 10s)
         await new Promise((resolve) => {
             const timer = setTimeout(done, 10000);
