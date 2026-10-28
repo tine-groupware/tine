@@ -455,12 +455,6 @@ msgstr "Benutzer*innenname"
 msgid "Password"
 msgstr "Passwort"
 
-msgid "Reveal Password?"
-msgstr "Passwort anzeigen?"
-
-msgid "You are about to reveal the password. This action will be logged. Proceed?"
-msgstr "Sie sind im Begriff, das Passwort anzeigen. Diese Aktion wird protokolliert. Wollen sie fortfahren?"
-
 msgid "Test IMAP Connection"
 msgstr "IMAP-Verbindung testen"
 
@@ -1820,8 +1814,8 @@ msgstr "\"Externe E-Mails weiterleiten\" und \"Nur E-Mails von Gruppenmitglieder
 msgid "You have new mail from:"
 msgstr "Sie haben eine neue E-Mail von:"
 
-msgid "You have received a new mail from %1$s"
-msgstr "Sie haben eine neue E-Mail von %1$s erhalten."
+msgid "You have received this mail notification from %1$s"
+msgstr "Sie erhalten diese E-Mail Benachrichtigung von %1$s"
 
 msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s."
 msgstr "Hier ist die von Ihnen angeforderte Erinnerung. Leider war es uns nicht möglich, eine Antwort auf die angehängte E-Mail innerhalb der von Ihnen angegebenen Frist zu finden: %1$s."
@@ -1852,15 +1846,3 @@ msgstr "Nur weitergeleitete E-Mail als .eml im Anhang"
 
 msgid "Depending on content format"
 msgstr "Abhängig vom Format"
-
-#~ msgid "I am on vacation from {{ startDate }} until {{ endDate }}."
-#~ msgstr "Ich bin vom {{ startDate }} bis zum {{ endDate }} im Urlaub."
-
-#~ msgid "I am on vacation from %1$s until %2$s."
-#~ msgstr "Ich bin vom %1$s bis zum %2$s im Urlaub."
-
-#~ msgid "Please contact %1$s (%2$s) %3$s"
-#~ msgstr "Bitte kontaktieren Sie %1$s (%2$s) %3$s"
-
-#~ msgid "or %1$s (%2$s) %3$s instead."
-#~ msgstr "oder %1$s (%2$s) %3$s"

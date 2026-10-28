@@ -11,7 +11,8 @@ available parameters:
 {% endblock %}
 
 {% block body %}
-    {{ _('You have received a new mail from %1$s') | format(from) | raw }}
+
+    {{ _('You have received this mail notification from %1$s') | format(from) | raw }}
     {{ link }}
 {#    todo: make html body works in sieve notification script#}
 {#    <div class="mt-3 mb-5">#}
