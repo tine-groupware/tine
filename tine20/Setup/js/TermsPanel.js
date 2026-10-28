@@ -70,7 +70,7 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
             bodyStyle: 'padding: 15px',
             listeners: {
                 afterrender: async function () {
-                    const response = await fetch('GDPR/view/privacy-policy', {
+                    const response = await fetch('view/privacy-policy', {
                         headers: {
                             'x-tine20-render-content-only': true,
                         },

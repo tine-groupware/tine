@@ -1297,6 +1297,36 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
             ]))->toArray());
         });
+
+        $r->addGroup('/view', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('[/{path:.+}]', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'publicPrivacyPolicy', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+            ]))->toArray());
+        });
+    }
+
+    public function publicPrivacyPolicy($path = null)
+    {
+        $locale = Tinebase_Core::getLocale();
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Tinebase";
+
+        $allowedPages = [
+            'privacy-policy' => 'privacy',
+        ];
+
+        $context = [
+            'lang' => $locale,
+            'requiredPublicPagesConfig' => false,
+        ];
+
+        // Check if it's a static page
+        if (isset($allowedPages[$path])) {
+            $template = $allowedPages[$path];
+            return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase', "$template.html.twig", context: $context);
+        }
+
+        return new \Laminas\Diactoros\Response(json_encode(['error' => 'Not found']), 404, ['Content-Type' => 'application/json']);
     }
 
     public function publicStatusPhpApi(): \Psr\Http\Message\ResponseInterface
