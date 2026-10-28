@@ -456,8 +456,9 @@ class Tinebase_Helper
      *
      * supported options:
      * - auth (with username & password sub-keys)
-     * - followlocation
-     * - contenttype
+     * - followlocation (bool)
+     * - contenttype (string)
+     * - allowedcodes (array of int)
      */
     public static function getFileOrUriContents(string $filenameOrUrl, array $options = [])
     {
@@ -510,7 +511,15 @@ class Tinebase_Helper
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' URL check failed for ' . $filenameOrUrl . ' with options: ' . print_r($options, true));
+                    . ' URL check failed for ' . $filenameOrUrl . '(http code: ' . $httpCode . ')'
+                    . ' with options: ' . print_r($options, true));
+            }
+            if (isset($options['allowedcodes']) && in_array($httpCode,  $options['allowedcodes'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' http code allowed by options');
+                }
+                return true;
             }
             return false;
         }
