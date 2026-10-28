@@ -74,8 +74,9 @@
     </div>
     <h2>I. Information about the processing of your data in accordance with Art. 13 of the General Data Protection Regulation (GDPR)</h2>
     <h3>1. Responsible party and data protection officer</h3>
-    <p>The responsible party for this site is</p>
     {% set installationResponsible = config(constant('GDPR_Config::INSTALLATION_RESPONSIBLE'), 'GDPR') %}
+    {% if installationResponsible is not empty %}
+    <p>The responsible party for this site is</p>
     <div class="contact-info">
         <div>{{ installationResponsible.n_fileas }}</div>
         {% set address_parts = [
@@ -88,6 +89,7 @@
         {% endif %}
         <div>{{ attribute(installationResponsible, installationResponsible.preferred_email) }}</div>
     </div>
+    {% endif %}
     {% set dataProtectionOfficer = config(constant('GDPR_Config::DATA_PROTECTION_OFFICER'), 'GDPR') %}
     {% if dataProtectionOfficer is not empty %}
     <p>You can contact the data protection officer by email at <b>{{ dataProtectionOfficer.email }}</b></p>

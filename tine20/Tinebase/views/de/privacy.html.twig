@@ -76,8 +76,9 @@
     </div>
     <h2>I. Informationen über die Verarbeitung Ihrer Daten gemäß Art. 13 der Datenschutz-Grundverordnung (DSGVO)</h2>
     <h3>1. Verantwortlicher und Datenschutzbeauftragter</h3>
-    <p>Verantwortlich für diese Website ist</p>
     {% set installationResponsible = config(constant('GDPR_Config::INSTALLATION_RESPONSIBLE'), 'GDPR') %}
+    {% if installationResponsible is not empty %}
+    <p>Verantwortlich für diese Website ist</p>
     <div class="contact-info">
         <div>{{ installationResponsible.n_fileas }}</div>
         {% set address_parts = [
@@ -90,6 +91,7 @@
         {% endif %}
         <div>{{ attribute(installationResponsible, installationResponsible.preferred_email) }}</div>
     </div>
+    {% endif %}
     {% set dataProtectionOfficer = config(constant('GDPR_Config::DATA_PROTECTION_OFFICER'), 'GDPR') %}
     {% if dataProtectionOfficer is not empty %}
     <p>Den Datenschutzbeauftragten erreichen Sie per E-Mail unter <b>{{ dataProtectionOfficer.email | default('') }}</b></p>

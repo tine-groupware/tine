@@ -139,7 +139,7 @@ class GDPR_Controller extends Tinebase_Controller_Event implements
         // Check if it's a static page
         if (isset($allowedPages[$path])) {
             $template = $allowedPages[$path];
-            return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, GDPR_Config::APP_NAME, "$template.html.twig", context: $context);
+            return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase', "$template.html.twig", context: $context);
         }
 
         $jsFiles[] = 'GDPR/js/ConsentClient/src/index.es6.js';
