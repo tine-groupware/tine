@@ -32,7 +32,7 @@ const getAbbreviatedName = () => {
 
 onBeforeMount(async () => {
   try {
-    const contact = await Tine.Addressbook.getContact({ id: currentAccount.contact_id })
+    const contact = await Tine.Addressbook.getContact(currentAccount.contact_id)
     if (contact.jpegphoto.startsWith('index.php')) {
       const t = await fetch(contact.jpegphoto).then((response) => response.blob())
       imgSrc.value = URL.createObjectURL(t)
