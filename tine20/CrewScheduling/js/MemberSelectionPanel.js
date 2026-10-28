@@ -65,6 +65,7 @@ Tine.CrewScheduling.MemberSelectionPanel = Ext.extend(Ext.Panel, {
         Object.assign(this.memberToken, this.memberTokenConfig || {});
 
         this.dataView = new Ext.DataView({
+            cls: 'cs-member-selection-panel',
             autoScroll: true,
             multiSelect: true,
             overClass:'x-view-over',
@@ -89,7 +90,26 @@ Tine.CrewScheduling.MemberSelectionPanel = Ext.extend(Ext.Panel, {
                 });
             }
         });
-
+        this.dataView.on('render', () => {
+            const me = this;
+            this.dropZone = new Ext.dd.DropZone(this.dataView.el.dom, {
+                ddgroup: 'cs-members',
+                getTargetFromEvent: () => {return {}},
+                onNodeOver: function(target, dd, e, data) {
+                    return data.eventMemberTokenIds?.length ? Ext.dd.DropZone.prototype.dropAllowed : Ext.dd.DropZone.prototype.dropNotAllowed;
+                },
+                onNodeDrop: async function(target, dd, e, data) {
+                    if (await Ext.MessageBox.confirm(
+                        me.app.formatMessage('Remove Attendee'),
+                        me.app.formatMessage('Do you realy want to remove the selected attendee?'),
+                        'cs-member-selection-confirm-remove-attendee'
+                    ) === 'yes') {
+                        me.mainScreen.membersGrid.removeMembers(data.eventMemberTokenIds);
+                        return true;
+                    }
+                }
+            });
+        }, this)
         Tine.CrewScheduling.MemberSelectionPanel.superclass.initComponent.call(this);
     },
 
