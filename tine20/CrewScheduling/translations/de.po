@@ -179,7 +179,10 @@ msgid "There are different services to perform. Please select which service is t
 msgstr "Es gibt verschiedene Dienste zu erbringen. Bitte wählen Sie aus, welcher Dienst von { attendeeName } ausgeführt werden soll."
 
 msgid "Remove Attendee"
-msgstr "Teilnehmer entfernen"
+msgstr "Teilnehmende entfernen"
+
+msgid "Do you realy want to remove the selected attendee?"
+msgstr "Wollen sie die selektierten Teilnehmenden wirklich entfernen?"
 
 msgid "Please wait"
 msgstr "Bitte warten"

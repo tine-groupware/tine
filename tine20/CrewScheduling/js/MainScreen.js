@@ -238,6 +238,9 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
         this.on('dragStart', (p, data) => {
             this.membersGrid.maskDropCells(data.selected);
         });
+        this.on('dragEnd', (p, data) => {
+            this.membersGrid.unmaskDropCells();
+        });
         this.memberSelectionPanel.on('selectionchange', (v, selIds) => {
             selIds.length ?
                 this.membersGrid.maskDropCells(v.getSelectedRecords()) :
@@ -333,6 +336,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                 store: this.csMembersStore,
                 border: false,
                 flex: 1,
+                mainScreen: this,
                 memberTokenConfig: {
                     getTokenStyles: this.getMemberTokenStyles.createDelegate(this)
                 }

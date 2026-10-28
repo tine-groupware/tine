@@ -466,6 +466,11 @@ Ext.MessageBox.ERROR
          * @return {Ext.MessageBox} this
          */
         confirm : function(title, msg, fn, scope, stateId = null){
+            if (_.isString(fn) && !stateId) {
+                stateId = fn;
+                fn = undefined;
+            }
+
             return this.show({
                 title : title,
                 msg : msg,
