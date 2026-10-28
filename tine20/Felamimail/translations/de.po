@@ -867,7 +867,7 @@ msgid "Print Message"
 msgstr "Nachricht drucken"
 
 msgid "Create New Task"
-msgstr ""
+msgstr "Erstelle neue Aufgabe"
 
 msgid "Delete"
 msgstr "Löschen"
