@@ -150,7 +150,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 region: 'north',
                 border: false,
                 layout: 'hbox',
-                height: 38,
+                height: 48,
                 frame: true,
                 defaults: {
                     height: 38,
