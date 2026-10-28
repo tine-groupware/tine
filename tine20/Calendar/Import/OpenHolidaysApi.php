@@ -70,9 +70,9 @@ class Calendar_Import_OpenHolidaysApi extends Tinebase_Import_Abstract
      */
     protected function _beforeImport($_resource = NULL)
     {
-        // https://openholidaysapi.org/PublicHolidays?countryIsoCode=DE&languageIsoCode=DE&validFrom=2023-01-01&validTo=2023-12-31&subdivisionCode=DE-BY
-        $apiData = Tinebase_Helper::getFileOrUriContents(
-            'https://openholidaysapi.org/'
+        // https://openholidaysapi.org/PublicHolidays?countryIsoCode=DE&languageIsoCode=DE
+        //   &validFrom=2023-01-01&validTo=2023-12-31&subdivisionCode=DE-BY
+        $uri = 'https://openholidaysapi.org/'
             . $this->_options[self::OPT_SOURCE]
             . '?countryIsoCode=' . urlencode($this->_options[self::OPT_COUNTRY])
             . '&languageIsoCode=' . urlencode($this->_options[self::OPT_COUNTRY])
@@ -80,7 +80,10 @@ class Calendar_Import_OpenHolidaysApi extends Tinebase_Import_Abstract
             . '&validTo=' .urlencode($this->_options[self::OPT_TO])
             . (!empty($this->_options[self::OPT_SUBDIVISION])
                 ? '&subdivisionCode=' . $this->_options[self::OPT_SUBDIVISION]
-                : '')
+                : '');
+        $apiData = Tinebase_Helper::getFileOrUriContents($uri, [
+                'allowedcodes' => [405] // we allow "Method Not Allowed" here for the curl check
+            ]
         );
         if (! $apiData) {
             throw new Tinebase_Exception_Backend('Could not load data from openholidaysapi.org');
