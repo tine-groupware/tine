@@ -17,9 +17,9 @@ ARG SCREENSHOTS_TINE_VERSION=2024.11
 RUN apk add php composer s3cmd
 RUN s3cmd --access_key=${SCREENSHOTS_S3_ACCESS_KEY} --secret_key=${SCREENSHOTS_S3_SECRET_KEY} --host ${SCREENSHOTS_S3_HOST} --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" sync s3://${SCREENSHOTS_S3_BUCKET}/${SCREENSHOTS_TINE_VERSION} /docs/docs/images/
 COPY . /docs
-RUN cd /docs/tine20/ \
- && composer install --ignore-platform-reqs \
- && vendor/bin/phpdoc-md
+#RUN cd /docs/tine20/ \
+# && composer install --ignore-platform-reqs \
+# && vendor/bin/phpdoc-md
 RUN sed 's%https://tine-screenshots.s3.rz1.metaways.net/%/images/%g' -i mkdocs.yml
 RUN mkdocs build
 
