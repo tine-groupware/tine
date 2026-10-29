@@ -362,27 +362,10 @@ class Felamimail_Controller extends Tinebase_Controller_Event
 
         $fs = Tinebase_FileSystem::getInstance();
         $appId = Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId();
-
-        $templateContainerId = Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID};
-        $nodes = [];
-
-        try {
-            $node =$fs->get($templateContainerId);
-            if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ)) {
-                $nodes = $fs->getTreeNodeChildren($templateContainerId);
-            }
-        } catch (Throwable $t) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' Could not get template files: ' . $t);
-        }
-
         $dirPath = rtrim($fs->getApplicationBasePath(
                 Felamimail_Config::APP_NAME,
                 Tinebase_FileSystem::FOLDER_TYPE_SHARED
             ), '/') . '/Vacation Templates';
-
-        $sharedTemplates = $fs->scanDir($dirPath . '/');
-        $nodes = $nodes->merge($sharedTemplates);
 
         $convert = function (string $content) use ($fields): string {
             return preg_replace_callback('/\{([^{}]+)\}/', function ($matches) use ($fields): string {
@@ -401,13 +384,14 @@ class Felamimail_Controller extends Tinebase_Controller_Event
 
         $created = [];
 
-        foreach ($nodes as $node) {
+        foreach ($fs->scanDir($dirPath . '/') as $node) {
             if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FILE
                 || !preg_match('/\.tpl$/i', $node->name)
             ) {
                 continue;
             }
-            $src = Tinebase_FileSystem::getInstance()->getPathOfNode($node->getId(), true);
+
+            $src = $dirPath . '/' . $node->name;
             $newTemplateName = preg_replace('/\.tpl$/i', '', $node->name) . '.text.twig';
             $newTemplatePath = 'Felamimail/views/emails/vacation/' . $newTemplateName;
 
