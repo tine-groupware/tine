@@ -115,8 +115,8 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
             name: 'reason',
             allowBlank: true,
             disabled: true,
+            height: 220,
             readOnly: readonly,
-            flex: 1,
             getDocMarkup: function () {
                 var markup = '<html><body></body></html>';
                 return markup;
@@ -128,33 +128,8 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
             plugins: [
                 new Ext.ux.form.HtmlEditor.RemoveFormat(),
                 new Ext.ux.form.HtmlEditor.SelectImage()
-            ],
+            ]
         });
-        this.reasonEditor.on('initialize', async function (a, value) {
-            this.reasonEditor.getDoc().addEventListener('keyup', async () => {
-                const value = this.reasonEditor.getValue();
-                const templateIdField = this.editDialog.getForm().findField('template_id');
-                if (this.template && value && this.template !== value) {
-                    if (templateIdField && templateIdField.getValue() !== 'custom') {
-                        if (this.customReason) {
-                            if (await Ext.MessageBox.confirm(
-                                this.app.i18n._('Overwrite Custom Template?'),
-                                this.app.i18n._('You already have a custom template. Would you like to overwrite it with the new one?')
-                            ) !== 'yes') {
-                                this.reasonEditor.setValue(this.template);
-                                return;
-                            }
-                        }
-                        templateIdField.setValue('custom');
-                        this.record.set('template_id', '');
-                    }
-                }
-                if (this.record && (this.record.get('template_id') === '' || this.record.get('template_id') === 'custom')) {
-                    this.customReason = value;
-                    this.record.set('reason', value);
-                }
-            });
-        }, this);
     },
 
     /**
@@ -182,7 +157,6 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
             listeners: {
                 scope: me,
                 select: function (combo, record) {
-                    this.record.set('enabled', combo.getValue());
                     me.editDialog.onRecordUpdate();
                 }
             }
@@ -193,13 +167,10 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
 
         const templates = this.app.getRegistry().get('vacationTemplates');
 
-        // always provide custom option
-        templates.results.push({
-            path: 'custom',
-            name: this.app.i18n._('Custom Template'),
-        })
+        if (templates.totalcount > 0) {
+            items = items.concat(this.getTemplateItems(templates));
+        }
 
-        items = items.concat(this.getTemplateItems(templates));
         items.push([this.reasonEditor]);
 
         return items;
@@ -235,6 +206,10 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
 
     getCommonFieldConfig: function () {
         return {
+            listeners: {
+                scope: this,
+                select: this.onSelectTemplateField
+            },
             columnWidth: 0.5
         };
     },
@@ -286,11 +261,11 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
             mode: 'local',
             listeners: {
                 scope: this,
-                select: this.updateTwigTemplate
+                select: this.onTemplateComboSelect
             },
             displayField: 'name',
             name: 'template_id',
-            valueField: 'path',
+            valueField: 'id',
             triggerAction: 'all',
             emptyText: this.app.i18n._('Choose Template...'),
             editable: false,
@@ -298,84 +273,42 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
                 id: 'timezone',
                 root: 'results',
                 totalProperty: 'totalcount',
-                fields: ['path', 'name'], // TODO use Tine.Filemanager.Model.Node or generic File model?
+                fields: ['id', 'name', 'type'], // TODO use Tine.Filemanager.Model.Node or generic File model?
                 data: templates
             }),
             checkState: () => {
-                const templateIdField = this.editDialog.getForm().findField('template_id');
-                templateIdField.setDisabled(!this.editDialog.getForm().findField('enabled').getValue());
-            },
+                this.editDialog.getForm().findField('template_id')
+                    .setDisabled(!this.editDialog.getForm().findField('enabled').getValue());
+            }
         }]
         ];
     },
 
-    async loadRecord(record) {
-        this.record = record ?? this.editDialog.record;
-        // mime type is always multipart/alternative
-        this.record.set('mime', 'multipart/alternative');
-
-        if (this.account.get('signature')) {
-            this.record.set('signature', this.account.get('signature'));
+    /**
+     * template field has been selected, check if new vacation message needs to be fetched
+     * - do this only if template has already been selected
+     */
+    onSelectTemplateField: async function () {
+        if (this.editDialog.getForm().findField('template_id').getValue() !== '') {
+            this.editDialog.onRecordUpdate();
         }
-
-        const form = this.editDialog.getForm();
-        const contactIds = this.record.get('contact_ids');
-        ['contact_id1', 'contact_id2'].forEach((field, idx) => {
-            if (form.findField(field) && contactIds?.[idx]) {
-                form.findField(field).setValue(contactIds[idx]);
-            }
-        }, this);
-
-        this.customReason = this.record.get('reason');
-        form.findField('template_id').setValue(this.record.get('template_id') || 'custom');
-
-        await this.updateTwigTemplate();
     },
-
-    onRecordUpdate() {
-        const contactIds = ['contact_id1', 'contact_id2']
-            .map(fieldName => this.editDialog.getForm().findField(fieldName))
-            .filter(field => field && field.getValue())
-            .map(field => field.getValue());
-
-        this.record.set('contact_ids', contactIds);
-
-        ['enabled', 'start_date', 'end_date'].forEach((fieldName) => {
-            const field = this.editDialog.getForm().findField(fieldName);
-            this.record.set(fieldName, field.getValue());
-        });
-
-        this.record.set('reason', this.customReason);
-    },
-
-    updateTwigTemplate: async function () {
-        try {
-            this.record = this.record ?? this.editDialog.record;
-
-            const templateIdField = this.editDialog.getForm().findField('template_id');
-            const oldTemplateId = this.record.get('template_id');
-            const templateId = templateIdField.getValue();
-            this.record.set('template_id', templateId);
-
-            if (templateId === 'custom') {
-                this.reasonEditor.setValue(this.customReason);
-            } else if (templateId && (!this.template || oldTemplateId !== templateId)) {
-                if (!this.editDialog.loadMask) {
-                    this.editDialog.loadMask = new Ext.LoadMask(this.editDialog.getEl(), {msg: i18n._('Loading Vacation Template...')});
-                }
-                this.editDialog.loadMask.show();
-
-                try {
-                    const response = await Tine.Felamimail.getVacationMessage(this.record.data);
-                    this.template = null; // reset so setValue isn't treated as a user edit
-                    this.reasonEditor.setValue(response.message);
-                    this.template = this.reasonEditor.getValue();
-                } finally {
-                    this.editDialog.hideLoadMask();
-                }
-            }
-        } catch (exception) {
-            Tine.Felamimail.handleRequestException(exception);
+    
+    /**
+     * template combo select event handler
+     *
+     * @param {} combo
+     * @param {} record
+     * @param {} index
+     */
+    onTemplateComboSelect: async function (combo, record, index) {
+        Tine.log.debug('Tine.Felamimail.sieve.VacationPanel::onTemplateComboSelect()');
+        Tine.log.debug(record);
+        
+        if (record.data && record.get('type') === 'file') {
+            this.editDialog.onRecordUpdate();
+        } else {
+            // TODO do something?
         }
     }
 });

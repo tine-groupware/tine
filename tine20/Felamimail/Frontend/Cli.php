@@ -54,12 +54,4 @@ class Felamimail_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Felamimail_Controller::getInstance()->createEmailSSORelyingParty();
         return 0;
     }
-
-    public function convertVacationTemplates($opts): int
-    {
-        $this->_checkAdminRight();
-        $args = $this->_parseArgs($opts);
-        Felamimail_Controller::getInstance()->convertVacationTemplates($args['overwrite'] ?? false);
-        return 0;
-    }
 }

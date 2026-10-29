@@ -11,8 +11,6 @@
  * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
-
-
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
@@ -218,7 +216,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         // close session to allow other requests
         Tinebase_Session::writeClose(true);
-
+        
         $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folderId, $time);
         
         return $this->_recordToJson($folder);
@@ -873,11 +871,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getVacationMessageTemplates()
     {
-        $tbf = new Tinebase_Frontend_Json();
-        $templates = $tbf->searchTwigTemplates([
-            ['field' => Tinebase_Model_TwigTemplate::FLD_PATH, 'operator'=> 'contains', 'value' => 'Felamimail/views/emails/vacation/'],
-        ], [0, 50]);
-        return $templates;
+        return $this->getTemplates(Felamimail_Config::getInstance()->{Felamimail_Config::VACATION_TEMPLATES_CONTAINER_ID});
     }
     
     /**
@@ -892,9 +886,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $record->setFromJsonInUsersTimezone($vacationData);
         
         $message = Felamimail_Controller_Sieve::getInstance()->getVacationMessage($record);
-
+        $htmlMessage = Tinebase_Mail::convertFromTextToHTML($message, 'felamimail-body-blockquote');
+        
         return array(
-            'message' => $message
+            'message' => $htmlMessage
         );
     }
     
@@ -915,14 +910,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'totalcount'    => count($supportedFlags),
             ),
         );
-
-        $vacationTemplates = $this->getVacationMessageTemplates();
-
-        foreach ($vacationTemplates['results'] as &$template) {
-            unset($template['twig_template']);
-        }
-
-        $result['vacationTemplates'] = $vacationTemplates;
+        
+        $result['vacationTemplates'] = $this->getVacationMessageTemplates();
         
         return $result;
     }

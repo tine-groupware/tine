@@ -130,8 +130,7 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
             /** @var Felamimail_Model_Sieve_Vacation $vacationRecord */
             $vacationRecord = $this->_vacationBackend->getByProperty($this->_accountId, 'account_id');
             $vacationRecord->addresses = Zend_Json::decode($vacationRecord->addresses);
-            $vacationRecord->contact_ids = Zend_Json::decode($vacationRecord->contact_ids);
-
+            
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Got vacation from DB: ' . print_r($vacationRecord->toArray(), TRUE));
             
@@ -249,17 +248,6 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
         $vacationRecord->account_id = $this->_accountId;
         $vacationRecord->setId($this->_accountId);
         $vacationRecord->addresses = Zend_Json::encode($vacationRecord->addresses);
-        $vacationRecord->contact_ids = Zend_Json::encode($vacationRecord->contact_ids);
-
-        if (!empty($vacationRecord->template_id)) {
-            if ($vacationRecord->template_id === 'custom') {
-                $vacationRecord->template_id = '';
-            }
-//            else {
-//                $vacationRecord->reason = '';
-//            }
-        }
-
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Saving vacation in DB: ' . print_r($vacationRecord->toArray(), TRUE));

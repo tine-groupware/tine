@@ -2382,83 +2382,114 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
      *
      * @return array
      */
-    public function testGetVacationTemplates($templateName = 'vacation.html.twig')
+    public function testGetVacationTemplates()
     {
+        $this->_addVacationTemplateFile();
         $result = $this->_json->getVacationMessageTemplates();
+
         $this->assertTrue($result['totalcount'] > 0, 'no templates found');
         $found = FALSE;
-        $targetTemplate = $result['results'];
         foreach ($result['results'] as $template) {
-            unset($template['twig_template']);
-            if ($template['name'] === $templateName) {
-                $found = true;
-                $targetTemplate = $template;
+            if ($template['name'] === $this->_sieveVacationTemplateFile) {
+                $found = TRUE;
                 break;
             }
         }
 
         $this->assertTrue($found, 'wrong templates: ' . print_r($result['results'], TRUE));
 
-        return $targetTemplate;
+        return $template;
+    }
+
+    /**
+     * add vacation template file to vfs
+     */
+    protected function _addVacationTemplateFile()
+    {
+        $webdavRoot = new DAV\Tree(new Tinebase_WebDav_Root());
+        $path = '/webdav/Felamimail/shared/Vacation Templates';
+        $node = $webdavRoot->getNodeForPath($path);
+        $this->_pathsToDelete[] = $path . '/' . $this->_sieveVacationTemplateFile;
+        $node->createFile($this->_sieveVacationTemplateFile, fopen(dirname(__FILE__) . '/../files/' . $this->_sieveVacationTemplateFile, 'r'));
     }
 
     /**
      * testGetVacationMessage
      */
-    protected function _testSaveVacationMessage()
+    public function testGetVacationMessage()
     {
-        $template = $this->testGetVacationTemplates();
-        $vacationData = self::getVacationData($this->_account);
+        $result = $this->_getVacationMessageWithTemplate();
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $pwulf = Tinebase_User::getInstance()->getFullUserByLoginName('pwulf');
-        $vacationData['contact_ids'] = [
-            $sclever->contact_id,
-            $pwulf->contact_id,
-        ];
-        $vacationData['template_id'] = $template['path'];
-        $result = $this->_json->saveVacation($vacationData);
-        return $result;
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie" . 
+        "<br /> Paul Wulf (pwulf@mail.test) +441273-3766-376 oder Susan Clever (sclever@mail.test) +441273-3766-373.<br />" . 
+        "<br />I am on vacation until Apr 20, 2012. Please contact" .
+        "<br /> Paul Wulf (pwulf@mail.test) +441273-3766-376 or Susan Clever (sclever@mail.test) +441273-3766-373 instead.<br /><br />" .
+            Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn . "<br />", 
+            $result['message'],
+        );
     }
 
     /**
      * testGetVacationMessage
      */
-    public function testSaveVacationMessageWithoutContacts()
+    public function testGetVacationMessageWithoutContacts()
     {
-        $vacationData = self::getVacationData($this->_account);
-        $vacationData['template_id'] = 'Felamimail/views/emails/vacation/vacation.text.twig';
-        $vacationData['start_date'] = '2012-04-18';
-        $vacationData['end_date'] = '2012-04-20';
-        $this->_json->saveVacation($vacationData);
-        $result = Felamimail_Controller_Sieve::getInstance()->getSieveScript($this->_account->getId());
-        $result = $result->getSieve();
-        $translate = Tinebase_Translation::getTranslation('Felamimail');
-        $translation = sprintf($translate->_('I am on vacation from %s until %s.'), '2012-04-18', '2012-04-20');
-        $this->assertStringContainsString($translation, $result);
-        $this->assertStringContainsString($translate->_('Please contact other colleagues.'), $result);
+        $template = $this->testGetVacationTemplates();
+        $result = $this->_json->getVacationMessage(array(
+            'start_date' => '2012-04-18',
+            'end_date' => '2012-04-20',
+            'contact_ids' => array(
+            ),
+            'template_id' => $template['id'],
+            'signature' => $this->_account->signature
+        ));
+
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie andere Kollegen.<br /><br /><br />" .
+            "I am on vacation until Apr 20, 2012. Please contact other colleagues.<br /><br /><br />" .
+            Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn . "<br />",
+            $result['message'],
+        );
     }
 
+
+    /**
+     * get vacation message with template
+     *
+     * @return array
+     */
+    protected function _getVacationMessageWithTemplate()
+    {
+        $template = $this->testGetVacationTemplates();
+        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
+        $result = $this->_json->getVacationMessage(array(
+            'start_date' => '2012-04-18',
+            'end_date' => '2012-04-20',
+            'contact_ids' => array(
+                Tinebase_User::getInstance()->getFullUserByLoginName('pwulf')->contact_id,
+                $sclever->contact_id,
+            ),
+            'template_id' => $template['id'],
+            'signature' => $this->_account->signature
+        ));
+
+        return $result;
+    }
 
     /**
      * testGetVacationWithSignature
      *
      * @see 0006866: check signature linebreaks in vacation message from template
      */
-    public function testSaveVacationWithSignature()
+    public function testGetVacationWithSignature()
     {
+        $this->_sieveVacationTemplateFile = 'vacation_template_sig.tpl';
+
         // set signature with <br> + linebreaks
-        $this->_account->signatures = [[
-            'name' => 'signature',
-            'signature' => "llalala<br>\nxyz<br>\nblubb<br>",
-            'is_default' => 1,
-        ]];
-        $this->_account = Felamimail_Controller_Account::getInstance()->update($this->_account);
-        $vacationData = self::getVacationData($this->_account);
-        $vacationData['template_id'] = 'Felamimail/views/emails/vacation/vacation_signature.text.twig';
-        $this->_json->saveVacation($vacationData);
-        $result = Felamimail_Controller_Sieve::getInstance()->getSieveScript($this->_account->getId());
-        $result = $result->getSieve();
-        $this->assertStringContainsString("llalala\nxyz\nblubb", $result);
+        $this->_account->signature = "llalala<br>\nxyz<br>\nblubb<br>";
+
+        $result = $this->_getVacationMessageWithTemplate();
+        $this->assertStringContainsString('-- <br />llalala<br />xyz<br />blubb<br />', $result['message'], 'wrong linebreaks or missing signature');
     }
 
     /**
@@ -2490,7 +2521,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
             . '<br><br>asxa xasxaxsxxxxx <br>Metaways Infosystems GmbH <br>Pickhuben 2, D-20457 Hamburg <br><br>E-Mail: x.asxasxasxsas@ssssssss.de<br>Web: http://www.metaways.de'
             . '<br>Tel: +49 (0)40 111112-222 <br>Fax: +49 (0)11 212122-222<br>Mobile: +49 (0)1222 1212-222 <br><br>Metaways Infosystems GmbH - Sitz: D-22967 Tremsbüttel <br>'
             . 'Handelsregister: Amtsgericht Lübeck HRB 4508 AH<br>Geschäftsführung: Hermann Thaele, Lüder-H.Thaele<br><br><br>';
-        $this->_sieveTestHelper($vacationData, false, "Fax: +49 (0)11 212122-222\nMobile: +49 (0)1222 1212-222 ");
+        $this->_sieveTestHelper($vacationData, false, "Fax: +49 (0)11 212122-222\r\nMobile: +49 (0)1222 1212-222 ");
     }
 
     /**

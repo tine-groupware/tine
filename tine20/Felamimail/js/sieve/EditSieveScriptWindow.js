@@ -8,8 +8,6 @@
  *
  */
 
-import waitFor from "util/waitFor.es6";
-
 Ext.ns('Tine.Felamimail');
 
 /**

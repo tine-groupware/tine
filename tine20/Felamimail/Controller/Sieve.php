@@ -302,9 +302,6 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             }
             $_vacation->from = $from;
         }
-        if ($_account) {
-            $_vacation->account_id = $_account->getId();
-        }
     }
     
     /**
@@ -682,34 +679,115 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($vacation->toArray(), TRUE));
 
-        return $this->_getVacationTemplate($vacation);
-    }
-
-    /**
-     * do substitutions in vacation message
-     *
-     * @param Felamimail_Model_Sieve_Vacation $vacation
-     * @return string
-     *
-     */
-    protected function _getVacationTemplate(Felamimail_Model_Sieve_Vacation $vacation)
-    {
-        $message = $vacation->reason;
-
-        if (!empty($vacation->template_id)) {
-            $locale = Tinebase_Core::getLocale();
-            $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME));
-            $template = $twig->load($vacation->template_id, $locale);
-            $message = $template->render();
-
-            if (str_contains($vacation->template_id, '.text.twig')) {
-                $message = Tinebase_Mail::convertFromTextToHTML($message, 'felamimail-body-blockquote');
-            }
+        if (empty($vacation->account_id)) {
+            $vacation->account_id = Felamimail_Controller_Account::getInstance()->getSystemAccount();
         }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $message);
+        if ($vacation->template_id) {
+            $message = $this->_getMessageFromTemplateFile($vacation->template_id);
+            $message = $this->_doMessageSubstitutions($vacation, $message);
+        } else {
+            $message = '';
+        }
         
         return $message;
+    }
+    
+    /**
+     * get vacation message from template file
+     * 
+     * @param string $templateId
+     * @return string
+     */
+    protected function _getMessageFromTemplateFile($templateId)
+    {
+        $message = Tinebase_FileSystem::getInstance()->getNodeContents($templateId);
+        
+        return $message;
+    }
+    
+    /**
+     * do substitutions in vacation message
+     * 
+     * @param Felamimail_Model_Sieve_Vacation $vacation
+     * @param string $message
+     * @return string
+     * 
+     * @todo get locale from placeholder (i.e. endDate-_LOCALESTRING_)
+     * @todo get field from placeholder (i.e. representation-_FIELDNAME_)
+     * @todo use twig
+     */
+    protected function _doMessageSubstitutions(Felamimail_Model_Sieve_Vacation $vacation, $message)
+    {
+        $timezone = Tinebase_Core::getUserTimezone();
+        $representatives = ($vacation->contact_ids) ? Addressbook_Controller_Contact::getInstance()->getMultiple($vacation->contact_ids) : array();
+        if ($vacation->contact_ids && count($representatives) > 0) {
+            // sort and expand representatives
+            $representativesArray = array();
+            foreach ($vacation->contact_ids as $id) {
+                if ($contact = $representatives->getById($id)) {
+                    $representativesArray[] = $contact;
+                }
+            }
+        }
+        try {
+            $account = $vacation->account_id instanceof Felamimail_Model_Account ? $vacation->account_id :
+                Felamimail_Controller_Account::getInstance()->get($vacation->account_id);
+            $ownContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($account->user_id);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+            $ownContact = NULL;
+        }
+
+        $search = array(
+            '{startDate-en_US}',
+            '{endDate-en_US}',
+            '{startDate-de_DE}',
+            '{endDate-de_DE}',
+            '{representation-n_fn-1}',
+            '{representation-n_fn-2}',
+            '{representation-email-1}',
+            '{representation-email-2}',
+            '{representation-tel_work-1}',
+            '{representation-tel_work-2}',
+            '{owncontact-n_fn}',
+            '{signature}',
+        );
+
+        if (!isset($representativesArray[1])) {
+            $message = str_replace(" or {representation-n_fn-2} ({representation-email-2}) {representation-tel_work-2} instead.", '', $message);
+            $message = str_replace(" oder {representation-n_fn-2} ({representation-email-2}) {representation-tel_work-2}.", '', $message);
+        }
+        
+        if (!isset($representativesArray[0])) {
+            $message = str_replace(" {representation-n_fn-1} ({representation-email-1}) {representation-tel_work-1}", '', $message);
+        }
+
+        if (!isset($representativesArray[0]) && !isset($representativesArray[1])) {
+            $message = str_replace(" Bitte kontaktieren Sie", " Bitte kontaktieren Sie andere Kollegen.", $message);
+            $message = str_replace(" Please contact", " Please contact other colleagues.", $message);
+        }
+        
+        $replace = array(
+            Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->start_date, $timezone, new Zend_Locale('en_US'), 'date'),
+            Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->end_date, $timezone, new Zend_Locale('en_US'), 'date'),
+            Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->start_date, $timezone, new Zend_Locale('de_DE'), 'date'),
+            Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->end_date, $timezone, new Zend_Locale('de_DE'), 'date'),
+            (isset($representativesArray[0])) ? $representativesArray[0]->n_fn : 'unknown person',
+            (isset($representativesArray[1])) ? $representativesArray[1]->n_fn : 'unknown person',
+            (isset($representativesArray[0])) ? $representativesArray[0]->email : 'unknown email',
+            (isset($representativesArray[1])) ? $representativesArray[1]->email : 'unknown email',
+            (isset($representativesArray[0])) ? $representativesArray[0]->tel_work : '',
+            (isset($representativesArray[1])) ? $representativesArray[1]->tel_work : '',
+            ($ownContact) ? $ownContact->n_fn : '',
+            ($vacation->signature) ? Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes(
+                preg_replace("/\\r|\\n/", '', $vacation->signature)) : '',
+        );
+        
+        $result = str_replace($search, $replace, $message);
+  
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $result);
+        
+        return $result;
     }
 
     /**
