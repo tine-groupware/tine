@@ -16,7 +16,8 @@ export default {
         "**/tine20/vendor/metaways/*/tests/e2etests/*.test.js"
     ],
     testPathIgnorePatterns: [
-        "node_modules"
+        "node_modules",
+        process.env.TEST_DIR + "/monitor"
     ],
     verbose: true,
     maxWorkers: process.env.TEST_WORKER,
