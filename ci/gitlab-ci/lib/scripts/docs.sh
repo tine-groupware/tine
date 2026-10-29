@@ -32,8 +32,8 @@ function docs_deploy () {
 
 function docs_build_php_doc() {
     cd tine20
-    composer install --ignore-platform-reqs
-    vendor/bin/phpdoc-md
+    #composer install --ignore-platform-reqs
+    #vendor/bin/phpdoc-md
     cd ..
 
 }

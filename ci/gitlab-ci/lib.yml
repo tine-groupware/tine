@@ -352,8 +352,8 @@
       
       function docs_build_php_doc() {
           cd tine20
-          composer install --ignore-platform-reqs
-          vendor/bin/phpdoc-md
+          #composer install --ignore-platform-reqs
+          #vendor/bin/phpdoc-md
           cd ..
       
       }
@@ -1225,8 +1225,6 @@
           pushd ${TINE20ROOT}/tine20
           # trigger customapploader plugin, to create links
           rm -rf vendor/metaways
-          # needed von 2025.11 to 2026.11, needs to be removed
-          rm -rf vendor/simplesamlphp
           COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress
           popd
       
@@ -1406,7 +1404,9 @@
           helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
       
           if helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml status; then
-              helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy
+              if ! helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy; then
+                  helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy --set flags.noHooks=true
+              fi
           fi
       
           test_cloud_teardown_database
@@ -1831,8 +1831,8 @@
         
         function docs_build_php_doc() {
             cd tine20
-            composer install --ignore-platform-reqs
-            vendor/bin/phpdoc-md
+            #composer install --ignore-platform-reqs
+            #vendor/bin/phpdoc-md
             cd ..
         
         }
@@ -2691,8 +2691,6 @@
             pushd ${TINE20ROOT}/tine20
             # trigger customapploader plugin, to create links
             rm -rf vendor/metaways
-            # needed von 2025.11 to 2026.11, needs to be removed
-            rm -rf vendor/simplesamlphp
             COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress
             popd
         
@@ -2871,7 +2869,9 @@
             helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
         
             if helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml status; then
-                helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy
+                if ! helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy; then
+                    helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy --set flags.noHooks=true
+                fi
             fi
         
             test_cloud_teardown_database
@@ -3341,8 +3341,8 @@
         
         function docs_build_php_doc() {
             cd tine20
-            composer install --ignore-platform-reqs
-            vendor/bin/phpdoc-md
+            #composer install --ignore-platform-reqs
+            #vendor/bin/phpdoc-md
             cd ..
         
         }
@@ -4201,7 +4201,7 @@
             pushd ${TINE20ROOT}/tine20
             # trigger customapploader plugin, to create links
             rm -rf vendor/metaways
-            COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest
+            COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress
             popd
         
             # Store cache, but not for custom apps. composer.lock contains commit specific data. Therefor the cache will be never reused.
@@ -4379,7 +4379,9 @@
             helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
         
             if helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml status; then
-                helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy
+                if ! helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy; then
+                    helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy --set flags.noHooks=true
+                fi
             fi
         
             test_cloud_teardown_database
