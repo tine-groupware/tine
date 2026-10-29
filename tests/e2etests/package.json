@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "test": "node --experimental-vm-modules --disable-warning=ExperimentalWarning node_modules/.bin/jest"
+    "test": "node --experimental-vm-modules --disable-warning=ExperimentalWarning node_modules/.bin/jest",
+    "test:monitor": "node --experimental-vm-modules --disable-warning=ExperimentalWarning node_modules/.bin/jest -c jest.config.monitor.mjs"
   },
   "dependencies": {
     "colorette": "^2.0.20",

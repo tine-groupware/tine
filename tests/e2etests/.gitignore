@@ -10,3 +10,4 @@ nbproject
 vagrant
 node_modules
 *.png
+src/monitor/*.json
