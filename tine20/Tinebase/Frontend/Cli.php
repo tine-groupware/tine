@@ -855,7 +855,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * nagios monitoring for tine 2.0 database connection
      * 
      * @return integer
-     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     * @see https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/3/en/pluginapi.html
      */
     public function monitoringCheckDB()
     {
@@ -892,7 +892,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * nagios monitoring for tine 2.0 config file
      * 
      * @return integer
-     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     * @see Tinebase_Frontend_Cli::monitoringCheckDB for nagios plugin api link
      */
     public function monitoringCheckConfig()
     {
@@ -917,7 +917,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     *
     * @return integer
     * 
-    * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+    * @see Tinebase_Frontend_Cli::monitoringCheckDB for nagios plugin api link
     * @see 0008038: monitoringCheckCron -> check if cron did run in the last hour
     */
     public function monitoringCheckCron()
@@ -1090,7 +1090,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @return integer
      *
-     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     * @see Tinebase_Frontend_Cli::monitoringCheckDB for nagios plugin api link
      */
     public function monitoringCheckQueue()
     {
@@ -1327,7 +1327,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @return integer
      *
-     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     * @see Tinebase_Frontend_Cli::monitoringCheckDB for nagios plugin api link
      */
     public function monitoringMaintenanceMode()
     {
@@ -1349,7 +1349,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @return integer
      *
-     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     * @see Tinebase_Frontend_Cli::monitoringCheckDB for nagios plugin api link
      */
     public function monitoringCheckCache()
     {
@@ -1399,7 +1399,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @return integer
      *
-     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     * @see Tinebase_Frontend_Cli::monitoringCheckDB for nagios plugin api link
      */
     public function monitoringCheckLicense()
     {
