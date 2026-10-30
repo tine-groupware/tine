@@ -409,7 +409,9 @@ Tine.widgets.grid.RendererManager = function() {
                     metaData = wrap.transformMetaData.apply(this, args);
                     args[1] = metaData;
                 }
-                return func.apply(this, args);
+                const rendered = func.apply(this, args);
+                // NOTE: consumers might concat the result (e.g. GridView.makeTableReadable)
+                return [null, undefined].indexOf(rendered) < 0 ? rendered : '';
             });
 
             return wrap
