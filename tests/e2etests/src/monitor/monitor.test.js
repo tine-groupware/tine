@@ -84,14 +84,18 @@ async function findAndOpenBookmarkPage(name, timeout) {
 
     // Double-click on found item and wait for the target page to be loaded.
     // Note: Don't use lib.getEditDialog() because it expects a tine popup.
-    const targetPagePromise = lib.getNewWindow(lib.getEnvInt('MONITOR_TIMEOUT_POPUP_OPEN'));
+    const openWindowTimeout = lib.getEnvInt('MONITOR_TIMEOUT_POPUP_OPEN', {defaultValue: lib.getEnvInt('TEST_TIMEOUT_POPUP_OPEN')});
+    const targetPagePromise = lib.getNewWindow(openWindowTimeout);
     targetPagePromise.catch(() => {});
 
     // Record the start time before clicking the bookmark link.
     const clickTime = Date.now();
     await lib.clickOnElementWithLabel(global.page, gridItemSelector, name, {clickCount: 2});
     const targetPage = await targetPagePromise;
-    await targetPage.waitForNetworkIdle({timeout: lib.getEnvInt('MONITOR_TIMEOUT_NETWORK_TIMEOUT'), idleTime: lib.getEnvInt('MONITOR_TIMEOUT_NETWORK_IDLE')});
+
+    const networkTimeout = lib.getEnvInt('MONITOR_TIMEOUT_NETWORK_TIMEOUT', {defaultValue: lib.getEnvInt('TEST_TIMEOUT_NETWORK_TIMEOUT')});
+    const networkIdle = lib.getEnvInt('MONITOR_TIMEOUT_NETWORK_IDLE', {defaultValue: lib.getEnvInt('TEST_TIMEOUT_NETWORK_IDLE')});
+    await targetPage.waitForNetworkIdle({timeout: networkTimeout, idleTime: networkIdle});
 
     // Check if loading exceeded the configured timeout.
     const loadTime = Date.now() - clickTime;
