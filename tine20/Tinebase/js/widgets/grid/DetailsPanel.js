@@ -91,7 +91,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      */
     getDefaultInfosPanel: function() {
         if (! this.defaultInfosPanel) {
-            if (this.recordClass) {
+            if (this.recordClass && !this.defaultTpl && !this.multiTpl) {
                 this.defaultInfosPanel = new Tine.widgets.display.DefaultDisplayPanel({
                     recordClass : this.recordClass
                 });
@@ -254,7 +254,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     onRecordChanges: function(data, e) {
         var _ = window.lodash;
 
-        if (this.singleRecordPanel.isVisible() && this.record.id == data.id) {
+        if (this.record && this.singleRecordPanel.isVisible() && this.record.id == data.id) {
             this.record = Tine.Tinebase.data.Record.setFromJson(data, this.recordClass);
             this.updateDetails(this.record, this.getSingleRecordPanel().body);
         }
