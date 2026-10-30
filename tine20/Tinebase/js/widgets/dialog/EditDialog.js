@@ -1379,6 +1379,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             if (keys(this.record.getChanges()).length) {
                 console.warn('this changes would be lost:');
                 console.warn(this.record.getChanges());
+                // ext windows only ask to leave if vetoed due to unsaved changes
+                this.window.hasUnsavedChanges = true;
                 return false;
             }
         }

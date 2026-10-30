@@ -27,14 +27,17 @@ Ext.ux.WindowFactory = function (config) {
         confirmLeavSite: me.confirmLeavSite,
 
         // closing interception analog to browser windows
+        // NOTE: only ask to leave if close got vetoed due to unsaved changes (see EditDialog.onBeforeClose)
+        //       other vetos (e.g. mandatory input in modal dialogs) must not be skipped
         close : function(force){
+            this.hasUnsavedChanges = false;
             if(force || this.fireEvent('beforeclose', this) !== false){
                 if(this.hidden){
                     this.doClose();
                 }else{
                     this.hide(null, this.doClose, this);
                 }
-            } else {
+            } else if (this.hasUnsavedChanges) {
                 this.confirmLeavSite(this);
             }
         },
@@ -90,7 +93,7 @@ Ext.ux.WindowFactory.prototype = {
      */
     getExtWindow: function (c) {
         let win = Ext.WindowMgr.get(c.name);
-        const winConstructor = c.modal ? Ext.Window : this.extWindowClass;
+        const winConstructor = this.extWindowClass;
 
         if (! win) {
             c.id = c.name;
