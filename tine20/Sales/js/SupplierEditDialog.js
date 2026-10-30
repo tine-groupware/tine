@@ -5,9 +5,11 @@
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-Ext.ns('Tine.Sales');
 
 import RelatedDocumentsGridPanel from './Document/RelatedDocumentsGridPanel'
+import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
+
+Ext.ns('Tine.Sales');
 
 /**
  * @namespace   Tine.Sales
@@ -379,6 +381,23 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 name: 'url',
                                 maxLength: 128,
                             }
+                        ]]
+                    }]
+                }, {
+                    xtype: 'fieldset',
+                    layout: 'hfit',
+                    autoHeight: true,
+                    title: this.app.i18n._('Evaluation Dimensions'),
+                    items: [{
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: formFieldDefaults,
+                        items: [[
+                            new EvaluationDimensionForm({
+                                columnWidth: 1,
+                                maxItemsPerRow: 2,
+                                recordClass: this.recordClass
+                            })
                         ]]
                     }]
                 }]
