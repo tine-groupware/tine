@@ -20,6 +20,8 @@
  *
  */
 
+import { getDefaultLayoutClasses } from "../../util/responsiveLayout";
+
 Ext.ns('Ext.ux.grid');
 
 /**
@@ -119,6 +121,12 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
 
         grid.view.scrollOffset = 18;
 
+        // manual responsive mode is stored independent of the (responsive mode suffixed) grid state
+        this._responsiveModeStateId = grid.stateId ? `${grid.stateId}-responsiveMode` : null;
+        const responsiveMode = this._responsiveModeStateId ? Ext.state.Manager.get(this._responsiveModeStateId) : null;
+        if (responsiveMode) {
+            v.setResponsiveMode(responsiveMode);
+        }
     },
 
 // -------- listeners
@@ -158,6 +166,49 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
     {
         this._view.beforeColMenuShow.call(this, menu);
         this._addMenuTitle();
+        this._addResponsiveModeItems();
+    },
+
+    /**
+     * adds items to manually choose the responsive mode (layout level)
+     */
+    _addResponsiveModeItems: function() {
+        const view = this._view;
+        if (view.disableResponsiveLayout) return;
+
+        const modes = ['auto'].concat(getDefaultLayoutClasses(this.cm.config)
+            .map((layoutClass) => layoutClass.name)
+            .filter((name) => name !== 'oneColumn' || !view.grid.disableOneColumnLayout));
+        // auto + one mode only -> nothing to choose
+        if (modes.length < 3) return;
+
+        const current = view.responsiveMode || 'auto';
+        const getText = (name) => Ext.util.Format.capitalize(window.i18n._(name === 'oneColumn' ? 'one column' : name));
+
+        this.colMenu.add('-', new Ext.menu.TextItem({
+            text: window.i18n._('Layout'),
+            style: 'line-height:16px;padding:3px 21px 3px 27px;position: relative;'
+        }));
+        modes.forEach((name) => {
+            this.colMenu.add(new Ext.menu.CheckItem({
+                itemId: `responsivemode-${name}`,
+                text: name === 'auto' ? `${getText(name)} (${getText(view.getResponsiveMode().name ?? name)})` : getText(name),
+                group: `${view.grid.id}-responsivemode`,
+                checked: current === name,
+                handler: () => this._setResponsiveMode(name)
+            }));
+        });
+    },
+
+    /**
+     * @param {String} mode
+     */
+    _setResponsiveMode: function(mode) {
+        this._view.setResponsiveMode(mode);
+        if (this._responsiveModeStateId) {
+            Ext.state.Manager.set(this._responsiveModeStateId, mode);
+        }
+        this._view.layout();
     },
 
     _addMenuTitle: function() {

@@ -72,6 +72,12 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     parentScope: null,
 
     /**
+     * quickadd/editing is not possible in oneColumn layout
+     * @cfg {Boolean} disableOneColumnLayout
+     */
+    disableOneColumnLayout: true,
+
+    /**
      * @private
      */
     initComponent: function(){
@@ -249,6 +255,8 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.colModel.on('columnmoved', this.syncFields, this);
         this.view.on('beforerefresh', this.onBeforeRefresh, this);
         this.view.on('refresh', this.onRefresh, this);
+        // responsive mode changes column visibility silently
+        this.view.on('responsivemodeapplied', this.syncFields, this);
 
         if (this.quickaddMode === 'header') {
             // this.view.on('beforerefresh', this.onBeforeRefresh, this);

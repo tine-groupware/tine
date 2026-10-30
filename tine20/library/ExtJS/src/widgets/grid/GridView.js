@@ -4,7 +4,7 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
-import {getLayoutClassByWidth, getLayoutClassByMode} from "../../../../../Tinebase/js/util/responsiveLayout";
+import {getLayoutClassByWidth, getLayoutClassByMode, getDefaultLayoutClasses} from "../../../../../Tinebase/js/util/responsiveLayout";
 
 /**
 /**
@@ -933,6 +933,8 @@ viewConfig: {
             
             this.lastViewWidth = vw;
         }else {
+            // NOTE: fitColumns applies the responsive mode for forceFit grids
+            if (this.grid.viewReady) this.applyResponsiveMode();
             this.autoExpand();
             this.syncHeaderScroll();
         }
@@ -969,13 +971,17 @@ viewConfig: {
             width = this.grid.lastSize.width;
         }
         if (width === 0) return result;
-        if (this.cm.config.length === 1) this.responsiveMode = 'oneColumn';
+        if (this.cm.config.length === 1 && !this.grid.disableOneColumnLayout) this.responsiveMode = 'oneColumn';
         if (!this.responsiveMode) this.responsiveMode = 'auto';
         
         if (this.responsiveMode === 'auto') {
             result = getLayoutClassByWidth(width, this.cm.config);
         } else {
             result = getLayoutClassByMode(this.responsiveMode, this.cm.config);
+        }
+        // e.g. editor grids can't edit in oneColumn mode
+        if (result.name === 'oneColumn' && this.grid.disableOneColumnLayout) {
+            result = getDefaultLayoutClasses(this.cm.config).find((c) => c.name !== 'oneColumn') ?? result;
         }
         return result;
     },
@@ -1324,70 +1330,7 @@ viewConfig: {
                 widthExtra = 0; 
             }
         }
-        const currentGridStateId = this.resolveStateIdResponsiveMode(this.grid?.getStateId());
-        const currentGridState = Ext.state.Manager.get(currentGridStateId);
-        const isStateIdChanged = !!(!this.latestGridStateId && currentGridStateId)
-            || !!((this.latestGridStateId && currentGridStateId) && (this.latestGridStateId !== currentGridStateId));
-        this.latestGridStateId = currentGridStateId;
-
-        if (isStateIdChanged) {
-            if (this.grid) {
-                this.grid.stateId = this.latestGridStateId;
-                if (currentGridState) {
-                    this.grid.applyState(currentGridState, true);
-                    const result = this.renderBody();
-                    this.mainBody.update(result).setWidth(this.getTotalWidth());
-                    this.updateHeaders();
-                    this.updateHeaderSortState();
-                    this.processRows(0, true);
-                    this.layout();
-                    this.applyEmptyText();
-                }
-            }
-            const mode = this.getResponsiveMode();
-            const modelConfig = this.grid.recordClass ? this.grid.recordClass.getModelConfiguration() : null;
-
-            cm.config.forEach((col, idx) => {
-                col.initialConfig = col.initialConfig || {... col};
-                col.index = idx;
-                const relIdx = _.findIndex(currentGridState?.columns, (c) => { return col.id === c.id; })
-                const refConfig = currentGridState?.columns?.[relIdx] ?? col.initialConfig;
-                // set custom field
-                col.useManualWidth = refConfig.useManualWidth ?? false;
-                
-                // reset grid state if stateId changed, make sure column config is based on current stateId
-                cm.setColumnWidth(col.index, refConfig?.width ?? this.grid.minColumnWidth, true);
-                let hidden = ((!col.hasOwnProperty('hidable') || col.hidable) && refConfig?.hidden) ?? false;
-                if (mode.level > -1) {
-                    if (mode.name === 'oneColumn') {
-                        hidden = col.id !== 'responsive';
-                    } else {
-                        //handle auto mode and strict mode
-                        if (!refConfig || refConfig.hasOwnProperty('responsiveLevel')) {
-                            const defaultResponsiveLevel = modelConfig?.uiconfig?.hasOwnProperty('big') ? 'large' : 'big';
-                            const colResponsiveLevel = col?.responsiveLevel ?? defaultResponsiveLevel;
-                            const colModeClass = getLayoutClassByMode(colResponsiveLevel, this.cm.config);
-                            if (col?.responsiveLevel || !hidden) hidden = colModeClass.level > mode.level;
-                        }
-                        if (col.id === 'responsive') hidden = true;
-                    }
-                    this.updateColumnStyle(col.index, {'display': hidden ? 'none' : ''});
-                }
-                cm.setHidden(col.index, hidden, true);
-
-            });
-            // handle sorting too
-            const sortInfo = currentGridState?.sort;
-            if (sortInfo && JSON.stringify(this.grid.store.sortInfo) !== JSON.stringify(sortInfo)) {
-                this.grid.store.sort(sortInfo.field, sortInfo.direction);
-            }
-
-            if (!currentGridState && this.hasRows()) {
-                this.mainBody.update(this.renderBody()).setWidth(this.getTotalWidth());
-                this.processRows(0, true);
-                this.applyEmptyText();
-            }
-
+        if (this.applyResponsiveMode()) {
             this.fitColumns(preventRefresh, onlyExpand, omitColumn);
         }
 
@@ -1462,6 +1405,109 @@ viewConfig: {
         // browser might draw x-scrollbars when y-scrollbars where shown
         this.scroller.setStyle('overflow-x', diff < 0 ? 'auto' : 'hidden');
         return true;
+    },
+
+    /**
+     * applies column visibility (and per mode grid state) if the responsive mode changed
+     * NOTE: used by fitColumns (forceFit) and layout (autoExpand), so it works for editor/quickadd grids too
+     *
+     * @return {Boolean} true if mode got applied
+     */
+    applyResponsiveMode : function(){
+        const cm = this.cm;
+        const currentGridStateId = this.resolveStateIdResponsiveMode(this.grid?.getStateId());
+        const currentGridState = Ext.state.Manager.get(currentGridStateId);
+        const isStateIdChanged = !!(!this.latestGridStateId && currentGridStateId)
+            || !!((this.latestGridStateId && currentGridStateId) && (this.latestGridStateId !== currentGridStateId));
+        this.latestGridStateId = currentGridStateId;
+
+        // grids without stateId can't detect mode changes by stateId
+        const modeName = this.getResponsiveMode().name;
+        const isModeChanged = !currentGridStateId && !!modeName && modeName !== this.latestResponsiveModeName;
+        this.latestResponsiveModeName = modeName;
+
+        if (!isStateIdChanged && !isModeChanged) return false;
+
+        if (this.grid && currentGridStateId) {
+            this.grid.stateId = this.latestGridStateId;
+            if (currentGridState) {
+                this.grid.applyState(currentGridState, true);
+                const result = this.renderBody();
+                this.mainBody.update(result).setWidth(this.getTotalWidth());
+                this.updateHeaders();
+                this.updateHeaderSortState();
+                this.processRows(0, true);
+                this.layout();
+                this.applyEmptyText();
+            }
+        }
+        const mode = this.getResponsiveMode();
+        const modelConfig = this.grid.recordClass ? this.grid.recordClass.getModelConfiguration() : null;
+
+        cm.config.forEach((col, idx) => {
+            col.initialConfig = col.initialConfig || {... col};
+            col.index = idx;
+            const relIdx = _.findIndex(currentGridState?.columns, (c) => { return col.id === c.id; })
+            const refConfig = currentGridState?.columns?.[relIdx] ?? col.initialConfig;
+            // set custom field
+            col.useManualWidth = refConfig.useManualWidth ?? false;
+
+            // reset grid state if stateId changed, make sure column config is based on current stateId
+            cm.setColumnWidth(col.index, refConfig?.width ?? this.grid.minColumnWidth, true);
+            let hidden = ((!col.hasOwnProperty('hidable') || col.hidable) && refConfig?.hidden) ?? false;
+            if (mode.level > -1) {
+                if (mode.name === 'oneColumn') {
+                    hidden = col.id !== 'responsive';
+                } else {
+                    //handle auto mode and strict mode
+                    if (!refConfig || refConfig.hasOwnProperty('responsiveLevel')) {
+                        const defaultResponsiveLevel = modelConfig?.uiconfig?.hasOwnProperty('big') ? 'large' : 'big';
+                        const colResponsiveLevel = col?.responsiveLevel ?? defaultResponsiveLevel;
+                        const colModeClass = getLayoutClassByMode(colResponsiveLevel, this.cm.config);
+                        if (col?.responsiveLevel || !hidden) hidden = colModeClass.level > mode.level;
+                    }
+                    if (col.id === 'responsive' || this.isForcedHiddenColumn(col)) hidden = true;
+                }
+                this.updateColumnStyle(col.index, {'display': hidden ? 'none' : ''});
+            }
+            cm.setHidden(col.index, hidden, true);
+
+        });
+        // handle sorting too
+        const sortInfo = currentGridState?.sort;
+        if (sortInfo && JSON.stringify(this.grid.store.sortInfo) !== JSON.stringify(sortInfo)) {
+            this.grid.store.sort(sortInfo.field, sortInfo.direction);
+        }
+
+        if (!currentGridState && this.hasRows()) {
+            this.mainBody.update(this.renderBody()).setWidth(this.getTotalWidth());
+            this.processRows(0, true);
+            this.applyEmptyText();
+        }
+
+        this.onResponsiveModeApplied(mode);
+        this.fireEvent('responsivemodeapplied', this, mode);
+        return true;
+    },
+
+    /**
+     * template method, called after column visibility got (silently) adjusted to a new responsive mode
+     *
+     * @param {Object} mode
+     */
+    onResponsiveModeApplied : function(mode){
+        // template method
+    },
+
+    /**
+     * columns which must stay hidden regardless of the responsive mode (e.g. the grouped column)
+     * NOTE: hidden columns the user can't show (hideable: false) are never shown by responsive mode either
+     *
+     * @param {Object} col
+     * @return {Boolean}
+     */
+    isForcedHiddenColumn : function(col){
+        return !!(col.hideable === false && col.initialConfig?.hidden);
     },
 
     // private

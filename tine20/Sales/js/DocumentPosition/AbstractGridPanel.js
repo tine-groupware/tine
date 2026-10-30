@@ -19,6 +19,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
     allowCreateNew: true,
     enableBbar: true,
+    disableResponsiveLayout: false,
 
     ddSortCol: 'sorting',
     sortInc: 10000,
@@ -233,6 +234,16 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     },
 
     // checks and applies if grid is grouped
+    // grouping and sorting are data driven (see checkGroupingState) - don't let (per responsive mode) grid state interfere
+    getState: function() {
+        return _.omit(AbstractGridPanel.superclass.getState.apply(this, arguments), ['group', 'sort']);
+    },
+
+    applyState: function(state, ...args) {
+        AbstractGridPanel.superclass.applyState.call(this, _.omit(state, ['group', 'sort']), ...args);
+        if (this.store) this.checkGroupingState();
+    },
+
     checkGroupingState: function() {
         // grouping might get lost when grp record is removed/reinserted on update
         this.store.groupBy(this.store.data.items.filter((r) => { return !!r.get('grouping') }).length ? 'grouping' : '');
@@ -299,7 +310,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         // init all columns
         this.columns = Object.keys(modelConfig.fields).reduce((columns, fieldName) => {
             const col = colMgr(fieldName, { sortable: false });
-            if (col && ['document_id'].indexOf(fieldName) < 0) {
+            if (col && ['id', 'document_id'].indexOf(fieldName) < 0) {
                 if (['type', 'pos_number'].indexOf(fieldName) < 0) {
                     col.editor = Ext.ComponentMgr.create(fieldMgr(fieldName, { selectOnFocus: true, blurOnSelect: false }));
                 }
@@ -311,6 +322,14 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         // some adjustments
         Object.assign(this.columns.find((c) => c.dataIndex === 'type'),{ header: '', width: 15, renderer: _.bind(this.typeRenderer, this) });
         Object.assign(this.columns.find((c) => c.dataIndex === 'pos_number'),{ width: 40 });
+        // NOTE: GroupingView / DDSortPlugin need the columns, but they are never displayed (no responsiveLevel -> stay hidden)
+        ['grouping', 'sorting'].forEach((dataIndex) => {
+            Object.assign(this.columns.find((c) => c.dataIndex === dataIndex) || {},{ hidden: true, hideable: false, responsiveLevel: null });
+        });
+        // generic fields are hidden in all responsive levels by default, but users can show them
+        ['created_by', 'creation_time', 'last_modified_by', 'last_modified_time'].forEach((dataIndex) => {
+            Object.assign(this.columns.find((c) => c.dataIndex === dataIndex) || {},{ hidden: true, responsiveLevel: null });
+        });
         // @TODO product_id picker nur sales produkte die noch aktiv
         Object.assign(this.columns.find((c) => c.dataIndex === 'title'),{ quickaddField: this.getProductPicker(), renderer: _.bind(this.titleRenderer, this) });
         Object.assign(this.columns.find((c) => c.dataIndex === 'unit_price') || {},{ header: i18n._('Price') });
