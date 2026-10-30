@@ -342,7 +342,9 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         return str;
     },
 
-    typeRenderer() {},
+    typeRenderer() {
+        return '';
+    },
 
     // @TODO have modelconfig type for this fields!
     discountRenderer(value, metadata, record) {
