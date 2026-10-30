@@ -656,6 +656,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         this.saveState();
+        this.grid?.getView?.().layout?.defer(200, this.grid.getView());
     },
 
     /**
