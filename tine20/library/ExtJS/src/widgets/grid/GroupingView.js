@@ -399,18 +399,21 @@ var grid = new Ext.grid.GridPanel({
         if(this.hideGroupedColumn) {
             var colIndex = this.cm.findColumnIndex(groupField),
                 hasLastGroupField = Ext.isDefined(this.lastGroupField);
+            // NOTE: restore hidden state from before grouping (column might be hidden anyway)
             if(!eg && hasLastGroupField){
                 this.mainBody.update('');
-                this.cm.setHidden(this.cm.findColumnIndex(this.lastGroupField), false);
+                this.cm.setHidden(this.cm.findColumnIndex(this.lastGroupField), !!this.lastGroupFieldWasHidden);
                 delete this.lastGroupField;
             }else if (eg && !hasLastGroupField){
                 this.lastGroupField = groupField;
+                this.lastGroupFieldWasHidden = this.cm.isHidden(colIndex);
                 this.cm.setHidden(colIndex, true);
             }else if (eg && hasLastGroupField && groupField !== this.lastGroupField) {
                 this.mainBody.update('');
                 var oldIndex = this.cm.findColumnIndex(this.lastGroupField);
-                this.cm.setHidden(oldIndex, false);
+                this.cm.setHidden(oldIndex, !!this.lastGroupFieldWasHidden);
                 this.lastGroupField = groupField;
+                this.lastGroupFieldWasHidden = this.cm.isHidden(colIndex);
                 this.cm.setHidden(colIndex, true);
             }
         }
@@ -572,6 +575,18 @@ var grid = new Ext.grid.GridPanel({
     // private
     onLayout : function(){
         this.updateGroupWidths();
+    },
+
+    // private
+    onResponsiveModeApplied : function(mode){
+        Ext.grid.GroupingView.superclass.onResponsiveModeApplied.call(this, mode);
+        this.updateGroupWidths();
+    },
+
+    // private
+    isForcedHiddenColumn : function(col){
+        return Ext.grid.GroupingView.superclass.isForcedHiddenColumn.call(this, col)
+            || (this.hideGroupedColumn && this.canGroup() && col.dataIndex === this.getGroupField());
     },
 
     // private
