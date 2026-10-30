@@ -676,7 +676,8 @@ viewConfig: {
         const hiddenTextDiv = `<div id="${cellId}" class="x-hidden-accessible" aria-label="${Ext.util.Format.htmlEncode(cellTextString)}" style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;"></div>`;
         const pauseDiv = `<div id="${pauseId}" class="x-hidden-accessible" aria-label="," style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;"></div>`;
 
-        p.value = p.value + '<div>' + hiddenTextDiv + pauseDiv + '</div>';
+        // NOTE: renderers might return undefined/null, which must not be rendered as string
+        p.value = (Ext.isEmpty(rawValue) ? '&#160;' : rawValue) + '<div>' + hiddenTextDiv + pauseDiv + '</div>';
 
         p.cellAttr = `${p.cellAttr || ''} aria-labelledby="${headerDomId} ${pauseId} ${cellId}"`;
     },
