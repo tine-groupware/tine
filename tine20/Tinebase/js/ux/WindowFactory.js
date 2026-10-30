@@ -22,6 +22,24 @@ Ext.ux.WindowFactory = function (config) {
     let me = this;
     Ext.apply(this, config);
 
+    // NOTE: Ext windows are also used as fallback for browser windows (see getWindow)
+    this.extWindowClass = Ext.extend(Ext.Window, {
+        confirmLeavSite: me.confirmLeavSite,
+
+        // closing interception analog to browser windows
+        close : function(force){
+            if(force || this.fireEvent('beforeclose', this) !== false){
+                if(this.hidden){
+                    this.doClose();
+                }else{
+                    this.hide(null, this.doClose, this);
+                }
+            } else {
+                this.confirmLeavSite(this);
+            }
+        },
+    });
+
     switch (this.windowType) {
         case 'Browser' :
             this.windowClass = Ext.ux.PopupWindow;
@@ -29,22 +47,7 @@ Ext.ux.WindowFactory = function (config) {
             break;
 
         case 'Ext' :
-            this.windowClass = Ext.extend(Ext.Window, {
-                confirmLeavSite: me.confirmLeavSite,
-
-                // closing interception analog to browser windows
-                close : function(force){
-                    if(force || this.fireEvent('beforeclose', this) !== false){
-                        if(this.hidden){
-                            this.doClose();
-                        }else{
-                            this.hide(null, this.doClose, this);
-                        }
-                    } else {
-                        this.confirmLeavSite(this);
-                    }
-                },
-            });
+            this.windowClass = this.extWindowClass;
             this.windowManager = Ext.WindowMgr;
             break;
         default :
@@ -87,7 +90,7 @@ Ext.ux.WindowFactory.prototype = {
      */
     getExtWindow: function (c) {
         let win = Ext.WindowMgr.get(c.name);
-        const winConstructor = c.modal ? Ext.Window : this.windowClass;
+        const winConstructor = c.modal ? Ext.Window : this.extWindowClass;
 
         if (! win) {
             c.id = c.name;
