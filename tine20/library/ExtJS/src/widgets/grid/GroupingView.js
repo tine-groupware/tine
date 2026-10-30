@@ -188,7 +188,7 @@ var grid = new Ext.grid.GridPanel({
 
     // private
     getGroups : function(){
-        return this.hasRows() ? this.mainBody.dom.childNodes : [];
+        return this.hasRows() && this.renderedGrouped ? this.mainBody.dom.childNodes : [];
     },
 
     getGroupText: function(values) {
@@ -414,6 +414,11 @@ var grid = new Ext.grid.GridPanel({
                 this.cm.setHidden(colIndex, true);
             }
         }
+        // remember how the dom was rendered, store grouping might change without a refresh
+        // (e.g. remoteGroup/groupOnSort before load returns, suspended events)
+        if(!Ext.isDefined(arguments[0])){
+            this.renderedGrouped = this.canGroup();
+        }
         return Ext.grid.GroupingView.superclass.renderRows.apply(
                     this, arguments);
     },
@@ -520,7 +525,7 @@ var grid = new Ext.grid.GridPanel({
 
     // private
     getRows : function(){
-        if(!this.canGroup()){
+        if(!this.renderedGrouped){
             return Ext.grid.GroupingView.superclass.getRows.call(this);
         }
         var r = [];
@@ -536,7 +541,7 @@ var grid = new Ext.grid.GridPanel({
 
     // private
     updateGroupWidths : function(){
-        if(!this.canGroup() || !this.hasRows()){
+        if(!this.renderedGrouped || !this.hasRows()){
             return;
         }
         var tw = Math.max(this.cm.getTotalWidth(), this.el.dom.offsetWidth-this.getScrollOffset()) +'px';
