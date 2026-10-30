@@ -1251,6 +1251,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         (function() {
             this.checkStates();
             // otherwise we would get modifications in a normal roundtrip record->form->record
+            this.onRecordUpdate();
             this.record.commit();
         }).defer(100, this);
 
@@ -1389,7 +1390,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onCancel : function(force){
         if(force===true || this.fireEvent('beforecancel', this) !== false) {
             this.fireEvent('cancel', this);
-            this.window.close(force);
+            // NOTE: as button handler force is the button -> only force close if explicitly requested
+            this.window.close(force === true);
         }
     },
 
