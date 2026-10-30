@@ -13,6 +13,7 @@ Ext.ns('Tine.Sales');
  * @namespace Tine.Sales
  * @class Tine.Sales.PurchaseInvoiceEditDialog
  * @extends Tine.widgets.dialog.EditDialog
+ * @deprecated by Tine.Sales.Document_PurchaseInvoiceEditDialog
  * 
  * <p>
  * Invoice Compose Dialog

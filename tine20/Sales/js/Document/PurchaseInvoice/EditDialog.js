@@ -110,10 +110,21 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
                     config.listeners = config.listeners || {};
                     config.listeners.select = (combo, record, index) => {
                         if (!record) return;
+                        const lang = 'en'; // no lang support yet
+                        // fields['document_language'].setValue(record.get('language') || fields['document_language'].getValue())
+                        const genericFieldNames = Tine.Tinebase.Model.modlogFields.reduce((a, f) => {return a.concat(f.name);}, [this.recordClass.getMeta('idProperty')]);
+                        Object.keys(record.data).forEach((fieldName) => {
+                            if (genericFieldNames.indexOf(fieldName) < 0 && this.recordClass.hasField(fieldName)) {
+                                const value = _.get(record.constructor.getField(fieldName), 'fieldDefinition.config.specialType') === 'localizedString' ?
+                                    _.find(record.data[fieldName], { language: lang })?.text || _.get(record.data, `${fieldName}[0].text`) : record.data[fieldName];
+                                this.record.set(fieldName, value);
+                                this.getForm().findField(fieldName).setValue(value);
+                            }
+                        });
+                        
                         fields['credit_term']?.setValue(record.get('credit_term'))
                         fields['document_currency'].setValue(record.get('currency') || fields['document_currency'].getValue())
                         fields['payment_means_used'].setValue(record.get('payment_means_default') || fields['payment_means_used'].getValue())
-                        // fields['document_language'].setValue(record.get('language') || fields['document_language'].getValue())
                         // if (record.get('discount')) {
                         //     fields['invoice_discount_type'].setValue('PERCENTAGE')
                         //     fields['invoice_discount_percentage'].setValue(record.get('discount'))
