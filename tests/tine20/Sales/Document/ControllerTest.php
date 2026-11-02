@@ -16,6 +16,20 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Sales_Document_ControllerTest extends Sales_Document_Abstract
 {
+    /*public function testLLM(): void
+    {
+        //$tmpFile = Tinebase_TempFile::getInstance()->createTempFileFromStream(fopen(__DIR__ . '/files/BB_R-19246_Betrieb_Shopware_Hosting.pdf', 'r'));
+        $tmpFile = Tinebase_TempFile::getInstance()->createTempFileFromStream(fopen(__DIR__ . '/files/Erzbistum_R-19193.pdf', 'r'));
+        $a = Sales_Model_Document_Invoice::createPositionsFromFileLocation(new Tinebase_Model_FileLocation([
+            Tinebase_Model_FileLocation::FLD_LOCATION => new Tinebase_Model_FileLocation_TempFile([
+                Tinebase_Model_FileLocation_TempFile::FLD_TEMP_FILE_ID => $tmpFile->getId(),
+            ]),
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_TempFile::class
+        ]));
+
+        print_r($a->{Sales_Model_Document_Invoice::FLD_POSITIONS}->toArray());
+    }*/
+
     public function testExpanderFilter()
     {
         $customer = $this->_createCustomer();
