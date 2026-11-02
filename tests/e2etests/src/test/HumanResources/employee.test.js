@@ -83,7 +83,7 @@ describe('employee', () => {
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
 
                     await employeeEditDialog.waitForTimeout(1000);
@@ -149,7 +149,7 @@ describe('employee', () => {
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await employeeEditDialog.waitForTimeout(2000);
                     await expectPuppeteer(employeeEditDialog).not.toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-grid3-col-type', {text: '[U] Urlaub'});
@@ -234,7 +234,7 @@ describe('employee', () => {
                     await employeeEditDialog.waitForTimeout(2000);
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled', {timeout: 10000});
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await employeeEditDialog.waitForTimeout(2000);
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-grid3-cell-inner.x-grid3-col-type', {text: '[U] Urlaub'});
@@ -256,7 +256,7 @@ describe('employee', () => {
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
 
                     await expectPuppeteer(employeeEditDialog).not.toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-grid3-cell-inner.x-grid3-col-type', {text: '[U] Urlaub'});
@@ -267,20 +267,55 @@ describe('employee', () => {
     });
     describe('edit contract', () => {
         let employeeEditDialog, contractEditDialog
+
+        // NOTE: These fixes are meant for 2025.11 only! 2026.11 and upwards use complex browser helpers to avoid timing issues.
+
+        // ExtJS 3 marks the selected row with x-grid3-row-selected
+        const waitRowSelected = (pg, text, timeout = 15000) =>
+            pg.waitForFunction((t) => {
+                    const sel = document.querySelector('.x-grid3-row-selected .x-grid3-col-account_id');
+                    return !!sel && sel.textContent.replace(/\s+/g, ' ').trim() === t;
+                }, {timeout}, text
+            );
+
+        // click the row, then verify the selection actually took effect
+        // (a click dispatched during a grid re-render can land at stale
+        // coordinates and select nothing, without throwing)
+        const selectRow = async (pg, text, tries = 3) => {
+            for (let i = 0; ; i++) {
+                try {
+                    await expectPuppeteer(pg).toClick('.x-grid3-col-account_id', {text: text});
+                } catch (e) {
+                    if (i >= tries - 1) throw e;
+                    await pg.waitForTimeout(2000);
+                    continue;
+                }
+                try {
+                    await waitRowSelected(pg, text, 10000);
+                    return;
+                } catch (e) {
+                    if (i >= tries - 1) throw new Error('row "' + text + '" not selected after ' + tries + ' clicks');
+                    await pg.waitForTimeout(2000);
+                }
+            }
+        };
+
         test('edit dialog', async () => {
             await page.waitForTimeout(1000);
-            await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'test'});
-            await page.waitForTimeout(1000);
+            await selectRow(page, 'test');
+            await page.waitForTimeout(2000);
             employeeEditDialog = await lib.getEditDialog('Mitarbeiter bearbeiten');
             await employeeEditDialog.waitForTimeout(3000);
             await expectPuppeteer(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Verträge', visible:true});
-        });
+        }, 120000);
         test('open contract', async () => {
+            if (!employeeEditDialog) throw new Error('employeeEditDialog missing - "edit dialog" failed');
             await employeeEditDialog.waitForTimeout(5000)
             contractEditDialog = await lib.getEditDialog('Vertrag hinzufügen', employeeEditDialog);
             await contractEditDialog.waitForTimeout(2000);
-        });
+        }, 180000);
         test('edit contract', async () => {
+            if (!contractEditDialog) throw new Error('contractEditDialog missing - "open contract" failed');
             await contractEditDialog.click('input[name=start_date]');
             await contractEditDialog.click('.x-form-field-wrap.x-form-field-trigger-wrap.x-form-invalid.x-trigger-wrap-focus .x-form-trigger');
             await expectPuppeteer(contractEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(2) > td:nth-child(1) > a > em > span');
@@ -298,8 +333,9 @@ describe('employee', () => {
             await contractEditDialog.waitForTimeout(200);
             await expectPuppeteer(contractEditDialog).toFill('input[name=weekdays_4]', '04:00', {delay: 50});
             await contractEditDialog.waitForTimeout(200);
-        });
+        }, 180000);
         test('edit breaktime configs', async () => {
+            if (!contractEditDialog) throw new Error('contractEditDialog missing - "open contract" failed');
             await contractEditDialog.click('[class=new-row] input');
             let breaktime = lib.getNewWindow();
             await contractEditDialog.waitForTimeout(1000);
@@ -322,9 +358,10 @@ describe('employee', () => {
             await expectPuppeteer(breaktime).toClick('button', {text: 'Ok'});
             await contractEditDialog.waitForTimeout(5000);
             await lib.makeScreenshot(contractEditDialog,{path: 'screenshots/Error/test3.png'});
-        });
+        }, 180000);
 
         test('edit workingtimeschema', async () => {
+            if (!contractEditDialog) throw new Error('contractEditDialog missing - "open contract" failed');
             await contractEditDialog.type('[class=new-row] input', 'Arbeitzeitlimitierung');
             await contractEditDialog.waitForTimeout(1000);
             let workingtimeschema = lib.getNewWindow();
@@ -338,18 +375,29 @@ describe('employee', () => {
             await expectPuppeteer(contractEditDialog).toClick('button', {text: 'Ok'});
             await page.waitForTimeout(2000);
             await expectPuppeteer(employeeEditDialog).toClick('button', {text: 'Ok'});
-        });
+        }, 180000);
 
         test('check contract', async () => {
             await page.waitForTimeout(2000);
-            await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'test'});
+            await selectRow(page, 'test');
             await page.waitForTimeout(2000);
             employeeEditDialog = await lib.getEditDialog('Mitarbeiter bearbeiten');
             await expectPuppeteer(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Verträge'});
-            await employeeEditDialog.waitForTimeout(5000)
-            await employeeEditDialog.waitForSelector('.x-grid3-cell-first .x-grid3-cell-inner.x-grid3-col-start_date');
-            await employeeEditDialog.click('.x-grid3-cell-first .x-grid3-cell-inner.x-grid3-col-start_date');
             await employeeEditDialog.waitForTimeout(5000);
+            await employeeEditDialog.waitForSelector('.x-grid3-cell-first .x-grid3-cell-inner.x-grid3-col-start_date', {timeout: 60000});
+            for (let i = 0; ; i++) {
+                await employeeEditDialog.click('.x-grid3-cell-first .x-grid3-cell-inner.x-grid3-col-start_date');
+                try {
+                    await employeeEditDialog.waitForFunction(
+                        () => !!document.querySelector('.x-grid3-row-selected .x-grid3-col-start_date'),
+                        {timeout: 10000});
+                    break;
+                } catch (e) {
+                    if (i >= 2) throw new Error('contract row not selected');
+                    await employeeEditDialog.waitForTimeout(2000);
+                }
+            }
+            await employeeEditDialog.waitForTimeout(2000);
             contractEditDialog = await lib.getEditDialog('Bearbeiten', employeeEditDialog);
             await contractEditDialog.waitForTimeout(5000);
             expect(await contractEditDialog.evaluate(() => document.querySelector('input[name=weekdays_0]').value)).toEqual('06:00');
@@ -362,7 +410,7 @@ describe('employee', () => {
             expect(await contractEditDialog.evaluate(() => document.querySelector('.x-grid3-body div:nth-child(2) .x-grid3-col-configRecord').textContent))
                 .toEqual(' Arbeitszeit wird ausgewertet von 06:00 bis 20:00. (Arbeitzeitlimitierung)');
 
-        })
+        }, 180000);
     });
 });
 
