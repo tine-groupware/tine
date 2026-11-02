@@ -11,11 +11,12 @@ https://github.com/tine-groupware/tine-dev
 * Check for related issues on the issue tracker
 * Non-trivial changes should be discussed on an issue first
 * Let us know you’re working on the issue (by using the
- [Kanban board](https://github.com/tine-groupware/tine/projects/1))
+ [Kanban board](https://github.com/orgs/tine-groupware/projects/1))
 * Develop in a topic branch, not main
 * Provide useful pull request description
 * Write a good description of your PR
 * Link to the Github issue in the description
+* See below for avoiding merge conflicts in the first place
 
 The default workflow for Github Pull Requests applies for tine Groupware, too.
 
@@ -104,6 +105,81 @@ We also use some annotations to mark commits for documentation follow-ups:
 If you use ai coding agents, please add the following annotation:
 
 - @ai supported by qwen 3.6
+
+## Merge Conflicts
+
+A merge conflict occurs when two branches modify the same lines of a file and git cannot merge them automatically. You must resolve the conflict by hand, keeping the parts you want and removing the conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`).
+
+### Ground rules
+
+* Never commit directly to `main` or any release branch. Always work on a topic branch and open a pull request.
+* For new features and general development: create the topic branch from `main` and open the PR targeting `main`.
+* For bug fixes and work on older release branches (e.g. `2025.11`): create the topic branch from that release branch and open the PR targeting it.
+
+### Preventing conflicts
+
+Before opening a PR (and before pushing updates to an existing one), sync your topic branch with the branch it targets:
+
+```sh
+git fetch origin
+git checkout main
+git pull --rebase
+git checkout my-topic-branch
+git rebase main
+```
+
+Resolve any conflicts that appear, then push. Rebase early and often — the longer a topic branch stays out of sync, the bigger the conflicts get. (Optional convenience: `git config pull.rebase true` makes `git pull` rebase instead of creating merge commits.)
+
+### Case 1: topic branch from `main`, PR targeting `main`
+
+This is the most common case. If the PR reports merge conflicts, rebase your topic branch onto the current `main`:
+
+```sh
+git fetch origin
+git checkout my-topic-branch
+git rebase main
+# resolve conflicts, then:
+git add <resolved files>
+git rebase --continue
+git push --force-with-lease origin my-topic-branch
+```
+
+* `--force-with-lease` is the safe variant of force-push: it refuses to overwrite the remote branch if it has changed in the meantime. Only force-push your own topic branch — never `main` or release branches.
+* If the rebase gets messy, `git rebase --abort` restores the state from before the rebase.
+* Alternative: `git merge main` into the topic branch instead of rebasing. This avoids force-push but adds a merge commit. Rebase is the preferred approach here.
+
+### Case 2: work on a release branch (e.g. `2025.11`)
+
+1. Checkout the release branch, create a topic branch from it, push, and open a PR targeting the release branch.
+2. After the PR is merged, the CI pipeline automatically merges the change forward through each intermediate branch until it reaches `main`.
+
+This forward-merge can produce conflicts even if the topic branch itself had none, because the same files have diverged between the release branch and `main` independently of your change. This is especially common for the e2etests: `main` has moved on (new node packages, new helpers in the e2etest libs, switch to ES modules, ...), so the test files on both branches are only partly compatible.
+
+**Rules for e2etests in this situation:**
+
+* Do not change the e2etests on `main` unless the changes in the topic branch also fix the e2etests on `main`.
+* When resolving conflicts in test files, keep as much of the `main` version as possible (ES module syntax, new helpers, current package versions) and only port the functional test changes from the release branch.
+
+**Resolving the forward-merge conflict** (do not revive the deleted topic branch):
+
+1. Look at the failing pipeline job and note the two branches involved (e.g. `2025.11` and `main`).
+2. Fetch both branches.
+3. Create a new branch from the target branch (`main`) with a name that includes `merge` and the PR id, e.g. `merge-1234-2025.11-into-main`.
+4. Merge the originating branch (`2025.11`) into it.
+5. Resolve the conflicts (see the e2etest rules above).
+6. Push the branch and open a PR targeting `main`.
+
+### After resolving conflicts (all cases)
+
+* Re-run the tests that cover the code you touched (PHPUnit via the tine-dev console, Jest, ...).
+* In particular, verify that the e2etests pass locally. They are the most likely to fail in CI after a conflict resolution.
+
+### Other cases and tips
+
+* **Two open PRs touching the same files:** coordinate with the other author. Merge the first PR, then rebase the second one onto the updated `main`.
+* **Lock files** (`package-lock.json`, `composer.lock`): do not merge them by hand. Resolve the conflicts in `package.json` / `composer.json` first, then run `npm install` / `composer update` to regenerate the lock file.
+* **Generated files** (build output, language files): pick one side and regenerate. Never hand-edit `.po` translation files — they are managed via Transifex.
+* **Take one side wholesale:** `git checkout --ours <file>` / `git checkout --theirs <file>`. Watch out: during a *rebase*, "ours" is the branch you rebase onto (`main`) and "theirs" is your topic branch — the opposite of what most people expect. During a *merge*, "ours" is the branch you are currently on.
 
 ## Reporting Bugs
 
