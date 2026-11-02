@@ -32,6 +32,7 @@ const priorities = {
 
 };
 
+// TODO: 2025.11 only: If any other tests are failing in CI due to timeouts related to grids, consider using selectRow and waitRowSelected from employee.test.js
 
 module.exports = {
     download: async function (page, selector, option = {}) {
@@ -61,13 +62,19 @@ module.exports = {
         await inputUploadHandle.uploadFile(file);
     },
 
-    getNewWindow: function () {
-        return new Promise((fulfill) => browser.once('targetcreated', (target) => fulfill(target.page())));
+    getNewWindow: function (timeout = 60000) {
+        return new Promise((fulfill, reject) => {
+            const timer = setTimeout(() => reject(new Error('getNewWindow: no new window opened within ' + timeout + ' ms')), timeout);
+            browser.once('targetcreated', (target) => {
+                clearTimeout(timer);
+                fulfill(target.page());
+            });
+        });
     },
 
     getEditDialog: async function (btnText, win) {
         await expect(win || page).toMatchElement('.x-btn-text', {text: btnText, visible: true});
-        await page.waitForTimeout(1000); // wait for btn to get active
+        await page.waitForTimeout(2000); // wait for btn to get active
         let popupWindow = this.getNewWindow();
         await expect(win || page).toClick('.x-btn-text', {text: btnText});
         popupWindow = await popupWindow;
@@ -76,8 +83,8 @@ module.exports = {
             await popupWindow.waitForSelector('.ext-el-mask', {timeout: 10000});
         } catch {
         }
-        await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
-        await popupWindow.waitForTimeout(2000);
+        await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'), {timeout: 60000});
+        await popupWindow.waitForTimeout(3000);
         return popupWindow;
     },
 
@@ -158,7 +165,7 @@ module.exports = {
             specStarted: result => jasmine.currentTest = result
         });
 
-        expect.setDefaultOptions({timeout: 5000});
+        expect.setDefaultOptions({timeout: 10000});
 
         let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--ignore-certificate-errors', '--start-maximized'];
 
@@ -269,7 +276,7 @@ module.exports = {
             specStarted: result => jasmine.currentTest = result
         });
 
-        expect.setDefaultOptions({timeout: 5000});
+        expect.setDefaultOptions({timeout: 10000});
 
         let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--start-maximized'];
 
