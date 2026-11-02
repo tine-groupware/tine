@@ -81,15 +81,18 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
             }
 
             $server = new Tinebase_Http_Server();
-            if ($appPwd = Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class}) {
+            if (Tinebase_Session::isStarted() &&
+                $appPwd = Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class}
+            ) {
                 $server->setAllowList($appPwd->{Tinebase_Model_AppPassword::FLD_CHANNELS});
+            } else {
+                $appPwd = null;
             }
             $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
             $server->setClass('Filemanager_Frontend_Download', 'Download');
 
             // register additional HTTP apis only available for authorised users
             if (Tinebase_Session::isStarted() && ($appPwd || Zend_Auth::getInstance()->hasIdentity())) {
-
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.mainScreen';
 
@@ -123,7 +126,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                     $_REQUEST['method'] = 'Tinebase.login';
                 }
 
-                // sessionId got send by client, but we don't use sessions for non authenticated users
+                // sessionId got send by client, but we don't use sessions for non-authenticated users
                 if (Tinebase_Session::sessionExists()) {
                     // expire session cookie on client
                     //Tinebase_Session::expireSessionCookie();
