@@ -1,10 +1,10 @@
 /*
- * Tine 2.0
+ * tine Groupware
  *
  * @package     EventManager
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Tonia Wulff <t.wulff@metaways.de>
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -21,6 +21,7 @@ Tine.EventManager.OptionRelationEditDialog = Ext.extend(Tine.widgets.dialog.Edit
     recordClass: null,
     mode: 'local',
     evalGrants: false,
+    eventOptions: null,
 
     initComponent: function () {
         this.recordClass = Tine.Tinebase.data.RecordMgr.get('EventManager', 'Option');

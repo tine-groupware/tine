@@ -50,6 +50,16 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         this.setOptionConfigClassTypeListener();
     },
 
+    getEventOptions: function () {
+        const grid = this.form.openerCt;
+        const store = grid?.store ?? grid?.getStore?.();
+        if (!store) return [];
+        return store.getRange().map(r => ({
+            id: r.id,
+            name_option: r.get('name_option') || r.id
+        }));
+    },
+
     setOptionConfigClassTypeListener: function () {
         const typeField = this.form.findField('option_config_class');
         typeField.on('select', function () {
@@ -116,7 +126,10 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 triggerClass: 'action_edit',
                 qtip: this.app.i18n._('Edit Rules'),
                 onTriggerClick: () => {
-                    Tine.EventManager.OptionRelationEditDialog.openWindow({ record: this.record });
+                    Tine.EventManager.OptionRelationEditDialog.openWindow({
+                        record: this.record,
+                        eventOptions: this.getEventOptions(),
+                    });
                 }
             });
             field.plugins.push(triggerPlugin);
@@ -156,6 +169,7 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 onTriggerClick: () => {
                     Tine.EventManager.OptionRelationEditDialog.openWindow({
                         record: this.record,
+                        eventOptions: this.getEventOptions(),
                     });
                 }
             });
