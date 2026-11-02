@@ -166,7 +166,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 continue;
             }
             try {
-                $controller = Tinebase_Core::getApplicationInstance($model);
+                $controller = Tinebase_Core::getApplicationInstance($model, _ignoreACL: true);
             } catch (Tinebase_Exception_NotFound) {
                 continue;
             }
