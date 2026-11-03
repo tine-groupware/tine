@@ -556,6 +556,23 @@ input, button, select, optgroup, textarea {
     border-radius: 5px;
 }
 
+// see Tine.Tinebase.common.colorRenderer
+.tb-color-swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    vertical-align: middle;
+    // NOTE: don't increase line (grid row) height
+    margin: -2px 0;
+    // NOTE: inner ring to make colors similar to the background visible
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15);
+
+    .dark-mode & {
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3);
+    }
+}
+
 .x-grid3-cell-inner .tb-grid-tags {
     margin-top: 1px;
 }

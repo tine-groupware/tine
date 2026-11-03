@@ -654,9 +654,12 @@ const common = {
      */
     colorRenderer: function(color) {
         // normalize
-        color = String(color).replace('#', '');
+        color = String(color || '').replace('#', '');
+        if (! /^[0-9a-fA-F]{6}$/.test(color)) {
+            return '';
+        }
 
-        return '<div class="dark-reverse" style="background-color: #' + htmlEncode(color) + '">&#160;</div>';
+        return '<span class="tb-color-swatch dark-reverse" style="background-color: #' + color + '"></span>';
     },
 
     urlRenderer: function (url) {
