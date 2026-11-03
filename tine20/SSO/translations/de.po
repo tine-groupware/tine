@@ -140,7 +140,7 @@ msgid "Allow reassignment of existing local accounts"
 msgstr "Erlaube geänderte Zuweisung zu existierenden lokalen Konten"
 
 msgid "Allow creation of new local accounts"
-msgstr "Erlaube das SAnlegen von neuen lokalen Konten"
+msgstr "Erlaube das Anlegen von neuen lokalen Konten"
 
 msgid "Allow local login of assigned accounts"
 msgstr "Erlaube lokale Logins bei zugewiesenen Konten"
