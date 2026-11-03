@@ -2479,7 +2479,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             if (Tinebase_Core::isLogLevel(Tinebase_Log::INFO))
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' No tables given. Purging records from all tables.');
-            $tables = $this->_getAllApplicationTables();
+            $tables = $this->getAllApplicationTables();
         }
         $orderedTables = $this->_orderTables($tables);
         if (! $beforeDate) {
@@ -2589,7 +2589,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @return array
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _getAllApplicationTables(): array
+    public function getAllApplicationTables(): array
     {
         $result = array();
 
