@@ -19,4 +19,26 @@ describe('common functions', () => {
         })
     })
 
+    describe('colorRenderer', () => {
+        it('renders a color swatch', () => {
+            const swatch = '<span class="tb-color-swatch dark-reverse" style="background-color: #FF6600"></span>'
+            expect(common.colorRenderer('#FF6600')).toEqual(swatch)
+            expect(common.colorRenderer('FF6600')).toEqual(swatch)
+        })
+
+        it('renders nothing for empty colors', () => {
+            expect(common.colorRenderer(null)).toEqual('')
+            expect(common.colorRenderer(undefined)).toEqual('')
+            expect(common.colorRenderer('')).toEqual('')
+            expect(common.colorRenderer('#null')).toEqual('')
+        })
+
+        it('renders nothing for invalid colors', () => {
+            expect(common.colorRenderer('"><img src=x onerror=alert(1)>')).toEqual('')
+            expect(common.colorRenderer('FF66')).toEqual('')
+            expect(common.colorRenderer('GGGGGG')).toEqual('')
+            expect(common.colorRenderer('FF6600; background-image: url(x)')).toEqual('')
+        })
+    })
+
 })

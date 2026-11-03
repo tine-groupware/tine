@@ -12,6 +12,7 @@
 
 const { isObject, isArray, map, isString, get, escapeRegExp, each, find, compact, cloneDeep } = require('lodash')
 const { htmlEncode, htmlDecode, date: dateFormat, number, round, capitalize} = require('Ext/util/Format')
+const { normalizeColor } = require('./util/colors')
 const { parse, parsePurified, parseInline, parseInlinePurified } = require('util/markdown')
 
 /**
@@ -653,9 +654,8 @@ const common = {
      * @param color
      */
     colorRenderer: function(color) {
-        // normalize
-        color = String(color || '').replace('#', '');
-        if (! /^[0-9a-fA-F]{6}$/.test(color)) {
+        color = normalizeColor(color);
+        if (! color) {
             return '';
         }
 

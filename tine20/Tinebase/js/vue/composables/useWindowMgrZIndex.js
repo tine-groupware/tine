@@ -5,7 +5,7 @@
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-import { onUnmounted, ref } from 'vue'
+import { getCurrentInstance, onUnmounted, ref } from 'vue'
 
 let seq = 0
 
@@ -17,8 +17,9 @@ let seq = 0
  *
  * @param {object} options
  * @param {function} [options.hide] hides the element (e.g. Ext.WindowMgr.hideAll)
+ * @param {object} [options.windowMgr] defaults to Ext.WindowMgr
  */
-export const useWindowMgrZIndex = ({ hide = () => {} } = {}) => {
+export const useWindowMgrZIndex = ({ hide = () => {}, windowMgr = Ext.WindowMgr } = {}) => {
   const zIndex = ref()
 
   const winMgrProxy = {
@@ -34,8 +35,8 @@ export const useWindowMgrZIndex = ({ hide = () => {} } = {}) => {
   }
 
   const register = () => {
-    Ext.WindowMgr.register(winMgrProxy)
-    Ext.WindowMgr.bringToFront(winMgrProxy)
+    windowMgr.register(winMgrProxy)
+    windowMgr.bringToFront(winMgrProxy)
   }
 
   const unregister = () => {
@@ -44,7 +45,9 @@ export const useWindowMgrZIndex = ({ hide = () => {} } = {}) => {
     }
   }
 
-  onUnmounted(unregister)
+  if (getCurrentInstance()) {
+    onUnmounted(unregister)
+  }
 
   return { zIndex, register, unregister }
 }

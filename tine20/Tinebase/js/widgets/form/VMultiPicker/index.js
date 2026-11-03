@@ -7,6 +7,7 @@
  */
 import { createBootstrap } from "bootstrap-vue-next";
 import RecordsDisplayContainer from "./RecordsDisplayContainer.vue";
+import { createColorSchemaResolver } from "./colorSchemaResolver";
 import * as async from 'async'
 Ext.ns('Tine.Tinebase.widgets.form')
 
@@ -71,13 +72,10 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         }
 
         // NOTE: tags are colored by the color property of the (mapped) record
-        this.colorSchemaResolver = this.colorSchemaResolver || (mr => {
-            let record = mr
-            if (this.isMetadataModelFor) {
-                const data = mr.get(this.isMetadataModelFor)
-                record = !data || data.get ? data : Tine.Tinebase.data.Record.setFromJson(data, this.mappingRecordClass)
-            }
-            return Tine.Tinebase.colorMgr.getRecordSchema(record)
+        this.colorSchemaResolver = this.colorSchemaResolver || createColorSchemaResolver({
+            isMetadataModelFor: this.isMetadataModelFor,
+            toRecord: data => Tine.Tinebase.data.Record.setFromJson(data, this.mappingRecordClass),
+            getRecordSchema: record => Tine.Tinebase.colorMgr.getRecordSchema(record)
         })
 
         const { reactive } = window.vue
