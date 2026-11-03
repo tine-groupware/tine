@@ -5,6 +5,8 @@ beforeAll(async () => {
     await lib.getBrowser('Human Resources');
 });
 
+const popupCloseOptions = {closeTimeout: lib.getEnvInt('TEST_TIMEOUT_POPUP_CLOSE') * 4};
+
 describe('employee', () => {
     describe('employee grid', () => {
         test('show grid', async () => {
@@ -84,8 +86,7 @@ describe('employee', () => {
                 
                 test('vacation is saved', async () => {
                     // Saving vacation takes very long, so give it some more time.
-                    const closeOptions = {closeTimeout: lib.getEnvInt('TEST_TIMEOUT_POPUP_CLOSE') * 2};
-                    await lib.clickOnElementWaitPageClosed(freetimeEditDialog, '.x-toolbar-right-row button', 'Ok', closeOptions);
+                    await lib.clickOnElementWaitPageClosed(freetimeEditDialog, '.x-toolbar-right-row button', 'Ok', popupCloseOptions);
 
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
@@ -119,7 +120,7 @@ describe('employee', () => {
                     await expectPuppeteer(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > a > em > span');
                     await expectPuppeteer(freetimeEditDialog).toFill('textarea[name=description]', testString + ' update');
 
-                    await lib.clickOnElementWaitPageClosed(freetimeEditDialog, '.x-toolbar-right-row button', 'Ok');
+                    await lib.clickOnElementWaitPageClosed(freetimeEditDialog, '.x-toolbar-right-row button', 'Ok', popupCloseOptions);
 
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
@@ -195,7 +196,7 @@ describe('employee', () => {
                 });
                 
                 test('sickness is saved', async () => {
-                    await lib.clickOnElementWaitPageClosed(freetimeEditDialog, '.x-toolbar-right-row button', 'Ok');
+                    await lib.clickOnElementWaitPageClosed(freetimeEditDialog, '.x-toolbar-right-row button', 'Ok', popupCloseOptions);
 
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled');
@@ -257,7 +258,7 @@ describe('employee', () => {
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
 
                     await expectPuppeteer(employeeEditDialog).not.toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-grid3-cell-inner.x-grid3-col-type', {text: '[U] Urlaub'});
-                    await lib.clickOnElementWaitPageClosed(employeeEditDialog, 'button', 'Ok');
+                    await lib.clickOnElementWaitPageClosed(employeeEditDialog, 'button', 'Ok', popupCloseOptions);
                 });
             });
         });
@@ -348,7 +349,7 @@ describe('employee', () => {
             await new Promise(r => setTimeout(r, 1000));
             await expectPuppeteer(contractEditDialog).toClick('button', {text: 'Ok'});
             await new Promise(r => setTimeout(r, 2000));
-            await lib.clickOnElementWaitPageClosed(employeeEditDialog, 'button', 'Ok');
+            await lib.clickOnElementWaitPageClosed(employeeEditDialog, 'button', 'Ok', popupCloseOptions);
         }, 180000);
 
         test('check contract', async () => {
@@ -385,7 +386,7 @@ describe('employee', () => {
                 .toEqual(' Wenn 06:00 Arbeitszeit überschritten sind, werden 01:00 Pausenzeit automatisch abgezogen. (Pausenzeit)');
             expect(await contractEditDialog.evaluate(() => document.querySelector('.x-grid3-body div:nth-child(2) .x-grid3-col-configRecord').textContent))
                 .toEqual(' Die Arbeitszeit wird von 06:00 bis 20:00 ausgewertet. (Arbeitszeitlimitierung)');
-            await lib.clickOnElementWaitPageClosed(contractEditDialog, 'button.x-btn-text', 'Abbrechen');
+            await lib.clickOnElementWaitPageClosed(contractEditDialog, 'button.x-btn-text', 'Abbrechen', popupCloseOptions);
         }, 180000);
 
         test('delete contract via context menu', async () => {
@@ -411,8 +412,8 @@ describe('employee', () => {
             await expectPuppeteer(employeeEditDialog).toClick('.modal.vue-message-box.show button.yes-button');
             // Wait for confirm dialog to be gone.
             await employeeEditDialog.waitForSelector('.modal.vue-message-box:not(.show)');
-            // Save and wait until the action is completed.
-            await lib.clickOnElementWaitPageClosed(employeeEditDialog, 'button', 'Ok');
+            // Save and wait until the action is completed (give it some extra time so CI doesn't complain).
+            await lib.clickOnElementWaitPageClosed(employeeEditDialog, 'button', 'Ok', popupCloseOptions);
         }, 180000);
     });
 });
