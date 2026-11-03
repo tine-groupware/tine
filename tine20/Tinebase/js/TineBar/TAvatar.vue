@@ -10,8 +10,13 @@
 <template>
   <b-button class="account-btn" variant="primary" tabindex="0" :aria-label="window.i18n._('User settings')">
   <div class="account-user-avatar">
-    <img v-if='imgSrc' class="account-user-avatar__image" :src='imgSrc'>
-    <div v-else class="account-user-avatar__image_alt text-center d-flex align-items-center justify-content-center">
+    <img v-if='imgSrc' class="account-user-avatar__image" :src='imgSrc' :style="imageStyle">
+    <div
+      v-else
+      class="account-user-avatar__image_alt text-center d-flex align-items-center justify-content-center"
+      :class="{ 'account-user-avatar__image_alt--colored': colorSchema }"
+      :style="colorSchema ? { backgroundColor: colorSchema.color, color: colorSchema.text } : null"
+    >
       <span>{{getAbbreviatedName()}}</span>
     </div>
   </div>
@@ -19,9 +24,12 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 
 const imgSrc = ref(null)
+const colorSchema = ref(null)
+// NOTE: like in addressbook, images get a border in contact color
+const imageStyle = computed(() => colorSchema.value ? { border: `2px solid ${colorSchema.value.color}` } : null)
 const currentAccount = Tine.Tinebase.registry.get('currentAccount')
 const getAbbreviatedName = () => {
   const t = currentAccount.accountFirstName
@@ -33,6 +41,9 @@ const getAbbreviatedName = () => {
 onBeforeMount(async () => {
   try {
     const contact = await Tine.Addressbook.getContact(currentAccount.contact_id)
+    if (contact.color) {
+      colorSchema.value = Tine.Tinebase.colorMgr.getSchema(contact.color)
+    }
     if (contact.jpegphoto.startsWith('index.php')) {
       const t = await fetch(contact.jpegphoto).then((response) => response.blob())
       imgSrc.value = URL.createObjectURL(t)
@@ -68,6 +79,7 @@ onBeforeMount(async () => {
     width: 100%;
     height: 100%;
     border-radius: 50%;
+    box-sizing: border-box;
   }
 
   .dark-mode &__image{
@@ -81,6 +93,11 @@ onBeforeMount(async () => {
     border-radius: 50%;
     font-size: 13px;
     font-weight: bold;
+  }
+
+  // NOTE: show contact color in dark mode as is (like images)
+  .dark-mode &__image_alt--colored{
+    filter: invert(1) hue-rotate(180deg);
   }
 }
 </style>
