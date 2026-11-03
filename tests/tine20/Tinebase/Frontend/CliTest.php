@@ -123,6 +123,14 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertStringContainsString('[updatecount] => 2', $result);
     }
 
+    public function testPurgeDeletedRecordsAddressbookDataRetention()
+    {
+        $deletedRecord = $this->_addAndDeleteContact();
+        $contactBackend = new Addressbook_Backend_Sql();
+        $deletedRecord = $contactBackend->get($deletedRecord->getId(), true);
+        $this->assertSame($deletedRecord->deleted_time->subMonth(Tinebase_Config::getInstance()->{Tinebase_Config::DELETED_DATA_RETENTION_TIME})->format('Y-m-d'), $deletedRecord->purge_date->format('Y-m-d'));
+    }
+
     /**
      * test purge deleted records
      */
@@ -130,6 +138,11 @@ class Tinebase_Frontend_CliTest extends TestCase
     {
         $this->_testNeedsTransaction();
         $opts = $this->_getOpts('addressbook');
+
+        $oldDataRetention = Tinebase_Config::getInstance()->{Tinebase_Config::DELETED_DATA_RETENTION_TIME};
+        $dataRetentionRAII = new Tinebase_RAII(fn() => Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::DELETED_DATA_RETENTION_TIME, $oldDataRetention));
+        Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::DELETED_DATA_RETENTION_TIME, 0);
+
         $deletedRecord = $this->_addAndDeleteContact();
 
         $result = $this->_cli->purgeDeletedRecords($opts);
@@ -150,6 +163,9 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->_testNeedsTransaction();
 
         $opts = $this->_getOpts();
+        $oldDataRetention = Tinebase_Config::getInstance()->{Tinebase_Config::DELETED_DATA_RETENTION_TIME};
+        $dataRetentionRAII = new Tinebase_RAII(fn() => Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::DELETED_DATA_RETENTION_TIME, $oldDataRetention));
+        Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::DELETED_DATA_RETENTION_TIME, 0);
         if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
             $deletedFile = $this->_addAndDeleteFile();
             static::assertSame(1, Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getMultipleByProperty(

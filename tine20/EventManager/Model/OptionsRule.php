@@ -23,6 +23,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 class EventManager_Model_OptionsRule extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'OptionsRule';
+    public const FLD_OPTION_ID = 'option_id';
     public const FLD_REF_OPTION_FIELD = 'ref_option_field';
     public const FLD_CRITERIA = 'criteria';
     public const FLD_VALUE = 'value';
@@ -49,6 +50,15 @@ class EventManager_Model_OptionsRule extends Tinebase_Record_NewAbstract
         ],
 
         self::FIELDS => [
+            self::FLD_OPTION_ID         => [
+                self::TYPE                  => self::TYPE_RECORD,
+                self::DISABLED              => true,
+                self::CONFIG                => [
+                    self::APP_NAME              => EventManager_Config::APP_NAME,
+                    self::MODEL_NAME            => EventManager_Model_Event::MODEL_NAME_PART,
+                ],
+                self::NULLABLE              => true,
+            ],
             self::FLD_REF_OPTION_FIELD      => [
                 self::LABEL                     => 'Event Option', // _('Event Option')
                 self::TYPE                      => self::TYPE_RECORD,
@@ -61,7 +71,6 @@ class EventManager_Model_OptionsRule extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
-                self::QUERY_FILTER              => true,
                 self::NAME                      => EventManager_Model_Option::FLD_NAME_OPTION,
                 self::NULLABLE                  => true,
             ],

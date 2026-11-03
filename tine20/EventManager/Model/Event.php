@@ -114,7 +114,13 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     ],
                 ],
                 self::FLD_OPTIONS => [
-                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [],
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        EventManager_Model_Option::FLD_OPTION_RULE => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                EventManager_Model_OptionsRule::FLD_REF_OPTION_FIELD => [],
+                            ],
+                        ],
+                    ],
                 ],
                 self::FLD_APPOINTMENTS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [],

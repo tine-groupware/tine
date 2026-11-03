@@ -625,8 +625,8 @@ class EventManager_ControllerTest extends TestCase
             'registrations'                 => [],
             'appointments'                  => [],
             'description'                   => [[
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
-                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'description test phpunit event'
+                EventManager_Model_EventLocalization::FLD_LANGUAGE => 'de',
+                EventManager_Model_EventLocalization::FLD_TEXT => 'description test phpunit event'
             ]],
             'is_live'                       => true,
             'registraion_possible_until'    => new Tinebase_DateTime("2025-05-27"),
