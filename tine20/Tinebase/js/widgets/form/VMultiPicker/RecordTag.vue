@@ -17,6 +17,7 @@ import { useWindowMgrZIndex } from '../../../vue/composables/useWindowMgrZIndex'
 const props = defineProps({
   record: Object,
   title: { type: String, default: '' },
+  colorSchema: { type: Object, default: null },
   maxWidth: { type: Number, default: undefined },
   wrap: { type: Boolean, default: false },
   id: { type: String, required: true },
@@ -31,6 +32,18 @@ const { width: titleWidth } = useElementSize(titleRef)
 
 const { zIndex, register, unregister } = useWindowMgrZIndex()
 
+// NOTE: colored tags are shown in their real colors in dark mode too (dark-reverse)
+const colorStyle = computed(() => {
+  return props.colorSchema ? { backgroundColor: props.colorSchema.color, color: props.colorSchema.text } : null
+})
+
+const tagStyle = computed(() => {
+  return {
+    ...colorStyle.value,
+    ...(props.maxWidth !== undefined ? { maxWidth: `${props.maxWidth}px` } : {})
+  }
+})
+
 const isTruncated = computed(() => {
   // NOTE: title is accessed to recompute on title changes
   return !!props.title && titleWidth.value > 0 && titleRef.value.scrollWidth > titleRef.value.clientWidth
@@ -41,8 +54,8 @@ const isTruncated = computed(() => {
 <template>
   <div
     class="record d-flex"
-    :class="{ 'flex-shrink-1': wrap }"
-    :style="maxWidth !== undefined ? { maxWidth: `${maxWidth}px` } : null"
+    :class="{ 'flex-shrink-1': wrap, 'dark-reverse': colorStyle }"
+    :style="tagStyle"
     @click.stop
     :id="`${id}-record-div`"
   >
@@ -63,7 +76,7 @@ const isTruncated = computed(() => {
       @show="register"
       @hidden="unregister"
     >
-      <div class="record d-flex" @click.stop>
+      <div class="record d-flex" :class="{ 'dark-reverse': colorStyle }" :style="colorStyle" @click.stop>
         <div class="flex-grow-1">{{title}}&nbsp;&nbsp;</div>
       </div>
     </BPopover>
@@ -85,7 +98,7 @@ const isTruncated = computed(() => {
   flex-shrink: 0;
   min-width: 0;
 
-  .dark-mode & {
+  .dark-mode &:not(.dark-reverse) {
     color: black;
   }
 }
@@ -101,15 +114,11 @@ const isTruncated = computed(() => {
 
 .tabler-icons-cross {
   flex-shrink: 0;
-  background-image: url(../../../node_modules/@tabler/icons/icons/outline/x.svg) !important;
+  // NOTE: icon is a mask so it has the text color
+  background-color: currentColor;
+  mask: url(../../../node_modules/@tabler/icons/icons/outline/x.svg) center / 13px 13px no-repeat;
   width: 15px;
   height: 15px;
-  background-repeat: no-repeat;
-  background-size: 13px 13px;
-  background-position: center !important;
-  &:not(.dark-mode *) {
-    filter: invert(1) hue-rotate(180deg);
-  }
 }
 
 </style>

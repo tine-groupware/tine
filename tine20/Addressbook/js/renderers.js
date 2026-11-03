@@ -174,7 +174,7 @@ const avatarRenderer = function(n_short, metadata, record) {
         }
     }
 
-    const colorSchema = Tine.Calendar.colorMgr.getSchema(record && record.get('color') ? record.get('color') : Tine.Calendar.ColorManager.stringToColour(shortName).substring(1,6));
+    const colorSchema = Tine.Tinebase.colorMgr.getSchema(record && record.get('color') ? record.get('color') : Tine.Tinebase.ColorManager.stringToColour(shortName).substring(1,6));
     return shortName ? `<span class="adb-avatar-wrap" ext:qtip="${fullName}" style="background-color: ${colorSchema.color}; color: ${colorSchema.text}">${shortName}</span>` : '';
 }
 

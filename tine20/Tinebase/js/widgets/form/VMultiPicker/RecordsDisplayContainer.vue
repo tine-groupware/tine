@@ -22,6 +22,7 @@
             :id="record.getId()"
             :record="record"
             :title="titles[record.getId()]"
+            :color-schema="colorSchemaResolver?.(record)"
             :max-width="tagMaxWidth"
             :show-popover="true"
             :readOnly="readOnly"
@@ -63,6 +64,7 @@
             :id="record.getId()"
             :record="record"
             :title="titles[record.getId()]"
+            :color-schema="colorSchemaResolver?.(record)"
             :wrap="true"
             @remove="removeRecord(record.getId())"
           />
@@ -83,6 +85,7 @@ import { useWindowMgrZIndex } from '../../../vue/composables/useWindowMgrZIndex'
 const props = defineProps({
   records: Object,
   recordRenderer: Function,
+  colorSchemaResolver: Function,
   injectKey: String,
   emptyText: String,
   readOnly: Boolean,
@@ -282,17 +285,16 @@ const triggerCombo = () => {
   cursor: pointer;
 }
 
-.tabler-icons-dots {
-  background-image: url(../../../node_modules/@tabler/icons/icons/outline/dots.svg) !important;
-  width: 15px;
-  height: 15px;
-  background-repeat: no-repeat;
-  background-size: 13px 13px;
-  background-position: center !important;
+.dark-mode .record {
+  color: black;
 }
 
-.tabler-icons-dots:not(.dark-mode *) {
-  filter: invert(1) hue-rotate(180deg);
+/* NOTE: icon is a mask so it has the text color */
+.tabler-icons-dots {
+  background-color: currentColor;
+  mask: url(../../../node_modules/@tabler/icons/icons/outline/dots.svg) center / 13px 13px no-repeat;
+  width: 15px;
+  height: 15px;
 }
 
 #ellipsis-show-more {
