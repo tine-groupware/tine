@@ -14,8 +14,11 @@ let seq = 0
  * so it's shown above Ext windows
  *
  * call register when the element gets shown and unregister when it got hidden
+ *
+ * @param {object} options
+ * @param {function} [options.hide] hides the element (e.g. Ext.WindowMgr.hideAll)
  */
-export const useWindowMgrZIndex = () => {
+export const useWindowMgrZIndex = ({ hide = () => {} } = {}) => {
   const zIndex = ref()
 
   const winMgrProxy = {
@@ -24,6 +27,8 @@ export const useWindowMgrZIndex = () => {
       zIndex.value = index
     },
     setActive: () => {},
+    isVisible: () => !!winMgrProxy.manager,
+    hide,
     on: () => {},
     un: () => {}
   }

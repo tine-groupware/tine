@@ -38,10 +38,11 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
 import { offset as floatingOffset, shift, size, hide as hideFloatMiddleWare } from '@floating-ui/vue'
 import { onClickOutside } from '@vueuse/core'
 import { createFocusTrap } from 'focus-trap'
+import { useWindowMgrZIndex } from '../composables/useWindowMgrZIndex'
 
 const props = defineProps({
   target: {},
@@ -85,10 +86,6 @@ const _floatingMiddleware = computed(() => {
   return arr
 })
 
-const zIndex = ref()
-const setZIndex = (index) => {
-  zIndex.value = index
-}
 let returnFocusTimer = null
 const clearReturnFocusTimer = () => {
   if (returnFocusTimer) {
@@ -103,7 +100,10 @@ const hide = (e) => {
   emits('hide', e)
 }
 
+const { zIndex, register, unregister } = useWindowMgrZIndex({ hide })
+
 const handleAfterHide = () => {
+  unregister()
   deactivateTrap()
   clearReturnFocusTimer()
 
@@ -181,23 +181,6 @@ const deactivateTrap = () => {
 onClickOutside(menu, hide, {
   ignore: [`#${props.target}`]
 })
-const winMgrProxy = {
-  eventManager: window.mitt(),
-  setZIndex,
-  on: (ev, handler) => {
-    winMgrProxy.eventManager.on(ev, handler)
-  },
-  un: (ev, handler) => {
-    winMgrProxy.eventManager.off(ev, handler)
-  },
-  isVisible: () => {
-    return props.visible
-  },
-  hide,
-  setActive: () => {},
-  id: 'tmenu-window-proxy'
-}
-
 const handleMenuNavigation = (event) => {
   if (!menu.value) return
 
@@ -228,21 +211,19 @@ watch(() => props.visible, (newVal) => {
   _visible.value = newVal
   if (newVal) {
     clearReturnFocusTimer()
-    Ext.WindowMgr.bringToFront(winMgrProxy)
+    register()
   } else {
     clearReturnFocusTimer()
     deactivateTrap()
+    unregister()
   }
 }, { immediate: true })
 
 const emits = defineEmits(['hide'])
 
-onMounted(() => Ext.WindowMgr.register(winMgrProxy))
-
 onUnmounted(() => {
   clearReturnFocusTimer()
   deactivateTrap()
-  Ext.WindowMgr.unregister(winMgrProxy)
 })
 
 </script>
