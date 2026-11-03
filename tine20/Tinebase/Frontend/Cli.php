@@ -468,6 +468,25 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         return TRUE;
     }
+
+    public function fixPurgeDate(): int
+    {
+        $this->_checkAdminRight();
+
+        $dataRetention = (int)Tinebase_Config::getInstance()->{Tinebase_Config::DELETED_DATA_RETENTION_TIME};
+        if ($dataRetention < 1) { $dataRetention = 12; }
+        $db = Tinebase_Core::getDb();
+        $setupMysql = new Setup_Backend_Mysql();
+        foreach (Tinebase_Controller::getInstance()->getAllApplicationTables() as $table) {
+            if ($setupMysql->columnExists(Tinebase_ModelConfiguration_Const::FLD_PURGE_DATE, $table)) {
+                $db->update(SQL_TABLE_PREFIX . $table, [
+                    Tinebase_ModelConfiguration_Const::FLD_PURGE_DATE => new Zend_Db_Expr('DATE_SUB(DATE(deleted_time), INTERVAL ' . $dataRetention . ' MONTH)')
+                ], 'purge_date IS NOT NULL AND deleted_time IS NOT NULL AND deleted_time <> "1970-01-01 00:00:00"');
+            }
+        }
+
+        return 0;
+    }
     
     /**
      * purge deleted records
