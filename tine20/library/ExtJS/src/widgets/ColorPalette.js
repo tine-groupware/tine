@@ -204,7 +204,7 @@ cp.colors = ['000000', '993300', '333300'];
             this.value = color;
             this.fireEvent('select', this, color);
 
-            let values = Tine.Calendar.ColorManager.str2dec(color)
+            let values = Tine.Tinebase.ColorManager.str2dec(color)
             // weights of color values see: https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color
             let Y = 0.299 * values[0] + 0.587 * values[1] + 0.114 * values[2];
             let textColor = Y > 128 ? '000000' : 'FFFFFF';

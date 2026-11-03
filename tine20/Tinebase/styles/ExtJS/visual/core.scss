@@ -32,21 +32,21 @@
     background-color: #aaa;
 }
 
-.x-color-palette a {
-    border-color:#fff;
+// NOTE: inner ring to make colors similar to the background visible
+.x-color-palette em span {
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .15);
+    color: #495057;
 }
 
-.x-color-palette a:hover, .x-color-palette a.x-color-palette-sel {
-    border-color:#8bb8f3;
-    background-color: #deecfd;
+.x-color-palette a.x-color-palette-sel {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--bs-primary, #0d6efd);
 }
 
-.x-color-palette em:hover, .x-color-palette span:hover{
-    background-color: #deecfd;
-}
-
-.x-color-palette em {
-    border-color:#aca899;
+// color picker (+) shows the selected custom color or a color wheel
+.x-color-palette a.color-picker:not(.x-color-palette-sel) span {
+    background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red) !important;
+    color: #fff;
+    text-shadow: 0 0 2px rgba(0, 0, 0, .6);
 }
 
 .x-ie-shadow {

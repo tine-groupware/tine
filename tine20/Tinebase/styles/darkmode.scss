@@ -59,8 +59,12 @@ body.dark-mode {
     background-color: rgb(33, 37, 41);
   }
 
-  .x-color-palette a {
-    border-color: initial;
+  // NOTE: palette is dark-reverse'd
+  .x-color-palette em span {
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3);
+  }
+  .x-color-palette a.x-color-palette-sel {
+    box-shadow: 0 0 0 2px #000, 0 0 0 4px #4d94ff;
   }
 
   .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top,

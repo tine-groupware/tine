@@ -143,6 +143,20 @@
     background-color: #fff !important;
 }
 
+// bootstrap dropdown look
+.x-menu.x-color-menu {
+    padding: 4px;
+    border: 1px solid rgba(0, 0, 0, .175);
+    border-radius: .5rem;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+
+    .x-menu-list {
+        padding: 0;
+        border: none;
+        background: none;
+    }
+}
+
 .x-menu .x-date-picker{
     border-color:#a3bad9;
 }
