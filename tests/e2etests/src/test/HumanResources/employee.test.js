@@ -41,7 +41,7 @@ describe('employee', () => {
                         await freetimeEditDialog.waitForFunction(() => document.querySelector('.ext-el-mask-msg.x-mask-loading div').textContent === 'Übertrage Abwesenheit...');
                     } catch {}
 
-                    await freetimeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading div'));
+                    await freetimeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading div'), {timeout: 30000});
                     await expectPuppeteer(freetimeEditDialog).toFill('textarea[name=description]', testString);
 
                     const inputValue = await freetimeEditDialog.evaluate(() => document.querySelector('input[name=employee_id]').value);
@@ -83,7 +83,7 @@ describe('employee', () => {
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'), {timeout: 30000});
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
 
                     await employeeEditDialog.waitForTimeout(1000);
@@ -101,7 +101,7 @@ describe('employee', () => {
                     try {
                         await freetimeEditDialog.waitForFunction(() => document.querySelector('.ext-el-mask-msg.x-mask-loading div').textContent === 'Übertrage Abwesenheit...');
                     } catch {}
-                    await freetimeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading div'));
+                    await freetimeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading div'), {timeout: 30000});
                     await freetimeEditDialog.waitForSelector('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(4).x-date-selected');
                 });
 
@@ -116,13 +116,13 @@ describe('employee', () => {
 
                     try {
                         await freetimeEditDialog.waitForSelector('.ext-el-mask', {timeout: 5000});
-                        await freetimeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask'));
+                        await freetimeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask'), {timeout: 30000});
                     } catch {}
 
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'), {timeout: 30000});
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
 
 
@@ -149,7 +149,7 @@ describe('employee', () => {
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'), {timeout: 30000});
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await employeeEditDialog.waitForTimeout(2000);
                     await expectPuppeteer(employeeEditDialog).not.toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-grid3-col-type', {text: '[U] Urlaub'});
@@ -197,13 +197,13 @@ describe('employee', () => {
 
                     try {
                         await freetimeEditDialog.waitForSelector('.ext-el-mask', {timeout: 5000});
-                        await freetimeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask'));
+                        await freetimeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask'), {timeout: 30000});
                     } catch {}
 
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled');
-                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'), {timeout: 30000});
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled');
 
                     await employeeEditDialog.waitForTimeout(5000);
@@ -234,7 +234,7 @@ describe('employee', () => {
                     await employeeEditDialog.waitForTimeout(2000);
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled', {timeout: 10000});
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'), {timeout: 30000});
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await employeeEditDialog.waitForTimeout(2000);
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-grid3-cell-inner.x-grid3-col-type', {text: '[U] Urlaub'});
@@ -256,7 +256,7 @@ describe('employee', () => {
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'));
+                    await employeeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading'), {timeout: 30000});
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
 
                     await expectPuppeteer(employeeEditDialog).not.toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-grid3-cell-inner.x-grid3-col-type', {text: '[U] Urlaub'});
