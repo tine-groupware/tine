@@ -180,7 +180,7 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                     self::APP_NAME              => EventManager_Config::APP_NAME,
                     self::MODEL_NAME            => EventManager_Model_OptionsRule::MODEL_NAME_PART,
                     self::DEPENDENT_RECORDS     => true,
-                    self::REF_ID_FIELD          => EventManager_Model_OptionsRule::FLD_REF_OPTION_FIELD,
+                    self::REF_ID_FIELD          => EventManager_Model_OptionsRule::FLD_OPTION_ID,
                     self::STORAGE               => self::TYPE_JSON,
                 ],
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
