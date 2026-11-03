@@ -7,6 +7,7 @@
  */
 import { createBootstrap } from "bootstrap-vue-next";
 import RecordsDisplayContainer from "./RecordsDisplayContainer.vue";
+import { createColorSchemaResolver } from "./colorSchemaResolver";
 import * as async from 'async'
 Ext.ns('Tine.Tinebase.widgets.form')
 
@@ -26,6 +27,12 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
     records: null,
 
     recordRenderer: null,
+
+    /**
+     * @cfg {Function} colorSchemaResolver
+     * returns colorset ({color, text, ...} see Tine.Tinebase.ColorManager) or null for given record
+     */
+    colorSchemaResolver: null,
 
     /**
      * Number of lines the box can grow to be.
@@ -64,6 +71,13 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
 
         }
 
+        // NOTE: tags are colored by the color property of the (mapped) record
+        this.colorSchemaResolver = this.colorSchemaResolver || createColorSchemaResolver({
+            isMetadataModelFor: this.isMetadataModelFor,
+            toRecord: data => Tine.Tinebase.data.Record.setFromJson(data, this.mappingRecordClass),
+            getRecordSchema: record => Tine.Tinebase.colorMgr.getRecordSchema(record)
+        })
+
         const { reactive } = window.vue
         this.vueEventBus = window.mitt()
         this.injectKey = 'injectKey'+this.id
@@ -72,6 +86,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             records: this.records,
             emptyText: this.emptyText,
             recordRenderer: this.recordRenderer,
+            colorSchemaResolver: this.colorSchemaResolver,
             multiLine: this.multiLine,
             readOnly: this.readOnly,
         })

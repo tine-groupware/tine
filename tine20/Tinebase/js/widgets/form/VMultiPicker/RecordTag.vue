@@ -9,74 +9,74 @@
 -->
 
 <script setup>
-import { computed, onBeforeMount, ref, inject } from 'vue'
+import { computed, ref } from 'vue'
 import { useElementSize } from '@vueuse/core'
 import { BPopover } from 'bootstrap-vue-next'
+import { useWindowMgrZIndex } from '../../../vue/composables/useWindowMgrZIndex'
 
 const props = defineProps({
   record: Object,
-  truncate: { type: Boolean, default: false },
-  maxDisplayLength: { type: Number, default: 30 },
-  minDisplayLength: { type: Number, default: 10 },
+  title: { type: String, default: '' },
+  colorSchema: { type: Object, default: null },
+  maxWidth: { type: Number, default: undefined },
+  wrap: { type: Boolean, default: false },
   id: { type: String, required: true },
   showPopover: { type: Boolean, default: false },
   readOnly: { type: Boolean, default: false }
 })
 
-const recordRenderer = inject('recordRenderer')
-
 const emits = defineEmits(['remove'])
 
-const displayTitle = computed(() => {
-  const t = title.value || ''
-  return props.truncate
-    ? t?.length <= props.minDisplayLength ? t : t.substring(0, props.minDisplayLength).trim()
-    : t?.length <= props.maxDisplayLength ? t : t.substring(0, props.maxDisplayLength).trim()
+const titleRef = ref()
+const { width: titleWidth } = useElementSize(titleRef)
+
+const { zIndex, register, unregister } = useWindowMgrZIndex()
+
+// NOTE: colored tags are shown in their real colors in dark mode too (dark-reverse)
+const colorStyle = computed(() => {
+  return props.colorSchema ? { backgroundColor: props.colorSchema.color, color: props.colorSchema.text } : null
 })
 
-const title = ref('')
-
-onBeforeMount(async () => {
-  let t = props.record ? (recordRenderer ? recordRenderer(props.record, {}) : props.record.getTitle()) : ''
-  if (t && typeof t !== 'string') t = await t.asString()
-  title.value = t
+const tagStyle = computed(() => {
+  return {
+    ...colorStyle.value,
+    ...(props.maxWidth !== undefined ? { maxWidth: `${props.maxWidth}px` } : {})
+  }
 })
 
-const containerRef = ref()
-
-const { width, height } = useElementSize(containerRef)
-
-const titleLength = computed(() => {
-  return title.value.length !== 0 ? Math.min(title.value.length, props.maxDisplayLength) : props.maxDisplayLength
-})
-
-defineExpose({
-  width, height, titleLength
+const isTruncated = computed(() => {
+  // NOTE: title is accessed to recompute on title changes
+  return !!props.title && titleWidth.value > 0 && titleRef.value.scrollWidth > titleRef.value.clientWidth
 })
 
 </script>
 
 <template>
-  <div ref="containerRef" class="record d-flex" @click.stop :id="`${id}-record-div`">
-    <div class="flex-grow-1">
-      {{showPopover ? displayTitle : title}}
+  <div
+    class="record d-flex"
+    :class="{ 'flex-shrink-1': wrap, 'dark-reverse': colorStyle }"
+    :style="tagStyle"
+    @click.stop
+    :id="`${id}-record-div`"
+  >
+    <div ref="titleRef" class="record-title" :class="wrap ? 'text-wrap' : 'text-truncate'">
+      {{title}}
     </div>
-    <div
-      v-if="showPopover && title?.length > (truncate ? minDisplayLength : maxDisplayLength)"
-      class="tabler-icons-dots"
-    />
     <div v-if="!readOnly" class="remove-record ms-1 tabler-icons-cross" @click.stop="emits('remove')"/>
     <BPopover
-      v-if="showPopover && title?.length > (truncate ? minDisplayLength : maxDisplayLength)"
+      v-if="showPopover && isTruncated"
       :target="`${id}-record-div`"
       click
       realtime
       placement="top"
-      container="body"
+      teleport-to="body"
       class="bootstrap-scope"
+      :style="{ zIndex }"
       :delay="0"
+      @show="register"
+      @hidden="unregister"
     >
-      <div class="record d-flex" @click.stop>
+      <div class="record d-flex" :class="{ 'dark-reverse': colorStyle }" :style="colorStyle" @click.stop>
         <div class="flex-grow-1">{{title}}&nbsp;&nbsp;</div>
       </div>
     </BPopover>
@@ -95,38 +95,30 @@ defineExpose({
   margin-left: 2px;
   cursor: pointer;
   margin-top: 1px;
+  flex-shrink: 0;
+  min-width: 0;
 
-  .dark-mode & {
+  .dark-mode &:not(.dark-reverse) {
     color: black;
   }
+}
+
+.record-title {
+  flex: 0 1 auto;
+  min-width: 0;
 }
 
 .record:active{
   background-color: #0062a7;
 }
 
-.tabler-icons-dots {
-  background-image: url(../../../node_modules/@tabler/icons/icons/outline/dots.svg) !important;
-  width: 15px;
-  height: 13px;
-  background-repeat: no-repeat;
-  background-size: 13px 13px;
-  background-position: center !important;
-  &:not(.dark-mode *) {
-    filter: invert(1) hue-rotate(180deg);
-  }
-}
-
 .tabler-icons-cross {
-  background-image: url(../../../node_modules/@tabler/icons/icons/outline/x.svg) !important;
+  flex-shrink: 0;
+  // NOTE: icon is a mask so it has the text color
+  background-color: currentColor;
+  mask: url(../../../node_modules/@tabler/icons/icons/outline/x.svg) center / 13px 13px no-repeat;
   width: 15px;
   height: 15px;
-  background-repeat: no-repeat;
-  background-size: 13px 13px;
-  background-position: center !important;
-  &:not(.dark-mode *) {
-    filter: invert(1) hue-rotate(180deg);
-  }
 }
 
 </style>

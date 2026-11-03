@@ -211,6 +211,7 @@ require("./ExceptionDialog.js");
 require("./Container.js");
 require("./EncodingHelper.js");
 Tine.Tinebase.common = require("./common.js");
+require("./ColorManager.js");
 Tine.Tinebase.configManager = require("./configManager.js");
 require("./widgets/grid/RendererManager.js");
 require("./Models.js");

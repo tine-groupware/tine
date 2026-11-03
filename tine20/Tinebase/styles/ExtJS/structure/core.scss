@@ -132,36 +132,42 @@
 }
 
 .x-color-palette {
-    width: 150px;
-    height: 92px;
+    display: grid;
+    grid-template-columns: repeat(8, 22px);
+    gap: 6px;
+    // NOTE: room for the selection ring
+    padding: 4px;
     cursor: pointer;
 }
 
 .x-color-palette a {
-    border: 1px solid;
-    float: left;
-    padding: 2px;
+    display: block;
+    border-radius: 50%;
     text-decoration: none;
-    -moz-outline: 0 none;
     outline: 0 none;
     cursor: pointer;
+    transition: transform .1s ease, box-shadow .1s ease;
 }
 
-.x-color-palette a:hover, .x-color-palette a.x-color-palette-sel {
-    border: 1px solid;
+.x-color-palette a:hover {
+    transform: scale(1.15);
 }
 
 .x-color-palette em {
     display: block;
-    border: 1px solid;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .x-color-palette em span {
     cursor: pointer;
     display: block;
-    height: 10px;
-    line-height: 10px;
-    width: 10px;
+    height: 22px;
+    line-height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    font-size: 15px;
+    font-weight: 600;
 }
 
 .x-ie-shadow {

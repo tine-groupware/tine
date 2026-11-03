@@ -21,8 +21,10 @@
             :key="record.getId()"
             :id="record.getId()"
             :record="record"
+            :title="titles[record.getId()]"
+            :color-schema="colorSchemaResolver?.(record)"
+            :max-width="tagMaxWidth"
             :show-popover="true"
-            :truncate="truncateTitle"
             :readOnly="readOnly"
             @remove="removeRecord(record.getId())"
           />
@@ -31,8 +33,10 @@
             @click.stop
             v-if="recordsCountInPopover"
             ref="popoverEllipsis"
-            class="d-flex align-items-center record tabler-icons-dots pe-4"
-          />
+            class="d-flex align-items-center record pe-4"
+          >
+            <div class="tabler-icons-dots"/>
+          </div>
         </div>
       </div>
     </div>
@@ -41,8 +45,12 @@
       click
       realtime
       placement="top"
-      container="body"
+      teleport-to="body"
+      class="bootstrap-scope"
+      :style="{ zIndex: popoverZIndex }"
       :delay="0"
+      @show="registerPopover"
+      @hidden="unregisterPopover"
       :hide="!recordsCountInPopover"
       v-if="recordsCountInPopover"
     >
@@ -50,12 +58,14 @@
         <div class="d-flex flex-wrap">
           <RecordTag
             v-for="record in recordsInPopover"
-            class="mb-1 text-wrap"
+            class="mb-1"
             :key="record.getId()"
             @click.stop
             :id="record.getId()"
             :record="record"
-            :truncate="false"
+            :title="titles[record.getId()]"
+            :color-schema="colorSchemaResolver?.(record)"
+            :wrap="true"
             @remove="removeRecord(record.getId())"
           />
         </div>
@@ -66,13 +76,16 @@
 
 <script setup>
 /* eslint-disable */
-import {computed, inject, ref, watchEffect, provide, watch, nextTick} from 'vue'
+import {computed, inject, ref, toRaw, watchEffect, watch, nextTick} from 'vue'
 import RecordTag from './RecordTag.vue'
 import {useElementBounding, useElementSize} from '@vueuse/core'
+import { fitTags } from './fitTags'
+import { useWindowMgrZIndex } from '../../../vue/composables/useWindowMgrZIndex'
 
 const props = defineProps({
   records: Object,
   recordRenderer: Function,
+  colorSchemaResolver: Function,
   injectKey: String,
   emptyText: String,
   readOnly: Boolean,
@@ -82,14 +95,28 @@ const props = defineProps({
   }
 })
 
-provide('recordRenderer', props.recordRenderer)
-
 const eventBus = inject(props.injectKey)
 const containerDiv = ref()
 const popoverEllipsis = ref()
 
+const { zIndex: popoverZIndex, register: registerPopover, unregister: unregisterPopover } = useWindowMgrZIndex()
+
 const popoverTarget = computed(() => {
   return popoverEllipsis.value ? popoverEllipsis.value.id : null
+})
+
+const titles = ref({})
+const requestedTitles = new WeakSet()
+watchEffect(() => {
+  props.records.forEach(async (record) => {
+    const id = record.getId()
+    if (requestedTitles.has(toRaw(record))) return
+    requestedTitles.add(toRaw(record))
+
+    let t = props.recordRenderer ? props.recordRenderer(record, {}) : record.getTitle()
+    if (t && typeof t !== 'string') t = await t.asString()
+    titles.value[id] = t || ''
+  })
 })
 
 const recordsCountInPopover = ref(0)
@@ -106,10 +133,20 @@ const { width: containerDivWidth, height: containerDivHeight } = useElementSize(
 const contentDiv = ref()
 const { width: contentDivWidth, height: contentDivHeight, right: contentDivRight } = useElementBounding(contentDiv)
 
-const truncateTitle = ref(true)
-
-const EXPANDED_TAG_WIDTH = 170
+// min (outer) width of a shrunk tag before tags get moved into the popover
+const MIN_TAG_WIDTH = 60
+// estimated (outer) width of the ellipsis until it got rendered
+const OVERFLOW_WIDTH = 40
 const CONTRACTED_TAG_WIDTH = 100
+
+const tagCap = ref(Infinity)
+const tagMargin = ref(0)
+const tagMaxWidth = computed(() => {
+  if (props.multiLine) {
+    return containerDivWidth.value ? Math.floor(containerDivWidth.value - tagMargin.value) : undefined
+  }
+  return tagCap.value === Infinity ? undefined : Math.floor(tagCap.value - tagMargin.value)
+})
 
 watch([containerDivWidth, containerDivHeight], ([nW,nH]) => {
   eventBus.emit('pickerResize', {w: nW, h: nH})
@@ -117,9 +154,58 @@ watch([containerDivWidth, containerDivHeight], ([nW,nH]) => {
 
 const removeRecord = (recordId) => {
   eventBus.emit('removeRecord', recordId)
-  recordsCountInPopover.value = Math.max(0, recordsCountInPopover.value - 1) // hack to rerun the watchEffect
+  if (props.multiLine) {
+    recordsCountInPopover.value = Math.max(0, recordsCountInPopover.value - 1) // hack to rerun the watchEffect
+  }
   return false
 }
+
+let canvas
+const getOuterWidth = (el) => {
+  const style = el.ownerDocument.defaultView.getComputedStyle(el)
+  return el.getBoundingClientRect().width + parseFloat(style.marginLeft) + parseFloat(style.marginRight)
+}
+
+// tag widths are computed from title text width and the tag decoration (padding, margin, remove icon)
+// so we can also compute the widths of tags which are currently in the popover
+const measureTags = () => {
+  const tagEl = contentDiv.value?.querySelector(':scope > .record:not(#ellipsis-show-more)')
+  const titleEl = tagEl?.querySelector('.record-title')
+  if (!titleEl) return null
+
+  const style = titleEl.ownerDocument.defaultView.getComputedStyle(titleEl)
+  canvas = canvas || titleEl.ownerDocument.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  ctx.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`
+
+  const tagWidth = getOuterWidth(tagEl)
+  tagMargin.value = tagWidth - tagEl.getBoundingClientRect().width
+  const decorationWidth = tagWidth - titleEl.getBoundingClientRect().width
+
+  return Array.from(props.records.values()).reverse().map((record) => {
+    const title = titles.value[record.getId()] || ''
+    return Math.ceil(ctx.measureText(title).width) + 1 + decorationWidth
+  })
+}
+
+const layoutTags = () => {
+  if (props.multiLine || !containerDivWidth.value) return
+
+  const widths = measureTags()
+  if (!widths) return
+
+  const contentStyle = contentDiv.value.ownerDocument.defaultView.getComputedStyle(contentDiv.value)
+  const available = containerDivWidth.value - parseFloat(contentStyle.marginLeft) - parseFloat(contentStyle.marginRight)
+  const { visibleCount, cap } = fitTags(widths, available, {
+    minWidth: MIN_TAG_WIDTH,
+    overflowWidth: popoverEllipsis.value ? getOuterWidth(popoverEllipsis.value) : OVERFLOW_WIDTH
+  })
+
+  tagCap.value = cap
+  recordsCountInPopover.value = widths.length - visibleCount
+}
+
+watch([containerDivWidth, titles, () => props.records.size, popoverEllipsis], layoutTags, { deep: true, flush: 'post' })
 
 const checkWidth = ref(false)
 watchEffect(async () => {
@@ -154,35 +240,8 @@ watchEffect(async () => {
         checkWidth.value = false
       }
     }
-
-  } else {
-    if (contentDivWidth.value < containerDivWidth.value ) {
-      if (truncateTitle.value && recordsCountInPopover.value === 0) {
-        if (recordsInDisplayContainer.value.length * EXPANDED_TAG_WIDTH < containerDivWidth.value) truncateTitle.value = false
-      } else {
-        if (recordsCountInPopover.value !== 0 && (contentDivWidth.value + CONTRACTED_TAG_WIDTH < containerDivWidth.value)) {
-          recordsCountInPopover.value = Math.max(0, recordsCountInPopover.value - 1)
-        }
-      }
-    } else {
-      // if content doesn't fit, first truncate the title
-      // if it still doesn't fit, take one record into popover
-      if (!truncateTitle.value) {
-        truncateTitle.value = true
-      } else {
-        recordsCountInPopover.value = Math.min(props.records.size, recordsCountInPopover.value + 1)
-      }
-    }
   }
 }, {
-  // onTrigger: (e) => {
-  //   console.warn(
-  //     'triggered',
-  //     contentDivWidth.value,
-  //     containerDivWidth.value,
-  //     recordsCountInPopover.value,
-  //     checkWidth.value)
-  // },
   flush: 'post'
 })
 
@@ -226,17 +285,21 @@ const triggerCombo = () => {
   cursor: pointer;
 }
 
+.dark-mode .record {
+  color: black;
+}
+
+/* NOTE: icon is a mask so it has the text color */
 .tabler-icons-dots {
-  background-image: url(../../../node_modules/@tabler/icons/icons/outline/dots.svg) !important;
+  background-color: currentColor;
+  mask: url(../../../node_modules/@tabler/icons/icons/outline/dots.svg) center / 13px 13px no-repeat;
   width: 15px;
-  height: 13px;
-  background-repeat: no-repeat;
-  background-size: 13px 13px;
-  background-position: center !important;
-  filter: invert(1) hue-rotate(180deg);
+  height: 15px;
 }
 
 #ellipsis-show-more {
+  height: 15px;
+  margin-top: 1px;
   border-right: none;
   mask: conic-gradient(from -135deg at right,#0000,#000 1deg 89deg,#0000 90deg) 50%/100% 4px;
 }

@@ -162,7 +162,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             })
         })
 
-        this.colorManager = new Tine.Calendar.ColorManager({});
+        this.colorManager = new Tine.Tinebase.ColorManager({});
 
         this.attendeeValidation = new AttendeeValidation({ formatMessage: this.app.formatMessage.bind(this.app) });
     },
@@ -740,7 +740,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
      * @returns {Promise}
      */
     loadCSRoles: async function() {
-        const colorMap = Object.keys(Tine.Calendar.ColorManager.prototype.colorSchemata);
+        const colorMap = Object.keys(Tine.Tinebase.ColorManager.prototype.colorSchemata);
 
         this.csRolesStore.loadData(await csRole.getRoles());
         this.csRolesStore.each((item, idx) => {
@@ -752,7 +752,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             schema = schema ? schema : this.colorManager.getCustomSchema(color || '969696');
 
             item.color = schema.color;
-            item.colorRGB = item.data.colorRGB = Tine.Calendar.ColorManager.str2dec(schema.light);
+            item.colorRGB = item.data.colorRGB = Tine.Tinebase.ColorManager.str2dec(schema.light);
         });
     },
 

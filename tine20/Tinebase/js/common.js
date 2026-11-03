@@ -12,6 +12,7 @@
 
 const { isObject, isArray, map, isString, get, escapeRegExp, each, find, compact, cloneDeep } = require('lodash')
 const { htmlEncode, htmlDecode, date: dateFormat, number, round, capitalize} = require('Ext/util/Format')
+const { normalizeColor } = require('./util/colors')
 const { parse, parsePurified, parseInline, parseInlinePurified } = require('util/markdown')
 
 /**
@@ -653,10 +654,12 @@ const common = {
      * @param color
      */
     colorRenderer: function(color) {
-        // normalize
-        color = String(color).replace('#', '');
+        color = normalizeColor(color);
+        if (! color) {
+            return '';
+        }
 
-        return '<div class="dark-reverse" style="background-color: #' + htmlEncode(color) + '">&#160;</div>';
+        return '<span class="tb-color-swatch dark-reverse" style="background-color: #' + color + '"></span>';
     },
 
     urlRenderer: function (url) {

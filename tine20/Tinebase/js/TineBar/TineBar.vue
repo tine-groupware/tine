@@ -122,7 +122,7 @@ const openedViaMouse = ref(true)
 const hideApplicationMenu = (e) => {
   if (!appMenuVisible.value) return
   appMenuVisible.value = false
-  e.__skip_toggle = true
+  if (e) e.__skip_toggle = true
 }
 const toggleAppMenuVisibility = (e) => {
   if (e.__skip_toggle) return
@@ -137,7 +137,7 @@ const activateApp = (appName) => {
 const hideMenu = (e) => {
   if (!mainMenuVisible.value) return
   mainMenuVisible.value = false
-  e.__skip_toggle = true
+  if (e) e.__skip_toggle = true
 }
 const toggleMenuVisibility = (e) => {
   if (e.__skip_toggle) return
