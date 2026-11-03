@@ -209,6 +209,7 @@ class EventManager_Setup_Initialize extends Setup_Initialize
         }
 
         EventManager_Setup_EventTemplates::getInstance()->createTemplates();
+        EventManager_Setup_EventTemplates::getInstance()->createEventForOptionTemplates();
     }
 
     protected function _initializeCostCenterCostBearer()
