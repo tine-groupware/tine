@@ -1553,6 +1553,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
     public static function getPurgeDate(): Tinebase_DateTime
     {
-        return (static::$_purgeDate ?? (static::$_purgeDate = Tinebase_DateTime::today()->addMonth((int)Tinebase_Config::DELETED_DATA_RETENTION_TIME)))->getClone();
+        return (static::$_purgeDate ?? (static::$_purgeDate = Tinebase_DateTime::today()->subMonth((int)Tinebase_Config::getInstance()->{Tinebase_Config::DELETED_DATA_RETENTION_TIME})))->getClone();
     }
 }
