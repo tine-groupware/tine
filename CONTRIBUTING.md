@@ -168,6 +168,10 @@ This forward-merge can produce conflicts even if the topic branch itself had non
 4. Merge the originating branch (`2025.11`) into it.
 5. Resolve the conflicts (see the e2etest rules above).
 6. Push the branch and open a PR targeting `main`.
+7. Do not squash the commits and do not rebase the new branch when merging the PR.
+
+In case the PR pipeline fails and only the job "prevent_dot_agents_changes" did not succeed:
+Simply add a label "allow-failure-prevent-dot-agents-changes" to the PR and ignore the failed job.
 
 ### After resolving conflicts (all cases)
 
