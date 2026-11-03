@@ -1,0 +1,47 @@
+/*
+ * Tine 2.0
+ *
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiß <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2026 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+import { onUnmounted, ref } from 'vue'
+
+let seq = 0
+
+/**
+ * let Ext.WindowMgr manage the z-index of a floating vue element (e.g. popover teleported to body)
+ * so it's shown above Ext windows
+ *
+ * call register when the element gets shown and unregister when it got hidden
+ */
+export const useWindowMgrZIndex = () => {
+  const zIndex = ref()
+
+  const winMgrProxy = {
+    id: `vue-floating-window-proxy-${++seq}`,
+    setZIndex: (index) => {
+      zIndex.value = index
+    },
+    setActive: () => {},
+    on: () => {},
+    un: () => {}
+  }
+
+  const register = () => {
+    Ext.WindowMgr.register(winMgrProxy)
+    Ext.WindowMgr.bringToFront(winMgrProxy)
+  }
+
+  const unregister = () => {
+    if (winMgrProxy.manager) {
+      winMgrProxy.manager.unregister(winMgrProxy)
+    }
+  }
+
+  onUnmounted(unregister)
+
+  return { zIndex, register, unregister }
+}
+
+export default useWindowMgrZIndex

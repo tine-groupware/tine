@@ -10,7 +10,7 @@
 <template>
   <BPopover
     :target="popoverTarget"
-    container="body"
+    teleport-to="body"
     v-model="visibleInternal"
     manual
     :delay="0"
