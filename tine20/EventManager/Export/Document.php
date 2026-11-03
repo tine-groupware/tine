@@ -133,6 +133,10 @@ class EventManager_Export_Document extends Tinebase_Export_DocV2
             $row['geschlecht'] = $this->_calculateGender($participant);
             $row['alter']      = $this->_calculateAge($participant, $event);
             $row['ich_bin']    = $this->_calculateFunction($registration);
+            $row['anmeldestatus'] = $this->_resolveKeyField(
+                EventManager_Config::REGISTRATION_STATUS,
+                $registration->{EventManager_Model_Registration::FLD_STATUS}
+            );
 
             // keep the original nested participant data available for the template
             $row['participant'] = $participant instanceof Tinebase_Record_Interface
@@ -187,6 +191,21 @@ class EventManager_Export_Document extends Tinebase_Export_DocV2
             return 'S';
         }
         return $function;
+    }
+
+    protected function _resolveKeyField(string $configName, $id): string
+    {
+        if (null === $id || '' === $id) {
+            return '';
+        }
+
+        $keyField = EventManager_Config::getInstance()->get($configName);
+        $record = $keyField->records->getById($id);
+        if (!$record) {
+            return (string)$id;
+        }
+        return Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME)
+            ->_((string)$record->value);
     }
 
     protected function _getTwigContext(array $context)

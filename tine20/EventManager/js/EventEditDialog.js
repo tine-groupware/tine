@@ -56,6 +56,21 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
     },
 
+    initButtons: function () {
+        this.supr().initButtons.apply(this, arguments);
+
+        // Move localized lang picker to the end so everything else stays left-aligned.
+        if (this.localizedLangPicker) {
+            this.tbar.on('beforerender', (tb) => {
+                const toMove = tb.items.filterBy(item =>
+                    item instanceof Ext.Toolbar.Fill || item === this.localizedLangPicker
+                ).getRange();
+                toMove.forEach(item => tb.remove(item, false));
+                tb.add(toMove);
+            }, this, { single: true });
+        }
+    },
+
     onAfterRecordLoad: function () {
         this.supr().onAfterRecordLoad.apply(this, arguments);
 
