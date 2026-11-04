@@ -135,6 +135,28 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
         }
     }
 
+    protected function _sendUnauthorizedHeader()
+    {
+        @header('WWW-Authenticate: Basic realm="' . $this->_getRealm() .  '"');
+        @header('HTTP/1.1 401 Unauthorized');
+    }
+
+    /**
+     * the realm must be stable across updates: clients (e.g. Thunderbird) store
+     * credentials per origin AND realm, so a realm containing the version
+     * orphans the stored password with every update.
+     * it also has to be plain ASCII as header values are interpreted as
+     * ISO-8859-1 (the default branding title "tine ®" shows up as "tine Â®").
+     */
+    protected function _getRealm(): string
+    {
+        $title = (string) Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE);
+        $title = trim((string) preg_replace('/[^\x20-\x7E]+/', '', $title));
+        $title = str_replace(['"', '\\'], '', $title);
+
+        return ($title !== '' ? $title : 'tine') . ' WebDAV Service';
+    }
+
     /**
      * get default modelconfig methods
      *
