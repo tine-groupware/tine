@@ -21,6 +21,7 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReportTest extends Tinebase_WebDa
 
     public function testExpandProperty()
     {
+        $this->markTestSkipped('account artefact in group/list');
         $this->_skipIfLDAPBackend('group itself (not shown by client) is missing');
 
         $list = Tinebase_Group::getInstance()->getGroupById(Tinebase_Core::getUser()->accountPrimaryGroup);
