@@ -129,10 +129,11 @@ class EventManager_Export_Document extends Tinebase_Export_DocV2
             $participant = $registration->{EventManager_Model_Registration::FLD_PARTICIPANT};
 
             // names in German so we don't confuse them with model variables
-            $row['lfd_nr']     = $lfdNr++;
+            $row['email'] = $this->_calculateEmail($registration);
+            $row['lfd_nr'] = $lfdNr++;
             $row['geschlecht'] = $this->_calculateGender($participant);
-            $row['alter']      = $this->_calculateAge($participant, $event);
-            $row['ich_bin']    = $this->_calculateFunction($registration);
+            $row['alter'] = $this->_calculateAge($participant, $event);
+            $row['ich_bin'] = $this->_calculateFunction($registration);
             $row['anmeldestatus'] = $this->_resolveKeyField(
                 EventManager_Config::REGISTRATION_STATUS,
                 $registration->{EventManager_Model_Registration::FLD_STATUS}
@@ -151,6 +152,30 @@ class EventManager_Export_Document extends Tinebase_Export_DocV2
         }
 
         return $rowSet;
+    }
+
+    protected function _calculateEmail(EventManager_Model_Registration $registration): string
+    {
+        $participant = $registration->{EventManager_Model_Registration::FLD_PARTICIPANT};
+        $registrant  = $registration->{EventManager_Model_Registration::FLD_REGISTRANT};
+
+        $participantEmail = $participant instanceof Tinebase_Record_Interface ? trim((string)$participant->email) : '';
+        $registrantEmail  = $registrant instanceof Tinebase_Record_Interface ? trim((string)$registrant->email) : '';
+
+        switch ((int)$registration->{EventManager_Model_Registration::FLD_COMMUNICATION_PREFERENCE}) {
+            case 2: // Registrant E-mail
+                $emails = [$registrantEmail ?: $participantEmail];
+                break;
+            case 3: // Participant E-mail, Registrant E-mail in CC
+                $emails = [$participantEmail, $registrantEmail];
+                break;
+            case 1: // Participant E-mail
+            default:
+                $emails = [$participantEmail ?: $registrantEmail];
+                break;
+        }
+
+        return implode(', ', array_unique(array_filter($emails)));
     }
 
     protected function _calculateGender($participant): string
