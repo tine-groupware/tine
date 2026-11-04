@@ -69,9 +69,9 @@ Promise.all([
                 otp: 'odp' //'application/vnd.oasis.opendocument.presentation-template'
             };
 
-            const format = record.get('name').split('.').pop();
+            const format = record.get('name')?.split('.').pop();
 
-            if (templateFormats[format]) {
+            if (record?.recordName === 'File' && templateFormats[format]) {
                 try {
                     const option = await Tine.widgets.dialog.MultiOptionsDialog.getOption({
                         title: app.i18n._('Open Template'),

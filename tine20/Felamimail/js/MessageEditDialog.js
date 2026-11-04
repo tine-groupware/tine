@@ -1573,6 +1573,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             value: _.get(signature, 'data.name', this.app.i18n._('None')),
             editable: false,
             triggerAction: 'all',
+            width: 200,
             store: new Ext.data.JsonStore({
                 fields: Tine.Felamimail.Model.Signature,
                 listeners: {
