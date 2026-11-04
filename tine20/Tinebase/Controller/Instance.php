@@ -54,6 +54,9 @@ class Tinebase_Controller_Instance extends Tinebase_Controller_Record_Abstract
             if (count($domains) > 0) {
                 $pattern = '(' . implode('|', array_map(fn($d) => preg_quote($d, '/'), $domains)) . ')';
                 $image = $instance[Tinebase_Model_Instance::FLD_FLAG_ICON_FILE];
+                if (empty($image)) {
+                    $image = $instance[Tinebase_Model_Instance::FLD_URL] . DIRECTORY_SEPARATOR . 'favicon';
+                }
 
                 if (!empty($image) && !str_contains($image, 'icon-set')) {
                     try {
