@@ -128,7 +128,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $deletedRecord = $this->_addAndDeleteContact();
         $contactBackend = new Addressbook_Backend_Sql();
         $deletedRecord = $contactBackend->get($deletedRecord->getId(), true);
-        $this->assertSame($deletedRecord->deleted_time->subMonth(Tinebase_Config::getInstance()->{Tinebase_Config::DELETED_DATA_RETENTION_TIME})->format('Y-m-d'), $deletedRecord->purge_date->format('Y-m-d'));
+        $this->assertSame($deletedRecord->deleted_time->addMonth(Tinebase_Config::getInstance()->{Tinebase_Config::DELETED_DATA_RETENTION_TIME})->format('Y-m-d'), $deletedRecord->purge_date->format('Y-m-d'));
     }
 
     /**
@@ -142,8 +142,12 @@ class Tinebase_Frontend_CliTest extends TestCase
         $oldDataRetention = Tinebase_Config::getInstance()->{Tinebase_Config::DELETED_DATA_RETENTION_TIME};
         $dataRetentionRAII = new Tinebase_RAII(fn() => Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::DELETED_DATA_RETENTION_TIME, $oldDataRetention));
         Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::DELETED_DATA_RETENTION_TIME, 0);
+        Tinebase_Timemachine_ModificationLog::setPurgeDate();
 
         $deletedRecord = $this->_addAndDeleteContact();
+        Tinebase_Timemachine_ModificationLog::setPurgeDate();
+        $deletedRecord = (new Addressbook_Backend_Sql())->get($deletedRecord->getId(), true);
+        $this->assertSame(Tinebase_DateTime::today()->format('Y-m-d'), $deletedRecord->purge_date->format('Y-m-d'));
 
         $result = $this->_cli->purgeDeletedRecords($opts);
         self::assertEquals(0, $result);
@@ -166,6 +170,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $oldDataRetention = Tinebase_Config::getInstance()->{Tinebase_Config::DELETED_DATA_RETENTION_TIME};
         $dataRetentionRAII = new Tinebase_RAII(fn() => Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::DELETED_DATA_RETENTION_TIME, $oldDataRetention));
         Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::DELETED_DATA_RETENTION_TIME, 0);
+        Tinebase_Timemachine_ModificationLog::setPurgeDate();
         if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
             $deletedFile = $this->_addAndDeleteFile();
             static::assertSame(1, Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getMultipleByProperty(
@@ -183,6 +188,7 @@ class Tinebase_Frontend_CliTest extends TestCase
 
         // delete tag too
         Tinebase_Tags::getInstance()->deleteTags($deletedContact->tags->getFirstRecord()->getId());
+        Tinebase_Timemachine_ModificationLog::setPurgeDate();
         
         ob_start();
         $result = $this->_cli->purgeDeletedRecords($opts);
