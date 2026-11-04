@@ -55,6 +55,17 @@ Pitfalls:
 - **MFA:** a login stuck in a FIDO2/WebAuthn dialog means MFA is active for the test user; ask the user to disable it.
 - Keep the test tab open after the run, so the next run can reuse it.
 
+## Real Dialogs Only
+
+E2E tests verify what a user sees and does. They must always use the real UI:
+
+- **Open real dialogs** the way a user does (toolbar button, context menu, double click), e.g. `getEditDialog('Termin hinzufügen')`. Never build components, windows or grids in the page (`new Ext.Window(...)`, `createApp(...)`) to test a widget in isolation.
+- **Interact like a user**: click, type, press keys, drag (e.g. resize a window via its resize handle). Never call component methods to change UI state (`setValue`, `setWidth`, `onTriggerClick`, `select`, ...) and never manipulate component internals (e.g. Vue `setupState`, `__vueParentComponent`).
+- **Assert on the rendered result** (DOM, computed styles, field values shown to the user). Reading state for assertions is fine, changing it is not.
+- **Test data via API is allowed** as setup / teardown (e.g. create records with `Tine.<App>.save<Model>()` in `beforeAll` and delete them in `afterAll`), as well as user preferences the test depends on (e.g. `windowtype`). Always restore changed data.
+- If a feature can't be reached through the real UI (e.g. missing test data like a contact image), create that data via API or upload it via the UI instead of faking it in the DOM.
+- Unit-level behaviour (pure logic, edge cases) belongs into Jest unit tests (`tests/js/jest`), not into E2E tests.
+
 ## Core Principles
 
 1. **No Hardcoded Delays**: Eliminate `setTimeout`. Use dynamic waiting (`waitForSelector`, `waitForFunction`).
@@ -62,6 +73,7 @@ Pitfalls:
 3. **Robust Assertions**: Replace `toMatchElement` with `waitForSelector` + `page.evaluate` text extraction. Normalize whitespace.
 4. **Dialog Handling**: Use `getEditDialog(btnText)` for popups. Handles loading masks and content readiness.
 5. **Simplify**: Prefer minimal, readable waiting logic over over-engineered helpers.
+6. **Real Dialogs Only**: Test through real dialogs and user interactions, no DOM tricks (see above).
 
 ## Library Reference
 
