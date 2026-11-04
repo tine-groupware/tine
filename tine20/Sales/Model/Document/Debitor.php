@@ -41,7 +41,7 @@ class Sales_Model_Document_Debitor extends Sales_Model_Debitor
                 ],
             ],
         ];
-        $_definition[self::EXPOSE_JSON_API] = false;
+        $_definition[self::EXPOSE_JSON_API] = true;
         $_definition[self::EXPOSE_HTTP_API] = false;
 
         unset($_definition[self::FIELDS][self::FLD_DELIVERY]);
