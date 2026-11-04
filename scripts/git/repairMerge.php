@@ -10,6 +10,9 @@
  * it will only fix composer.lock fails, any other fail needs to be fixed manually
  */
 
+// remove this once support for 2025.11 drops
+exec('rm -rf ./tine20/vendor/simplesamlphp');
+
 // check that only tine20/composer.lock is in conflict, no other files
 exec('git diff --name-only --diff-filter=U', $out, $ret);
 if (0 !== $ret) {
