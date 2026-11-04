@@ -159,9 +159,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
                 }
 
             } catch (Tinebase_Exception_NotFound $tenf) {
-                header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
-                header('HTTP/1.1 401 Unauthorized');
-
+                $this->_sendUnauthorizedHeader();
                 return;
             }
 
@@ -187,7 +185,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             }
 
             if ($authResult !== true) {
-                $this->_unauthorized();
+                $this->_sendUnauthorizedHeader();
                 return;
             }
 
@@ -225,12 +223,6 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             Tinebase_Session::destroyAndRemoveCookie();
         }
         unset($tidewaysTransactionNameRaii);
-    }
-
-    protected function _unauthorized()
-    {
-        header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
-        header('HTTP/1.1 401 Unauthorized');
     }
 
     /**

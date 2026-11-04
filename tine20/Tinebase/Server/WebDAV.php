@@ -411,17 +411,6 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         ]));
     }
 
-    protected function _sendUnauthorizedHeader()
-    {
-        @header('WWW-Authenticate: Basic realm="' . $this->_getRealm() .  '"');
-        @header('HTTP/1.1 401 Unauthorized');
-    }
-
-    protected function _getRealm(): string
-    {
-        return Tinebase_Core::getTineUserAgent('WebDAV Service');
-    }
-
     /**
      * Set an odd parity bit for a given byte, in least-significant position.
      *
