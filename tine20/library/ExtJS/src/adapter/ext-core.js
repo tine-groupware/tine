@@ -528,7 +528,7 @@
         } else {
             doAdd(win, "load", pub._load);
         }
-        doAdd(win, UNLOAD, pub._unload);
+        // doAdd(win, UNLOAD, pub._unload);
         _tryPreloadAttach();
 
         return pub;
