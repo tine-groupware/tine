@@ -3596,7 +3596,11 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         /** @var Tinebase_Record_Interface $model */
         foreach ($targetModels as $model => $cfg) {
-            $propertiesToSet = $propagateProperties ?: array_diff($model::getConfiguration()->fieldKeys, TMCC::$modLogProperties);
+            $mc = $model::getConfiguration();
+            if (!$mc->exposeJsonApi) {
+                throw new Tinebase_Exception_Record_DefinitionFailure($model . ' needs to expose JSON API');
+            }
+            $propertiesToSet = $propagateProperties ?: array_diff($mc->fieldKeys, TMCC::$modLogProperties);
             /** @var Tinebase_Controller_Record_Abstract $ctrl */
             $ctrl = Tinebase_Core::getApplicationInstance($model);
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, array_merge([
