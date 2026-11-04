@@ -478,9 +478,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $db = Tinebase_Core::getDb();
         $setupMysql = new Setup_Backend_Mysql();
         foreach (Tinebase_Controller::getInstance()->getAllApplicationTables() as $table) {
+            if (!$setupMysql->tableExists($table)) continue;
             if ($setupMysql->columnExists(Tinebase_ModelConfiguration_Const::FLD_PURGE_DATE, $table)) {
                 $db->update(SQL_TABLE_PREFIX . $table, [
-                    Tinebase_ModelConfiguration_Const::FLD_PURGE_DATE => new Zend_Db_Expr('DATE_SUB(DATE(deleted_time), INTERVAL ' . $dataRetention . ' MONTH)')
+                    Tinebase_ModelConfiguration_Const::FLD_PURGE_DATE => new Zend_Db_Expr('DATE_ADD(DATE(deleted_time), INTERVAL ' . $dataRetention . ' MONTH)')
                 ], 'purge_date IS NOT NULL AND deleted_time IS NOT NULL AND deleted_time <> "1970-01-01 00:00:00"');
             }
         }
