@@ -62,6 +62,18 @@ Main entry point. Key exports:
 
 Implements waiting logic, throttling, login, form fillers, and screenshot utilities.
 
+## Real Dialogs Only
+
+E2E tests verify what a user sees and does. They must always use the real UI:
+
+- **Open real dialogs** the way a user does (toolbar button, context menu, double click), e.g. `getEditDialog('Termin hinzufügen')`. Never build components, windows or grids in the page (`new Ext.Window(...)`, `createApp(...)`) to test a widget in isolation.
+- **Interact like a user**: click, type, press keys, drag (e.g. resize a window via its resize handle). Never call component methods to change UI state (`setValue`, `setWidth`, `onTriggerClick`, `select`, ...) and never manipulate component internals (e.g. Vue `setupState`, `__vueParentComponent`).
+- **Assert on the rendered result** (DOM, computed styles, field values shown to the user). Reading state for assertions is fine, changing it is not.
+- **Test data via API is allowed** as setup / teardown (e.g. create records with `Tine.<App>.save<Model>()` in `beforeAll` and delete them in `afterAll`), as well as user preferences the test depends on (e.g. `windowtype`). Always restore changed data.
+- **Don't rely on the current state of the test user** (preferences, saved window sizes, data left by other runs). Dialogs open as browser popups by default (preference `windowtype` = `autodetect`), so use `getEditDialog()`. If a test needs Ext windows, it sets `windowtype` itself (save it and update the registry, the client reloads itself) and restores the original value in `afterAll`.
+- If a feature can't be reached through the real UI (e.g. missing test data like a contact image), create that data via API or upload it via the UI instead of faking it in the DOM.
+- Unit-level behaviour (pure logic, edge cases) belongs into Jest unit tests (`tests/js/jest`), not into E2E tests.
+
 ## Patterns
 
 ### Waiting
