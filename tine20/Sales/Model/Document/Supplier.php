@@ -34,7 +34,7 @@ class Sales_Model_Document_Supplier extends Sales_Model_Supplier
                 ],
             ],
         ];
-        $_definition[self::EXPOSE_JSON_API] = false;
+        $_definition[self::EXPOSE_JSON_API] = true;
         $_definition[self::EXPOSE_HTTP_API] = false;
 
         $_definition[self::DENORMALIZATION_OF] = Sales_Model_Supplier::class;
