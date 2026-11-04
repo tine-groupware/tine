@@ -44,7 +44,7 @@ replication configuration
 
 run replication:
 
-    $ php tine20.php --method Tinebase.readModifictionLogFromMaster
+    $ php tine20.php --method Tinebase.readModificationLogFromMaster
 
 skip modlog
 
