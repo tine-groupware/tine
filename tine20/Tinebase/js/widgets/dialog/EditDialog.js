@@ -454,7 +454,38 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                                 const originalId = this.record.json.original_id
                                 const EditDialog = Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass)
                                 if (originalId && EditDialog?.openWindow) {
-                                    EditDialog.openWindow({recordId: originalId, record: { id: originalId }, mode: 'remote'});
+                                    this.onRecordUpdate();
+                                    const record = this.record.constructor.clone(this.record);
+                                    EditDialog.openWindow({recordId: originalId, record: { id: originalId }, mode: 'remote', listeners: { update: async (recordData, mode, ticketFn) => {
+                                        let current
+                                        try {
+                                            await this.loadRecord(await this.denormalizationRecordClass.getProxy().promiseLoadRecord(record.id))
+                                        } catch (e) {/* no api -> record was not updated */}
+
+                                        if (this.record.getMTime() <= record.getMTime()) {
+                                            // take data from updated original
+                                            this.loadRecord(this.recordClass.setFromJson(recordData), true);
+                                            this.record.setId(record.id);
+                                            this.record.set('original_id', record.get('original_id') || record.id);
+
+                                        }
+
+                                        if (Object.keys(record.modified || {}).length) {
+                                            if (await Ext.MessageBox.show({
+                                                icon: Ext.MessageBox.QUESTION,
+                                                buttons: Ext.MessageBox.YESNO,
+                                                title: this.app.formatMessage('Discard changes?'),
+                                                msg: this.app.formatMessage('Do you want to overwrite the local changes with the data from the original record?'),
+                                            }) === 'no') {
+                                                forEach(record.modified, (val, field) => {
+                                                    this.record.set(field, record.get(field));
+                                                    this.getForm().findField(field)?.setValue(record.get(field));
+                                                });
+                                            }
+                                        }
+                                        // notify openers
+                                        this.fireEvent('update', recordData, this.mode, ticketFn);
+                                    }}});
                                 }
 
                             })
