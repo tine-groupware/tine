@@ -60,7 +60,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @param Zend_Console_Getopt $opts
      * @return boolean success
      */
-    public function readModifictionLogFromMaster($opts)
+    public function readModificationLogFromMaster($opts)
     {
         $this->_checkAdminRight();
 
