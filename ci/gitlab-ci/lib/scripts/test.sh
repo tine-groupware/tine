@@ -97,6 +97,8 @@ test_composer_install() {
     pushd ${TINE20ROOT}/tine20
     # trigger customapploader plugin, to create links
     rm -rf vendor/metaways
+    # needed for update test from 2025.11 to 2026.11. needs to be removed
+    rm -rf vendor/simplesamlphp
     COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress
     popd
 
