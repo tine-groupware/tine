@@ -296,6 +296,7 @@ class Tinebase_Twig
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('addNewLine',
             fn($str) => (is_scalar($str) && strlen((string)$str) > 0) ? $str . "\n" : $str));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('dateFormat', function ($date, $format) {
+            if (!$date) return '';
             if (!($date instanceof DateTime)) {
                 $date = new Tinebase_DateTime($date, Tinebase_Core::getUserTimezone());
             }

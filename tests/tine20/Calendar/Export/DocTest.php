@@ -208,7 +208,12 @@ class Calendar_Export_DocTest extends Calendar_TestCase
 
         Tinebase_ImportExportDefinition::getInstance()->update($definition);
 
-        $export = new Calendar_Export_Doc(new Calendar_Model_EventFilter(), null,
+        $export = new Calendar_Export_Doc(new Calendar_Model_EventFilter([
+            ['field' => 'period', 'operator' => 'within', 'value' => [
+                'from' => new DateTime('monday this week'),
+                'until' => new DateTime('saturday this week'),
+            ]]
+        ]), null,
             [
                 'definitionId'  => $definition->getId(),
                 'recordData'    => $this->_getEvent(true)->toArray()
