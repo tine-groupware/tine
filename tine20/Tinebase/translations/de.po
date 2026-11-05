@@ -2801,6 +2801,12 @@ msgstr "Aktion:"
 msgid "Notice: Changes to {recordGender, select, male {this} female {this} other {this}} {recordName} apply only to {contextRecordGender, select, male {the associated} female {the associated} other {the associated}} {contextRecordName}. {recordGender, select, male {The} female {The} other {The}} [original {recordName}]() remains unchanged."
 msgstr "Hinweis: Änderungen an {recordGender, select, male {diesem} female {dieser} other {diesem}} {recordName} gelten nur für {contextRecordGender, select, male {den zugrundeliegenden} female {die zugrundeliegende} other {das zugrundeliegende}} {contextRecordName}. {recordGender, select, male {Der} female {Die} other {Das}} [original {recordName}]() bleibt unverändert."
 
+msgid "Discard changes?"
+msgstr "Änderungen verwerfen?"
+
+msgid "Do you want to overwrite the local changes with the data from the original record?"
+msgstr "Möchten Sie die lokalen Änderungen mit den Daten aus dem Originaldatensatz überschreiben?"
+
 msgid "Enter description"
 msgstr "Beschreibung einfügen"
 
