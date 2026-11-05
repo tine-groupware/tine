@@ -936,25 +936,31 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $response = new \Laminas\Diactoros\Response();
             $response->getBody()->write(json_encode($registration->toArray()));
         } catch (Tinebase_Exception_AccessDenied $tead) {
+            Tinebase_Exception::log($tead);
             $response = new \Laminas\Diactoros\Response('php://memory', 403);
             $response->getBody()->write(json_encode(['error' => $tead->getMessage()]));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            Tinebase_Exception::log($tesg);
             $response = new \Laminas\Diactoros\Response('php://memory', 422);
             $response->getBody()->write(json_encode(['error' => $tesg->getMessage()]));
         } catch (Tinebase_Exception_Record_Validation $terv) {
+            Tinebase_Exception::log($terv);
             $response = new \Laminas\Diactoros\Response('php://memory', 404);
             $response->getBody()->write(json_encode($terv->getMessage()));
         } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Exception::log($tenf);
             $response = new \Laminas\Diactoros\Response('php://memory', 404);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            Tinebase_Exception::log($terna);
             $response = new \Laminas\Diactoros\Response('php://memory', 401);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_ConcurrencyConflict $tecc) {
+            Tinebase_Exception::log($tecc);
             $response = new \Laminas\Diactoros\Response('php://memory', 409);
             $response->getBody()->write(json_encode($tecc->getMessage()));
         } catch (Throwable $t) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $t);
+            Tinebase_Exception::log($t);
             $response = new \Laminas\Diactoros\Response('php://memory', 500);
             $response->getBody()->write(json_encode(['error' => 'Registration failed']));
         } finally {
@@ -1293,6 +1299,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $response = new \Laminas\Diactoros\Response();
             $response->getBody()->write(json_encode($registration->toArray()));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            Tinebase_Exception::log($tesg);
             $response = new \Laminas\Diactoros\Response('php://memory', 422);
             $response->getBody()->write(json_encode(['error' => $tesg->getMessage()]));
         } catch (Exception $e) {
