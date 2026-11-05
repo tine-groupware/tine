@@ -130,6 +130,7 @@ class EventManager_Export_Document extends Tinebase_Export_DocV2
 
             // names in German so we don't confuse them with model variables
             $row['email'] = $this->_calculateEmail($registration);
+            $row['telefon'] = $this->_calculatePhone($registration);
             $row['lfd_nr'] = $lfdNr++;
             $row['geschlecht'] = $this->_calculateGender($participant);
             $row['alter'] = $this->_calculateAge($participant, $event);
@@ -138,6 +139,9 @@ class EventManager_Export_Document extends Tinebase_Export_DocV2
                 EventManager_Config::REGISTRATION_STATUS,
                 $registration->{EventManager_Model_Registration::FLD_STATUS}
             );
+            $row['geburtsdatum'] = $this->_formatDate($participant->bday ?? null);
+            $row['anschrift'] = $this->_calculateAddress($registration);
+            $row['antworten_liste'] = $this->_buildAnswerList($registration);
 
             // keep the original nested participant data available for the template
             $row['participant'] = $participant instanceof Tinebase_Record_Interface
@@ -167,7 +171,10 @@ class EventManager_Export_Document extends Tinebase_Export_DocV2
                 $emails = [$registrantEmail ?: $participantEmail];
                 break;
             case 3: // Participant E-mail, Registrant E-mail in CC
-                $emails = [$participantEmail, $registrantEmail];
+                $emails = [
+                    $participantEmail,
+                    $registrantEmail && $registrantEmail !== $participantEmail ? 'Anmelder: ' . $registrantEmail : ''
+                ];
                 break;
             case 1: // Participant E-mail
             default:
@@ -175,7 +182,40 @@ class EventManager_Export_Document extends Tinebase_Export_DocV2
                 break;
         }
 
-        return implode(', ', array_unique(array_filter($emails)));
+        return implode("\n", array_unique(array_filter($emails)));
+    }
+
+    protected function _calculatePhone(EventManager_Model_Registration $registration): string
+    {
+        $participantPhones = $this->_getPhones($registration->{EventManager_Model_Registration::FLD_PARTICIPANT});
+        $registrantPhones  = $this->_getPhones($registration->{EventManager_Model_Registration::FLD_REGISTRANT});
+
+        $registrantPhones = array_values(array_diff($registrantPhones, $participantPhones));
+
+        $lines = [];
+        if (!empty($participantPhones)) {
+            $lines[] = implode(', ', $participantPhones);
+        }
+        if (!empty($registrantPhones)) {
+            $lines[] = 'Anmelder: ' . implode(', ', $registrantPhones);
+        }
+
+        return implode("\n", $lines);
+    }
+
+    protected function _getPhones($contact): array
+    {
+        if (!$contact instanceof Tinebase_Record_Interface) {
+            return [];
+        }
+        $phones = [];
+        foreach (['tel_prefer_normalized', 'tel_cell_normalized', 'tel_work_normalized'] as $field) {
+            $phone = trim((string)$contact->{$field});
+            if ('' !== $phone) {
+                $phones[] = $phone;
+            }
+        }
+        return array_values(array_unique($phones));
     }
 
     protected function _calculateGender($participant): string
@@ -231,6 +271,77 @@ class EventManager_Export_Document extends Tinebase_Export_DocV2
         }
         return Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME)
             ->_((string)$record->value);
+    }
+
+    protected function _formatDate($date): string
+    {
+        if (empty($date)) {
+            return '';
+        }
+
+        if (!$date instanceof Tinebase_DateTime) {
+            $date = new Tinebase_DateTime($date);
+        }
+
+        return $date->format('d.m.Y');
+    }
+
+    protected function _calculateAddress(EventManager_Model_Registration $registration): string
+    {
+        $participantAddress = $this->_formatAddress($registration->{EventManager_Model_Registration::FLD_PARTICIPANT});
+        $registrantAddress  = $this->_formatAddress($registration->{EventManager_Model_Registration::FLD_REGISTRANT});
+
+        $blocks = [];
+        if ('' !== $participantAddress) {
+            $blocks[] = $participantAddress;
+        }
+        if ('' !== $registrantAddress && $registrantAddress !== $participantAddress) {
+            $blocks[] = "Anmelder:\n" . $registrantAddress;
+        }
+        return implode("\n\n", $blocks);
+    }
+
+    protected function _formatAddress($contact): string
+    {
+        if (!$contact instanceof Tinebase_Record_Interface) {
+            return '';
+        }
+        $lines = [
+            trim((string)$contact->adr_one_street),
+            trim(trim((string)$contact->adr_one_postalcode) . ' ' . trim((string)$contact->adr_one_locality)),
+            trim((string)$contact->adr_one_countryname),
+        ];
+        return implode("\n", array_filter($lines));
+    }
+
+    protected function _buildAnswerList(EventManager_Model_Registration $registration): array
+    {
+        $items = [];
+        foreach ($registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} ?? [] as $booked) {
+            $class      = $booked->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS};
+            $isCheckbox = $class === EventManager_Model_Selections_Checkbox::class;
+            $isText     = $class === EventManager_Model_Selections_TextInput::class;
+            $option     = $booked->{EventManager_Model_BookedOption::FLD_OPTION};
+            if ((!$isCheckbox && !$isText) || !$option instanceof Tinebase_Record_Interface) {
+                continue;
+            }
+
+            $config   = $booked->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG};
+            $name     = rtrim((string)$option->{EventManager_Model_Option::FLD_NAME_OPTION}, ': ');
+            $group    = rtrim(trim((string)$option->{EventManager_Model_Option::FLD_GROUP}), ': ');
+            $isBooked = $isCheckbox && $config && $config->booked;
+            $response = $isText && $config ? trim((string)$config->response) : '';
+
+            if ('' !== $group && $isCheckbox) {
+                // grouped checkbox: only the chosen one, "Group: Option"
+                if ($isBooked) {
+                    $items[] = ['label' => $group, 'value' => $name];
+                }
+            } else {
+                $items[] = ['label' => $name, 'value' => $isCheckbox ? ($isBooked ? 'Ja' : 'Nein') : $response];
+            }
+        }
+        return $items;
     }
 
     protected function _getTwigContext(array $context)
