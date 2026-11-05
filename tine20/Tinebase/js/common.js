@@ -137,9 +137,9 @@ const common = {
     dateRenderer: function (date, metadata) {
         const format = this?.format ? (this.format?.Date || this.format) : ['wkday', 'medium'];
         const dateObj = date instanceof Date ? date :
-            Ext.form.DateField.prototype.parseDate.call(Object.assign({
+            Ext.form.DateField.prototype.parseDate.call(Object.assign({}, Ext.form.DateField.prototype, {
                 format: Date.patterns.ISO8601Long
-            }, Ext.form.DateField.prototype), date);
+            }), date);
 
         const formatDate = (key) => key === 'wkday'
             ? dateObj.format('l').substr(0, 2)
