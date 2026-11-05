@@ -96,6 +96,7 @@ E2E tests verify what a user sees and does. They must always use the real UI:
 ### Dialogs
 
 - Use `getEditDialog(btnText)` for popup windows — handles loading masks and content readiness
+- Use `answerMessageBox(page, 'yes'|'no'|'ok'|'cancel', {title})` to answer message boxes (`Ext.MessageBox`, rendered as vue modal). It waits until the modal and its backdrop are gone: they still cover the page for some frames after `.show` was removed, clicks in that time get lost
 
 ### Navigation
 

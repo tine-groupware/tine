@@ -67,8 +67,7 @@ describe('Create and delete time sheet', () => {
         // await verifyGridPanelDeleteRecordsWorks();
 
         // Wait for modal confirmation dialog to appear, click on "Ja" and wait until the dialog disappears.
-        await lib.clickOnElement(global.page, '.modal.vue-message-box button.yes-button');
-        await lib.waitForElement(global.page, '.modal.vue-message-box', {hidden: true});
+        await lib.answerMessageBox(global.page, 'yes');
 
         // Refresh grid and check for absence of the entry.
         await lib.refreshGridAndWaitForReady(global.page, '.t-app-timetracker');
