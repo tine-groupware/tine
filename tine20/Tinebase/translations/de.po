@@ -3318,6 +3318,18 @@ msgstr ""
 msgid "Edit copy"
 msgstr "Kopie bearbeiten"
 
+msgid "Edit this copy"
+msgstr "Diese Kopie bearbeiten"
+
+msgid "Edit original"
+msgstr "Original bearbeiten"
+
+msgid "{contextRecordGender, select, male {The associated} female {The associated} other {The associated}} {contextRecordName} keeps its own copy. Changes to this copy apply only to {contextRecordGender, select, male {this} female {this} other {this}} {contextRecordName}, {recordGender, select, male {the} female {the} other {the}} original {recordName} remains unchanged."
+msgstr "{contextRecordGender, select, male {Der zugrundeliegende} female {Die zugrundeliegende} other {Das zugrundeliegende}} {contextRecordName} pflegt eine eigene Kopie. Änderungen an dieser Kopie gelten nur für {contextRecordGender, select, male {diesen} female {diese} other {dieses}} {contextRecordName}, {recordGender, select, male {der} female {die} other {das}} original {recordName} bleibt unverändert."
+
+msgid "Edit copy or original"
+msgstr "Kopie oder Original bearbeiten"
+
 #, python-brace-format
 msgid "Search for {0} ..."
 msgstr "Suche nach {0} ..."

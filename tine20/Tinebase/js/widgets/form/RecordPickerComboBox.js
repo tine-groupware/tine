@@ -154,7 +154,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 allowCreateNew: true,
                 preserveJsonProps: 'original_id',
                 assertState: function(){
-                    this.setQtip(!!this.field.selectedRecord ? window.i18n._('Edit copy') : 'Add new original')
+                    this.setQtip(!!this.field.selectedRecord ? window.i18n._('Edit copy or original') : 'Add new original')
                     this.editDialogConfig = !!this.field.selectedRecord ? {
                         mode: 'local',
                         denormalizationRecordClass: me.denormalizationRecordClass,
