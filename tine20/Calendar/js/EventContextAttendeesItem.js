@@ -38,6 +38,9 @@ Tine.Calendar.EventContextAttendeesItem = Ext.extend(Ext.menu.Item, {
         }, this);
 
         Ext.each(explicitAttendee, function(attendeeData) {
+            // memberOf is a filter only type and can't be an event attendee
+            if (attendeeData.user_type === 'memberOf') return;
+
             var r = new Tine.Calendar.Model.Attender(attendeeData, 'new-' + Ext.id()),
                 isCurrent = Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(currentAttendee, r);
 
@@ -83,11 +86,18 @@ Tine.Calendar.EventContextAttendeesItem = Ext.extend(Ext.menu.Item, {
      */
     renderAttender: function(attender) {
         const proto = Tine.Calendar.AttendeeGridPanel.prototype;
-        const name = proto.renderAttenderName.call(proto, attender.get('user_id'), false, attender);
-        // NOTE: String.prototype has asString too - plain strings are already html (e.g. resource icon + name)
+        const iconStyle = 'display: inline-block; vertical-align: middle; width: 16px; height: 16px; margin: 0 5px 0 0;';
+
+        // resources: use the specific resource type icon instead of the generic type icon + icon in name
+        const resourceIcon = attender.get('user_type') === 'resource' ?
+            proto.renderAttenderResourceIcon.call(proto, attender.get('user_id')) : '';
+
+        const name = proto.renderAttenderName.call(proto, attender.get('user_id'), resourceIcon ? {noIcon: true} : false, attender);
+        // NOTE: String.prototype has asString too - plain strings are already html
         const isAsync = !!name?.isHTMLProxy;
-        const typeHtml = proto.renderAttenderType.call(proto, attender.get('user_type'), {}, attender)
-            .replace('<div', '<div style="display: inline-block; vertical-align: middle; margin: 0 5px 0 0; background-position: 0px;"');
+        const typeHtml = resourceIcon ? resourceIcon.replace('<img', `<img style="${iconStyle}"`) :
+            proto.renderAttenderType.call(proto, attender.get('user_type'), {}, attender)
+                .replace('<div', `<div style="${iconStyle} background-position: 0px;"`);
 
         return {
             typeHtml: typeHtml,
