@@ -301,7 +301,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      * The beforeclose event is fired before the close happens and will cancel 
      * the close action if it returns false.
      */
-    close: function(force) {
+    close: function(force, leaveStateId) {
         if(force || this.fireEvent("beforeclose", this) !== false){
             this.forceClose = true;
 
@@ -319,7 +319,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 
             return true;
         } else {
-            this.confirmLeavSite(this);
+            this.confirmLeavSite(this, leaveStateId);
         }
     },
     
