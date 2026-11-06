@@ -829,7 +829,7 @@ Record.getDefaultData = function(recordClass, defaults) {
 Record.setFromJson = function(json, recordClass) {
     recordClass = recordMgr.get(recordClass);
     if (!recordClass) return null;
-    var jsonReader = new JsonReader({
+    recordClass.jsonReader = recordClass.jsonReader || new JsonReader({
         id: recordClass.idProperty,
         root: 'results',
         totalProperty: 'totalcount'
@@ -841,7 +841,7 @@ Record.setFromJson = function(json, recordClass) {
                     isString(json) ? JSON.parse(json) : json
                 ])
             },
-            data = jsonReader.readRecords(recordData),
+            data = recordClass.jsonReader.readRecords(recordData),
             record = data.records[0];
     } catch (e) {
         log.warn('Exception in setFromJson:');
