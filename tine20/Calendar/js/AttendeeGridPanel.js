@@ -411,10 +411,20 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             members = Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store),
             fbInfoUpdate = [];
 
-        var mask = new Ext.LoadMask(this.getEl(), {msg: this.app.i18n._("Loading Group Members...")});
-        mask.show();
+        // NOTE: grid might not be rendered yet (e.g. onRecordLoad before window is shown)
+        let isLoading = true,
+            mask = null;
+        this.afterIsRendered().then(() => {
+            if (isLoading && !this.isDestroyed) {
+                mask = new Ext.LoadMask(this.getEl(), {msg: this.app.i18n._("Loading Group Members...")});
+                mask.show();
+            }
+        });
 
         Tine.Calendar.resolveGroupMembers(members, function(attendeesData) {
+            isLoading = false;
+            if (this.isDestroyed) return;
+
             var attendees = Tine.Calendar.Model.Attender.getAttendeeStore(attendeesData);
 
             // remove not longer existing attendee
@@ -435,7 +445,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }, this);
 
             this.updateFreeBusyInfo(fbInfoUpdate);
-            mask.hide();
+            mask?.hide();
             this.addNewAttendeeRow();
         }, this);
     },
