@@ -74,6 +74,7 @@ E2E tests verify what a user sees and does. They must always use the real UI:
 3. **Robust Assertions**: Replace `toMatchElement` with `waitForSelector` + `page.evaluate` text extraction. Normalize whitespace.
 4. **Dialog Handling**: Use `getEditDialog(btnText)` for popups. Handles loading masks and content readiness.
 5. **Simplify**: Prefer minimal, readable waiting logic over over-engineered helpers.
+6. **Use the library first**: Check `src/lib/browser.js` before writing own `waitForFunction` or navigation code (e.g. `waitForElement` with `{hidden: true}`, `getBrowser(app, module)`).
 6. **Real Dialogs Only**: Test through real dialogs and user interactions, no DOM tricks (see above).
 
 ## Library Reference
@@ -85,6 +86,8 @@ E2E tests verify what a user sees and does. They must always use the real UI:
 | `browser.formFillInputField(page, selector, value)` | Fill input with typing delay simulation |
 | `browser.formFillComboField(page, selector, value)` | Fill combo box with typing delay and selection |
 | `browser.waitForAppReady(page)` | Wait for loading indicators to disappear |
+| `browser.waitForElement(page, selector, {visible\|hidden, timeout})` | Wait until all matches are visible / hidden (or exist) |
+| `browser.answerMessageBox(page, button, {title})` | Answer a message box and wait until it is closed |
 | `browser.getCurrentUser(page)` | Get logged-in user account info |
 
 ## Pattern Mapping

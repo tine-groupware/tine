@@ -56,6 +56,8 @@ Main entry point. Key exports:
 | `formFillInputField(page, selector, value)` | Fill input with typing delay simulation |
 | `formFillComboField(page, selector, value)` | Fill combo box with typing delay and selection |
 | `waitForAppReady(page)` | Wait for loading indicators to disappear |
+| `waitForElement(page, selector, {visible\|hidden, timeout})` | Wait until all matches are visible / hidden (or exist) |
+| `answerMessageBox(page, button, {title})` | Answer a message box and wait until it is closed |
 | `getCurrentUser(page)` | Get logged-in user account info |
 
 ### `src/lib/browser.helpers.js`
@@ -81,6 +83,9 @@ E2E tests verify what a user sees and does. They must always use the real UI:
 - **Dynamic waiting preferred:** `waitForSelector`, `waitForFunction` with configurable timeouts from env vars (`TEST_TIMEOUT_*`)
 - **No hardcoded delays:** Eliminate `setTimeout` — use dynamic waiting instead
 - **Timeouts:** Start high, then reduce. Use `TEST_TIMEOUT_WAIT_FOR_SELECTOR` for overrides
+- Before writing an own `waitForFunction`, check `src/lib/browser.js` for a helper that covers it (e.g. `waitForElement`, `waitForAppReady`, `answerMessageBox`, `getBrowser(app, module)`)
+- Use `waitForElement(page, selector, {hidden: true})` to wait until elements are gone / not displayed, `{visible: true}` until they are shown
+- Use `waitForFunction` only for conditions no helper covers (e.g. field values, component state)
 
 ### Form Filling
 
