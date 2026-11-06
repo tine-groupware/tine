@@ -33,7 +33,7 @@ Tine.Calendar.FreeTimeSearchDialog = Ext.extend(Ext.Panel, {
             this.record = this.recordProxy.recordReader({responseText: this.record});
         }
 
-        var prefs = this.app.getRegistry().get('preferences');
+        var prefs = this.app.getRegistry().peek('preferences');
         Ext.DatePicker.prototype.startDay = parseInt((prefs ? prefs.get('firstdayofweek') : 1), 10);
 
         this.store = new Ext.data.JsonStore({

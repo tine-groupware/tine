@@ -9,7 +9,7 @@ const expandFilter = (filterSpec, filter) => {
         if (filterSpec.preference) {
             filter = filter.concat(
                 Tine.Tinebase.appMgr.get(filterSpec.preference.appName)
-                    .getRegistry().get('preferences').get(filterSpec.preference.name)
+                    .getRegistry().peek('preferences').get(filterSpec.preference.name)
             );
         }
         if (filterSpec.favorite) {

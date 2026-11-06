@@ -804,7 +804,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      */
     onFiltertrigger: function() {
         // auto search on filter change only if set in user preferences
-        if (parseInt(Tine.Tinebase.registry.get('preferences').get('filterChangeAutoSearch'), 10) === 1) {
+        if (parseInt(Tine.Tinebase.registry.peek('preferences').get('filterChangeAutoSearch'), 10) === 1) {
             this.fireEvent('filtertrigger', this);
         }
     }

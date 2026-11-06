@@ -1118,7 +1118,7 @@ Tine.Tinebase.tineInit = {
      */
     onRegistryLoad: async function() {
         if (! Tine.Tinebase.tineInit.onPreferenceChangeRegistered
-            && Tine.Tinebase.registry.get('preferences')
+            && Tine.Tinebase.registry.peek('preferences')
             && Tine.Tinebase.registry.get('currentAccount')
         ) {
             // NOTE: safari (and maybe other slow browsers) need some time till all events from initial preferences
@@ -1164,7 +1164,7 @@ Tine.Tinebase.tineInit = {
 
         Ext.form.NumberField.prototype.decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
         Ext.ux.form.NumberField.prototype.thousandSeparator = Tine.Tinebase.registry.get('thousandSeparator');
-        Ext.grid.GridView.prototype.resizingStrategy = Tine.Tinebase.registry.get('preferences')?.get('gridResizingStrategy');
+        Ext.grid.GridView.prototype.resizingStrategy = Tine.Tinebase.registry.peek('preferences')?.get('gridResizingStrategy');
 
         formatMessage.setup({
             locale: Tine.Tinebase.registry.get('locale').locale || 'en'
@@ -1388,9 +1388,9 @@ Tine.Tinebase.tineInit = {
         // initialise window types
         var windowType = '';
         Ext.ux.PopupWindow.prototype.url = Tine.Tinebase.common.getUrl();
-        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
+        if (Tine.Tinebase.registry && Tine.Tinebase.registry.peek('preferences')) {
             // update window factory window type (required after login)
-            windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
+            windowType = Tine.Tinebase.registry.peek('preferences').get('windowtype');
         }
 
         if (! windowType || windowType == 'autodetect') {
@@ -1437,7 +1437,7 @@ Tine.Tinebase.tineInit = {
             return;
         }
 
-        Ext.Direct.addProvider(Ext.apply(sam, {
+        Ext.Direct.addProvider(Ext.apply({ ...sam }, {
             'type'     : 'jsonrpcprovider',
             'namespace': 'Tine',
             'url'      : sam.target

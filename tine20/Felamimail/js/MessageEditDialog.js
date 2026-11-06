@@ -438,7 +438,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         let attachments = [];
         let forwardMode = !this.isForwardedMessage()
             ? ''
-            : Tine[this.app.appName].registry.get('preferences').get('emlForward');
+            : Tine[this.app.appName].registry.peek('preferences').get('emlForward');
 
         if (forwardMode === 'message' || this.draftOrTemplate) {
             Ext.each(message.get('attachments'), function (attachment) {
@@ -635,7 +635,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.msgBody = this.getQuotedMailHeader(format) + this.msgBody;
 
         if (this.isForwardedMessage()) {
-            const forwardMode = Tine[this.app.appName].registry.get('preferences').get('emlForward');
+            const forwardMode = Tine[this.app.appName].registry.peek('preferences').get('emlForward');
             if (forwardMode === 'onlyAsAttachment') {
                 this.msgBody = '';
             }
@@ -720,7 +720,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
 
             const currentAccountId = this.accountId;
-            const defaultAccountId = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+            const defaultAccountId = Tine.Felamimail.registry.peek('preferences').get('defaultEmailAccount');
             const currentAccount = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.accountId);
 
             if (!currentAccount.data?.account_grants?.addGrant) {
@@ -1279,7 +1279,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 Ext.util.Format.htmlEncode(this.replyTo.get('from_name'))
             ) + ':\n';
         } else if (this.isForwardedMessage()) {
-            const forwardMode = Tine[this.app.appName].registry.get('preferences').get('emlForward');
+            const forwardMode = Tine[this.app.appName].registry.peek('preferences').get('emlForward');
 
             if (forwardMode !== 'onlyAsAttachment') {
                 header = String.format('{0}-----' + this.app.i18n._('Original message') + '-----{1}',

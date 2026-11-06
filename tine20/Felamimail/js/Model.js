@@ -335,7 +335,7 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
      * @param account
      */
     getFormatConfig(formatConfig, message, account = null) {
-        const defaultDisplayFormat = Tine.Felamimail.registry.get('preferences').get('displayFormat');
+        const defaultDisplayFormat = Tine.Felamimail.registry.peek('preferences').get('displayFormat');
 
         account = account ?? Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(message.get('account_id'));
         // set default mimeType to text/plain when no account found, might happen for .eml emails

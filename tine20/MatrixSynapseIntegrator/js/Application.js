@@ -25,7 +25,7 @@ Tine.MatrixSynapseIntegrator.Application = Ext.extend(Tine.Tinebase.Application,
     },
 
     init: function() {
-        if (!!+this.getRegistry().get('preferences').get('startClientInBackground')) {
+        if (!!+this.getRegistry().peek('preferences').get('startClientInBackground')) {
             // init client in background to get unread count
             let attempts = 0;
 

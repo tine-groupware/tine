@@ -10,6 +10,7 @@ import { get, set, uniq, isArray, find, bind, concat, delay, isFunction, each, f
 import waitFor from "util/waitFor.es6"
 import asString from "../../ux/asString"
 import * as markdown from 'util/markdown'
+import { takeOriginalChanges } from './denormalization'
 
 
 Ext.ns('Tine.widgets.dialog');
@@ -457,34 +458,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                                     this.onRecordUpdate();
                                     const record = this.record.constructor.clone(this.record);
                                     EditDialog.openWindow({recordId: originalId, record: { id: originalId }, mode: 'remote', listeners: { update: async (recordData, mode, ticketFn) => {
-                                        let current
-                                        try {
-                                            await this.loadRecord(await this.denormalizationRecordClass.getProxy().promiseLoadRecord(record.id))
-                                        } catch (e) {/* no api -> record was not updated */}
-
-                                        if (this.record.getMTime() <= record.getMTime()) {
-                                            // take data from updated original
-                                            this.loadRecord(this.recordClass.setFromJson(recordData), true);
-                                            this.record.setId(record.id);
-                                            this.record.set('original_id', record.get('original_id') || record.id);
-
-                                        }
-
-                                        if (Object.keys(record.modified || {}).length) {
-                                            if (await Ext.MessageBox.show({
-                                                icon: Ext.MessageBox.QUESTION,
-                                                buttons: Ext.MessageBox.YESNO,
-                                                title: this.app.formatMessage('Discard changes?'),
-                                                msg: this.app.formatMessage('Do you want to overwrite the local changes with the data from the original record?'),
-                                            }) === 'no') {
-                                                forEach(record.modified, (val, field) => {
-                                                    this.record.set(field, record.get(field));
-                                                    this.getForm().findField(field)?.setValue(record.get(field));
-                                                });
-                                            }
-                                        }
-                                        // notify openers
-                                        this.fireEvent('update', recordData, this.mode, ticketFn);
+                                        const updated = await takeOriginalChanges(record, recordData, this.denormalizationRecordClass, this.app);
+                                        await this.loadRecord(updated, true);
+                                        // notify openers (the record knows its local changes)
+                                        this.fireEvent('update', updated, this.mode, this, ticketFn);
                                     }}});
                                 }
 

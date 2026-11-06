@@ -13,11 +13,12 @@ const configManager = function(){
     return {
         get: function(name, appName) {
             var registry = appName && Tine[appName] ? Tine[appName].registry : Tine.Tinebase.registry,
-                config = registry ? registry.get('config') : false,
+                // NOTE: peek instead of get -> only clone the requested value, not the whole config
+                config = registry ? registry.peek('config') : false,
                 pathParts = String(name).split('.'),
                 path = pathParts.join('.value.') + (pathParts.length == 1 ? '.value' : '');
 
-            return lodash.get(config, path);
+            return lodash.cloneDeep(lodash.get(config, path));
         },
         set: function(name, value, appName) {
             var registry = appName && Tine[appName] ? Tine[appName].registry : Tine.Tinebase.registry,

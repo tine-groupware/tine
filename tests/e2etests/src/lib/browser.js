@@ -477,6 +477,7 @@ export default {
     waitForElement: helpers.waitForElement.bind(helpers),
     isElementUnblocked: helpers.isElementUnblocked.bind(helpers),
     clickOnElementWaitPageClosed: helpers.clickOnElementWaitPageClosed.bind(helpers),
+    answerMessageBox: helpers.answerMessageBox.bind(helpers),
     makeScreenshot: helpers.makeScreenshot.bind(helpers),
     proxyConsole: helpers.proxyConsole.bind(helpers),
     initExpect: helpers.initExpect.bind(helpers),

@@ -407,11 +407,8 @@ describe('employee', () => {
             await employeeEditDialog.waitForSelector('.x-menu-floating .x-menu-list-item:not(.x-item-disabled) a img.x-menu-item-icon.action_delete');
             await expectPuppeteer(employeeEditDialog).toClick('.x-menu-floating .x-menu-list-item:not(.x-item-disabled) a span', {text: 'Vertrag löschen', timeout: 5000});
 
-            // Wait for confirm dialog to be ready.
-            await employeeEditDialog.waitForSelector('.modal.vue-message-box.show button.yes-button');
-            await expectPuppeteer(employeeEditDialog).toClick('.modal.vue-message-box.show button.yes-button');
-            // Wait for confirm dialog to be gone.
-            await employeeEditDialog.waitForSelector('.modal.vue-message-box:not(.show)');
+            // Confirm and wait for confirm dialog to be gone.
+            await lib.answerMessageBox(employeeEditDialog, 'yes');
             // Save and wait until the action is completed (give it some extra time so CI doesn't complain).
             await lib.clickOnElementWaitPageClosed(employeeEditDialog, 'button', 'Ok', popupCloseOptions);
         }, 180000);

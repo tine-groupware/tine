@@ -827,7 +827,7 @@ const common = {
      */
     hasRight: function (right, application, resource) {
 
-        if (! (Tine && Tine[application] && Tine[application].registry && Tine[application].registry.get('rights'))) {
+        if (! (Tine && Tine[application] && Tine[application].registry && Tine[application].registry.peek('rights'))) {
             if (Tine.Tinebase.tineInit.isReloading) {
                 Tine.log.info('Tine 2.0 is reloading ...');
             } else if (! Tine.Tinebase.appMgr) {
@@ -839,8 +839,9 @@ const common = {
             }
             return false;
         }
-        var userRights = Tine[application].registry.get('rights'),
-            allAppRights = Tine[application].registry.get('allrights');
+        // NOTE: peek instead of get -> no (deep) clones, we only read here
+        var userRights = Tine[application].registry.peek('rights'),
+            allAppRights = Tine[application].registry.peek('allrights');
 
         if (allAppRights && right === 'view' && allAppRights.indexOf('view') < 0) {
             // switch to run as app has no view right

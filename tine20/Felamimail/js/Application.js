@@ -98,7 +98,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         Tine.log.info('initialising app');
         this.checkMailsDelayedTask = new Ext.util.DelayedTask(this.checkMails, this);
         
-        this.updateInterval = parseInt(Tine.Felamimail.registry.get('preferences').get('updateInterval')) * 60000;
+        this.updateInterval = parseInt(Tine.Felamimail.registry.peek('preferences').get('updateInterval')) * 60000;
         Tine.log.debug('user defined update interval is "' + this.updateInterval/1000 + '" seconds');
 
         Tine.Tinebase.appMgr.isInitialised('Felamimail')
@@ -811,7 +811,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @return {Boolean}
      */
     isDefaultAccountId: function(accountId) {
-        return accountId == Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+        return accountId == Tine.Felamimail.registry.peek('preferences').get('defaultEmailAccount');
     },
     
     /**
@@ -898,7 +898,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }
         
         if (!account) {
-            account = this.getAccountStore().getById(Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'));
+            account = this.getAccountStore().getById(Tine.Felamimail.registry.peek('preferences').get('defaultEmailAccount'));
         }
         
         if (!account) {
@@ -926,7 +926,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 reader: Tine.Felamimail.accountBackend.getReader(),
                 listeners: {
                     load: _.bind(() => {
-                        const defaultAccountId = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+                        const defaultAccountId = Tine.Felamimail.registry.peek('preferences').get('defaultEmailAccount');
                         this.defaultAccount = this.accountStore.getById(defaultAccountId);
                         if (!this.defaultAccount) {
                             this.defaultAccount = this.accountStore.getAt(0);

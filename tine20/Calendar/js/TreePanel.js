@@ -89,7 +89,7 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         //@TODO improve detection or pipe as config
         this.isMainScreenFilterTree = this.hasContextMenu;
         this.app = Tine.Tinebase.appMgr.get('Calendar');
-        this.removeFiltersOnSelectContainer = this.app ? this.app.getRegistry().get('preferences').get('removeFiltersOnSelectContainer') : false;
+        this.removeFiltersOnSelectContainer = this.app ? this.app.getRegistry().peek('preferences').get('removeFiltersOnSelectContainer') : false;
 
         this.extraItems = [
             {
@@ -363,7 +363,7 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     },
 
     getSelectedContainer: function(requiredGrants, defaultContainer, onlySingle) {
-        var prefs = this.app.getRegistry().get('preferences');
+        var prefs = this.app.getRegistry().peek('preferences');
 
         if ('none' === prefs.get('defaultCalendarStrategy')) {
             var sm = this.getSelectionModel(),

@@ -100,7 +100,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
 
         // the paging toolbar
         var pagingToolbar = new Ext.PagingToolbar({
-            pageSize: parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) || 50,
+            pageSize: parseInt(Tine.Tinebase.registry.peek('preferences').get('pageSize'), 10) || 50,
             store: this.store,
             displayInfo: true,
             displayMsg: this.translation.gettext('Displaying history records {0} - {1} of {2}'),
@@ -206,7 +206,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                 options.params = {};
             }
 
-            this.paging.limit = parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10);
+            this.paging.limit = parseInt(Tine.Tinebase.registry.peek('preferences').get('pageSize'), 10);
             
             // paging toolbar only works with this properties in the options!
             options.params.sort  = store.getSortState() ? store.getSortState().field : this.paging.sort;

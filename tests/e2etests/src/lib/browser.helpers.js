@@ -418,6 +418,55 @@ export default {
     },
 
     /**
+     * Waits for the message box (Ext.MessageBox, rendered as vue modal), clicks one of its buttons
+     * and waits until the message box is closed.
+     * NOTE: the modal loses `.show` first, the modal and its backdrop still cover the page for some frames.
+     *       Clicks on the page during that time get lost.
+     *
+     * @param {puppeteer.Page} page
+     * @param {string} button - Name of the button (locale independent): 'yes', 'no', 'ok' or 'cancel'.
+     * @param {Object} [options] - Optional settings.
+     * @param {string} [options.title] - Expected title of the message box, waits for a message box with this title.
+     * @param {number} [options.timeout=TEST_TIMEOUT_CONTENT_READY] - Max time in ms to wait for the message box to appear.
+     * @param {number} [options.closeTimeout=TEST_TIMEOUT_ACTIONABLE] - Max time in ms to wait for the message box to close.
+     * @returns {Promise<{title: string, message: string}>} Whitespace-normalized title and message of the answered message box.
+     */
+    answerMessageBox: async function (page, button, options = {}) {
+        this.assertNotAborted('answerMessageBox');
+
+        const timeout = options.timeout || this.getEnvInt('TEST_TIMEOUT_CONTENT_READY');
+        const closeTimeout = options.closeTimeout || this.getEnvInt('TEST_TIMEOUT_ACTIONABLE');
+        const selector = '.modal.vue-message-box.show';
+
+        try {
+            await page.waitForFunction((sel, title) => {
+                const box = document.querySelector(sel);
+                const boxTitle = (box?.querySelector('.modal-title')?.textContent || '').replace(/\s+/g, ' ').trim();
+                return !!box && (!title || boxTitle === title);
+            }, {timeout}, selector, options.title || null);
+        } catch (err) {
+            const shown = await page.evaluate((sel) => (document.querySelector(`${sel} .modal-title`)?.textContent || '').trim(), selector).catch(() => '');
+            const error = new Error(`answerMessageBox: no message box${options.title ? ` with title "${options.title}"` : ''} shown within ${timeout}ms${shown ? ` (shown: "${shown}")` : ''}`);
+            error.cause = err;
+            throw error;
+        }
+
+        const content = await page.evaluate((sel) => {
+            const normalize = (el) => (el?.textContent || '').replace(/\s+/g, ' ').trim();
+            const box = document.querySelector(sel);
+            return {title: normalize(box.querySelector('.modal-title')), message: normalize(box.querySelector('.modal-body'))};
+        }, selector);
+
+        await this.clickOnElement(page, `${selector} .modal-footer button.${button}-button`);
+
+        // the message box is closed when neither the modal nor its backdrop are displayed anymore
+        await this.waitForElement(page, '.modal.vue-message-box', {hidden: true, timeout: closeTimeout});
+        await this.waitForElement(page, '.modal-backdrop', {hidden: true, timeout: closeTimeout});
+
+        return content;
+    },
+
+    /**
      * Takes a screenshot of the given page with the specified options.
      * The env variable TEST_ALL_SCREENSHOT set to 'true' will take screenshots in both light and dark modes.
      *
