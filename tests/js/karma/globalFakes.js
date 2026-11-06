@@ -26,6 +26,9 @@ let registry = (app) => {
     get: (key) => {
       return registry[key]
     },
+    peek: (key) => {
+      return registry[key]
+    },
     getAll: () => {
       return registry
     },

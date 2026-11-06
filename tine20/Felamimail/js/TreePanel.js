@@ -507,7 +507,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {Record} account
      */
     selectInbox: function(account) {
-        const accountId = (account) ? account.id : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+        const accountId = (account) ? account.id : Tine.Felamimail.registry.peek('preferences').get('defaultEmailAccount');
 
         this.expandPath('/root/' + accountId + '/', null, function(success, parentNode) {
             Ext.each(parentNode.childNodes, function(node) {

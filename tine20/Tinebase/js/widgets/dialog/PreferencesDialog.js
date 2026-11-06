@@ -396,7 +396,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         for (let application in data) {
             if (data.hasOwnProperty(application)) {
                 appPrefs = data[application];
-                const registryValues = Tine[application].registry.get('preferences');
+                const registryValues = Tine[application].registry.peek('preferences');
                 let changed = false;
                 for (var i = 0; i < appPrefs.length; i++) {
                     if (registryValues.get(appPrefs[i].name) !== appPrefs[i].value) {

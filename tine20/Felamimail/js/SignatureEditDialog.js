@@ -1,7 +1,7 @@
 Tine.widgets.form.FieldManager.register('Felamimail', 'Signature', 'signature', {
     xtype: 'htmleditor',
     name: 'signature',
-    defaultFont: Tine.Felamimail.registry.get('preferences').get('defaultfont') || 'tahoma',
+    defaultFont: Tine.Felamimail.registry.peek('preferences').get('defaultfont') || 'tahoma',
     height: 400,
     getDocMarkup: function(){
         let markup = '<html>'

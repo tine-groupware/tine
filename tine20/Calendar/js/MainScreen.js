@@ -23,7 +23,7 @@ Ext.namespace('Tine.Calendar');
 Tine.Calendar.MainScreen = function(config) {
     Ext.apply(this, config);
 
-    var prefs = this.app.getRegistry().get('preferences');
+    var prefs = this.app.getRegistry().peek('preferences');
     Ext.DatePicker.prototype.startDay = parseInt((prefs ? prefs.get('firstdayofweek') : 1), 10);
 
     Tine.Calendar.MainScreen.superclass.constructor.apply(this, arguments);

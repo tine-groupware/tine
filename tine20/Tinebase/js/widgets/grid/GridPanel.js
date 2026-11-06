@@ -1893,7 +1893,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     initGrid: async function () {
-        var preferences = Tine.Tinebase.registry.get('preferences');
+        var preferences = Tine.Tinebase.registry.peek('preferences');
 
         if (preferences) {
             this.gridConfig = Ext.applyIf(this.gridConfig || {}, {
@@ -3171,9 +3171,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         var records = sm.getSelectedRecords ? sm.getSelectedRecords() : sm.getSelections();
 
-        if (this.disableDeleteConfirmation || (Tine[this.app.appName].registry.get('preferences')
-            && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') !== null
-            && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') == 0)
+        if (this.disableDeleteConfirmation || (Tine[this.app.appName].registry.peek('preferences')
+            && Tine[this.app.appName].registry.peek('preferences').get('confirmDelete') !== null
+            && Tine[this.app.appName].registry.peek('preferences').get('confirmDelete') == 0)
         ) {
             // don't show confirmation question for record deletion
             this.deleteRecords(sm, records);

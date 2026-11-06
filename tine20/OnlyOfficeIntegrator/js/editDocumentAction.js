@@ -161,7 +161,7 @@ Promise.all([
     
     // dblclick actions
     Tine.on('filesystem.fileDoubleClick', (fileNode, dblClickHandlers) => {
-        const dbClickPreference = Tine.Tinebase.registry.get('preferences').get('fileDblClickAction');
+        const dbClickPreference = Tine.Tinebase.registry.peek('preferences').get('fileDblClickAction');
         
         if (allowOpen(fileNode) && dbClickPreference === 'openwithonlyoffice') {
             dblClickHandlers.push({

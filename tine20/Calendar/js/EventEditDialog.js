@@ -69,7 +69,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Object} components this.itmes definition
      */
     getFormItems: function() {
-        var timeIncrement = parseInt(this.app.getRegistry().get('preferences').get('timeIncrement'));
+        var timeIncrement = parseInt(this.app.getRegistry().peek('preferences').get('timeIncrement'));
 
         return {
             xtype: 'tabpanel',
@@ -902,7 +902,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     adjustTimeToUserPreference: function(dateValue, prefKey) {
         let userPreferenceDate = dateValue;
-        const prefs = this.app.getRegistry().get('preferences');
+        const prefs = this.app.getRegistry().peek('preferences');
         const hour = prefs.get(prefKey).split(':')[0];
         
         // adjust date to user preference

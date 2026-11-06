@@ -112,8 +112,8 @@ Ext.apply(Tine.Tinebase.AppManager.prototype, {
      */
     getDefault: function() {
         if (! this.defaultApp) {
-            var defaultAppName = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('defaultapp')) 
-                ? Tine.Tinebase.registry.get('preferences').get('defaultapp') 
+            var defaultAppName = (Tine.Tinebase.registry.peek('preferences') && Tine.Tinebase.registry.peek('preferences').get('defaultapp')) 
+                ? Tine.Tinebase.registry.peek('preferences').get('defaultapp') 
                 : this.defaultAppName;
                 
             this.defaultApp = this.get(defaultAppName) || this.apps.find(function(app) {return app.hasMainScreen});
