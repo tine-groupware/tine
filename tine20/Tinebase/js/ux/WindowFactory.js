@@ -29,7 +29,7 @@ Ext.ux.WindowFactory = function (config) {
         // closing interception analog to browser windows
         // NOTE: only ask to leave if close got vetoed due to unsaved changes (see EditDialog.onBeforeClose)
         //       other vetos (e.g. mandatory input in modal dialogs) must not be skipped
-        close : function(force){
+        close : function(force, leaveStateId){
             this.hasUnsavedChanges = false;
             if(force || this.fireEvent('beforeclose', this) !== false){
                 if(this.hidden){
@@ -38,7 +38,7 @@ Ext.ux.WindowFactory = function (config) {
                     this.hide(null, this.doClose, this);
                 }
             } else if (this.hasUnsavedChanges) {
-                this.confirmLeavSite(this);
+                this.confirmLeavSite(this, leaveStateId);
             }
         },
     });
@@ -234,18 +234,22 @@ Ext.ux.WindowFactory.prototype = {
         }
     },
 
-    confirmLeavSite: function(scope) {
+    /**
+     * @param {Object} scope window to close
+     * @param {String} [stateId] allows the user to skip the confirmation ("do not show again")
+     */
+    confirmLeavSite: async function(scope, stateId) {
         let win = scope.popup ? scope.popup : window;
-        win.Ext.MessageBox.show({
+        const buttonId = await win.Ext.MessageBox.show({
             title: i18n._('Leave site?'),
             msg: i18n._('Changes you made may not be saved.'),
             buttons: Ext.MessageBox.OKCANCEL,
-            fn: function(buttonId) {
-                if (buttonId === 'ok') {
-                    scope.close(true);
-                }
-            },
-            icon: Ext.MessageBox.WARNING
+            icon: Ext.MessageBox.WARNING,
+            stateId: stateId || null
         });
+        // NOTE: a skipped message box (doNotShowAgain) resolves with 'yes'
+        if (['ok', 'yes'].includes(buttonId)) {
+            scope.close(true);
+        }
     }
 };

@@ -1401,7 +1401,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if(force===true || this.fireEvent('beforecancel', this) !== false) {
             this.fireEvent('cancel', this);
             // NOTE: as button handler force is the button -> only force close if explicitly requested
-            this.window.close(force === true);
+            // NOTE: users know what they do when they cancel -> they can skip the leave confirmation (not on window close)
+            this.window.close(force === true, 'tinebase-editdialog-cancel-leavesite');
         }
     },
 
