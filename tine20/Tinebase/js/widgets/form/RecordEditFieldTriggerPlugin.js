@@ -7,6 +7,7 @@
  */
 
 import FieldTriggerPlugin from "../../ux/form/FieldTriggerPlugin"
+import { takeOriginalChanges } from "../dialog/denormalization"
 
 class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
     allowCreateNew = true
@@ -38,7 +39,7 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
         this.setVisible((!!this.field.selectedRecord || this.allowCreateNew));
         this.setTriggerClass(!!this.field.selectedRecord ? 'action_edit' : 'action_add');
 
-        if (this.readyOnly || this.field.readOnly || this.field.disabled) {
+        if (this.isReadOnly()) {
             this.setVisible(!!this.field.selectedRecord);
             this.setTriggerClass('action_preview');
         }
@@ -49,8 +50,106 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
         return {}
     }
 
-    async onTriggerClick () {
-        // let me = this;
+    async onTriggerClick (plugin, e) {
+        const originalId = this.field.selectedRecord?.get('original_id');
+        if (this.field.denormalizationRecordClass && originalId && !this.isReadOnly()) {
+            // the field holds a copy (denormalization) of an original record -> let the user choose which one to edit
+            this.menu = this.menu || new Ext.menu.Menu({
+                items: [{
+                    text: window.i18n._('Edit this copy') + Tine.widgets.form.FieldManager.getDescriptionHTML(this.getCopyDescription()),
+                    iconCls: 'action_edit',
+                    handler: () => this.editRecord(),
+                    listeners: {
+                        // the info icon explains the copy (quicktip on hover/click)
+                        click: (item, e) => !e.getTarget('.field-description')
+                    }
+                }, {
+                    text: window.i18n._('Edit original'),
+                    iconCls: 'action_edit',
+                    handler: () => this.editOriginal()
+                }]
+            });
+
+            // NOTE: the quicktip of the trigger would cover the menu, it's shown on click as well
+            const quickTip = Ext.QuickTips.getQuickTip();
+            const qtip = this.qtip;
+            quickTip?.cancelShow(e.getTarget());
+            quickTip?.hide();
+            this.setQtip('');
+            this.menu.on('hide', () => this.setQtip(qtip), this, { single: true });
+
+            this.menu.show(e.getTarget(), 'tl-bl?');
+            return;
+        }
+
+        return this.editRecord();
+    }
+
+    /**
+     * explains the copy (denormalization) of the original record
+     *
+     * @return {String}
+     */
+    getCopyDescription() {
+        const editDialog = this.field.findParentBy((cmp) => cmp instanceof Tine.widgets.dialog.EditDialog);
+        const contextRecordClass = editDialog?.recordClass || this.field.contextRecordClass;
+
+        return formatMessage('{contextRecordGender, select, male {The associated} female {The associated} other {The associated}} {contextRecordName} keeps its own copy. Changes to this copy apply only to {contextRecordGender, select, male {this} female {this} other {this}} {contextRecordName}, {recordGender, select, male {the} female {the} other {the}} original {recordName} remains unchanged.', {
+            recordName: this.field.recordClass.getRecordName(),
+            recordGender: this.field.recordClass.getRecordGender(),
+            contextRecordName: contextRecordClass.getRecordName(),
+            contextRecordGender: contextRecordClass.getRecordGender(),
+        });
+    }
+
+    isReadOnly() {
+        return !!(this.readyOnly || this.field.readOnly || this.field.disabled);
+    }
+
+    /**
+     * edits the original of the copy (denormalization) and takes its changes into the copy
+     */
+    async editOriginal() {
+        const originalId = this.field.selectedRecord.get('original_id');
+        const editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(this.field.recordClass);
+
+        editDialogClass.openWindow({
+            recordId: originalId,
+            record: { id: originalId },
+            mode: 'remote',
+            listeners: {
+                scope: this,
+                'update': async (recordData) => {
+                    const updated = await takeOriginalChanges(this.field.selectedRecord.copy(), recordData, this.field.denormalizationRecordClass, this.field.app);
+                    this.field.setValue(updated);
+                    this.field.onSelect(updated, 0);
+                }
+            }
+        });
+    }
+
+    /**
+     * tracks the local changes of the copy (denormalization) in record.modified (see takeOriginalChanges)
+     *
+     * @param {Object|String|Tine.Tinebase.data.Record} updatedRecord - data of the copy edit dialog
+     * @param {Tine.Tinebase.data.Record} record - updatedRecord as record
+     * @return {Tine.Tinebase.data.Record}
+     */
+    trackLocalChanges(updatedRecord, record) {
+        if (updatedRecord.data) {
+            // copy with the changes of the original from the copy dialog, it knows its local changes
+            const copy = this.field.recordClass.setFromJson(JSON.stringify(updatedRecord.getData()));
+            copy.modified = { ...updatedRecord.modified };
+            return copy;
+        }
+
+        const copy = this.field.selectedRecord.copy();
+        Object.keys(record.data).forEach((name) => copy.set(name, record.data[name]));
+        record.modified = { ...copy.modified };
+        return record;
+    }
+
+    async editRecord () {
         let editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(this.field.recordClass);
 
         if (editDialogClass) {
@@ -69,11 +168,14 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
             editDialogClass.openWindow(Object.assign({mode, record,
                 recordId: record.getId(),
                 needsUpdateEvent: true,
-                readOnly: mode.match(/local/) && (this.readyOnly || this.field.readOnly || this.field.disabled),
+                readOnly: mode.match(/local/) && this.isReadOnly(),
                 listeners: {
                     scope: this,
                     'update': (updatedRecord) => {
                         let record = !updatedRecord.data ? Tine.Tinebase.data.Record.setFromJson(updatedRecord, this.field.recordClass) : updatedRecord;
+                        if (this.field.denormalizationRecordClass && this.field.selectedRecord && mode.match(/local/)) {
+                            record = this.trackLocalChanges(updatedRecord, record);
+                        }
                         Tine.Tinebase.common.assertComparable(record.data);
                         if (this.field.selectedRecord && this.preserveJsonProps) {
                             Ext.copyTo(record.json, this.field.selectedRecord.json, this.preserveJsonProps)
