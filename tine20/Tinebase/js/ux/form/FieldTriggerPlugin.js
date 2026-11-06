@@ -39,6 +39,9 @@ class FieldTriggerPlugin {
 
         await field.afterIsRendered()
 
+        // field might have been destroyed in the meantime (e.g. grid editors which get recreated on refresh)
+        if (field.isDestroyed || !field.el?.dom) return
+
         const wrap = field.el.parent('.x-form-field-wrap') ||
             field.el.parent('.tw-relpickercombocmp') ||
             field.el.parent('.x-form-element') ||
@@ -70,6 +73,9 @@ class FieldTriggerPlugin {
     }
 
     assertState() {
+        // e.g. buffered keydown after destroy
+        if (this.field.isDestroyed) return
+
         this.setVisible((!this.hideOnEmptyValue || !!this.field.getValue()) && (!this.hideOnInvalidValue || this.field.isValid()));
 
         const visibleTriggerPlugins = _.filter(this.field.plugins, plugin => plugin instanceof FieldTriggerPlugin && plugin.visible)
