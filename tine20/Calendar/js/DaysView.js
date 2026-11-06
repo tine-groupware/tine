@@ -241,7 +241,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
 
-        this.timeIncrement = parseInt(this.app.getRegistry().get('preferences').get('timeIncrement')) || this.timeIncrement;
+        this.timeIncrement = parseInt(this.app.getRegistry().peek('preferences').get('timeIncrement')) || this.timeIncrement;
 
         this.initTimeScale();
 
@@ -250,7 +250,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         }
 
         // apply preferences
-        var prefs = this.app.getRegistry().get('preferences'),
+        var prefs = this.app.getRegistry().peek('preferences'),
             defaultStartTime = Date.parseDate(prefs.get('daysviewdefaultstarttime'), 'H:i'),
             startTime = Date.parseDate(prefs.get('daysviewstarttime'), 'H:i'),
             endTime = Date.parseDate(prefs.get('daysviewendtime'), 'H:i'),

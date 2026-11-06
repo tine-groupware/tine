@@ -21,7 +21,7 @@ Tine.Tasks.Model.TaskMixin = {
          */
         getDefaultData: function() {
             var app = Tine.Tinebase.appMgr.get('Tasks'),
-                prefs = app.getRegistry().get('preferences');
+                prefs = app.getRegistry().peek('preferences');
 
             var data =  {
                 'class': 'PUBLIC',

@@ -439,9 +439,9 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         const sm = this.grid.getSelectionModel();
         const records = _.map(this.getSelectedFreeTimes(), _.curry(Tine.Tinebase.data.Record.setFromJson)(_, Tine.HumanResources.Model.FreeTime));
 
-        if (this.disableDeleteConfirmation || (Tine[this.app.appName].registry.get('preferences')
-            && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') !== null
-            && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') == 0)
+        if (this.disableDeleteConfirmation || (Tine[this.app.appName].registry.peek('preferences')
+            && Tine[this.app.appName].registry.peek('preferences').get('confirmDelete') !== null
+            && Tine[this.app.appName].registry.peek('preferences').get('confirmDelete') == 0)
         ) {
             // don't show confirmation question for record deletion
             this.deleteRecords(sm, records);

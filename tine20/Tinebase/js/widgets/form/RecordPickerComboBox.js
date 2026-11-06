@@ -189,7 +189,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.loadingText = i18n._('Searching...');
 
         this.sortBy = this.sortBy || this.recordClass.getModelConfiguration()?.defaultSortInfo?.field;
-        this.pageSize = parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) || this.pageSize;
+        this.pageSize = parseInt(Tine.Tinebase.registry.peek('preferences').get('pageSize'), 10) || this.pageSize;
 
         this.store = this.store || new Tine.Tinebase.data.RecordStore({
             remoteSort: true,

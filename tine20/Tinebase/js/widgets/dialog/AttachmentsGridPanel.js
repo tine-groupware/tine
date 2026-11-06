@@ -193,7 +193,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             }];
 
             if (Tine.Tinebase.configManager.get('downloadsAllowed')
-                && Tine.Tinebase.registry.get('preferences').get('fileDblClickAction') === 'download' ) {
+                && Tine.Tinebase.registry.peek('preferences').get('fileDblClickAction') === 'download' ) {
 
                 dblClickHandlers[0].fn = _.bind(this.action_download.execute, this.action_download);
             }

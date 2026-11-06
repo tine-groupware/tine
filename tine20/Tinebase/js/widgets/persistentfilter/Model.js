@@ -67,7 +67,7 @@ Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record
      */
     isDefault: function() {
         var app = Tine.Tinebase.appMgr.getById(this.get('application_id'));
-        return this.app && this.get('id') === app.getRegistry().get('preferences').get('defaultpersistentfilter');
+        return this.app && this.get('id') === app.getRegistry().peek('preferences').get('defaultpersistentfilter');
     }
 });
 
@@ -79,7 +79,7 @@ Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record
  */
 Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite = function(appName, modelName) {
     var app = Tine.Tinebase.appMgr.get(appName),
-        appPrefs = app.getRegistry().get('preferences'),
+        appPrefs = app.getRegistry().peek('preferences'),
         defaultFavoriteId = appPrefs ? appPrefs.get('defaultpersistentfilter') : null;
 
     if (! defaultFavoriteId) {

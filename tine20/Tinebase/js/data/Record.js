@@ -199,7 +199,7 @@ extend(Record, ExtRecord, {
         var _ = window.lodash,
             me = this;
 
-        const template = Tine.Tinebase.appMgr.get(this.appName).getRegistry().get('preferences')?.get(`${lowerFirst(this.modelName)}TitleTemplate`);
+        const template = Tine.Tinebase.appMgr.get(this.appName).getRegistry().peek('preferences')?.get(`${lowerFirst(this.modelName)}TitleTemplate`);
         if (template) {
             this.titleProperty = template;
         }
@@ -226,7 +226,7 @@ extend(Record, ExtRecord, {
             const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinition(get(languagesAvailableDef, 'config.appName', this.appName), languagesAvailableDef.name)
             let language = options?.language || keyFieldDef.default;
             const value = this.get(this.titleProperty);
-            const preferredLanguage = Tine.Tinebase.registry.get('preferences')?.get('locale');
+            const preferredLanguage = Tine.Tinebase.registry.peek('preferences')?.get('locale');
             if (preferredLanguage !== 'auto') {
                 language = preferredLanguage;
             }

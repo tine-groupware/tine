@@ -134,7 +134,7 @@ const Event = Record.create([], {
     getTitle: function() {
         if (! this.constructor.titleTwing) {
             const app = Tine.Tinebase.appMgr.get(this.appName);
-            const template = app.getRegistry().get('preferences').get('webEventTitleTemplate') + '{% if poll_id and not poll_id.closed %}\uFFFD{% endif %}';
+            const template = app.getRegistry().peek('preferences').get('webEventTitleTemplate') + '{% if poll_id and not poll_id.closed %}\uFFFD{% endif %}';
             const twingEnv = getTwingEnv();
             const loader = twingEnv.getLoader();
 
@@ -167,7 +167,7 @@ const Event = Record.create([], {
  */
 Event.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar'),
-        prefs = app.getRegistry().get('preferences'),
+        prefs = app.getRegistry().peek('preferences'),
         defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me',
         interval = prefs.get('interval') || 15,
         mainScreen = app.getMainScreen(),
@@ -229,7 +229,7 @@ Event.getDefaultAttendee = function(organizer, container) {
         defaultAttendeeData = Tine.Calendar.Model.Attender.getDefaultData(),
         defaultResourceData = Tine.Calendar.Model.Attender.getDefaultResourceData(),
         filteredContainers = westPanel.getContainerTreePanel().getFilterPlugin().getFilter().value || [],
-        prefs = app.getRegistry().get('preferences'),
+        prefs = app.getRegistry().peek('preferences'),
         defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me',// one of['me', 'intelligent', 'calendarOwner', 'filteredAttendee', 'none']
         defaultAttendee = [],
         calendarResources = Tine.Tinebase.appMgr.get('Calendar').calendarResources;

@@ -1364,7 +1364,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Tine.log.debug('Tine.Felamimail.GridPanel::onRowSelection() -> Selected unread message');
             Tine.log.debug(record);
 
-            if (Tine.Felamimail.registry.get('preferences').get('markEmailRead') === 1) {
+            if (Tine.Felamimail.registry.peek('preferences').get('markEmailRead') === 1) {
                 setTimeout( ()=>  {
                     record.addFlag('\\Seen');
                     record.mtime = new Date().getTime();

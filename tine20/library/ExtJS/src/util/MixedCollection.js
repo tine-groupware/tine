@@ -92,6 +92,18 @@ extend(MixedCollection, Observable, {
     },
 
     /**
+     * returns the item associated with the passed key WITHOUT cloning it (even if returnClones is set).
+     * NOTE: the returned item MUST NOT be modified! Use it for frequent read-only access only.
+     * @param {String/Number} key The key or index of the item.
+     * @return {Object} The item associated with the passed key.
+     */
+    peek: function(key) {
+        var mk = this.map[key],
+            item = mk !== undefined ? mk : (typeof key == 'number') ? this.items[key] : undefined;
+        return !isFunction(item) || this.allowFunctions ? item : null;
+    },
+
+    /**
      * Adds an item to the collection. Fires the {@link #add} event when complete.
      * @param {String} key <p>The key to associate with the item, or the new item.</p>
      * <p>If a {@link #getKey} implementation was specified for this MixedCollection,

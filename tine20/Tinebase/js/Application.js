@@ -160,7 +160,8 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * @return {Boolean}
      */
     featureEnabled: function(featureName) {
-        var featureConfig = Tine[this.appName].registry.get("config")?.features,
+        // NOTE: peek instead of get -> no (deep) clone of the whole config, we only read a scalar here
+        var featureConfig = Tine[this.appName].registry.peek("config")?.features,
             result = featureConfig && featureConfig.value[featureName];
 
         if (result == undefined) {

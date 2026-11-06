@@ -346,8 +346,8 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         });
 
         var buttons = [];
-        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')
-            && Tine.Tinebase.registry.get('preferences').get('dialogactionsOrderStyle') === 'Windows') {
+        if (Tine.Tinebase.registry && Tine.Tinebase.registry.peek('preferences')
+            && Tine.Tinebase.registry.peek('preferences').get('dialogactionsOrderStyle') === 'Windows') {
             buttons.push(this.okAction, this.cancelAction);
         }
         else {

@@ -28,7 +28,7 @@ Tine.widgets.PreferenceCombo = Ext.extend(Ext.form.ComboBox, {
     
     async initComponent() {
         const app = Tine.Tinebase.appMgr.get(this.appName);
-        const pref = app.getRegistry().get('preferences').get(this.preferenceName);
+        const pref = app.getRegistry().peek('preferences').get(this.preferenceName);
 
         if (pref) {
             const currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
