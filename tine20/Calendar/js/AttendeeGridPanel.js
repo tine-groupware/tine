@@ -276,9 +276,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // attendeePickerCombo
         if ((attendeeData || type === 'email') && type) {
             if (this.showMemberOfType && 'group' == type) {
-                var row = ed.row,
-                    col = ed.col,
-                    selectedRecord = _.get(ed, 'field.selectedRecord');
+                var selectedRecord = _.get(ed, 'field.selectedRecord');
 
                 Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                     title: this.app.i18n._('Whole group or each group member'),
@@ -291,11 +289,14 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     ],
 
                     handler: function(option) {
-                        this.startEditing(row, col);
-                        selectedRecord.set('user_type', option);
-                        selectedRecord.groupType = option;
-                        this.activeEditor.field.selectedRecord = selectedRecord;
-                        this.stopEditing();
+                        // NOTE: don't modify the record of the picker store (its list can't render 'sel_*' types)
+                        const groupRecord = selectedRecord.copy();
+                        groupRecord.set('user_type', option);
+                        groupRecord.groupType = option;
+                        // NOTE: complete with the existing editor - starting a new edit would create (and
+                        //       immediately destroy) another attendee picker combo
+                        ed.field.selectedRecord = groupRecord;
+                        this.onEditComplete(ed, null, startValue);
                     }
                 });
 
