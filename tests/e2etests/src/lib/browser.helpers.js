@@ -460,8 +460,8 @@ export default {
         await this.clickOnElement(page, `${selector} .modal-footer button.${button}-button`);
 
         // the message box is closed when neither the modal nor its backdrop are displayed anymore
-        await page.waitForFunction(() => ![...document.querySelectorAll('.modal.vue-message-box, .modal-backdrop')]
-            .some((el) => getComputedStyle(el).display !== 'none'), {timeout: closeTimeout});
+        await this.waitForElement(page, '.modal.vue-message-box', {hidden: true, timeout: closeTimeout});
+        await this.waitForElement(page, '.modal-backdrop', {hidden: true, timeout: closeTimeout});
 
         return content;
     },

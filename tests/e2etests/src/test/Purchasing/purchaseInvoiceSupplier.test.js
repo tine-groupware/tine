@@ -145,8 +145,7 @@ const getOriginal = (supplier) => global.page.evaluate(async (id) => {
 }, supplier.id);
 
 beforeAll(async () => {
-    await lib.getBrowser('Einkauf');
-    await lib.clickOnElementWithLabel(global.page, '.tine-mainscreen-centerpanel-west .x-tree-node a span', 'Eingangsrechnungen');
+    await lib.getBrowser('Einkauf', 'Eingangsrechnungen');
     await lib.waitForAppReady(global.page);
 });
 
