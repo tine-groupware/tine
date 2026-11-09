@@ -663,6 +663,20 @@ Tine.Filemanager.nodeActions.Publish = {
     },
 };
 
+Tine.Filemanager.nodeActions.ShowNode = {
+    app: 'Filemanager',
+    text: 'Show in Filemanager', // _('Show in Filemanager')
+    iconCls: 'FilemanagerIconCls',
+    requiredGrant: 'readGrant',
+    allowMultiple: false,
+    handler: function(action) {
+        const node = _.get(action, 'initialConfig.selections[0]');
+        const mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
+        mainWindow.location = node.getSystemLink();
+        mainWindow.focus();
+    },
+};
+
 /**
  * one or multiple file nodes currently uploaded
  */

@@ -708,7 +708,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         let fileLocations = record.get('fileLocations');
         if (_.isArray(fileLocations) && fileLocations.length) {
-            const fileLocationText = Tine.Felamimail.MessageFileAction.getFileLocationText(fileLocations, '<br>');
+            const fileLocationText = Tine.Felamimail.MessageFileAction.getFileLocationText(fileLocations);
 
             result +=  fileLocationText ? ('<img class="FelamimailFlagIcon MessageFileIcon" src="images/icon-set/icon_download.svg" ' +
                 'ext:qtitle="' + Ext.util.Format.htmlEncode(i18n._('Filed as:')) + '"' +
