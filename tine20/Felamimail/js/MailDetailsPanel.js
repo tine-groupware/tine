@@ -400,7 +400,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
                     if (fileLocations.length) {
                         let app = Tine.Tinebase.appMgr.get('Felamimail');
-                        const html = Tine.Felamimail.MessageFileAction.getFileLocationText(fileLocations, ', ');
+                        const html = Tine.Felamimail.MessageFileAction.getFileLocationText(fileLocations);
                         const text = app.formatMessage('{locationCount, plural, one {This message is filed at the following location} other {This message is filed at the following locations}}: {locationsHtml}', {
                             locationCount: fileLocations.length,
                             locationsHtml: html

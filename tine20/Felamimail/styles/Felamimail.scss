@@ -547,9 +547,30 @@
     display: block;
 }
 
-.felamimail-location {
-    padding-right: 5px;
-    cursor: pointer;
+.felamimail-location.btn {
+    --bs-btn-color: inherit;
+    --bs-btn-hover-color: inherit;
+    --bs-btn-active-color: inherit;
+    color: inherit;
+    padding: 2px 8px;
+    margin: 2px;
+    border-radius: 12px;
+    background-color: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.felamimail-location.btn:hover {
+    background-color: color-mix(in srgb, currentColor 16%, transparent);
+}
+
+.felamimail-location-menu.btn {
+    padding-right: 20px;
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    background-size: 10px;
+}
+
+.felamimail-location-menu.btn:hover {
+    background-image: url(../../images/icon-set/icon_arrow_down.svg);
 }
 
 .felamimail-location-icon {

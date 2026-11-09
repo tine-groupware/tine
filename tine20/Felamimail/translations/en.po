@@ -1159,6 +1159,9 @@ msgstr "{messageCount, plural, one {Message was saved} other {# messages where s
 msgid "Save Messages as Attachment"
 msgstr "Save Messages as Attachment"
 
+msgid "Show Details"
+msgstr "Show Details"
+
 msgid "GENDER_Message"
 msgstr "GENDER_Message"
 
