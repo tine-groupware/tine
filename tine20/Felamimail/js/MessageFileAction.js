@@ -627,29 +627,50 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
     }
 });
 
-Tine.Felamimail.MessageFileAction.getFileLocationText = function(locations, glue='') {
+Tine.Felamimail.MessageFileAction.getFileLocationText = function(locations) {
     return _.reduce(locations, function(text, location) {
         const model = _.isString(location.model) ? Tine.Tinebase.data.RecordMgr.get(location.model) : location.model;
+        if (!model) return text;
+
+        const recordClassName = model.getPhpClassName();
         const recordId = location?.record_id?.id ?? location.record_id;
-        const iconCls = model ? model.getIconCls() : '';
-        const icon = iconCls ? '<span class="felamimail-location-icon ' + iconCls +'"></span>' : '';
-        const span = model ? '<span class="felamimail-location" ' +
-            'onclick="Tine.Felamimail.MessageFileAction.locationClickHandler(\'' + model.getPhpClassName() +
-            "','" + recordId + '\')">' + icon + '<span class="felamimail-location-text">'
-            + Ext.util.Format.htmlEncode(location.record_title) + '</span></span>' : '';
-        
-        return text.concat(span);
-    }, []).join(glue);
+        const nodeId = location?.node_id ?? '';
+        const iconCls = model.getIconCls();
+        const icon = iconCls ? `<span class="felamimail-location-icon ${iconCls}"></span>` : '';
+        const menuCls = recordClassName === 'Filemanager_Model_Node' ? ' felamimail-location-menu' : '';
+
+        return text.concat(
+            `<span class="felamimail-location btn btn-sm border-0${menuCls}" role="button" `
+            + `onclick="Tine.Felamimail.MessageFileAction.locationClickHandler('${recordClassName}', '${recordId}', '${nodeId}', event)">`
+            + `${icon}<span class="felamimail-location-text">${Ext.util.Format.htmlEncode(location.record_title)}</span></span>`
+        );
+    }, []).join('');
 };
 
-Tine.Felamimail.MessageFileAction.locationClickHandler = function (recordClassName, recordId) {
+Tine.Felamimail.MessageFileAction.locationClickHandler = async function(recordClassName, recordId, nodeId, event) {
+    const e = Ext.EventObject.setEvent(event);
+    e.stopEvent();
+    const xy = e.getXY();
+    const app = Tine.Tinebase.appMgr.get('Felamimail');
     const recordClass = Tine.Tinebase.data.RecordMgr.get(recordClassName);
-    const recordData = {};
-    const editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
-    recordData[recordClass.getMeta('idProperty')] = recordId;
-
-    editDialogClass.openWindow({
-        record: Tine.Tinebase.data.Record.setFromJson(recordData, recordClass),
-        recordId: recordId
+    const openDetails = () => Tine.widgets.dialog.EditDialog.getConstructor(recordClass).openWindow({
+        record: Tine.Tinebase.data.Record.setFromJson({[recordClass.getMeta('idProperty')]: recordId}, recordClass),
+        recordId
     });
+
+    if (recordClassName !== 'Filemanager_Model_Node') return openDetails();
+
+    const node = await Tine.Filemanager.nodeBackend.promiseLoadRecord(nodeId || recordId);
+    const showNode = Tine.Filemanager.nodeActionsMgr.get('ShowNode', {
+        initialConfig: {
+            selections: [node]
+        }
+    });
+    showNode.initialConfig.actionUpdater?.(showNode, node.get('account_grants'), [node], false, []);
+
+    new Ext.menu.Menu({items: [{
+            text: app.i18n._('Show Details'),
+            iconCls: 'action_edit_file',
+            handler: openDetails
+        }, showNode]}).showAt(xy);
 };

@@ -39,7 +39,9 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
             style: {
                 marginTop: '10px',
                 width: 'auto',
-                minHeight: '15px'
+                height: 'auto',
+                minHeight: '30px',
+                overflow: 'visible'
             },
         });
 
@@ -161,7 +163,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
                 type: "node"
             }
             text = this.app.formatMessage('Permissions are inherited from {locationsHtml} as follows', {
-                locationsHtml: Tine.Felamimail.MessageFileAction.getFileLocationText([location], ', ')
+                locationsHtml: Tine.Felamimail.MessageFileAction.getFileLocationText([location])
             });
         }
         
