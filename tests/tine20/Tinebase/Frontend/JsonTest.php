@@ -1169,6 +1169,138 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertEquals($expectedTerminationDeadline, $result['terminationDeadline']);
     }
 
+    public function testAppPwdNonAdminOwnAccount(): void
+    {
+        $user = $this->_setNonAdminAppPwdUser();
+        $token = 'ownAccountToken';
+
+        $result = $this->_instance->saveAppPassword($this->_getAppPwdData($user->getId(), $token));
+
+        $this->assertArrayHasKey('id', $result);
+        $this->assertNotNull(Tinebase_Controller_AppPassword::getInstance()->getByToken($user->getId(), $token));
+    }
+
+    public function testAppPwdNonAdminCreateForOtherAccount(): void
+    {
+        $otherUser = $this->_originalTestUser;
+        $this->_setNonAdminAppPwdUser();
+        $token = 'otherAccountToken';
+
+        try {
+            $this->_instance->saveAppPassword($this->_getAppPwdData($otherUser->getId(), $token));
+        } catch (Tinebase_Exception_AccessDenied) {
+            // expected
+        }
+
+        $this->assertNull(Tinebase_Controller_AppPassword::getInstance()->getByToken($otherUser->getId(), $token),
+            'non-admin must not be able to create an app password for another account');
+    }
+
+    public function testAppPwdNonAdminReassignToOtherAccount(): void
+    {
+        $otherUser = $this->_originalTestUser;
+        $user = $this->_setNonAdminAppPwdUser();
+        $token = 'reassignedToken';
+        $appPwd = $this->_instance->saveAppPassword($this->_getAppPwdData($user->getId(), $token));
+
+        $appPwd[Tinebase_Model_AppPassword::FLD_ACCOUNT_ID] = $otherUser->getId();
+        try {
+            $this->_instance->saveAppPassword($appPwd);
+        } catch (Tinebase_Exception_AccessDenied) {
+            // expected
+        }
+
+        $this->assertNull(Tinebase_Controller_AppPassword::getInstance()->getByToken($otherUser->getId(), $token),
+            'non-admin must not be able to move an app password to another account');
+    }
+
+    public function testAppPwdNonAdminUpdateOtherAccount(): void
+    {
+        $otherUser = $this->_personas['sclever'];
+        $otherAppPwd = $this->_createAppPwdForAccount($otherUser);
+        $this->_setNonAdminAppPwdUser();
+        $token = 'replacedToken';
+
+        $data = $this->_getAppPwdData($otherUser->getId(), $token);
+        $data['id'] = $otherAppPwd->getId();
+        try {
+            $this->_instance->saveAppPassword($data);
+        } catch (Tinebase_Exception_AccessDenied) {
+            // expected
+        }
+
+        $this->assertNull(Tinebase_Controller_AppPassword::getInstance()->getByToken($otherUser->getId(), $token),
+            'non-admin must not be able to change the app password of another account');
+    }
+
+    public function testAppPwdNonAdminGetOtherAccount(): void
+    {
+        $otherAppPwd = $this->_createAppPwdForAccount($this->_personas['sclever']);
+        $this->_setNonAdminAppPwdUser();
+
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $this->_instance->getAppPassword($otherAppPwd->getId());
+    }
+
+    public function testAppPwdNonAdminDeleteOtherAccount(): void
+    {
+        $otherAppPwd = $this->_createAppPwdForAccount($this->_personas['sclever']);
+        $this->_setNonAdminAppPwdUser();
+        // keep the fixture when the controller rolls back after the AccessDenied
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+
+        try {
+            $this->_instance->deleteAppPasswords([$otherAppPwd->getId()]);
+            $this->fail('non-admin must not be able to delete the app password of another account');
+        } catch (Tinebase_Exception_AccessDenied) {
+            // expected
+        }
+
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $this->assertSame($otherAppPwd->getId(),
+            Tinebase_Controller_AppPassword::getInstance()->get($otherAppPwd->getId())->getId());
+    }
+
+    public function testAppPwdNonAdminSearchOnlyOwnAccount(): void
+    {
+        $otherAppPwd = $this->_createAppPwdForAccount($this->_personas['sclever']);
+        $user = $this->_setNonAdminAppPwdUser();
+        $ownAppPwd = $this->_instance->saveAppPassword($this->_getAppPwdData($user->getId(), 'searchOwnToken'));
+
+        $result = $this->_instance->searchAppPasswords([], []);
+
+        $ids = array_column($result['results'], 'id');
+        $this->assertContains($ownAppPwd['id'], $ids);
+        $this->assertNotContains($otherAppPwd->getId(), $ids);
+    }
+
+    protected function _setNonAdminAppPwdUser(string $loginName = 'jsmith'): Tinebase_Model_FullUser
+    {
+        $user = $this->_personas[$loginName];
+        Tinebase_Core::setUser($user);
+        $this->assertFalse($user->hasRight(Tinebase_Config::APP_NAME, Tinebase_Acl_Rights::ADMIN),
+            $loginName . ' must not have the Tinebase admin right for this test');
+
+        return $user;
+    }
+
+    protected function _createAppPwdForAccount(Tinebase_Model_FullUser $account): Tinebase_Model_AppPassword
+    {
+        return Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword(
+            $this->_getAppPwdData($account->getId(), Tinebase_Record_Abstract::generateUID())
+        ));
+    }
+
+    protected function _getAppPwdData(string $accountId, string $token): array
+    {
+        return [
+            Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $accountId,
+            Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(1),
+            Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $token,
+            Tinebase_Model_AppPassword::FLD_CHANNELS => [0 => 0],
+        ];
+    }
+
     /******************** protected helper funcs ************************/
 
     /**
