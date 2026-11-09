@@ -20,3 +20,9 @@ D1E3 B9AF 10E3 D7D5 67F4 E963 6127 0D7C 7036 F259
 OR
 
 Use the GitHub "security advisories" functionality -> https://github.com/tine-groupware/tine/security/advisories
+
+### Severity & CVSS
+
+NOTE:
+The CVSS severity does not take into account, that authenticated tine users are a "curated" user group. That means, a
+critical issue might be less severe if it can only be exploited by authenticated tine accounts.
