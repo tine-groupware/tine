@@ -1302,6 +1302,8 @@ myStore.reload(lastOptions);
             for(var i = 0, len = r.length; i < len; i++){
                 r[i].join(this);
             }
+            // invalidate pending async filter runs (they refer to the old records)
+            this.filterSeq = (this.filterSeq || 0) + 1;
             if(this.snapshot){
                 this.data = this.snapshot;
                 delete this.snapshot;
@@ -1550,9 +1552,22 @@ myStore.reload(lastOptions);
      * @param {Object} scope (optional) The scope (<code>this</code> reference) in which the function is executed. Defaults to this Store.
      */
     filterBy : function(fn, scope){
-        this.snapshot = this.snapshot || this.data;
-        this.data = this.queryBy(fn, scope||this);
-        this.fireEvent('datachanged', this);
+        var filterSeq = this.filterSeq = (this.filterSeq || 0) + 1,
+            result = this.queryBy(fn, scope||this);
+
+        var applyFilter = function(data) {
+            // skip outdated (async) filter runs
+            if (filterSeq !== this.filterSeq) return false;
+
+            this.snapshot = this.snapshot || this.data;
+            this.data = data;
+            this.fireEvent('datachanged', this);
+            return true;
+        }.createDelegate(this);
+
+        // NOTE: fn might return Promises -> filter gets applied when all of them are resolved
+        //       (returned Promise resolves to false if filter run got outdated by a newer filter run)
+        return Ext.isFunction(result?.then) ? result.then(applyFilter) : (applyFilter(result), undefined);
     },
 
     /**
@@ -1582,8 +1597,29 @@ myStore.reload(lastOptions);
      * @return {MixedCollection} Returns an Ext.util.MixedCollection of the matched records
      **/
     queryBy : function(fn, scope){
-        var data = this.snapshot || this.data;
-        return data.filterBy(fn, scope||this);
+        var data = this.snapshot || this.data,
+            results = new Map(),
+            isAsync = false;
+
+        data.each(function(record, idx) {
+            var match = fn.call(scope||this, record, data.keys[idx]);
+            isAsync = isAsync || Ext.isFunction(match?.then);
+            results.set(record, match);
+        }, this);
+
+        var collect = function() {
+            // NOTE: records added while async filterFns were pending are not matched
+            return data.filterBy(function(record) {
+                return !!results.get(record);
+            });
+        };
+
+        // NOTE: fn might return Promises -> resolve to collection when all of them are resolved
+        return isAsync ?
+            Promise.all(Array.from(results.entries()).map(async ([record, match]) => {
+                results.set(record, await match);
+            })).then(collect) :
+            collect();
     },
 
     /**
@@ -1658,6 +1694,8 @@ myStore.reload(lastOptions);
      * {@link #datachanged} event.
      */
     clearFilter : function(suppressEvent){
+        // invalidate pending async filter runs
+        this.filterSeq = (this.filterSeq || 0) + 1;
         if(this.isFiltered()){
             this.data = this.snapshot;
             delete this.snapshot;

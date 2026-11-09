@@ -357,6 +357,13 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
         var _ = window.lodash,
             me = this;
 
+        // reset counts of all members (also filtered ones) as memberCounts contains used members only
+        _.each(me.csMembersStore.snapshot?.items || me.csMembersStore.data.items, function(attendee) {
+            if (attendee.data.user_id) {
+                attendee.data.user_id.count = 0;
+            }
+        });
+
         _.each(memberCounts, function(count, key) {
             var attendee = me.csMembersStore.getById(key.replace(';', '-'));
             if (attendee) {
@@ -369,7 +376,6 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
 
     // filter selection panel
     onMemberGridSelectionChange: function() {
-        const gridView = this.membersGrid.getView();
         const cm = this.membersGrid.getColumnModel();
         const visibleRoles = this.membersGrid.rolesVisible; //cm.config.filter((col) => { return !col.hidden });
 
@@ -385,9 +391,13 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             });
         }
 
-        this.memberSelectionPanel.setFilterCells(_.compact(_.map(selection, function(index) {
-            return _.get(Ext.fly(gridView.getCell(index[0], index[1]))?.query('.cs-members-cell'), '[0].id');
-        })));
+        // NOTE: cells are rendered async, so we can't take the cellIds (<eventId>:<roleId>) from the dom
+        return this.memberSelectionPanel.setFilterCells(_.uniq(_.compact(_.map(selection, (index) => {
+            const event = this.membersGrid.store.getAt(index[0]);
+            const roleKey = String(_.get(cm.config, `[${index[1]}].id`, '')).split(':').pop();
+            const role = index[1] > 0 && this.csRolesStore.getAt(this.csRolesStore.findExact('key', roleKey));
+            return event && role ? `${event.id}:${role.id}` : null;
+        }))));
     },
 
     // change from ftb
@@ -672,6 +682,8 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             .then(_.bind(me.computeCSMembersCapabilities, me))
             .then(_.bind(function() {
                 me.membersGrid.getView().refresh();
+                // NOTE: filterCells depend on loaded events (e.g. implicit selection of hidden roles)
+                return me.onMemberGridSelectionChange();
             }, me))
             .then(_.bind(me.checkUnusedAttendee, me))
             .catch(_.bind(function(error) {
@@ -855,7 +867,8 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
 
 
                 // map: member -> csRoles, days, favorites
-                await async.forEach(this.csMembersStore.data.items, async (attendee) => {
+                // NOTE: store might be filtered already (e.g. implicit filterCells from hidden roles) -> compute all members
+                await async.forEach(this.csMembersStore.snapshot?.items || this.csMembersStore.data.items, async (attendee) => {
                     const member = attendee.get('user_id');
                     const memberId = attendee.getUserId();
 
@@ -902,6 +915,8 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
 
                 // bind store
                 this.memberSelectionPanel.dataView.bindStore(this.csMembersStore);
+                // (re)apply member filter as filtering before capabilities got computed is not reliable
+                await this.memberSelectionPanel.applyFilter();
                 fulfill(this.csMembersStore.data.items);
                 this.memberSelectionPanel.dataView.refresh()
             } catch(e) {

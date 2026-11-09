@@ -62,7 +62,8 @@ Ext.extend(Tine.CrewScheduling.MemberToken, Ext.XTemplate, {
 
     prepareData : function(data) {
         return Object.assign({}, data.user_id, {
-            count: data.count,
+            // NOTE: count is managed in user_id (see MainScreen::onUpdateMemberCount)
+            count: data.count ?? data.user_id?.count,
             fbInfo: data.fbInfo,
             initials: data.user_id ? (data.user_id.n_short ? data.user_id.n_short
                 : _.join(_.map(_.map([data.user_id.n_given, data.user_id.n_family], _.toUpper), _.head), '')) : Attendee.getRecord(data).getTitle(),
