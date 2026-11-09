@@ -60,11 +60,10 @@ class Tinebase_Controller_AppPassword extends Tinebase_Controller_Record_Abstrac
 
         if ($_record->getIdFromProperty(Tinebase_Model_AppPassword::FLD_ACCOUNT_ID) !== Tinebase_Core::getUser()->getId()) {
             if ($_throw) {
-                new Tinebase_Exception_AccessDenied($_errorMessage);
+                throw new Tinebase_Exception_AccessDenied($_errorMessage);
             }
             return false;
         }
-
         return true;
     }
 
