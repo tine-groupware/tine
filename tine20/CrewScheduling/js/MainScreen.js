@@ -357,6 +357,13 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
         var _ = window.lodash,
             me = this;
 
+        // reset counts of all members (also filtered ones) as memberCounts contains used members only
+        _.each(me.csMembersStore.snapshot?.items || me.csMembersStore.data.items, function(attendee) {
+            if (attendee.data.user_id) {
+                attendee.data.user_id.count = 0;
+            }
+        });
+
         _.each(memberCounts, function(count, key) {
             var attendee = me.csMembersStore.getById(key.replace(';', '-'));
             if (attendee) {
