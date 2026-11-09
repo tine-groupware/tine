@@ -1074,6 +1074,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             $_newRecord->is_deleted     = $_curRecord ? $_curRecord->is_deleted : 0;
             $_newRecord->deleted_time   = $_curRecord ? $_curRecord->deleted_time : NULL;
             $_newRecord->deleted_by     = $_curRecord ? $_curRecord->deleted_by : NULL;
+            $_newRecord->{TMCC::FLD_PURGE_DATE} = $_curRecord ? $_curRecord->{TMCC::FLD_PURGE_DATE} : NULL;
         }
         
         switch ($_action) {
