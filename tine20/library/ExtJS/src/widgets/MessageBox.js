@@ -109,6 +109,13 @@ Ext.MessageBox = function(){
     }
     
     // private
+    // NOTE: like in ExtJS the close tool counts as 'cancel' -> callback/promise needs to be resolved
+    const handleClose = function() {
+        handleHide();
+        Ext.callback(opt.fn, opt.scope||window, ['cancel', undefined, opt], 1);
+    }
+
+    // private
     const handleHide = function() {
         synchronousVisibilityState = __HIDDEN
         if(vueProps) vueProps.otherConfigs.visible = false;
@@ -285,7 +292,7 @@ Ext.MessageBox = function(){
 
                 // events initialization
                 vueEmitter = window.mitt();
-                vueEmitter.on("close", handleHide);
+                vueEmitter.on("close", handleClose);
                 vueEmitter.on("buttonClicked", handleButton);
                 vueEmitter.on("messageClicked", e => {
                     if (_.isFunction(opt.onMessageClick)) {
