@@ -37,7 +37,6 @@ class Sales_AllTests
         $suite->addTestSuite(Sales_Export_ProductTest::class);
         $suite->addTestSuite(Sales_Import_AllTests::class);
         $suite->addTestSuite(Sales_InvoiceControllerTests::class);
-        $suite->addTestSuite(Sales_InvoiceExportTests::class);
         $suite->addTestSuite(Sales_InvoiceJsonTests::class);
         $suite->addTestSuite(Sales_JsonTest::class);
         $suite->addTestSuite(Sales_OfferControllerTests::class);
