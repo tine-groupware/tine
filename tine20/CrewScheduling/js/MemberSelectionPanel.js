@@ -5,6 +5,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import asString from '../../Tinebase/js/ux/asString';
+
 Ext.ns('Tine.CrewScheduling');
 
 require('../styles/memberSelectionPanel.scss');
@@ -136,12 +138,19 @@ Tine.CrewScheduling.MemberSelectionPanel = Ext.extend(Ext.Panel, {
     setFilterCells: function(filterCells) {
         if (JSON.stringify(filterCells) != JSON.stringify(this.filterCells)) {
             this.filterCells = filterCells;
-            this.filterStore(this.filterField.getValue(), this.filterCells);
+            return this.applyFilter();
         }
     },
 
     onFilterChange: function(field, value, oldValue) {
-        this.filterStore(this.filterField.getValue(), this.filterCells);
+        this.applyFilter();
+    },
+
+    /**
+     * (re)apply current query and filterCells to store
+     */
+    applyFilter: function() {
+        return this.filterStore(this.filterField.getValue(), this.filterCells);
     },
 
     filterStore: function(queryString, filterCells) {
@@ -150,7 +159,7 @@ Tine.CrewScheduling.MemberSelectionPanel = Ext.extend(Ext.Panel, {
             this.store.clearFilter();
             return;
         }
-        
+
         var _ = window.lodash,
             queryParts = queryString ? String(queryString).trim().split(' ') : null,
             search = '',
@@ -162,8 +171,9 @@ Tine.CrewScheduling.MemberSelectionPanel = Ext.extend(Ext.Panel, {
 
         regExp = new RegExp(search,'gi');
 
-        this.store.filterBy(function(member) {
-            return !! member.getTitle().match(regExp) &&
+        // NOTE: getTitle might be async (twig title template)
+        return this.store.filterBy(async function(member) {
+            return !! String(await asString(member.getTitle()) || '').match(regExp) &&
                 (filterCells.length ?
                     _.get(member, 'data.user_id.possibleUsages', []).containsAny(filterCells) :
                     true);

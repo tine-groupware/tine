@@ -614,6 +614,21 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
             isSelected = _.reduce(this.store.data.items, function(s,r,i) {return s && sm.isSelected([i, colIndex])}, true),
             cells = _.map(this.store.data.items, function(r,i) {return [i, colIndex]});
 
+        // event column has no member cells -> toggle select all/nothing
+        if (! colIndex) {
+            const lastCell = [this.store.getCount() - 1, this.getColumnModel().getColumnCount() - 1];
+            const isAllSelected = _.every(_.range(1, lastCell[1] + 1), (col) => {
+                return _.every(_.range(0, lastCell[0] + 1), (row) => sm.isSelected([row, col]));
+            });
+
+            if (isAllSelected) {
+                sm.clearSelections();
+            } else if (this.store.getCount()) {
+                sm.selectRange([0, 1], lastCell);
+            }
+            return;
+        }
+
         if (isSelected && isMultiSelect) {
             _.each(cells, function(cell) {
                 sm.deselectCell(cell);
