@@ -369,7 +369,6 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
 
     // filter selection panel
     onMemberGridSelectionChange: function() {
-        const gridView = this.membersGrid.getView();
         const cm = this.membersGrid.getColumnModel();
         const visibleRoles = this.membersGrid.rolesVisible; //cm.config.filter((col) => { return !col.hidden });
 
@@ -385,9 +384,13 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             });
         }
 
-        this.memberSelectionPanel.setFilterCells(_.compact(_.map(selection, function(index) {
-            return _.get(Ext.fly(gridView.getCell(index[0], index[1]))?.query('.cs-members-cell'), '[0].id');
-        })));
+        // NOTE: cells are rendered async, so we can't take the cellIds (<eventId>:<roleId>) from the dom
+        return this.memberSelectionPanel.setFilterCells(_.uniq(_.compact(_.map(selection, (index) => {
+            const event = this.membersGrid.store.getAt(index[0]);
+            const roleKey = String(_.get(cm.config, `[${index[1]}].id`, '')).split(':').pop();
+            const role = index[1] > 0 && this.csRolesStore.getAt(this.csRolesStore.findExact('key', roleKey));
+            return event && role ? `${event.id}:${role.id}` : null;
+        }))));
     },
 
     // change from ftb
@@ -672,6 +675,8 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             .then(_.bind(me.computeCSMembersCapabilities, me))
             .then(_.bind(function() {
                 me.membersGrid.getView().refresh();
+                // NOTE: filterCells depend on loaded events (e.g. implicit selection of hidden roles)
+                return me.onMemberGridSelectionChange();
             }, me))
             .then(_.bind(me.checkUnusedAttendee, me))
             .catch(_.bind(function(error) {

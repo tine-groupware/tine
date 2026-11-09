@@ -138,7 +138,7 @@ Tine.CrewScheduling.MemberSelectionPanel = Ext.extend(Ext.Panel, {
     setFilterCells: function(filterCells) {
         if (JSON.stringify(filterCells) != JSON.stringify(this.filterCells)) {
             this.filterCells = filterCells;
-            this.filterStore(this.filterField.getValue(), this.filterCells);
+            return this.applyFilter();
         }
     },
 
