@@ -855,7 +855,8 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
 
 
                 // map: member -> csRoles, days, favorites
-                await async.forEach(this.csMembersStore.data.items, async (attendee) => {
+                // NOTE: store might be filtered already (e.g. implicit filterCells from hidden roles) -> compute all members
+                await async.forEach(this.csMembersStore.snapshot?.items || this.csMembersStore.data.items, async (attendee) => {
                     const member = attendee.get('user_id');
                     const memberId = attendee.getUserId();
 
@@ -902,6 +903,8 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
 
                 // bind store
                 this.memberSelectionPanel.dataView.bindStore(this.csMembersStore);
+                // (re)apply member filter as filtering before capabilities got computed is not reliable
+                await this.memberSelectionPanel.applyFilter();
                 fulfill(this.csMembersStore.data.items);
                 this.memberSelectionPanel.dataView.refresh()
             } catch(e) {

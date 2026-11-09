@@ -143,7 +143,14 @@ Tine.CrewScheduling.MemberSelectionPanel = Ext.extend(Ext.Panel, {
     },
 
     onFilterChange: function(field, value, oldValue) {
-        this.filterStore(this.filterField.getValue(), this.filterCells);
+        this.applyFilter();
+    },
+
+    /**
+     * (re)apply current query and filterCells to store
+     */
+    applyFilter: function() {
+        return this.filterStore(this.filterField.getValue(), this.filterCells);
     },
 
     filterStore: function(queryString, filterCells) {
