@@ -1656,6 +1656,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectDelete(array $_ids)
     {
+        throw new Tinebase_Exception_NotImplemented('use document invoice instead, legacy invoices are read only now');
+
         $records = $this->_backend->getMultiple($_ids);
         
         $invoicePositionController = Sales_Controller_InvoicePosition::getInstance();
@@ -1889,10 +1891,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             case 'create':
             case 'update':
             case 'delete':
-                if (! Tinebase_Core::getUser()->hasRight('Sales', Sales_Acl_Rights::MANAGE_INVOICES)) {
+                throw new Tinebase_Exception_NotImplemented('use document invoice instead, legacy invoices are read only now');
+                /*if (! Tinebase_Core::getUser()->hasRight('Sales', Sales_Acl_Rights::MANAGE_INVOICES)) {
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to manage invoices!");
                 }
-                break;
+                break;*/
         }
 
         parent::_checkRight($_action);
