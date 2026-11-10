@@ -192,9 +192,8 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
                         }]
                     });
                 }
-                const target = e.getTarget('a', 1 , true) ||
-                    e.getTarget('input[type=text]', 1 , true) ||
-                    e.getTarget('textarea', 1, true);
+
+                const target = e.getTarget() && e.getTarget().closest('a, input[type=text], textarea');
                 
                  if (this.menu.items.length > 0 && window.getSelection().toString() === '' && !target) {
                     e.stopEvent();
