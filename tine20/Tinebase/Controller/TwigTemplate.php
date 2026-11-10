@@ -42,7 +42,7 @@ class Tinebase_Controller_TwigTemplate extends Tinebase_Controller_Record_Abstra
         $this->_purgeRecords = false;
     }
 
-    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.',
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = null,
         /** @noinspection PhpUnusedParameterInspection */ $_oldRecord = NULL)
     {
         if (!$this->_doContainerACLChecks) {
@@ -52,6 +52,12 @@ class Tinebase_Controller_TwigTemplate extends Tinebase_Controller_Record_Abstra
             return true;
         }
 
+        if ($_throw) {
+            if (!$_errorMessage) {
+                $_errorMessage = $this->_getTranslatedNoPermissionMessage($_action);
+            }
+            throw new Tinebase_Exception_AccessDenied($_errorMessage);
+        }
         return false;
     }
 
