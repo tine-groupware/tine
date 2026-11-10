@@ -403,7 +403,7 @@ class Tinebase_FileSystem_StreamWrapper
      * url_stat
      * 
      * @param string $_path
-     * @param array $_flags
+     * @param int $_flags
      * @return boolean|array
      */
     public function url_stat($_path, $_flags)
@@ -424,14 +424,15 @@ class Tinebase_FileSystem_StreamWrapper
             }
             return false;
         }
-        
-        $timestamp = $node->last_modified_time instanceof Tinebase_DateTime ? $node->last_modified_time->getTimestamp() : $node->creation_time->getTimestamp();
+
+        $creationTimestamp = $node->creation_time instanceof Tinebase_DateTime ? $node->creation_time->getTimestamp() : 1;
+        $timestamp = $node->last_modified_time instanceof Tinebase_DateTime ? $node->last_modified_time->getTimestamp() : $creationTimestamp;
         
         $mode      = 0;
         // set node type (directory, file, link)
         $mode      = $node->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER ? $mode | 0040000 : $mode | 0100000;
         
-        $stat =  array(
+        return [
             0  => 0,
             1  => crc32($node->object_id),
             2  => $mode,
@@ -442,7 +443,7 @@ class Tinebase_FileSystem_StreamWrapper
             7  => $node->size,
             8  => $timestamp,
             9  => $timestamp,
-            10 => $node->creation_time->getTimestamp(),
+            10 => $creationTimestamp,
             11 => -1,
             12 => -1,
             'dev'     => 0,
@@ -455,11 +456,9 @@ class Tinebase_FileSystem_StreamWrapper
             'size'    => $node->size,
             'atime'   => $timestamp,
             'mtime'   => $timestamp, 
-            'ctime'   => $node->creation_time->getTimestamp(),
+            'ctime'   => $creationTimestamp,
             'blksize' => -1,
-            'blocks'  => -1
-        );
-        
-        return $stat;
+            'blocks'  => -1,
+        ];
     }
 }
