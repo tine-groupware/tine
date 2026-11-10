@@ -440,6 +440,8 @@ Tine.Tinebase.tineInit = {
         mainCardPanel.layout.setActiveItem(Tine.loginPanel.id);
         // Tine.loginPanel.doLayout();
         Tine.loginPanel.onLogin = function(response) {
+            // login success shows a MessageBox wait indicator - don't show the boot splash waitcycle in addition
+            Ext.select('.tine-viewport-waitcycle', false, activeItem?.el?.dom).setDisplayed(false);
             mainCardPanel.layout.setActiveItem(activeItem);
             cb.call(scope||window, response);
         };
