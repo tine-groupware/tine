@@ -164,11 +164,16 @@ Tine.widgets.dialog.ModalDialog = Ext.extend(Ext.Component, {
         this.visible = true
         this._mask = this._mask || new Ext.LoadMask(document.body, {msg: i18n._('Loading')})
         if(!(this.vueHandle && this.modalProps && !this.modalProps.visible)){
-            if(this._mask.disabled) this._mask.show()
+            if(!this._maskShown) {
+                // show loading mask once while dialog component is still loading (e.g. async chunk in dev mode)
+                this._maskShown = true
+                this._mask.show()
+            }
             setTimeout(() => this.showModal(), 10)
             return
         }
         this._mask.hide()
+        this._maskShown = false
         Ext.WindowMgr.bringToFront(this.windowProxy)
         this.modalProps.visible = true
     },

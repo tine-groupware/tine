@@ -258,7 +258,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.BoxComponent, {
         const values = this.getFormValue()
 
         if (this.checkFormValidity()) {
-            if (values.password) Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'), { estimate: 2000 })
+            // NOTE: password might be empty (password-less login) but MFA requests need a wait indicator as well
+            if (values.password || additionalParams?.MFAUserConfigId) Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'), { estimate: 2000 })
             this._login(values.username, values.password, additionalParams)
         } else {
             Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
