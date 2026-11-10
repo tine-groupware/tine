@@ -290,6 +290,9 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     throw new Tinebase_Exception_InvalidArgument("User backend type $backendType not implemented.");
             }
         } catch (Tinebase_Exception_Backend_Ldap $e) {
+            $e->setLogToSentry(false);
+            $e->setLogLevelMethod('warn');
+            Tinebase_Exception::log($e);
             if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}) {
                 Tinebase_Config::getInstance()->clearCache();
                 try {
