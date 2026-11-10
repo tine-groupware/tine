@@ -208,7 +208,7 @@
                       unchecked-value="false"
                       @click="singleSelection(option)"
                     >
-                      <div>{{option.name_option}}</div>
+                      <MarkdownRenderer :content="option.name_option" />
                       <div v-if="option.option_config">
                         <MarkdownRenderer v-if="option.option_config.description" :content="option.option_config.description" />
                         <div v-if="option.option_config.price">{{formatMessage('Price')}} {{option.option_config.price}}</div>
@@ -218,7 +218,7 @@
                   <div v-if="option.option_config_class === 'EventManager_Model_FileOption'"
                        :class="{ 'required-field-error-container': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}">
                     <div class="m-3">
-                      <div>{{option.name_option}}</div>
+                      <MarkdownRenderer :content="option.name_option" />
 
                       <div v-if="option.option_config?.node_id">
                         <b-button class="action-button" @click="downloadFile(option.option_config.node_id, option.option_config.file_name, option.option_config.file_type)">
