@@ -329,7 +329,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     focusAndSelect: function(store, records, index) {
         (function() {
-            if (this.rendered) {
+            // NOTE: grid might be destroyed meanwhile (e.g. dialog closed)
+            if (this.rendered && !this.isDestroyed && this.getView().mainBody) {
                 if (this.selectRowAfterAdd) {
                     this.getView().focusRow(index);
                     this.getSelectionModel().selectRow(index);
