@@ -810,6 +810,7 @@ const resetFormState = () => {
   isLegalGuardian.value = false;
   communicationPreferenceTouched.value = false;
   communicationPreference.value = defaultCommunicationPreference.value;
+  participantPrefilledFromOwner.value = false;
   initializeEventOptions();
 };
 
@@ -839,12 +840,28 @@ const handleEditExistingRegistration = async (participantId) => {
    await checkAndLoadExistingRegistration(participantId);
 };
 
+const participantPrefilledFromOwner = ref(false);
+
+const matchesParticipant = (reg, participantId) => {
+  const participant = reg.participant;
+  if (!participant || !participantId) {
+    return false;
+  }
+  if (String(participant.id) === String(participantId)) {
+    return true;
+  }
+  if (String(participant.original_id ?? '') !== String(participantId)) {
+    return false;
+  }
+  return String(participantId) !== String(accountOwner.value?.id) || !toBool(reg.has_registrant);
+};
+
 const checkAndLoadExistingRegistration = async (participantId) => {
   const registration = eventRegistrations.value.find(reg => {
     if (registrationId.value) {
       return reg.id === registrationId.value;
     }
-    return String(reg.participant?.id) === String(participantId);
+    return matchesParticipant(reg, participantId);
   });
 
   if (registration) {
@@ -877,11 +894,16 @@ const checkAndLoadExistingRegistration = async (participantId) => {
   } else {
     if (accountOwner.value.id === participantId || !canRegisterOnBehalf.value) {
       contactDetails.value = prefillParticipant(accountOwner.value);
+      participantPrefilledFromOwner.value = true;
     } else {
       isRegistrant.value = true;
-      const reg = registrations.value.find(reg => reg.participant?.id === participantId);
+      const reg = registrations.value.find(reg => matchesParticipant(reg, participantId));
       if (reg) {
-        contactDetails.value = prefillParticipant(reg.participant);
+        const originalId = reg.participant.original_id;
+        contactDetails.value = prefillParticipant(reg.participant, {
+          id: originalId && String(originalId) !== String(accountOwner.value.id) ? originalId : '',
+          registration_id: '',
+        });
       }
     }
     registrantDetails.value = prefillRegistrant(accountOwner.value);
@@ -1331,6 +1353,18 @@ const onLegalGuardianChange = (checked) => {
   }
   isLegalGuardian.value = checked;
 };
+
+watch(isRegistrant, (onBehalf, wasOnBehalf) => {
+  if (!participantPrefilledFromOwner.value || onBehalf === wasOnBehalf) {
+    return;
+  }
+  // the participant fields still hold the account owner (including the owner's contact id).
+  // Registering someone else must start from an empty participant.
+  contactDetails.value = onBehalf
+    ? emptyContactDetails()
+    : prefillParticipant(accountOwner.value);
+  validationErrors.value = [];
+});
 
 watch([() => parentEmail.value, () => contactDetails.value.email], () => {
   if (!showParentEmailField.value) return;
