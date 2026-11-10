@@ -1065,14 +1065,15 @@ const isOptionRequired = (option) => {
 };
 
 const evaluateRule = (rule) => {
-  const refOptionField = rule.ref_option_field;
+  const ref = rule.ref_option_field;
+  const refOptionField = (ref && typeof ref === 'object') ? ref.id : ref;
   const referencedOption = eventDetails.value.options.find(opt => opt.id === refOptionField);
 
   if (referencedOption?.option_config_class === 'EventManager_Model_FileOption') {
     const hasFiles = uploadedFiles.value[refOptionField] &&
       uploadedFiles.value[refOptionField].length > 0;
 
-    switch (rule.criteria) {
+    switch (Number(rule.criteria)) {
       case 1:
         return hasFiles;
       case 2:
