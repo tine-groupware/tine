@@ -18,6 +18,9 @@ Ext.ns('Tine.Admin.Tags');
  * @extends     Tine.widgets.dialog.EditRecord
  */
 Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
+    // context of the user manual
+    canonicalName: '/Admin/EditDialog/Tag',
+
     
     /**
      * var tag
@@ -58,7 +61,11 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             });
             if (anycontext) {
                 tag.data.contexts = ['any'];
+            } else {
+                // keep contexts of apps not shown in the tree
+                tag.data.contexts.push(...this.hiddenContexts);
             }
+            tag.data.context_models = this.getContextModels();
             
             form.updateRecord(tag);
             
@@ -119,7 +126,10 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         });
         
         this.anyContext = ! tagData.contexts || tagData.contexts.indexOf('any') > -1;
+        this.appModels = _.groupBy(tagData.context_models || [], (model) => model.split('_')[0]);
         this.createTreeNodes(tagData.appList);
+        this.updateTreeNodes();
+        this.showAppModels(null);
         this.getForm().loadRecord(this.tag);
     },
 
@@ -141,13 +151,26 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.rootNode.eachChild(function (node) {
             toRemove.push(node);
         });
-        
+        // don't duplicate tree nodes on 'apply changes'
+        toRemove.forEach((node) => node.remove());
+        // NOTE: apps might be hidden as the models of an app are not available (e.g. no right to run the app)
+        this.hiddenContexts = [];
+        this.hiddenModelApps = [];
+
         for (var i = 0, j = appList.length; i < j; i += 1) {
-            // don't duplicate tree nodes on 'apply changes'
-            toRemove[i] ? toRemove[i].remove() : null;
             
             var appData = appList[i];
             if (appData.name === 'Tinebase') {
+                continue;
+            }
+            // only apps with models with tags
+            if (!(this.availableModels[appData.name] || []).length) {
+                if (this.anyContext || this.tag.get('contexts').indexOf(appData.id) > -1) {
+                    this.hiddenContexts.push(appData.id);
+                }
+                if ((this.appModels[appData.name] || []).length) {
+                    this.hiddenModelApps.push(appData.name);
+                }
                 continue;
             }
             // get translated app title
@@ -156,6 +179,8 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             
             this.rootNode.appendChild(new Ext.tree.TreeNode({
                 text: appTitle,
+                appTitle: appTitle,
+                appName: appData.name,
                 id: appData.id,
                 checked: this.anyContext || this.tag.get('contexts').indexOf(appData.id) > -1,
                 leaf: true,
@@ -163,6 +188,101 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             }));
         }
     },
+
+    /**
+     * models of the checked apps (apps with models are restricted to these models)
+     */
+    getContextModels: function () {
+        const models = _.flatten(this.hiddenModelApps.map((appName) => this.appModels[appName]));
+        this.rootNode.eachChild((node) => {
+            if (node.attributes.checked) {
+                models.push(...(this.appModels[node.attributes.appName] || []));
+            }
+        });
+        return models;
+    },
+
+    updateTreeNodes: function () {
+        this.rootNode.eachChild((node) => {
+            const count = (this.appModels[node.attributes.appName] || []).length;
+            node.setText(node.attributes.appTitle + (count ?
+                ` (${String.format(this.translation.ngettext('restricted to {0} model', 'restricted to {0} models', count), count)})` : ''));
+            node.getUI()[count ? 'addClass' : 'removeClass']('admin-tag-context-restricted');
+        });
+    },
+
+    /**
+     * shows the models of the app (node) to restrict the app to
+     */
+    showAppModels: function (node) {
+        const panel = this.modelsPanel;
+        panel.removeAll(true);
+
+        if (!node) {
+            panel.setTitle(this.translation.gettext('Restrict to Models'));
+            panel.add({
+                xtype: 'box',
+                cls: 'admin-tag-context-models-hint',
+                html: Ext.util.Format.htmlEncode(this.translation.gettext('The tag can be used in the checked applications. Select an application to restrict the tag to some of its models.'))
+            });
+        } else {
+            const appName = node.attributes.appName;
+            const selected = this.appModels[appName] || [];
+            const models = _.uniq((this.availableModels[appName] || []).concat(selected));
+
+            panel.setTitle(String.format(this.translation.gettext('Restrict {0} to Models'), Ext.util.Format.htmlEncode(node.attributes.appTitle)));
+            panel.add({
+                xtype: 'box',
+                cls: 'admin-tag-context-models-hint',
+                html: Ext.util.Format.htmlEncode(models.length ?
+                    this.translation.gettext('Without selection the tag can be used for all models of the application.') :
+                    this.translation.gettext('The application has no models with tags.'))
+            });
+            _.sortBy(models.map((model) => {
+                const recordClass = Tine.Tinebase.data.RecordMgr.get(model);
+                return { model, name: recordClass ? recordClass.getRecordsName() : model };
+            }), 'name').forEach(({ model, name }) => {
+                panel.add({
+                    xtype: 'checkbox',
+                    hideLabel: true,
+                    name: `context_model_${model}`,
+                    cls: 'admin-tag-context-model',
+                    modelName: model,
+                    boxLabel: `${Ext.util.Format.htmlEncode(name)} <span class="admin-tag-context-model-class">${Ext.util.Format.htmlEncode(model.split('_Model_')[1] || model)}</span>`,
+                    checked: selected.indexOf(model) > -1,
+                    listeners: {
+                        check: (cb, checked) => this.onModelCheck(node, model, checked),
+                        scope: this
+                    }
+                });
+            });
+        }
+        panel.doLayout();
+    },
+
+    onModelCheck: function (node, model, checked) {
+        const appName = node.attributes.appName;
+        const models = _.without(this.appModels[appName] || [], model);
+        this.appModels[appName] = checked ? models.concat(model) : models;
+        // restricting an app implies using it
+        if (checked && !node.attributes.checked) {
+            node.getUI().toggleCheck(true);
+        }
+        this.updateTreeNodes();
+    },
+
+    /**
+     * unchecking an app removes its models
+     */
+    onContextCheckChange: function (node, checked) {
+        if (checked || !(this.appModels[node.attributes.appName] || []).length) return;
+        delete this.appModels[node.attributes.appName];
+        this.updateTreeNodes();
+        if (this.contextTree.getSelectionModel().getSelectedNode() === node) {
+            this.showAppModels(node);
+        }
+    },
+
     /**
      * function display
      */
@@ -174,21 +294,60 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             draggable: false,
             allowDrop: false
         });
-        var contextPanel = new Ext.tree.TreePanel({
-            title: this.translation.gettext('Context'),
+        var contextTree = this.contextTree = new Ext.tree.TreePanel({
             id: 'adminSharedTagsContextPanel',
+            region: 'west',
+            width: 260,
+            split: true,
+            autoScroll: true,
             rootVisible: true,
             border: false,
-            root: this.rootNode
+            root: this.rootNode,
+            listeners: {
+                checkchange: this.onContextCheckChange,
+                scope: this
+            }
+        });
+        contextTree.getSelectionModel().on('selectionchange', (sm, node) => {
+            this.showAppModels(node && node !== this.rootNode ? node : null);
+        });
+
+        // only models with tags can be selected (modelconfig: hasTags, legacy models: tags field)
+        this.availableModels = _.reduce(Tine.Tinebase.data.RecordMgr.items, (byApp, recordClass) => {
+            if (_.isFunction(recordClass.hasField) && recordClass.hasField('tags')
+                && recordClass.getMeta('appName') !== 'Tinebase') {
+                (byApp[recordClass.getMeta('appName')] = byApp[recordClass.getMeta('appName')] || [])
+                    .push(recordClass.getPhpClassName());
+            }
+            return byApp;
+        }, {});
+
+        this.modelsPanel = new Ext.Panel({
+            cls: 'admin-tag-context-models',
+            region: 'center',
+            border: false,
+            autoScroll: true,
+            layout: 'form',
+            bodyStyle: 'padding: 5px;',
+            title: this.translation.gettext('Restrict to Models')
+        });
+
+        var contextPanel = new Ext.Panel({
+            title: this.translation.gettext('Context'),
+            canonicalName: 'Contexts',
+            layout: 'border',
+            border: false,
+            items: [contextTree, this.modelsPanel]
         });
         // sort nodes in context panel by text property
-        var treeSorter = new Ext.tree.TreeSorter(contextPanel, {
+        var treeSorter = new Ext.tree.TreeSorter(contextTree, {
             folderSort: true,
             dir: "asc"
         });
         
         this.rightsPanel = new Tine.widgets.account.PickerGridPanel({
             title: this.translation.gettext('Account Rights'),
+            canonicalName: 'Rights',
             store: this.rightsStore,
             recordClass: Tine.Admin.Model.TagRight,
             hasAccountPrefix: true,

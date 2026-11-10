@@ -13,6 +13,7 @@
 const { isObject, isArray, map, isString, get, escapeRegExp, each, find, compact, cloneDeep } = require('lodash')
 const { htmlEncode, htmlDecode, date: dateFormat, number, round, capitalize} = require('Ext/util/Format')
 const { normalizeColor } = require('./util/colors')
+const tagStyle = require('./widgets/tags/tagStyle')
 const { parse, parsePurified, parseInline, parseInlinePurified } = require('util/markdown')
 
 /**
@@ -285,54 +286,15 @@ const common = {
      * TODO add style for tag divs
      */
     tagsRenderer: function (tags) {
-        let result = '';
-        if (tags) {
-            for (var i = 0; i < tags.length; i += 1) {
-                if (tags[i] && tags[i].name) {
-                    var qtipText = Tine.Tinebase.common.doubleEncode(tags[i].name);
-                    if (tags[i].description) {
-                        qtipText += ' | ' + Tine.Tinebase.common.doubleEncode(tags[i].description);
-                    }
-                    if (tags[i].occurrence) {
-                        qtipText += ' (' + i18n._('Usage:&#160;') + tags[i].occurrence + ')';
-                    }
-                    result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags dark-reverse" style="background-color:' + (tags[i].color ? tags[i].color : '#fff') + ';">&#160;</div>';
-                }
-            }
-        }
-
-        return result;
+        return tagStyle.compact(tags);
     },
 
     /**
-     * render single tag
+     * render single tag as tag label
      *
-     * @param {Tine.Tinebase.Model.Tag} tag
+     * @param {Tine.Tinebase.Model.Tag|Object} tag
      */
     tagRenderer: function(tag) {
-        if (! Tine.Tinebase.common.tagRenderer.tpl) {
-            Tine.Tinebase.common.tagRenderer.tpl = new Ext.XTemplate(
-                '<div class="tb-grid-tags dark-reverse" style="background-color:{values.color};">&#160;</div>',
-                '<div class="x-widget-tag-tagitem-text" ext:qtip="',
-                    '{[this.encode(values.name)]}',
-                    '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
-                    '</i>&nbsp;[{occurrence}]',
-                    '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
-
-                    '&nbsp;{[this.encode(values.name)]}',
-                    '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
-                '</div>',
-            {
-                encode: function(value) {
-                     if (value) {
-                        return Tine.Tinebase.common.doubleEncode(value);
-                    } else {
-                        return '';
-                    }
-                }
-            }).compile();
-        }
-
         var result =  i18n._('No Information');
 
         if (tag && Ext.isFunction(tag.beginEdit)) {
@@ -345,7 +307,7 @@ const common = {
 
         // non objects are treated as ids and -> No Information
         if (Ext.isObject(tag)) {
-            result = Tine.Tinebase.common.tagRenderer.tpl.apply(tag);
+            result = tagStyle.label(tag);
         }
 
         return result;

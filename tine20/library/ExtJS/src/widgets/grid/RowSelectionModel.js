@@ -345,6 +345,10 @@ Ext.grid.RowSelectionModel = Ext.extend(Ext.grid.AbstractSelectionModel,  {
             view.focusRow(rowIndex);
         }else{
             var isSelected = this.isSelected(rowIndex);
+            // tine: keep selection when clicking the tags cell of a selected row (opens tags menu for selection)
+            if(isSelected && !e.ctrlKey && e.getTarget('.x-grid3-td-tags')){
+                return;
+            }
             if(e.ctrlKey && isSelected){
                 this.deselectRow(rowIndex);
             }else if(!isSelected || this.getCount() > 1){

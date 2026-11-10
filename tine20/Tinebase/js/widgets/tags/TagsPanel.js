@@ -23,6 +23,11 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      */
     app: null,
     /**
+     * @cfg {Tine.Tinebase.data.Record} recordClass (optional) of the record this panel is displayed for
+     * used to search tags of this model and to show pinned tags
+     */
+    recordClass: null,
+    /**
      * @cfg {String} recordId Id of record this panel is displayed for
      */
     recordId: '',
@@ -45,6 +50,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     searchField: null,
     
     iconCls: 'action_tag',
+    // context of the user manual (same for all apps)
+    canonicalName: '/Tinebase/TagsPanel',
     layout: 'fit',
     bodyStyle: 'padding: 2px 2px 2px 2px',
     collapsible: true,
@@ -68,6 +75,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 add: this.onChange,
                 load: this.onChange,
                 remove: this.onChange,
+                clear: this.onChange,
                 scope: this
             }
         });
@@ -88,11 +96,21 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             }
         });*/
 
+        this.setRecordClass(this.recordClass);
+        // NOTE: most edit dialogs create the panel without recordClass -> take it from the dialog
+        this.on('render', () => {
+            if (!this.recordClass) {
+                this.setRecordClass(this.findParentBy((c) => c instanceof Tine.widgets.dialog.EditDialog)?.recordClass);
+                this.updatePinnedTags();
+            }
+        });
+
         this.searchField = new Tine.widgets.tags.TagCombo({
             app: this.app,
             onlyUsableTags: true,
             disableClearer: true
         });
+        this.searchField.taggedModel = this.recordClass;
         this.searchField.on('select', function(searchField, selectedTag){
             if(this.recordTagsStore.getById(selectedTag.id) === undefined) {
                 this.recordTagsStore.add(selectedTag);
@@ -111,24 +129,33 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
 
         var tagTpl = new Ext.XTemplate(
             '<tpl for=".">',
-               '<div class="x-widget-tag-tagitem" id="{id}">',
-                    '<div class="x-widget-tag-tagitem-color dark-reverse" style="background-color: {color};">&#160;</div>',
-                    '<div class="x-widget-tag-tagitem-text" ext:qtip="', 
-                        '{[this.encode(values.name)]}', 
-                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
-                        '</i>&nbsp;[{occurrence}]',
-                        '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
-                        
-                        '&nbsp;{[this.encode(values.name)]}',
-                    '</div>',
-                '</div>',
+                '<div class="x-widget-tag-tagitem tw-tag-item" id="{id}">{[this.label(values)]}</div>',
             '</tpl>' ,{
-                encode: function(value) {
-                    return Tine.Tinebase.common.doubleEncode(value);
+                label: function(values) {
+                    return Tine.widgets.tags.tagStyle.label(values);
                 }
             }
         );
-        
+
+        // pinned but not attached tags, click attaches them
+        this.pinnedTagsView = new Ext.BoxComponent({
+            cls: 'tw-tagspanel-pinned',
+            autoEl: { tag: 'div' },
+            listeners: {
+                render: (cmp) => {
+                    cmp.el.on('click', (e) => {
+                        const target = e.getTarget('.tw-tag-ghost');
+                        const tag = target && _.find(this.quickTags.getPinnedTags(), { id: target.getAttribute('data-tag-id') });
+                        if (tag && !this.searchField.disabled && !this.recordTagsStore.getById(tag.id)) {
+                            this.recordTagsStore.add(new Tine.Tinebase.Model.Tag(tag, tag.id));
+                            this.quickTags.addRecent(tag);
+                        }
+                    });
+                    this.updatePinnedTags();
+                }
+            }
+        });
+
         this.dataView = new Ext.DataView({
             store: this.recordTagsStore,
             tpl: tagTpl,
@@ -298,11 +325,14 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         
         this.items = [{
             xtype: 'panel',
-            layout: 'fit',
+            // NOTE: fit layout renders the first item only
+            layout: 'auto',
+            autoScroll: true,
             border: false,
             bbar: this.bottomBar,
             items: [
                 this.dataView,
+                this.pinnedTagsView,
                 this.formField
             ]
         }];
@@ -311,6 +341,36 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         Tine.widgets.tags.TagPanel.superclass.initComponent.call(this);
     },
     
+    setRecordClass: function(recordClass) {
+        this.recordClass = recordClass ? Tine.Tinebase.data.RecordMgr.get(recordClass) : null;
+        this.quickTags = this.recordClass?.getMeta ? new Tine.widgets.tags.QuickTags({ recordClass: this.recordClass }) : null;
+        // pins might refer to deleted tags -> update ghost tags, when usable tags are (re)loaded
+        this.offUsableTagsChange?.();
+        this.offUsableTagsChange = this.quickTags?.onUsableTagsChange(() => this.updatePinnedTags());
+        this.quickTags?.loadUsableTags().then(() => this.updatePinnedTags()).catch(Ext.emptyFn);
+        if (this.searchField) {
+            this.searchField.taggedModel = this.recordClass;
+        }
+    },
+
+    /**
+     * show pinned tags, which are not attached, as ghost tags
+     */
+    updatePinnedTags: function() {
+        if (this.isDestroyed || !this.pinnedTagsView?.rendered) return;
+        const pinned = this.quickTags && !this.searchField.disabled ? this.quickTags.getPinnedTags() : [];
+        this.pinnedTagsView.el.update(pinned.filter((tag) => !this.recordTagsStore.getById(tag.id)).map((tag) => {
+            return Tine.widgets.tags.tagStyle.label(tag, { state: 'none', cls: 'tw-tag-ghost', qtip: false })
+                .replace('<span class="', `<span data-tag-id="${Ext.util.Format.htmlEncode(tag.id)}" ext:qtip="${i18n._('Add pinned tag')}" class="`)
+                .replace('<span class="tw-tag-text">', '<span class="tw-tag-text">+ ');
+        }).join(''));
+    },
+
+    onDestroy: function() {
+        this.offUsableTagsChange?.();
+        Tine.widgets.tags.TagPanel.superclass.onDestroy.apply(this, arguments);
+    },
+
     getFormField: function() {
         return this.formField.items;
     },
@@ -350,6 +410,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      * updates the title
      */
     onChange: function() {
+        this.updatePinnedTags();
         if (this.recordTagsStore) {
             this.title = i18n._('Tags') + ' (' + this.recordTagsStore.getCount() + ')';
             if (this.header) {
@@ -416,6 +477,7 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
     setDisabled: function(disabled) {
         // disable combo, btn, context
         this.tagsPanel.searchField.setDisabled(disabled);
+        this.tagsPanel.updatePinnedTags();
     }
 
 });

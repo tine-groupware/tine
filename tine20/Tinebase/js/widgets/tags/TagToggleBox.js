@@ -104,34 +104,21 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
     
     initTemplate: function() {
         this.tpl = new Ext.XTemplate(
-            '<tpl for=".">', 
-                '<div class="x-combo-list-item">',
-                    '<input class="tagcheckel" type="checkbox" style="margin-right:5px" id="{values.id}" />' +
-                    '<div class="tb-grid-tags dark-reverse" style="margin-top:2px;background-color:{values.color};">&#160;</div>',
-                    '<div class="x-widget-tag-tagitem-text" style="margin-top:1px" ext:qtip="',
-                        '{[this.encode(values.name)]}',
-                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
-                        '</i>&nbsp;[{occurrence}]',
-                        '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
-                        
-                        '&nbsp;{[this.encode(values.name)]}&nbsp;({values.selection_occurrence})',
-                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
-                    '</div>',
-                '</div>', 
+            '<tpl for=".">',
+                '<div class="x-combo-list-item tw-tag-combo-item">',
+                    '<input class="tagcheckel" type="checkbox" style="margin-right:5px" id="{values.id}" />',
+                    '{[this.label(values)]}',
+                '</div>',
             '</tpl>',
             {
-                encode: function(value) {
-                     if (value) {
-                        return Tine.Tinebase.common.doubleEncode(value);
-                    } else {
-                        return '';
-                    }
+                label: function(values) {
+                    return Tine.widgets.tags.tagStyle.label(values, { count: values.selection_occurrence ? `(${values.selection_occurrence})` : '' });
                 }
             }
         );
     },
-    
-    
+
+
     initView : function() {
         this.view = new Ext.DataView({
             anchor : '100% 100%',

@@ -48,6 +48,7 @@ Tine.Sales.ProductGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_editInNewWindow.setDisabled(true);
                 this.action_deleteRecord.setDisabled(true);
                 this.action_tagsMassAttach.setDisabled(true);
+                this.action_tagsMenu?.setDisabled(true);
             }
         }, this);
 

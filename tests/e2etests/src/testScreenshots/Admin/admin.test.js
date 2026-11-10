@@ -171,7 +171,14 @@ describe('shared tags', () => {
         await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(tagDialog,{path: 'screenshots/Administration/22_admin_gemeinsame_tags_rechte.png'});
         await expectPuppeteer(tagDialog).toClick('span', {text: 'Kontexte'});
-        await new Promise(r => setTimeout(r, 500));
+        // select an app in the tree and restrict the tag to a model of the app (not saved)
+        const salesId = await tagDialog.evaluate(() => Tine.Tinebase.appMgr.get('Sales').id);
+        await lib.clickOnElement(tagDialog, `#adminSharedTagsContextPanel [ext\\:tree-node-id="${salesId}"] .x-tree-node-anchor`);
+        await tagDialog.waitForSelector('.admin-tag-context-models input[type=checkbox]', {visible: true});
+        const checkboxId = await tagDialog.evaluate(() => Array.from(document.querySelectorAll('.admin-tag-context-models input[type=checkbox]'))
+            .find((cb) => Ext.getCmp(cb.id).modelName === 'Sales_Model_DocumentPosition_Offer')?.id);
+        await lib.clickOnElement(tagDialog, `#${checkboxId}`);
+        await tagDialog.waitForSelector('.x-tree-node-el.admin-tag-context-restricted', {visible: true});
         await lib.makeScreenshot(tagDialog,{path: 'screenshots/Administration/23_admin_gemeinsame_tags_kontexte.png'});
         await tagDialog.close();
     });

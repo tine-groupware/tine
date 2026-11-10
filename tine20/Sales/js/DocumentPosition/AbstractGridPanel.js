@@ -21,9 +21,17 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     enableBbar: true,
     disableResponsiveLayout: false,
 
+    // tags are changed locally and saved with the document, also in booked documents
+    enableTagsMenu: true,
+    tagsWritableIfReadOnly: true,
+    // rows are tinted with the colors of their tags
+    tagsRowTint: true,
+
     ddSortCol: 'sorting',
     sortInc: 10000,
     isFormField: true,
+    // context of the user manual e.g. /Sales/EditDialog/Document_Offer/Positions
+    canonicalName: 'Positions',
 
     initComponent() {
         this.app = Tine.Tinebase.appMgr.get('Sales');
@@ -311,7 +319,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.columns = Object.keys(modelConfig.fields).reduce((columns, fieldName) => {
             const col = colMgr(fieldName, { sortable: false });
             if (col && ['id', 'document_id'].indexOf(fieldName) < 0) {
-                if (['type', 'pos_number'].indexOf(fieldName) < 0) {
+                if (['type', 'pos_number', 'tags'].indexOf(fieldName) < 0) {
                     col.editor = Ext.ComponentMgr.create(fieldMgr(fieldName, { selectOnFocus: true, blurOnSelect: false }));
                 }
                 columns.push(col);
@@ -321,6 +329,11 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
         // some adjustments
         Object.assign(this.columns.find((c) => c.dataIndex === 'type'),{ header: '', width: 15, renderer: _.bind(this.typeRenderer, this) });
+        // tags column (click opens tags menu)
+        Object.assign(this.columns.find((c) => c.dataIndex === 'tags') || {}, { id: 'tags', header: i18n._('Tags'), width: 50, hidden: false, responsiveLevel: 'small', renderer: Tine.Tinebase.common.tagsRenderer });
+        // leading columns: pos, type, tags
+        const leadingCols = ['pos_number', 'type', 'tags'].map((dataIndex) => this.columns.find((c) => c.dataIndex === dataIndex)).filter(Boolean);
+        this.columns = leadingCols.concat(this.columns.filter((c) => leadingCols.indexOf(c) < 0));
         Object.assign(this.columns.find((c) => c.dataIndex === 'pos_number'),{ width: 40 });
         // NOTE: GroupingView / DDSortPlugin need the columns, but they are never displayed (no responsiveLevel -> stay hidden)
         ['grouping', 'sorting'].forEach((dataIndex) => {

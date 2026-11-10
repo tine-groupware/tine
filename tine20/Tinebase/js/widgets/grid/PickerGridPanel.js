@@ -137,6 +137,25 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     readOnly: false,
 
     /**
+     * @cfg {Bool} tagsRowTint
+     * tint rows with the colors of their tags (see Tine.widgets.grid.TagsRowTintPlugin)
+     */
+    tagsRowTint: false,
+
+    /**
+     * @cfg {Bool} enableTagsMenu
+     * tags menu (context menu and click on tags cell) for records with tags,
+     * tags are changed locally and saved with the main record
+     */
+    enableTagsMenu: false,
+
+    /**
+     * @cfg {Bool} tagsWritableIfReadOnly
+     * tags menu stays enabled in readOnly mode (e.g. booked documents)
+     */
+    tagsWritableIfReadOnly: false,
+
+    /**
      * @cfg {Bool} allowCopy
      */
     allowCopy: false,
@@ -217,6 +236,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     // NOTE: shared with Tine.widgets.grid.QuickaddGridPanel
     initComponentMixin: function () {
+        if (this.tagsRowTint) {
+            this.plugins = [].concat(this.plugins || [], { ptype: 'tw-tagsrowtint' });
+        }
         this.initStore();
         this.initGrid();
         this.initActionsAndToolbars();
@@ -395,6 +417,24 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
 
         var contextItems = [this.actionCreate, this.actionCopy, this.actionEdit, this.actionRemove];
+
+        if (this.enableTagsMenu && this.recordClass?.getField?.('tags')) {
+            this.action_tagsMenu = new Tine.widgets.tags.TagsMenuItem({
+                requiredGrant: null,
+                actionUpdater: (action, grants, records) => {
+                    action.setDisabled(!records.length || (this.readOnly && !this.tagsWritableIfReadOnly));
+                },
+                menuConfig: {
+                    recordClass: this.recordClass,
+                    selectionModel: this.selModel,
+                    mode: 'local',
+                    // NOTE: no methods of this class here, initComponentMixin is shared with QuickaddGridPanel
+                    onLocalChange: () => this.fireEvent('change', this)
+                }
+            });
+            contextItems.push('-', this.action_tagsMenu);
+            this.on('cellclick', Tine.widgets.grid.PickerGridPanel.prototype.onTagsCellClick, this);
+        }
         this.contextMenu = new Ext.menu.Menu({
             plugins: _.concat([{
                 ptype: 'ux.itemregistry',
@@ -457,6 +497,26 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (this.enableTbar) {
             this.initTbar();
         }
+    },
+
+    /**
+     * click on tags cell opens tags menu
+     */
+    onTagsCellClick: function(grid, row, col, e) {
+        if (grid.getColumnModel().getDataIndex(col) !== 'tags' || e.ctrlKey || e.shiftKey
+            || (this.readOnly && !this.tagsWritableIfReadOnly)
+            || this.fireEvent('beforecontextmenu', grid, row, e) === false) {
+            return;
+        }
+
+        const sm = grid.getSelectionModel();
+        if (!sm.isSelected(row)) {
+            sm.selectRow(row);
+        }
+        if (!this.tagsMenu) {
+            this.tagsMenu = new Tine.widgets.tags.TagsMenu(Object.assign({}, this.action_tagsMenu.menuConfig));
+        }
+        this.tagsMenu.show(grid.getView().getCell(row, col), 'tl-bl?');
     },
 
     actionRemoveUpdater: function(action, grants, records) {
