@@ -13,7 +13,7 @@
 /*global Ext, Tine, google, OpenLayers, Locale, */
 
 import waitFor from 'util/waitFor.es6';
-import {init as initBroadcastClient} from './broadcastClient'
+import {init as initBroadcastClient, isConnected as isBroadcastClientConnected} from './broadcastClient'
 import * as localforage from "localforage";
 
 var EventEmitter = require('events');
@@ -1175,6 +1175,7 @@ Tine.Tinebase.tineInit = {
         if (Tine.Tinebase.registry.get('currentAccount')) {
             Tine.Tinebase.tineInit.initAppMgr();
             if (window.isMainWindow && Tine.Tinebase.configManager.get('broadcasthub')?.active) {
+                Tine.Tinebase.broadcastClient = { isConnected: isBroadcastClientConnected };
                 initBroadcastClient();
             }
         }
@@ -1201,6 +1202,10 @@ Tine.Tinebase.tineInit = {
                 alert('Your installation in broken. ' + rejectedApps.join(' and ') + ' could not be loaded, please contact your administrator!');
             }
             Tine.Tinebase.tineInit.initCustomJS();
+            if (Tine.Tinebase.registry.get('currentAccount')) {
+                // client caches of all apps are defined now
+                Tine.Tinebase.data.SyncedCache.preload();
+            }
             Tine.__onAllAppsLoadedResolve();
         });
     },

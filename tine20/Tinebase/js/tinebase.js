@@ -197,6 +197,7 @@ require("./ux/Printer/renderers/EditDialogRenderer.js");
 require("./data/TitleRendererManager.js");
 Tine.Tinebase.data.Record = require("./data/Record.js").default;
 Tine.Tinebase.data.RecordMgr = require("./data/RecordMgr.js");
+Tine.Tinebase.data.SyncedCache = require("./data/SyncedCache.js").default;
 require("./data/RecordStore.js");
 require("./data/GroupedStoreCollection.js");
 require("./data/RecordProxy.js");

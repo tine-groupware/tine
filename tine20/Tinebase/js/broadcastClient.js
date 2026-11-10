@@ -27,6 +27,22 @@ const randWait = async (min = 0, max = 2000) => {
 };
 
 let running = false;
+let connected = false;
+
+/**
+ * NOTE: updates might have been missed while not connected (e.g. client caches have to reload after connect)
+ */
+const setConnected = (isConnected) => {
+    if (connected === isConnected) return;
+    connected = isConnected;
+    window.postal.publish({
+        channel: 'broadcasthub',
+        topic: isConnected ? 'connected' : 'disconnected',
+        data: {}
+    });
+};
+
+const isConnected = () => connected;
 
 const instanceId = Tine.Tinebase.data.Record.generateUID(5);
 const bc = new BroadcastChannel('Tine.Tinebase.breadcastClient');
@@ -77,6 +93,8 @@ const init = async () => {
             if (authResponse !== 'AUTHORIZED') {
                 console.error(`[broadcastClient] not authorised: code=${event.code} ${event.data}`);
                 running = false;
+            } else {
+                setConnected(true);
             }
             return;
         }
@@ -113,6 +131,7 @@ const init = async () => {
             console.error('[broadcastClient] Connection died');
         }
         running = false;
+        setConnected(false);
         await randWait(5000, 10000);
         init();
     };
@@ -195,4 +214,4 @@ const startTransaction = (record, action, timeout) => {
     return commitFn;
 };
 
-export { init, startTransaction };
+export { init, startTransaction, isConnected };
