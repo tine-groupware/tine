@@ -153,10 +153,6 @@ class Sales_InvoiceTestCase extends TestCase
         $cfg->set(Sales_Config::AUTO_INVOICE_CONTRACT_INTERVAL, 12);
         
         $this->_invoiceController = Sales_Controller_Invoice::getInstance();
-        $filter = new Sales_Model_InvoiceFilter(array(
-            array('field' => 'cleared', 'operator' => 'not', 'value' => 'CLEARED'),
-        ));
-        $this->_invoiceController->deleteByFilter($filter);
         
         parent::setUp();
         
@@ -196,9 +192,6 @@ class Sales_InvoiceTestCase extends TestCase
 
         $paController = Sales_Controller_ProductAggregate::getInstance();
         $paController->deleteByFilter(new Sales_Model_ProductAggregateFilter(array()));
-        
-        $this->_invoiceController = Sales_Controller_Invoice::getInstance();
-        $this->_invoiceController->deleteByFilter(new Sales_Model_InvoiceFilter(array()));
 
         if ($this->_sharedContractsContainerId) {
             try {
