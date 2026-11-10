@@ -424,6 +424,17 @@ trait Calendar_Convert_Event_VCalendar_AbstractTrait
                     }
 
                     if ($readFromURL) {
+                        // FIXME SECURITY: never fetch attachment URLs taken from calendar data. This code added
+                        //       the user's login name and password to an URL chosen by the sender of the data (e.g. an
+                        //       iMIP mail). Remote attachments are skipped until a safe import for the CalDAV client exists.
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                . ' Skipping remote attachment (fetching is disabled): ' . $name . ' ' . $managedId);
+                        }
+                        $readFromURL = false;
+                    }
+
+                    if ($readFromURL) {
                         if (preg_match('#^(https?://)(.*)$#', str_replace(array("\n","\r"), '', $url), $matches)) {
                             // we are client and found an external hosted attachment that we need to import
                             $userCredentialCache = Tinebase_Core::getUserCredentialCache();
