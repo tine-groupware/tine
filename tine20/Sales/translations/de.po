@@ -98,6 +98,12 @@ msgstr "Geschäftsbereiche verwalten"
 msgid "Add, edit and delete divisions"
 msgstr "Geschäftsbereiche hinzufügen, bearbeiten und löschen"
 
+msgid "Manage Credits"
+msgstr "Gutschriften verwalten"
+
+msgid "Add, edit and delete credits."
+msgstr "Gutschriften hinzufügen, bearbeiten und löschen."
+
 msgid "Auto Invoice Contract Interval"
 msgstr "Vertragsintervall automatisch abrechnen"
 
@@ -265,6 +271,12 @@ msgstr ""
 
 msgid "Validation Service URL"
 msgstr "Validierungsservice URL"
+
+msgid "View Service URL"
+msgstr ""
+
+msgid "CII View Service URL"
+msgstr ""
 
 msgid "Delivery Status Transitions"
 msgstr "Lieferstatus-Übergänge"
@@ -1180,6 +1192,9 @@ msgstr[1] "Zahlungsmittel"
 msgid "Generic"
 msgstr "Generell"
 
+msgid "Tags"
+msgstr "Tags"
+
 msgid "Price"
 msgstr "Preis"
 
@@ -1241,6 +1256,9 @@ msgstr "Eingangsrechnung importieren ist nicht möglich"
 
 msgid "Import Purchase Invoice"
 msgstr "Eingangsrechnung importieren"
+
+msgid "Documents"
+msgstr ""
 
 msgid "Send as Email to Datev"
 msgstr "Als E-Mail an Datev senden"
@@ -1494,9 +1512,6 @@ msgstr "Gezahlt am"
 msgid "Method of payment"
 msgstr "Zahlungsart"
 
-msgid "Document lines"
-msgstr "Belegpositionen"
-
 msgid "Clipboard"
 msgstr "Zwischenablage"
 
@@ -1515,6 +1530,9 @@ msgstr "Neue*n Lieferant*in hinzufügen"
 #, python-brace-format
 msgid "Edit Supplier \"{0}\""
 msgstr "Lieferant*in \"{0}\" bearbeiten"
+
+msgid "Evaluation Dimensions"
+msgstr ""
 
 msgid "without supplier"
 msgstr "ohne Lieferant*in"
@@ -2541,6 +2559,60 @@ msgstr "Alle Angebotsdatensätze"
 msgid "All offer records"
 msgstr "Alle Angebote"
 
+msgid "Draft Offers"
+msgstr ""
+
+msgid "To be dispatched Offers"
+msgstr ""
+
+msgid "Dispatched Offers"
+msgstr ""
+
+msgid "Ordered Offers"
+msgstr ""
+
+msgid "Refused Offers"
+msgstr ""
+
+msgid "All Orders"
+msgstr ""
+
+msgid "Received Orders"
+msgstr ""
+
+msgid "Accepted Orders"
+msgstr ""
+
+msgid "To be dispatched Orders"
+msgstr ""
+
+msgid "Dispatched Orders"
+msgstr ""
+
+msgid "Done Orders"
+msgstr ""
+
+msgid "All Invoices"
+msgstr "Alle Rechnungen"
+
+msgid "Invoices current month"
+msgstr "Rechnungen des aktuellen Monats"
+
+msgid "Invoices not booked"
+msgstr "ungebuchte Rechnungen"
+
+msgid "Invoices manual dispatch"
+msgstr "nicht versandte Rechnungen"
+
+msgid "Invoices unpaid"
+msgstr "unbezahlte Rechnungen"
+
+msgid "Invoices reversed"
+msgstr "stornierte Rechnungen"
+
+msgid "Reversal Invoices"
+msgstr "Storno Rechnungen"
+
 msgid "All Purchase Invoices"
 msgstr "Alle Eingangsrechnungen"
 
@@ -2591,9 +2663,6 @@ msgstr "Alle Verträge"
 
 msgid "All contract records"
 msgstr "Alle Vertragsdatensätze"
-
-msgid "All Invoices"
-msgstr "Alle Rechnungen"
 
 msgid "All invoice records"
 msgstr "Alle Rechnungsdatensätze"
@@ -2649,41 +2718,20 @@ msgstr "Der eDokument Typ wird nicht unterstützt"
 msgid "Service disruption of view service"
 msgstr "Störung des anzeige Services"
 
-msgid "Manage Credits"
-msgstr "Gutschriften verwalten"
+#~ msgid "Document lines"
+#~ msgstr "Belegpositionen"
 
-msgid "Add, edit and delete credits."
-msgstr "Gutschriften hinzufügen, bearbeiten und löschen."
+#~ msgid "Update Supplier Data?"
+#~ msgstr "Lieferantendaten Aktualisieren?"
 
-msgid "Invoices current month"
-msgstr "Rechnungen des aktuellen Monats"
+#~ msgid "Reversal (booked, closed)"
+#~ msgstr "Storno (gebucht, geschlossen)"
 
-msgid "Invoices not booked"
-msgstr "ungebuchte Rechnungen"
+#~ msgid "Either postal code or postbox is required!"
+#~ msgstr "Entweder die Postleitzahl oder ein Schließfach ist erforderlich!"
 
-msgid "Invoices manual dispatch"
-msgstr "nicht versandte Rechnungen"
+#~ msgid "Prefix"
+#~ msgstr "Zusatz"
 
-msgid "Invoices unpaid"
-msgstr "unbezahlte Rechnungen"
-
-msgid "Invoices reversed"
-msgstr "stornierte Rechnungen"
-
-msgid "Reversal Invoices"
-msgstr "Storno Rechnungen"
-
-msgid "Update Supplier Data?"
-msgstr "Lieferantendaten Aktualisieren?"
-
-msgid "Reversal (booked, closed)"
-msgstr "Storno (gebucht, geschlossen)"
-
-msgid "Either postal code or postbox is required!"
-msgstr "Entweder die Postleitzahl oder ein Schließfach ist erforderlich!"
-
-msgid "Prefix"
-msgstr "Zusatz"
-
-msgid "Additional Prefix"
-msgstr "Weiterer Zusatz"
+#~ msgid "Additional Prefix"
+#~ msgstr "Weiterer Zusatz"

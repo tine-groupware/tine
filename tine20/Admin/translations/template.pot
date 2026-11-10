@@ -85,6 +85,18 @@ msgstr ""
 msgid "Add and edit import and export definitions"
 msgstr ""
 
+msgid "Manage scheduler tasks"
+msgstr ""
+
+msgid "Add and edit scheduler tasks."
+msgstr ""
+
+msgid "Manage logs"
+msgstr ""
+
+msgid "Add and delete application logs."
+msgstr ""
+
 msgid "View access log"
 msgstr ""
 
@@ -303,57 +315,6 @@ msgstr ""
 msgid "success"
 msgstr ""
 
-msgid "Groups"
-msgstr ""
-
-msgid "Roles"
-msgstr ""
-
-msgid "Applications"
-msgstr ""
-
-msgid "Containers"
-msgstr ""
-
-msgid "Shared Tags"
-msgstr ""
-
-msgid "Custom Fields"
-msgstr ""
-
-msgid "Computers"
-msgstr ""
-
-msgid "Log"
-msgstr ""
-
-msgid "Server Information"
-msgstr ""
-
-msgid "ActiveSync Devices"
-msgstr ""
-
-msgid "Email Accounts"
-msgstr ""
-
-msgid "Matrix Accounts"
-msgstr ""
-
-msgid "Import Export Definitions"
-msgstr ""
-
-msgid "Admin"
-msgstr ""
-
-msgid "Refresh"
-msgstr ""
-
-msgid "Disabled"
-msgstr ""
-
-msgid "Feature is disabled by configuration."
-msgstr ""
-
 msgid "Default Addressbook for new contacts and groups"
 msgstr ""
 
@@ -376,6 +337,9 @@ msgid "{0} Settings"
 msgstr ""
 
 msgid "Search:"
+msgstr ""
+
+msgid "Disabled"
 msgstr ""
 
 msgid "Enabled"
@@ -602,9 +566,6 @@ msgstr ""
 msgid "Group Members"
 msgstr ""
 
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
 msgid "Confirm"
 msgstr ""
 
@@ -649,6 +610,54 @@ msgid "ImportExportDefinition"
 msgid_plural "ImportExportDefinitions"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Groups"
+msgstr ""
+
+msgid "Roles"
+msgstr ""
+
+msgid "Applications"
+msgstr ""
+
+msgid "Containers"
+msgstr ""
+
+msgid "Shared Tags"
+msgstr ""
+
+msgid "Custom Fields"
+msgstr ""
+
+msgid "Computers"
+msgstr ""
+
+msgid "Log"
+msgstr ""
+
+msgid "Server Information"
+msgstr ""
+
+msgid "ActiveSync Devices"
+msgstr ""
+
+msgid "Email Accounts"
+msgstr ""
+
+msgid "Matrix Accounts"
+msgstr ""
+
+msgid "Import Export Definitions"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Feature is disabled by configuration."
+msgstr ""
 
 msgid "Configs"
 msgstr ""
@@ -796,6 +805,28 @@ msgstr ""
 msgid "Could not save tag ({0})"
 msgstr ""
 
+#, python-brace-format
+msgid "restricted to {0} model"
+msgid_plural "restricted to {0} models"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Restrict to Models"
+msgstr ""
+
+msgid "The tag can be used in the checked applications. Select an application to restrict the tag to some of its models."
+msgstr ""
+
+#, python-brace-format
+msgid "Restrict {0} to Models"
+msgstr ""
+
+msgid "Without selection the tag can be used for all models of the application."
+msgstr ""
+
+msgid "The application has no models with tags."
+msgstr ""
+
 msgid "Allowed Contexts"
 msgstr ""
 
@@ -859,9 +890,6 @@ msgid "Do you want to apply the changes you made to the twig template?"
 msgstr ""
 
 msgid "Templates"
-msgstr ""
-
-msgid "Allowed Domains"
 msgstr ""
 
 msgid "Special characters are not allowed in login name."
@@ -1067,6 +1095,9 @@ msgid "SMTP"
 msgstr ""
 
 msgid "Would you like to move the contact to this Addressbook?"
+msgstr ""
+
+msgid "Contact"
 msgstr ""
 
 msgid "The selected contact will be updated"

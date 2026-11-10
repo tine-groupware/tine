@@ -351,12 +351,6 @@ msgstr "Kontaktdaten vom synchronisierten Backend synchronisieren"
 msgid "Sync user contact data from sync backend"
 msgstr "Benutzer*innenkontaktdaten vom synchronisierten Backend synchronisieren"
 
-msgid "Sync contact photo from sync backend"
-msgstr "Kontaktphoto vom Sync-Backend Synchronisieren"
-
-msgid "Sync user contact photo from sync backend"
-msgstr "Das Benutzer*innenkontaktphoto vom Sync-Backend Synchronisieren"
-
 msgid "Sync deleted users from sync backend"
 msgstr "Im Sync-Backend gelöschte Nutzer entfernen"
 
@@ -851,12 +845,6 @@ msgstr "SyncToken Plugin aktivieren"
 msgid "Enable the use of the SyncToken plugin."
 msgstr "Aktiviere die Nutzung des SyncToken Plugins."
 
-msgid "currency symbol"
-msgstr "Währungssymbol"
-
-msgid "Path to custom favicon."
-msgstr "Pfad zu einem benutzer*innendefinierten Favicon."
-
 msgid "Role receiving support requests"
 msgstr "Rolle, die Supportanfragen erhält"
 
@@ -1037,6 +1025,18 @@ msgstr "Adressen für den Versand von Kontingent-Benachrichtigungen per E-Mail"
 msgid "Quota Monitoring"
 msgstr "Kontingentüberwachung"
 
+msgid "Monitoring Emails"
+msgstr ""
+
+msgid "Email addresses to send monitoring notifications to"
+msgstr ""
+
+msgid "Monitoring Emails Threshold"
+msgstr ""
+
+msgid "Minimum monitoring result level to trigger email notification (0=OK, 1=WARN, 2=CRIT)"
+msgstr ""
+
 msgid "Tine20 URL"
 msgstr "Tine20 URL"
 
@@ -1184,10 +1184,17 @@ msgstr "Maximale Anzahl von Benutzer*innen erreicht."
 msgid "The new password must be different from the old one."
 msgstr "Das neue Passwort muss sich vom alten unterscheiden."
 
+msgid "WebDAV issues notification"
+msgstr ""
+
 msgid "Bank Holiday Calendar"
 msgid_plural "Bank Holiday Calendars"
 msgstr[0] "Feiertagskalender"
 msgstr[1] "Feiertagskalender"
+
+#, python-format, php-format
+msgid "You do not have permission to %s record of type %s"
+msgstr "Sie haben nicht die Berechtigungen zum %s vom Datensatz des Typs %s"
 
 #, python-brace-format
 msgid "A Message has been filed to this record. Subject: {0}"
@@ -1205,10 +1212,6 @@ msgstr "Aktualisieren"
 
 msgid "delete"
 msgstr "Löschen"
-
-#, python-format, php-format
-msgid "You do not have permission to %s record of type %s"
-msgstr "Sie haben nicht die Berechtigungen zum %s vom Datensatz des Typs %s"
 
 #, python-brace-format
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
@@ -1496,14 +1499,32 @@ msgstr "Der ganze Tag"
 msgid "Add new Element..."
 msgstr "Neues Element zufügen…"
 
-msgid "Usage:&#160;"
-msgstr "Verwendung:&#160;"
+msgid "Test Connection"
+msgstr ""
 
-msgid "personal"
-msgstr "Persönlich"
+msgid "Cloud Account Access Possible"
+msgstr ""
+
+msgid "Cloud connect to cloud account with given data."
+msgstr ""
+
+msgid "Cloud Account Access Failure"
+msgstr ""
+
+msgid "Cloud not connect to cloud account with given data."
+msgstr ""
+
+msgid "Save cloud account anyway?"
+msgstr ""
+
+msgid "Select a { collectionName }..."
+msgstr ""
 
 msgid "No Information"
 msgstr "Keine Information"
+
+msgid "This field supports Markdown formatting. For more information check the user manual"
+msgstr "Dieses Feld unterstützt Markdown-Formatierung. Weitere Informationen finden Sie im Handbuch."
 
 msgid "No Access"
 msgstr "Kein Zugriff"
@@ -2210,6 +2231,12 @@ msgstr "Übersetzungsproblem"
 msgid "A problem with the translations was detected. Trying to reload the client..."
 msgstr "Es wurde ein Problem mit den Übersetzungen festgestellt. Der Client wird neu geladen..."
 
+msgid "Uploads"
+msgstr "Uploads"
+
+msgid ". Clicking this button will open the content in a new window."
+msgstr ". Klicken dieses Knopfes öffnet den Inhalt in einem neuen Fenster."
+
 msgid "Total    Uploads"
 msgstr "Alle    Uploads"
 
@@ -2295,6 +2322,9 @@ msgstr "Kein gültiges Zeitformat (verwenden Sie Stunden:Minuten)"
 msgid "Not a valid time"
 msgstr "Kein gültiger Zeitpunkt"
 
+msgid "Clear Value"
+msgstr ""
+
 msgid "Copied to clipboard"
 msgstr "In die Zwischenablage kopiert"
 
@@ -2344,6 +2374,9 @@ msgstr "Bild löschen"
 msgid "Show Original Image"
 msgstr "Zeige Originalbild"
 
+msgid "Lock/Unlock"
+msgstr ""
+
 msgid "When a preference is locked, a normal user cannot edit the preference anymore."
 msgstr "Wenn eine Einstellung gesperrt ist, kann sie nur im Admin-Modus bearbeitet werden."
 
@@ -2385,6 +2418,15 @@ msgstr "Bitte nach „{0}“ sortieren"
 #, python-brace-format
 msgid "To use manual sorting, you need to sort by column \"{0}\""
 msgstr "Für manuelle Sortierung muss nach Spalte „{0}“ sortiert werden"
+
+msgid "oneColumn"
+msgstr ""
+
+msgid "Layout"
+msgstr ""
+
+msgid "Choose more column categories."
+msgstr "Wählen Sie weitere Spalten-Kategorien aus."
 
 msgid "Export Records from these Positions"
 msgstr "Exportiere Einträge dieser Positionen"
@@ -2731,6 +2773,12 @@ msgstr "Benutzername"
 msgid "Please enter your credentials"
 msgstr "Bitte geben Sie Ihre Zugangsdaten ein"
 
+msgid "Discard changes?"
+msgstr "Änderungen verwerfen?"
+
+msgid "Do you want to overwrite the local changes with the data from the original record?"
+msgstr "Möchten Sie die lokalen Änderungen mit den Daten aus dem Originaldatensatz überschreiben?"
+
 msgid "OK"
 msgstr "OK"
 
@@ -2800,12 +2848,6 @@ msgstr "Aktion:"
 
 msgid "Notice: Changes to {recordGender, select, male {this} female {this} other {this}} {recordName} apply only to {contextRecordGender, select, male {the associated} female {the associated} other {the associated}} {contextRecordName}. {recordGender, select, male {The} female {The} other {The}} [original {recordName}]() remains unchanged."
 msgstr "Hinweis: Änderungen an {recordGender, select, male {diesem} female {dieser} other {diesem}} {recordName} gelten nur für {contextRecordGender, select, male {den zugrundeliegenden} female {die zugrundeliegende} other {das zugrundeliegende}} {contextRecordName}. {recordGender, select, male {Der} female {Die} other {Das}} [original {recordName}]() bleibt unverändert."
-
-msgid "Discard changes?"
-msgstr "Änderungen verwerfen?"
-
-msgid "Do you want to overwrite the local changes with the data from the original record?"
-msgstr "Möchten Sie die lokalen Änderungen mit den Daten aus dem Originaldatensatz überschreiben?"
 
 msgid "Enter description"
 msgstr "Beschreibung einfügen"
@@ -2919,9 +2961,6 @@ msgstr "Nachfolgend finden Sie eine Liste mit allen Import-Formaten und eine Bei
 
 msgid "Below you find a list of all supported import formats."
 msgstr "Nachfolgend finden Sie eine Liste mit allen unterstützten Import-Formaten."
-
-msgid "Choose File and Format"
-msgstr "Datei und Format wählen"
 
 msgid "Choose Import File"
 msgstr "Importdatei wählen"
@@ -3084,12 +3123,6 @@ msgstr "{0} {1} haben invalide Daten nach der Aktualisierung. Diese {1} wurden n
 msgid "{0} {1} has invalid data after updating. This {1} has not been changed."
 msgstr "{0} {1} hat invalide Daten nach der Aktualisierung. Dieser {1} wurde nicht geändert."
 
-msgid "Set password"
-msgstr "Setze Passwort"
-
-msgid "Generate password"
-msgstr "Passwort generieren"
-
 msgid "Admin Mode"
 msgstr "Adminmodus"
 
@@ -3135,9 +3168,6 @@ msgstr "Bitte geben Sie das neue Passwort ein:"
 msgid "Send SMS with new password"
 msgstr "SMS Nachricht mit neuem Passwort senden"
 
-msgid "Password has expired in accordance with the password policy and needs to be changed"
-msgstr "Das Passwort ist gemäß der Passwortrichtlinie abgelaufen und muss geändert werden."
-
 msgid "The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message."
 msgstr "Die Zeichenkette {{ password }} wird beim Versenden der Nachricht automatisch durch das Passwort ersetzt und muss in der Nachricht enthalten sein."
 
@@ -3164,6 +3194,9 @@ msgstr "Falsches Passwort"
 
 msgid "Invalid second factor password given"
 msgstr "Ungültiges zweites Passwort"
+
+msgid "Choose File and Format"
+msgstr "Datei und Format wählen"
 
 msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr "Tine 2.0 versteht nicht alle Dateien, die Sie möglicherweise hochladen möchten. Eventuell müssen Sie manuell die Datei so anpassen, dass sie von Tine 2.0 verarbeitet werden kann."
@@ -3203,6 +3236,12 @@ msgstr ""
 
 msgid "State data for \"{ key }\" is not valid. You need to fix the errors first."
 msgstr ""
+
+msgid "Set password"
+msgstr "Setze Passwort"
+
+msgid "Generate password"
+msgstr "Passwort generieren"
 
 msgid "Back"
 msgstr "Zurück"
@@ -3285,6 +3324,18 @@ msgstr "Konfiguration speichern"
 msgid "Reload config"
 msgstr "Konfiguration neu laden"
 
+msgid "Optional"
+msgstr "Optional"
+
+msgid "Required"
+msgstr "Erforderlich"
+
+msgid "Field"
+msgstr "Feld"
+
+msgid "Contact Fields"
+msgstr "Kontaktfelder"
+
 msgid "Compose Email"
 msgstr "E-Mail erstellen"
 
@@ -3305,8 +3356,17 @@ msgid_plural "Models"
 msgstr[0] "Datentyp"
 msgstr[1] "Datentypen"
 
+msgid "Value needs to start with { prefix }"
+msgstr ""
+
 msgid "Cleartext/Hidden"
 msgstr "Klartext/Versteckt"
+
+msgid "Reveal Password?"
+msgstr ""
+
+msgid "You are about to reveal the password. This action will be logged. Proceed?"
+msgstr ""
 
 msgid "No record"
 msgstr "Kein Datensatz"
@@ -3314,9 +3374,6 @@ msgstr "Kein Datensatz"
 #, python-brace-format
 msgid "{recordName} is not valid."
 msgstr ""
-
-msgid "Edit copy"
-msgstr "Kopie bearbeiten"
 
 msgid "Edit this copy"
 msgstr "Diese Kopie bearbeiten"
@@ -3352,6 +3409,9 @@ msgstr "Suche nach Einträgen..."
 #, python-brace-format
 msgid "No {0} could be found. Please try changing your filter criteria or view options."
 msgstr "Es konnte keine {0} gefunden werden. Bitte ändern Sie die Filterkriterien oder Ansichtseinstellungen."
+
+msgid "Checker"
+msgstr ""
 
 msgid "Image"
 msgstr "Bild"
@@ -3542,20 +3602,14 @@ msgstr "Wählen Sie ein Feld"
 msgid "Delete this filter"
 msgstr "Diesen Filter löschen"
 
-msgid "show details"
-msgstr "Details anzeigen"
-
 msgid "Filters"
 msgstr "Filter"
 
+msgid "Show advanced filters"
+msgstr ""
+
 msgid "Hide Filters"
 msgstr "Verberge Filter"
-
-msgid "hide details"
-msgstr "Details verbergen"
-
-msgid "show"
-msgstr "Zeigen"
 
 #, fuzzy, python-brace-format
 msgid "Your view is limited by {0} criteria:"
@@ -3743,8 +3797,23 @@ msgstr "ID muss folgendem Schema folgen PARENTID:ID"
 msgid "Setting new language..."
 msgstr "neue Sprache wird eingestellt..."
 
+msgid "action bar"
+msgstr "Aktionsleiste"
+
+msgid "modules and filters"
+msgstr "Module und Filter"
+
+msgid "has been opened"
+msgstr "wurde geöffnet"
+
+msgid "is empty. There is no data to be shown."
+msgstr "ist leer. Es können keine Daten angezeigt werden."
+
 msgid "Save current view as favorite"
 msgstr "Diese Ansicht als Favorit speichern"
+
+msgid "Main content"
+msgstr "Hauptinhalt"
 
 msgid "containers"
 msgstr "Kontainer"
@@ -3760,6 +3829,12 @@ msgstr "Bezeichnung"
 
 msgid "Shared Favorite (visible by other users)"
 msgstr "Gemeinsame Favoriten (sichtbar für andere Benutzer*innen)"
+
+msgid "Show total count of found records"
+msgstr ""
+
+msgid "fetch result count in background"
+msgstr ""
 
 msgid "The grant to see and use this filter"
 msgstr "Das Recht diesen Filter zu sehen und zu bearbeiten"
@@ -3781,6 +3856,9 @@ msgstr "Favorit bearbeiten"
 
 msgid "Overwrite Favorite"
 msgstr "Favorit überschreiben"
+
+msgid "Last updated"
+msgstr ""
 
 #, python-brace-format
 msgid "Do you really want to delete the favorite \"{0}\"?"
@@ -3941,6 +4019,12 @@ msgstr "Tag(s) entfernen"
 msgid "Select Tag(s) to detach"
 msgstr "Bitte wählen Sie die Tags, die entfernt werden sollen"
 
+msgid "Unpin tag"
+msgstr "Tag lösen"
+
+msgid "Pin tag"
+msgstr "Tag anpinnen"
+
 msgid "No Tags to display"
 msgstr "Keine Tags vorhanden"
 
@@ -3999,6 +4083,9 @@ msgstr "Konnte Tag(s) nicht löschen."
 
 msgid "Could not update tag."
 msgstr "Konnte Tag nicht aktualisieren."
+
+msgid "personal"
+msgstr "Persönlich"
 
 msgid "Detach Tags"
 msgstr "Tags entfernen"
@@ -4349,8 +4436,8 @@ msgid_plural "Instances"
 msgstr[0] "Instanz"
 msgstr[1] "Instanzen"
 
-msgid "Flag Icon File"
-msgstr "Flag Icon Datei"
+msgid "Flag Icon URL/File"
+msgstr ""
 
 msgid "LogEntry"
 msgid_plural "LogEntries"
@@ -4773,6 +4860,9 @@ msgstr "Deaktivierungsdatum"
 msgid "Tine 2.0 URL"
 msgstr "Tine 2.0 URL"
 
+msgid "Privacy Policy"
+msgstr "Datenschutzerklärung"
+
 msgid "Hello"
 msgstr "Hallo"
 
@@ -4784,9 +4874,6 @@ msgstr "Ihr %1$s Team"
 
 msgid "Terms of Service"
 msgstr "Nutzungsbedingungen"
-
-msgid "Privacy Policy"
-msgstr "Datenschutzerklärung"
 
 msgid "Contact Us"
 msgstr "Kontakt"
@@ -4809,86 +4896,80 @@ msgstr "Nur Nachbarn"
 msgid "Preview"
 msgstr "Vorschau"
 
-msgid "Turn on Dark or Light Mode."
-msgstr "Schalten Sie Dunkler Modus oder Heller Modus ein."
+#~ msgid "Sync contact photo from sync backend"
+#~ msgstr "Kontaktphoto vom Sync-Backend Synchronisieren"
 
-msgid "User settings"
-msgstr "Benutzereinstellungen"
+#~ msgid "Sync user contact photo from sync backend"
+#~ msgstr "Das Benutzer*innenkontaktphoto vom Sync-Backend Synchronisieren"
 
-msgid "Search for applications."
-msgstr "Suche nach Applikationen."
+#~ msgid "currency symbol"
+#~ msgstr "Währungssymbol"
 
-msgid "Left sidebar. All chosen applications"
-msgstr "Linke Seitenleiste. Auswahl aller Applikationen"
+#~ msgid "Path to custom favicon."
+#~ msgstr "Pfad zu einem benutzer*innendefinierten Favicon."
 
-msgid "Choose from all applications."
-msgstr "Wählen Sie aus allen Applikationen die Benötigten aus."
+#~ msgid "Usage:&#160;"
+#~ msgstr "Verwendung:&#160;"
 
-msgid "show markdown"
-msgstr "Markdown anzeigen"
+#~ msgid "Password has expired in accordance with the password policy and needs to be changed"
+#~ msgstr "Das Passwort ist gemäß der Passwortrichtlinie abgelaufen und muss geändert werden."
 
-msgid "Setting new timezone..."
-msgstr "Neue Zeitzone setzen..."
+#~ msgid "Edit copy"
+#~ msgstr "Kopie bearbeiten"
 
-msgid "Confirm Logout"
-msgstr "Ausloggen bestätigen"
+#~ msgid "show details"
+#~ msgstr "Details anzeigen"
 
-msgid "Show confirmation dialog on logout."
-msgstr "Bestätigungsdialog beim Ausloggen anzeigen."
+#~ msgid "hide details"
+#~ msgstr "Details verbergen"
 
-msgid "Choose more column categories."
-msgstr "Wählen Sie weitere Spalten-Kategorien aus."
+#~ msgid "show"
+#~ msgstr "Zeigen"
 
-msgid "Attendance recorder"
-msgstr "Stempeluhr"
+#~ msgid "Flag Icon File"
+#~ msgstr "Flag Icon Datei"
 
-msgid "Uploads"
-msgstr "Uploads"
+#~ msgid "Turn on Dark or Light Mode."
+#~ msgstr "Schalten Sie Dunkler Modus oder Heller Modus ein."
 
-msgid "This field supports Markdown formatting. For more information check the user manual"
-msgstr "Dieses Feld unterstützt Markdown-Formatierung. Weitere Informationen finden Sie im Handbuch."
+#~ msgid "User settings"
+#~ msgstr "Benutzereinstellungen"
 
-msgid "Optional"
-msgstr "Optional"
+#~ msgid "Search for applications."
+#~ msgstr "Suche nach Applikationen."
 
-msgid "Required"
-msgstr "Erforderlich"
+#~ msgid "Left sidebar. All chosen applications"
+#~ msgstr "Linke Seitenleiste. Auswahl aller Applikationen"
 
-msgid "Field"
-msgstr "Feld"
+#~ msgid "Choose from all applications."
+#~ msgstr "Wählen Sie aus allen Applikationen die Benötigten aus."
 
-msgid "Contact Fields"
-msgstr "Kontaktfelder"
+#~ msgid "show markdown"
+#~ msgstr "Markdown anzeigen"
 
-msgid "Column Headers"
-msgstr "Spalten-Überschriften"
+#~ msgid "Setting new timezone..."
+#~ msgstr "Neue Zeitzone setzen..."
 
-msgid "has been opened"
-msgstr "wurde geöffnet"
+#~ msgid "Confirm Logout"
+#~ msgstr "Ausloggen bestätigen"
 
-msgid ". Clicking this button will open the content in a new window."
-msgstr ". Klicken dieses Knopfes öffnet den Inhalt in einem neuen Fenster."
+#~ msgid "Show confirmation dialog on logout."
+#~ msgstr "Bestätigungsdialog beim Ausloggen anzeigen."
 
-msgid "no entry"
-msgstr "kein Eintrag"
+#~ msgid "Attendance recorder"
+#~ msgstr "Stempeluhr"
 
-msgid "global functions"
-msgstr "Globale Funktionen"
+#~ msgid "Column Headers"
+#~ msgstr "Spalten-Überschriften"
 
-msgid "modules and filters"
-msgstr "Module und Filter"
+#~ msgid "no entry"
+#~ msgstr "kein Eintrag"
 
-msgid "banner"
-msgstr "Kopfzeile"
+#~ msgid "global functions"
+#~ msgstr "Globale Funktionen"
 
-msgid "action bar"
-msgstr "Aktionsleiste"
+#~ msgid "banner"
+#~ msgstr "Kopfzeile"
 
-msgid "row"
-msgstr "Zeile"
-
-msgid "Main content"
-msgstr "Hauptinhalt"
-
-msgid "is empty. There is no data to be shown."
-msgstr "ist leer. Es können keine Daten angezeigt werden."
+#~ msgid "row"
+#~ msgstr "Zeile"

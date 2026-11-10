@@ -1502,12 +1502,6 @@ msgstr ""
 msgid "Select a { collectionName }..."
 msgstr ""
 
-msgid "Usage:&#160;"
-msgstr ""
-
-msgid "personal"
-msgstr ""
-
 msgid "No Information"
 msgstr ""
 
@@ -2310,6 +2304,9 @@ msgstr ""
 msgid "Not a valid time"
 msgstr ""
 
+msgid "Clear Value"
+msgstr ""
+
 msgid "Copied to clipboard"
 msgstr ""
 
@@ -2359,6 +2356,9 @@ msgstr ""
 msgid "Show Original Image"
 msgstr ""
 
+msgid "Lock/Unlock"
+msgstr ""
+
 msgid "When a preference is locked, a normal user cannot edit the preference anymore."
 msgstr ""
 
@@ -2399,6 +2399,12 @@ msgstr ""
 
 #, python-brace-format
 msgid "To use manual sorting, you need to sort by column \"{0}\""
+msgstr ""
+
+msgid "oneColumn"
+msgstr ""
+
+msgid "Layout"
 msgstr ""
 
 msgid "Choose more column categories."
@@ -2749,6 +2755,12 @@ msgstr ""
 msgid "Please enter your credentials"
 msgstr ""
 
+msgid "Discard changes?"
+msgstr ""
+
+msgid "Do you want to overwrite the local changes with the data from the original record?"
+msgstr ""
+
 msgid "OK"
 msgstr ""
 
@@ -2930,9 +2942,6 @@ msgid "Below you find a list of all supported import formats and a sample file, 
 msgstr ""
 
 msgid "Below you find a list of all supported import formats."
-msgstr ""
-
-msgid "Choose File and Format"
 msgstr ""
 
 msgid "Choose Import File"
@@ -3141,9 +3150,6 @@ msgstr ""
 msgid "Send SMS with new password"
 msgstr ""
 
-msgid "Password has expired in accordance with the password policy and needs to be changed"
-msgstr ""
-
 msgid "The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message."
 msgstr ""
 
@@ -3169,6 +3175,9 @@ msgid "Wrong Password"
 msgstr ""
 
 msgid "Invalid second factor password given"
+msgstr ""
+
+msgid "Choose File and Format"
 msgstr ""
 
 msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
@@ -3348,7 +3357,16 @@ msgstr ""
 msgid "{recordName} is not valid."
 msgstr ""
 
-msgid "Edit copy"
+msgid "Edit this copy"
+msgstr ""
+
+msgid "Edit original"
+msgstr ""
+
+msgid "{contextRecordGender, select, male {The associated} female {The associated} other {The associated}} {contextRecordName} keeps its own copy. Changes to this copy apply only to {contextRecordGender, select, male {this} female {this} other {this}} {contextRecordName}, {recordGender, select, male {the} female {the} other {the}} original {recordName} remains unchanged."
+msgstr ""
+
+msgid "Edit copy or original"
 msgstr ""
 
 #, python-brace-format
@@ -3372,6 +3390,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "No {0} could be found. Please try changing your filter criteria or view options."
+msgstr ""
+
+msgid "Checker"
 msgstr ""
 
 msgid "Image"
@@ -3563,16 +3584,13 @@ msgstr ""
 msgid "Delete this filter"
 msgstr ""
 
-msgid "show details"
+msgid "Filters"
 msgstr ""
 
-msgid "Always show advanced filters"
+msgid "Show advanced filters"
 msgstr ""
 
-msgid "hide details"
-msgstr ""
-
-msgid "show"
+msgid "Hide Filters"
 msgstr ""
 
 #, python-brace-format
@@ -3761,6 +3779,12 @@ msgstr ""
 msgid "Setting new language..."
 msgstr ""
 
+msgid "action bar"
+msgstr ""
+
+msgid "modules and filters"
+msgstr ""
+
 msgid "has been opened"
 msgstr ""
 
@@ -3768,6 +3792,9 @@ msgid "is empty. There is no data to be shown."
 msgstr ""
 
 msgid "Save current view as favorite"
+msgstr ""
+
+msgid "Main content"
 msgstr ""
 
 msgid "containers"
@@ -3974,6 +4001,12 @@ msgstr ""
 msgid "Select Tag(s) to detach"
 msgstr ""
 
+msgid "Unpin tag"
+msgstr ""
+
+msgid "Pin tag"
+msgstr ""
+
 msgid "No Tags to display"
 msgstr ""
 
@@ -4030,6 +4063,9 @@ msgid "Could not delete Tag(s)."
 msgstr ""
 
 msgid "Could not update tag."
+msgstr ""
+
+msgid "personal"
 msgstr ""
 
 msgid "Detach Tags"
@@ -4805,6 +4841,9 @@ msgstr ""
 msgid "Tine 2.0 URL"
 msgstr ""
 
+msgid "Privacy Policy"
+msgstr ""
+
 msgid "Hello"
 msgstr ""
 
@@ -4815,9 +4854,6 @@ msgid "Your %1$s Team"
 msgstr ""
 
 msgid "Terms of Service"
-msgstr ""
-
-msgid "Privacy Policy"
 msgstr ""
 
 msgid "Contact Us"
