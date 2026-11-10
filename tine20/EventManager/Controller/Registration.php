@@ -993,6 +993,20 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $this->_assertRegistrationAccess($existingRegistration, $verifiedEmail, (string) $event_id);
             $request['contactDetails']['registration_id'] = $requestedRegistrationId;
             $request['registrantDetails']['registration_id'] = $requestedRegistrationId;
+        } else {
+            $ownerContact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($verifiedEmail);
+            $ownerId = $ownerContact?->getId();
+
+            if ($isOnBehalf) {
+                // the registrant is the token owner, and the participant must never be linked to the token owner
+                $request['registrantDetails']['id'] = $ownerId;
+                if ($ownerId !== '' && (string) ($request['contactDetails']['id'] ?? '') === $ownerId) {
+                    $request['contactDetails']['id'] = '';
+                }
+            } else {
+                // self-registration: the participant is the token owner
+                $request['contactDetails']['id'] = $ownerId;
+            }
         }
 
         $isLegalGuardian = $isOnBehalf
