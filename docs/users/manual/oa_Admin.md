@@ -724,8 +724,10 @@ In der Tabelle sehen Sie drei Spalten: Farbe, Name und Beschreibung. Sollten Sie
 ![Abbildung: Das Zuweisen von Benutzern oder Gruppen zu einem gemeinsamen Tag und die Definition der entsprechenden Benutzerrechte]({{ img_url_mobile }}Administration/22_admin_gemeinsame_tags_rechte_light.png#only-light){.mobile-img}
 ![Abbildung: Das Zuweisen von Benutzern oder Gruppen zu einem gemeinsamen Tag und die Definition der entsprechenden Benutzerrechte]({{ img_url_mobile }}Administration/22_admin_gemeinsame_tags_rechte_dark.png#only-dark){.mobile-img}
 
-Oben links können Sie einen beliebigen Tag-Namen vergeben. Bevor sie das daneben liegende Feld Beschreibung ausfüllen, denken Sie bitte einmal kurz daran, dass es sich hierbei um einen gemeinsamen Tag handelt. Es gilt das bereits an mehreren Stellen Gesagte: Eine Beschreibung muss so nachvollziehbar sein, dass alle anderen Administratoren und in diesem Falle auch alle anderen Benutzer des Tags wissen, wofür er eingerichtet wurde. Die Farbe, die Sie einem Tag zuweisen und mit der dann Ihre Datenbank-Objekte in den entsprechenden Tabellenansichten mit einen kleinen farbigen Punkt markiert sind, können Sie über das Pulldown-Menü ganz rechts außen auswählen. Es werden Ihnen die üblichen HTML-Systemfarben angezeigt.
+<a id="ctx:Admin.EditDialog.Tag"></a>
+Oben links können Sie einen beliebigen Tag-Namen vergeben. Bevor sie das daneben liegende Feld Beschreibung ausfüllen, denken Sie bitte einmal kurz daran, dass es sich hierbei um einen gemeinsamen Tag handelt. Es gilt das bereits an mehreren Stellen Gesagte: Eine Beschreibung muss so nachvollziehbar sein, dass alle anderen Administratoren und in diesem Falle auch alle anderen Benutzer des Tags wissen, wofür er eingerichtet wurde. Die Farbe, die Sie einem Tag zuweisen und in der der Tag dann in den Tabellenansichten als kleines Symbol in der Spalte Tags (und in manchen Tabellen als Zeilenfarbe) erscheint, können Sie über das Pulldown-Menü ganz rechts außen auswählen. Es werden Ihnen die üblichen HTML-Systemfarben angezeigt.
 
+<a id="ctx:Admin.EditDialog.Tag.Rights"></a>
 Kommen wir nun zu den beiden Reitern Benutzerrechte und Kontexte: Klicken Sie den Reiter Benutzerrechte jetzt an, wenn er nicht schon standardmäßig geöffnet ist! Benutzerrechte werden üblicherweise über Benutzergruppen verwaltet. Demzufolge steht der Standard hier auch auf der Gruppenauswahl und Sie können mit dem unter den Reitern befindlichen Pulldown Suche nach Gruppen... die betreffenden Benutzergruppen auswählen, für die der eingerichtete Tag verfügbar sein soll. Sollten Sie die Suche hier auf einzelne Personen oder "Alle" umstellen wollen, so ist das möglich, indem Sie das hinter dem Symbol mit den schwarzen Köpfen befindliche Pulldown betätigen und entweder Benutzersuche oder Jeder hinzufügen auswählen.
 
 Haben Sie den entsprechenden Nutzerkreis für den Tag ausgewählt, können Sie, wie Sie an den links befindlichen zwei Checkbuttons sehen, die Benutzerrechte Zeigen und Verwenden zuweisen.
@@ -734,6 +736,9 @@ Zeigen bedeutet, dass der Benutzer, der dieses Recht hat, das Tag in der Auswahl
 
 Verwenden bedeutet hingegen, dass der entsprechende Benutzer auch das Recht hat, selbst einen beliebigen Datensatz mit dem Tag zu kennzeichnen oder auch den Tag wieder zu entfernen.
 
+### Kontexte { #gemeinsame-tags-kontexte data-ctx="/Admin/EditDialog/Tag/Contexts" }
+
+<!--Tags,Kontexte,Datentypen-->
 Klicken Sie nun den Reiter Kontexte an:
 
 <!-- SCREENSHOT -->
@@ -744,7 +749,13 @@ Klicken Sie nun den Reiter Kontexte an:
 ![Abbildung: Die Einstellung, in welchen Anwendungen ein gemeinsamer Tag anwendbar und gültig sein soll]({{ img_url_mobile }}Administration/23_admin_gemeinsame_tags_kontexte_light.png#only-light){.mobile-img}
 ![Abbildung: Die Einstellung, in welchen Anwendungen ein gemeinsamer Tag anwendbar und gültig sein soll]({{ img_url_mobile }}Administration/23_admin_gemeinsame_tags_kontexte_dark.png#only-dark){.mobile-img}
 
-Sie sehen eine Reihe von Checkbuttons, die den einzelnen Programmbausteinen von {{ branding.title }} entsprechen. Hier können Sie also die Gültigkeit des gerade definierten Tags auf einzelne Programmteile, bspw. das Adressbuch, beschränken. Standardmäßig sollten alle Anwendungen ausgewählt sein.
+Im Reiter Kontexte legen Sie fest, wo der Tag verwendet werden kann:
+
+* Links sehen Sie die Anwendungen von {{ branding.title }}, deren Datensätze Tags haben können. Ist eine Anwendung angehakt, kann der Tag dort verwendet werden. Standardmäßig sind alle Anwendungen angehakt.
+* Klicken Sie auf den Namen einer Anwendung, erscheinen rechts die Datentypen dieser Anwendung, z.B. bei Sales Angebote, Angebotspositionen, Produkte usw. Hier können Sie den Tag innerhalb der Anwendung auf einzelne Datentypen einschränken. Ist kein Datentyp ausgewählt, gilt der Tag für alle Datentypen der Anwendung.
+* Ist eine Anwendung eingeschränkt, steht im Baum dahinter z.B. (eingeschränkt auf 1 Datentyp). Wählen Sie einen Datentyp einer nicht angehakten Anwendung, wird die Anwendung automatisch angehakt. Entfernen Sie den Haken einer Anwendung, wird auch ihre Einschränkung entfernt.
+
+Die Einschränkung auf Datentypen gilt immer nur für die jeweilige Anwendung. Ein Beispiel: Ein Tag prüfen soll in Sales nur für Angebotspositionen angeboten werden, im Adressbuch aber für alle Datensätze. Lassen Sie dazu Sales und Adressbuch angehakt, klicken Sie auf Sales und wählen Sie rechts Angebotspositionen aus. In allen anderen Datentypen von Sales wird der Tag dann nicht mehr angeboten.
 
 <!--Zusatzfelder-->
 ## Zusatzfelder { data-ctx="/Admin/EditDialog/Customfield" }

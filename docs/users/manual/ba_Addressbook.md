@@ -365,7 +365,7 @@ Zu den _Tags_ haben wir in [Kontakte importieren](ba_Addressbook.md/#kontakte-im
 
 Das Definieren gemeinsamer Tags erfolgt nicht hier, sondern nur in der Admin-Anwendung (siehe [Administration - Gemeinsame Tags](oa_Admin.md/#gemeinsame-tags)), da Sie dazu die entsprechende Berechtigung haben müssen.
 
-Wenn Sie einen Tag in der Liste mit Rechtsklick anklicken, bietet Ihnen ein Kontextmenü die Möglichkeit, den Tag von diesem Kontakt zu entfernen, ihn (sofern es sich um einen Ihrer eigenen Tags handelt) zu bearbeiten, oder ihn ganz zu löschen. Sollte Ihnen die Bedeutung von Tags jetzt noch nicht ganz einleuchten – keine Bange! Wir werden uns im Weiteren mit den Sortier- und Gruppiermöglichkeiten von Daten (u.a. auch von Kontaktdaten) in {{ branding.title }} praktisch beschäftigen. Und spätestens dann werden Sie sehen, welch sinnvolle Erfindung Tags sind.
+Wenn Sie einen Tag in der Liste mit Rechtsklick anklicken, bietet Ihnen ein Kontextmenü die Möglichkeit, den Tag von diesem Kontakt zu entfernen, ihn (sofern es sich um einen Ihrer eigenen Tags handelt) zu bearbeiten, oder ihn ganz zu löschen. Sollte Ihnen die Bedeutung von Tags jetzt noch nicht ganz einleuchten – keine Bange! Wir werden uns im Weiteren mit den Sortier- und Gruppiermöglichkeiten von Daten (u.a. auch von Kontaktdaten) in {{ branding.title }} praktisch beschäftigen. Und spätestens dann werden Sie sehen, welch sinnvolle Erfindung Tags sind. Angepinnte Tags werden unter den Tags des Kontakts blass angezeigt und mit einem Klick zugeordnet, siehe [Allgemeine Hinweise zur Bedienung - Tags](ca_StandardBedienhinweise.md/#tags).
 
 ### Kontakte aus der Tabellenansicht heraus bearbeiten
 
@@ -393,18 +393,18 @@ Kommen wir nun zur Bearbeitung von Kontakten aus der Tabelle heraus: Oben links,
 
 Sie wollten immer schon einmal wissen, wie Spammer arbeiten? Markieren Sie das gesamte Adressbuch (mit dem kleinen Pulldown-Menü n ausgewählt rechts am Rand, oberhalb des Tabellenkopfes, indem Sie die Option Alle Seiten auswählen verwenden) und drücken Sie auf E-Mail verfassen... Aber bitte nicht abschicken! Zum E-Mail-Fenster kommen wir weiter unten noch detailliert.
 
-Ebenfalls eine wichtige und häufig verwendete Massenbearbeitungsfunktion ist das Arbeiten mit Tags. Markieren Sie hierzu noch einmal eine beliebige Anzahl von Kontaktdatensätzen in der Tabelle und rufen Sie dann, mit dem Mauszeiger auf einem der markierten Objekte, über einen Rechtsklick das Kontextmenü auf. Wählen Sie Tag hinzufügen:
+Ebenfalls eine wichtige und häufig verwendete Massenbearbeitungsfunktion ist das Arbeiten mit Tags. Markieren Sie hierzu noch einmal eine beliebige Anzahl von Kontaktdatensätzen in der Tabelle und rufen Sie dann, mit dem Mauszeiger auf einem der markierten Objekte, über einen Rechtsklick das Kontextmenü auf. In der Zeile Tags sehen Sie Ihre angepinnten und zuletzt verwendeten Tags; ein Klick auf eines der Symbole vergibt den Tag an alle markierten Kontakte bzw. entfernt ihn wieder:
 
 <!-- SCREENSHOT -->
-![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_desktop }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_light.png#only-light){.desktop-img}
-![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_desktop }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_dark.png#only-dark){.desktop-img}
-![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_tablet }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_light.png#only-light){.tablet-img}
-![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_tablet }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_dark.png#only-dark){.tablet-img}
-![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_mobile }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_light.png#only-light){.mobile-img}
-![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_mobile }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_dark.png#only-dark){.mobile-img}
+![Abbildung: Tags über das Kontextmenü mehreren markierten Kontakten zuweisen]({{ img_url_desktop }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_light.png#only-light){.desktop-img}
+![Abbildung: Tags über das Kontextmenü mehreren markierten Kontakten zuweisen]({{ img_url_desktop }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_dark.png#only-dark){.desktop-img}
+![Abbildung: Tags über das Kontextmenü mehreren markierten Kontakten zuweisen]({{ img_url_tablet }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_light.png#only-light){.tablet-img}
+![Abbildung: Tags über das Kontextmenü mehreren markierten Kontakten zuweisen]({{ img_url_tablet }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_dark.png#only-dark){.tablet-img}
+![Abbildung: Tags über das Kontextmenü mehreren markierten Kontakten zuweisen]({{ img_url_mobile }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_light.png#only-light){.mobile-img}
+![Abbildung: Tags über das Kontextmenü mehreren markierten Kontakten zuweisen]({{ img_url_mobile }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_dark.png#only-dark){.mobile-img}
 
 
-Über das Pulldown werden Ihnen alle für Sie gültigen, d.h. sowohl die gemeinsamen als auch die persönlichen, Tags angeboten. Sie können nur jeweils einen Tag je Arbeitsgang zuweisen. Rückwärts funktioniert dies mit Tag(s) entfernen analog, nur dass Sie hier über Checkbuttons mehrere Tags zum Entfernen auswählen können.
+Zeigen Sie auf Tags, öffnet sich das Tags-Menü: Dort sehen Sie an der Checkbox, welche der markierten Kontakte einen Tag schon haben, und können Tags anpinnen. Über Tags hinzufügen... wählen Sie mehrere, auch neue persönliche Tags auf einmal aus; Tag(s) entfernen... entfernt Tags über Checkbuttons. Alle Möglichkeiten beschreibt [Allgemeine Hinweise zur Bedienung - Tags über das Kontextmenü](ca_StandardBedienhinweise.md/#tags-menu).
 
 !!! warning "Warnung"
     Das Bearbeitungs- wie auch das Kontextmenü bieten weitere Funktionen zum Bearbeiten über mehrere Datensätze an. Wenn Sie die Mehrfachauswahl z.B. auf Kontakte bearbeiten anwenden, erhalten Sie eine Maske, in der die Felder, die bei Ihren ausgewählten Kontakten jeweils verschiedene Inhalte haben können, leer und ockerfarbig dargestellt sind. Lassen Sie sich nicht verwirren – das ist logisch: Was sollte {{ branding.title }} Ihnen sonst hier anzeigen? Das Ganze hat jedoch einen tieferen Sinn: Sie können damit Datenfelder über mehrere Datensätze mit einem gemeinsamen Inhalt füllen – eine sehr mächtige Funktion, wenn Sie diese mit Bedacht anwenden. Also denken Sie bitte daran, dass Sie ggf. alte Feldinhalte überschreiben, die Sie hier gar nicht sehen! Zur Sicherheit erhalten Sie beim Hineinklicken in ein solches Feld (korrekterweise: mehrere Felder!) noch einmal eine Warnung.

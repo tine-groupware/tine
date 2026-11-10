@@ -241,3 +241,29 @@ Der Menüpunkt löscht eine in der Tabelle angewählte Abteilung, immer mit Sich
 ### Drucke Seite
 
 Dieser Menüpunkt öffnet Ihren browserinternen Druckdialog und erzeugt standardmäßig eine Liste aller in der Tabellenansicht dargestellten Abteilungen im DIN-A4-Hochformat. Es werden exakt die Felder ausgedruckt, die auch in der Tabellenansicht ausgewählt wurden – in diesem Falle ist es standardmäßig nur eines. Sie können jedoch auch die vier Felder zur Dokumentation der Bearbeitung mit anwählen und ausdrucken.
+
+<!--Positionen,Tags-->
+## Positionen von Belegen { #positionen data-ctx="/Sales/EditDialog/Document_Offer/Positions" }
+<a id="ctx:Sales.EditDialog.Document_Order.Positions"></a>
+<a id="ctx:Sales.EditDialog.Document_Delivery.Positions"></a>
+<a id="ctx:Sales.EditDialog.Document_Invoice.Positions"></a>
+<a id="ctx:Sales.EditDialog.Document_Credit.Positions"></a>
+<a id="ctx:Sales.EditDialog.Document_PurchaseInvoice.Positions"></a>
+
+Angebote, Aufträge, Lieferungen, Rechnungen und Gutschriften enthalten Positionen. Die Tabelle der Positionen beginnt mit den Spalten Pos., Typ und Tags. Über die Eingabezeile der Tabelle fügen Sie neue Positionen hinzu; sie wird nicht eingefärbt.
+
+Positionen können Sie wie andere Datensätze mit Tags versehen, z.B. um Positionen zu kennzeichnen, die noch geprüft oder angepasst werden müssen:
+
+* Markieren Sie eine oder mehrere Positionen und öffnen Sie mit einem Rechtsklick das Kontextmenü. In der Zeile Tags vergeben bzw. entfernen Sie Tags mit einem Klick, über Tags öffnen Sie das Tags-Menü.
+* Ein Klick in die Tags-Zelle einer Position öffnet das Tags-Menü direkt.
+* Die Zeilen der Positionen werden in den Farben ihrer Tags eingefärbt; bei mehreren Tags gehen die Farben von links nach rechts ineinander über.
+
+Die Tags der Positionen werden zusammen mit dem Beleg gespeichert. Schließen Sie den Beleg ohne zu speichern, bleiben die Positionen unverändert. Angepinnte Tags merkt sich {{ branding.title }} für jede Art von Position getrennt, z.B. für Angebotspositionen anders als für Rechnungspositionen. Welche Tags für Positionen angeboten werden, kann ein Administrator festlegen (siehe [Administration - Gemeinsame Tags](oa_Admin.md/#gemeinsame-tags)). Alles Weitere zu Tags finden Sie in [Allgemeine Hinweise zur Bedienung - Tags](ca_StandardBedienhinweise.md/#tags-menu).
+
+<!-- SCREENSHOT -->
+![Abbildung: Positionen eines Angebots mit Tags und eingefärbten Zeilen]({{ img_url_desktop }}Sales/7_sales_angebot_positionen_tags_light.png#only-light){.desktop-img}
+![Abbildung: Positionen eines Angebots mit Tags und eingefärbten Zeilen]({{ img_url_desktop }}Sales/7_sales_angebot_positionen_tags_dark.png#only-dark){.desktop-img}
+![Abbildung: Positionen eines Angebots mit Tags und eingefärbten Zeilen]({{ img_url_tablet }}Sales/7_sales_angebot_positionen_tags_light.png#only-light){.tablet-img}
+![Abbildung: Positionen eines Angebots mit Tags und eingefärbten Zeilen]({{ img_url_tablet }}Sales/7_sales_angebot_positionen_tags_dark.png#only-dark){.tablet-img}
+![Abbildung: Positionen eines Angebots mit Tags und eingefärbten Zeilen]({{ img_url_mobile }}Sales/7_sales_angebot_positionen_tags_light.png#only-light){.mobile-img}
+![Abbildung: Positionen eines Angebots mit Tags und eingefärbten Zeilen]({{ img_url_mobile }}Sales/7_sales_angebot_positionen_tags_dark.png#only-dark){.mobile-img}
