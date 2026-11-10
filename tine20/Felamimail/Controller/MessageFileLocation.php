@@ -111,7 +111,7 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
         $cacheId = Tinebase_Helper::convertCacheId('getLocationsForMessage' . $message->getId());
         if ($cache->test($cacheId)) {
             $locations = $cache->load($cacheId);
-            if (count($locations) > 0) {
+            if ($locations && count($locations) > 0) {
                 return $locations;
             }
         }
