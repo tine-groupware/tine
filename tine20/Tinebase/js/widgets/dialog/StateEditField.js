@@ -10,11 +10,7 @@ const StateEditField = Ext.extend(Ext.form.TriggerField, {
         this.fieldLabel = formatMessage('Client states')
         this.description = formatMessage('Client states')
 
-        // NOTE: we don't have a complete list of states here... we only "know" the state which are saved so far.
-        this.allStates = Ext.state.Manager.getProvider().state
-        this.value = formatMessage('{numSavedStates, plural, one {# saved state} other {# saved states}}', {
-            numSavedStates: Object.keys(this.allStates).length
-        })
+        this.value = this.getStatesSummary()
 
         this.plugins = this.plugins || [];
         this.plugins.push(new FieldTriggerPlugin({
@@ -34,16 +30,30 @@ const StateEditField = Ext.extend(Ext.form.TriggerField, {
         this.supr().initComponent.call(this)
     },
 
+    getStatesSummary() {
+        // NOTE: we don't have a complete list of states here... we only "know" the state which are saved so far.
+        this.allStates = Ext.state.Manager.getProvider().state
+        return formatMessage('{numSavedStates, plural, one {# saved state} other {# saved states}}', {
+            numSavedStates: Object.keys(this.allStates).length
+        })
+    },
+
+    updateStatesSummary() {
+        // NOTE: preference dialog might be closed meanwhile
+        if (!this.isDestroyed) this.setValue(this.getStatesSummary())
+    },
+
     async clearAllStates() {
         if (await Ext.MessageBox.show({
             icon: Ext.MessageBox.QUESTION,
             buttons: Ext.MessageBox.YESNO,
             title: formatMessage('Delete All States?'),
-            msg: formatMessage('Really delete all client states)'),
+            msg: formatMessage('Really delete all client states?'),
         }) === 'yes') {
-            _.each(this.allStates, (value, key) => {
-                Ext.state.Manager.clear(key)
-            })
+            // NOTE: provider.clear is async (persistent clear) and removes the local state afterwards
+            const provider = Ext.state.Manager.getProvider()
+            await Promise.all(_.map(_.keys(this.allStates), (key) => provider.clear(key)))
+            this.updateStatesSummary()
         }
     },
 
@@ -96,8 +106,9 @@ const StateEditField = Ext.extend(Ext.form.TriggerField, {
                                                     title: formatMessage('Delete State?'),
                                                     msg: formatMessage('Really delete state "{ key }"?', {key}),
                                                 }) === 'yes') {
-                                                    Ext.state.Manager.clear(key)
                                                     cmp.store.remove(state)
+                                                    await Ext.state.Manager.getProvider().clear(key)
+                                                    this.updateStatesSummary()
                                                 }
                                                 break
                                             case 'edit':

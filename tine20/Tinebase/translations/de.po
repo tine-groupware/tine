@@ -3169,40 +3169,40 @@ msgid "Tine 2.0 does not understand all kind of files you might want to upload. 
 msgstr "Tine 2.0 versteht nicht alle Dateien, die Sie möglicherweise hochladen möchten. Eventuell müssen Sie manuell die Datei so anpassen, dass sie von Tine 2.0 verarbeitet werden kann."
 
 msgid "Client states"
-msgstr ""
+msgstr "Client-Zustände"
 
 msgid "{numSavedStates, plural, one {# saved state} other {# saved states}}"
-msgstr ""
+msgstr "{numSavedStates, plural, one {# gespeicherter Zustand} other {# gespeicherte Zustände}}"
 
 msgid "Edit states"
-msgstr ""
+msgstr "Zustände bearbeiten"
 
 msgid "Delete All States"
-msgstr ""
+msgstr "Alle Zustände löschen"
 
 msgid "Delete All States?"
-msgstr ""
+msgstr "Alle Zustände löschen?"
 
-msgid "Really delete all client states)"
-msgstr ""
+msgid "Really delete all client states?"
+msgstr "Wollen Sie wirklich alle Client-Zustände löschen?"
 
 msgid "State List"
-msgstr ""
+msgstr "Zustandsliste"
 
 msgid "Delete State?"
-msgstr ""
+msgstr "Zustand löschen?"
 
 msgid "Really delete state \"{ key }\"?"
-msgstr ""
+msgstr "Wollen Sie den Zustand \"{ key }\" wirklich löschen?"
 
 msgid "Edit state \"{ key }\""
-msgstr ""
+msgstr "Zustand \"{ key }\" bearbeiten"
 
 msgid "Invalid State"
-msgstr ""
+msgstr "Ungültiger Zustand"
 
 msgid "State data for \"{ key }\" is not valid. You need to fix the errors first."
-msgstr ""
+msgstr "Die Zustandsdaten für \"{ key }\" sind ungültig. Sie müssen die Fehler zuerst beheben."
 
 msgid "Back"
 msgstr "Zurück"

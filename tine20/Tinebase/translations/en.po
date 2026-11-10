@@ -3177,8 +3177,8 @@ msgstr "Delete All States"
 msgid "Delete All States?"
 msgstr "Delete All States?"
 
-msgid "Really delete all client states)"
-msgstr "Really delete all client states)"
+msgid "Really delete all client states?"
+msgstr "Really delete all client states?"
 
 msgid "State List"
 msgstr "State List"
