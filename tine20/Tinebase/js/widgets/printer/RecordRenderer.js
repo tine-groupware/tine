@@ -21,7 +21,7 @@ Tine.widgets.printer.fieldRenderer = function(appName, record, fieldValue, label
         value = fieldValue ? fieldValue : '';
 
     html = '<span class="rp-print-single-label">' + app.i18n._(label)
-        + '</span><span class="rp-print-single-value">' + value + '</span>';
+        + '</span><span class="rp-print-single-value">' + Ext.util.Format.htmlEncode(value) + '</span>';
 
 
     return html;
@@ -32,7 +32,7 @@ Tine.widgets.printer.fieldsRenderer = function(appName, record, fieldName){
 
     Ext.each(fieldName, function(field) {
         html += '<div class="rp-print-single-details-row">' +
-            '<span class="rp-print-single-value">'+ field + '</span>' +
+            '<span class="rp-print-single-value">'+ Ext.util.Format.htmlEncode(field) + '</span>' +
             '</div>';
     }, this);
 

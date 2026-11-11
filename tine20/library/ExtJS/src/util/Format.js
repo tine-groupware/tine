@@ -86,8 +86,9 @@ var Format = function(){
             if (_.get(value, 'isExpression')) {
                 return value;
             }
+            // NOTE: emoji markup must not contain quotes, as encoded values are also used in attributes
             return !value ? value : String(value).replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;")
-                .replace(emojiRE, '<em class="emoji">$1</em>');
+                .replace(emojiRE, '<em class=emoji>$1</em>');
         },
 
         /**
@@ -129,6 +130,21 @@ var Format = function(){
          */
         htmlDecode : function(value){
             return !value ? value : String(value).replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
+        },
+
+        /**
+         * Encodes the given value for the use in (single or double quoted) html attributes
+         * NOTE: htmlEncode is not meant for attributes (it passes expressions and adds markup for emojis)
+         * @param {String} value The string to encode
+         * @return {String} The encoded text
+         */
+        attrEncode : function(value){
+            return [null, undefined].indexOf(value) >= 0 ? '' : String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
         },
 
         /**

@@ -69,7 +69,7 @@ Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
             me = this,
             appName = editDialog.recordClass.getMeta('appName');
 
-        data.titleHTML = editDialog.record.getTitle();
+        data.titleHTML = Ext.util.Format.htmlEncode(editDialog.record.getTitle());
         data.customFieldHTML = Tine.widgets.customfields.Renderer.renderAll(appName, editDialog.recordClass, data.customfields);
 
 

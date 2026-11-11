@@ -296,7 +296,7 @@ Tine.widgets.grid.RendererManager = function() {
                 case 'model':
                     renderer = (classname, metaData, record) => {
                         const recordClass = Tine.Tinebase.data.RecordMgr.get(_.get(classname, 'className', classname));
-                        return recordClass ? recordClass.getRecordName() : classname;
+                        return recordClass ? recordClass.getRecordName() : Ext.util.Format.htmlEncode(classname);
                     };
                     break;
                 case 'dynamicRecord':

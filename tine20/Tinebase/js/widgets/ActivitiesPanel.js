@@ -138,42 +138,50 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             i18n = app ? app.i18n : window.i18n,
             fieldTags = ['added', 'removed', 'modified'].map((tag) => { return window.i18n._hidden(tag) + ':'}).concat('-&gt;');
 
-        note = Ext.util.Format.htmlEncode(note);
-        note = note.replace(new RegExp(`( +[^ ]+ \\(.*? (${fieldTags.join('|')}) [^)]*)\\)`,'g'), '<br> \u00A0\u2022\u00A0 $&');
+        // NOTE: generated html is replaced by placeholders, so that subsequent field regexps can't capture
+        //       (and re-render) html of previous replacements. Values are encoded once and rendered once only.
+        const htmlParts = [];
+        const protect = (html) => {
+            htmlParts.push(String(html));
+            return `\u0000${htmlParts.length - 1}\u0000`;
+        };
+
+        note = Ext.util.Format.htmlEncode(String(note ?? '').replace(/\u0000/g, ''));
+        note = note.replace(new RegExp(`( +[^ ]+ \\([^\u0000]*? (${fieldTags.join('|')}) [^)\u0000]*)\\)`,'g'), (match) => {
+            return protect('<br> \u00A0\u2022\u00A0 ') + match;
+        });
 
         if (recordClass) {
             Ext.each(recordClass.getFieldDefinitions(), function(field) {
                 var _ = window.lodash,
                     i18nLabel = field.label ? i18n._hidden(field.label) : field.name,
-                    regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(i18nLabel) + `) \\((.*?) (-&gt;) ([^)]*)\\)`),
-                    struct = regexp.exec(note),
-                    label = struct && struct.length == 5 ? struct[1] : null,
-                    oldValue = label ? struct[2] : null,
-                    newValue = label ? struct[4] : null,
-                    renderer = Tine.widgets.grid.RendererManager.get(appName, recordClass, field.name, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+                    encodedLabel = Ext.util.Format.htmlEncode(i18nLabel),
+                    regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(encodedLabel) + `) \\(([^\u0000]*?) (-&gt;) ([^)\u0000]*)\\)`),
+                    renderer = Tine.widgets.grid.RendererManager.get(appName, recordClass, field.name, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL),
+                    isRecordField = ['record', 'records'].indexOf(_.get(field, 'fieldDefinition.type')) >= 0;
 
-                if (label) {
-                    if (['record', 'records'].indexOf(_.get(field, 'fieldDefinition.type')) < 0) {
-                        oldValue = renderer(oldValue, {}, record);
-                        newValue = renderer(newValue, {}, record);
-                    }
-
-                    note = note.replace(regexp, i18nLabel + ' (' + oldValue + ' \u27bd ' + newValue + ')');
+                if (regexp.test(note)) {
+                    note = note.replace(regexp, (all, label, oldValue, arrow, newValue) => {
+                        if (! isRecordField) {
+                            // values are encoded already, renderers encode themselves
+                            oldValue = renderer(Ext.util.Format.htmlDecode(oldValue), {}, record);
+                            newValue = renderer(Ext.util.Format.htmlDecode(newValue), {}, record);
+                        }
+                        return protect(encodedLabel + ' (' + oldValue + ' \u27bd ' + newValue + ')');
+                    });
                 } else {
                     // alternative form
-                    regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(i18nLabel) + ') \\((.[^)])\\)');
+                    regexp = new RegExp(' (' + _.escapeRegExp(field.name) +'|' + _.escapeRegExp(encodedLabel) + ') \\(([^)\u0000][^)\u0000])\\)');
 
-                    struct = regexp.exec(note);
-                    label = struct && struct.length == 3 ? struct[1] : null;
-                    var value = label ? struct[2] : null;
-
-                    note = note.replace(regexp, '<br> \u00A0\u2022\u00A0 ' + i18nLabel + ' (' + value + ')');
+                    note = note.replace(regexp, (all, label, value) => {
+                        return protect('<br> \u00A0\u2022\u00A0 ' + encodedLabel + ' (') + value + ')';
+                    });
                 }
 
             }, this);
         }
 
-        return note;
+        return note.replace(/\u0000(\d+)\u0000/g, (match, idx) => htmlParts[idx]);
     },
 
     /**
