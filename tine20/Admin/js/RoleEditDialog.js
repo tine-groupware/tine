@@ -373,7 +373,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (! this.role.id) {
             this.window.setTitle(this.translation.gettext('Add New Role'));
         } else {
-            this.window.setTitle(String.format(this.translation.gettext('Edit Role "{0}"'), this.role.get('name')));
+            this.window.setTitle(String.format(this.translation.gettext('Edit Role "{0}"'), Ext.util.Format.htmlEncode(this.role.get('name'))));
         }
         
         this.getForm().loadRecord(this.role);
