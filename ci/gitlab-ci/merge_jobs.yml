@@ -45,9 +45,22 @@ merge:
       else
         merge_merge_upwards $TINE_VERSION_BE $TINE_VERSION_NEXT
       fi
-    - merge_merge_mirror customers $TINE_VERSION_NEXT github main
-    - merge_merge_mirror github main customers $TINE_VERSION_NEXT
+    - |
+      if [ "${MERGE_MIRROR_GITHUB}" == "false" ];then
+        warnings="${warnings}\n- Merge to and from github is disabled."
+      else
+        merge_merge_mirror customers $TINE_VERSION_NEXT github main
+        merge_merge_mirror github main customers $TINE_VERSION_NEXT
+      fi
     - merge_trigger_next
+    - |
+      if [ "${warnings}" != "" ]; then
+        printf "warnings: ${warnings}"
+        exit 20
+      fi
+  allow_failure:
+    exit_codes:
+      - 20
   rules:
     - if: $AUTO_MERGE == "never"
       when: never
