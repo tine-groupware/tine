@@ -494,8 +494,9 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                             modelConfig: modelConfig,
                             app: Tine.Tinebase.appMgr.get(appName),
                             recordProxy: Tine[appName][recordProxyName],
-                            recordClass: Tine[appName].Model[modelName],
-                            listenMessageBus: true
+                            recordClass: Tine[appName].Model[modelName]
+                            // NOTE: don't set listenMessageBus here - it's the GridPanel default anyway and
+                            //       Ext.apply below would overwrite explicit listenMessageBus: false of existing grids
                         }, modelConfig.uiconfig);
 
                     if (! Tine[appName].hasOwnProperty(gridPanelName)) {

@@ -537,7 +537,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     initMessageBus: function() {
         this.postalSubscriptions = [];
-        if (this.listenMessageBus) {
+        // NOTE: dependent record grids (records live in editDialog record) and grids without server search
+        //       can't reload anyway - so there is nothing to listen for
+        if (this.listenMessageBus && this.hasRemoteSearch()) {
             this.postalSubscriptions.push(postal.subscribe({
                 channel: "recordchange",
                 topic: [this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), '*'].join('.'),
@@ -555,6 +557,28 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     onClick: function(e, target) {
         debugger
+    },
+
+    /**
+     * records of this grid can be (re)loaded from the server
+     *
+     * @return {Boolean}
+     */
+    hasRemoteSearch: function() {
+        if (! this.recordProxy || (this.editDialog && this.editDialogRecordProperty)) {
+            return false;
+        }
+
+        // NOTE: custom proxies might search via other methods, we can only check the generic one
+        if (this.recordProxy.searchRecords === Tine.Tinebase.data.RecordProxy.prototype.searchRecords) {
+            const services = _.get(Tine.Tinebase.registry.get('serviceMap'), 'services');
+            const method = `${this.recordProxy.appName}.search${this.recordProxy.modelName}s`;
+            if (services && ! services.hasOwnProperty(method)) {
+                return false;
+            }
+        }
+
+        return true;
     },
 
     getRecordByData(data) {
@@ -2216,6 +2240,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     loadGridData: function(options) {
         options = options || {};
+
+        if (! this.hasRemoteSearch()) {
+            // e.g. dependent records - there is no api to search them
+            return;
+        }
 
         Ext.applyIf(options, {
             callback:           Ext.emptyFn,
