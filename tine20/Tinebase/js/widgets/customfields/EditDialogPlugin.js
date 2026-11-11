@@ -143,7 +143,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                 };
 
                 Ext.ux.ItemRegistry.registerItem(key,
-                    {layout: 'form', items: wrapperConfig, title: _.get(fields, 'data.definition.label')},pos ? pos : '0/0');
+                    {layout: 'form', items: wrapperConfig, title: Ext.util.Format.htmlEncode(_.get(fields, 'data.definition.label'))},pos ? pos : '0/0');
             }
         }, this));
 

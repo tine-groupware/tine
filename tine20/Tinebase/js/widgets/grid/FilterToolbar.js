@@ -389,7 +389,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             value: filterModel.field,
             renderTo: fRow.child('td[class=tw-ftb-frow-field]'),
             validator: this.validateFilter.createDelegate(this),
-            tpl: '<tpl for="."><div class="x-combo-list-item tw-ftb-field-{field}">{label}</div></tpl>',
+            tpl: '<tpl for="."><div class="x-combo-list-item tw-ftb-field-{field:htmlEncode}">{label:htmlEncode}</div></tpl>',
             beforeBlur : function(){
                 this.assertValue();
                 if (! this.getValue()) {

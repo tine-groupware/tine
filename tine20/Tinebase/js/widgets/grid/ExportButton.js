@@ -97,7 +97,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
                 menuItems = _.reduce(allFiles, function(result, file) {
                     if (file && _.endsWith(file.name, format)) {
                         result.push({
-                            text: file.name,
+                            text: Ext.util.Format.htmlEncode(file.name),
                             handler: handler.createDelegate(action, [{template: file.id}])
                         });
                     }

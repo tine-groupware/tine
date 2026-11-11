@@ -234,22 +234,23 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
                         title = await title;
                     }
 
-                    fulfill(new Ext.XTemplate(
+                    // NOTE: title and body contain user data - they must not be part of a template source
+                    //       (XTemplate would interpret {...} and execute {[...]})
+                    fulfill([
                         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
                         '<html>',
                         '<head> ',
                         '<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />',
-                        '<x-additional-headers />',
+                        me.getAdditionalHeaders(),
                         '<link href="' + me.stylesheetPath + '?' + new Date().getTime() + '" rel="stylesheet" type="text/css" media="screen,print" />',
-                        '<title>' + title + '</title>',
+                        '<title>' + Ext.util.Format.htmlEncode(title) + '</title>',
                         '</head>',
                         '<body>',
                         '<div id="csscheck"></div>',
                         bodyHtml,
                         '</body>',
                         '</html>'
-                    // NOTE: we need to append additional headers outside xtemplate as the template.compile has problems e.g. with complex css structures
-                    ).apply(data).replace('<x-additional-headers />', me.getAdditionalHeaders()));
+                    ].join(''));
                 });
             });
         });

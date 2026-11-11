@@ -283,8 +283,10 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     </div>`;
                 },
                 linkifyEmail(name, email) {
-                    const id = Ext.id() + ':' + email + Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(name));
-                    const address = name ? `${name} < ${email} >` : email;
+                    // NOTE: name and email are user data (e.g. from external senders)
+                    const id = Tine.Tinebase.common.attrEncode(Ext.id() + ':' + email + ':' + Ext.util.Format.trim(name));
+                    const encodedEmail = Ext.util.Format.htmlEncode(email);
+                    const address = name ? `${Ext.util.Format.htmlEncode(name)} &lt; ${encodedEmail} &gt;` : encodedEmail;
                     const link =  document.createElement('div');
                     link.className = 'preview-panel-felamimail-header-longtext';
                     link.innerHTML = `<a id="${id}" class="tinebase-email-link">${address}</a>`;
@@ -384,7 +386,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
                     for (var i=0, id, cls; i < attachments.length; i++) {
                         result += `<span id="${idPrefix}:${i}" style="padding-left:5px;" class="tinebase-download-link">`
-                            + '<i>' + attachments[i].filename + '</i>'
+                            + '<i>' + Ext.util.Format.htmlEncode(attachments[i].filename) + '</i>'
                             // NOTE: size is 'transfer size' (base64 encoded) here.
                             // @TODO replace size from message cache size when it's loaded?
                             + ' (' + Ext.util.Format.fileSize(Math.round(attachments[i].size / 1.333)) + ')<div class="tinebase-download-link-wait"></div></span> ';

@@ -136,7 +136,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             }
                         } catch (e) {
                             record.reject()
-                            errorMsgs.push(app.formatMessage('Cannot book { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: record.getTitle(), e }))
+                            errorMsgs.push(app.formatMessage('Cannot book { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: Ext.util.Format.htmlEncode(record.getTitle()), e: {code: e.code, message: Ext.util.Format.htmlEncode(e.message)} }))
                         }
                     })
                 }
@@ -176,7 +176,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                         buttons: Ext.Msg.OK,
                                         icon: Ext.MessageBox.WARNING,
                                         title: app.formatMessage('Nothing to do'),
-                                        msg: app.formatMessage('{ document } has no open positions left.', { document: record.getTitle() })
+                                        msg: app.formatMessage('{ document } has no open positions left.', { document: Ext.util.Format.htmlEncode(record.getTitle()) })
                                     });
                                 }
                             }
@@ -207,7 +207,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             processedSourceIds = processedSourceIds.concat(_.map(transition.sourceDocuments, 'sourceDocument.id'))
                         }
                     } catch (e) {
-                        errorMsgs.push(app.formatMessage('Cannot create { targetType } from { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: record.getTitle(), targetType: targetRecordClass.getRecordName(), e }))
+                        errorMsgs.push(app.formatMessage('Cannot create { targetType } from { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: Ext.util.Format.htmlEncode(record.getTitle()), targetType: targetRecordClass.getRecordName(), e: {code: e.code, message: Ext.util.Format.htmlEncode(e.message)} }))
                     }
                 })
 

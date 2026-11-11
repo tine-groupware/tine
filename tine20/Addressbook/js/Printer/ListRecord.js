@@ -27,7 +27,7 @@ Tine.Addressbook.Printer.ListRenderer = Ext.extend(Ext.ux.Printer.EditDialogRend
                     '<div class="rp-print-single">',
                     '{[Tine.widgets.printer.headerRenderer()]}',
                     '<div class="rp-print-single-summary">',
-                    '<span class="adb-print-single-value">{name}</span>',
+                    '<span class="adb-print-single-value">{name:htmlEncode}</span>',
                     '</div>',
                     '<div class="rp-print-single-details-row">',
                     '{[this.fieldRenderer("", "List type")]}',
@@ -37,7 +37,8 @@ Tine.Addressbook.Printer.ListRenderer = Ext.extend(Ext.ux.Printer.EditDialogRend
                     '{[this.fieldRenderer(values.description, "Description")]}',
                     '</div>',
                     '</br>',
-                    memberHtml,
+                    // NOTE: memberHtml contains user data and must not be part of the template source
+                    '{values.memberHtml}',
                     '</br>',
                     '{[this.customFieldRenderer(values.customfields)]}',
                     '{[this.relationRenderer(values.relations)]}',
@@ -66,7 +67,7 @@ Tine.Addressbook.Printer.ListRenderer = Ext.extend(Ext.ux.Printer.EditDialogRend
                                 return '<div class="rp-print-single-block-heading">' + i18n._('Related to') + '</div>' + relations  + '</br>';
                             }
                         }
-                    }).apply(data));
+                    }).apply(Object.assign(data, {memberHtml})));
             });
         });
     }

@@ -355,9 +355,9 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         const customer = this.getForm().findField('customer_id').selectedRecord;
                         if (_.uniq(_.map(customer.get('debitors') || [], 'division_id.id')).indexOf(division.id) < 0) {
                             Ext.Msg.alert(this.app.i18n._('No Matching Debitor'), this.app.formatMessage("The category <b>{category}</b> can't be selected as the customer <b>{customer}</b> has no debitor for the division <b>{division.title}</b> of the category.", {
-                                category: await category.getTitle(),
-                                customer: await customer.getTitle(),
-                                division
+                                category: Ext.util.Format.htmlEncode(await category.getTitle()),
+                                customer: Ext.util.Format.htmlEncode(await customer.getTitle()),
+                                division: {title: Ext.util.Format.htmlEncode(division?.title)}
                             }));
                             return false;
                         }
@@ -382,9 +382,9 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         const division = _.get(category, 'data.division_id');
                         if (_.uniq(_.map(record.get('debitors') || [], 'division_id.id')).indexOf(division.id) < 0) {
                             Ext.Msg.alert(this.app.i18n._('No Matching Debitor'), this.app.formatMessage("The customer <b>{customer}</b> can't be selected as it has no debitor for the division <b>{division.title}</b> of this documents' category <b>{category}</b>.", {
-                                customer: await record.getTitle(),
-                                division,
-                                category: category.getTitle()
+                                customer: Ext.util.Format.htmlEncode(await record.getTitle()),
+                                division: {title: Ext.util.Format.htmlEncode(division?.title)},
+                                category: Ext.util.Format.htmlEncode(category.getTitle())
                             }));
                             return false;
                         }

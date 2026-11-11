@@ -9,7 +9,7 @@
 // make sure url's are opened via bookmarks app to ensure proxy auth
 const renderer = (value, index, record) => {
     const url = Tine.Tinebase.common.getUrl() + '/Bookmarks/openBookmark/' + record.getId()
-    return '<a href=' + Tine.Tinebase.EncodingHelper.encode(url, 'href') + ' target="_blank">' + Tine.Tinebase.EncodingHelper.encode(value, 'shorttext') + '</a>';
+    return '<a href="' + Tine.Tinebase.common.attrEncode(url) + '" target="_blank" rel="noopener noreferrer">' + Tine.Tinebase.EncodingHelper.encode(value, 'shorttext') + '</a>';
 }
 
 Tine.widgets.grid.RendererManager.register('Bookmarks', 'Bookmark', 'url', renderer, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);

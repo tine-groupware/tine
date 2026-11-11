@@ -148,7 +148,7 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                         const rowIndex = view.findRowIndex(tip.triggerElement);
                         let path = store.getAt(rowIndex).data.path;
                         path = path.startsWith('/') ? path.substring(1) : path;
-                        path = path.replace(/\//g, '/<br />');
+                        path = Ext.util.Format.htmlEncode(path).replace(/\//g, '/<br />');
                         tip.body.dom.innerHTML = path;
                     }
                 }

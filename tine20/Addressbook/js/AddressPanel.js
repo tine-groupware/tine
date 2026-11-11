@@ -48,7 +48,7 @@ const getAddressPanels = () => {
                                 handler: async () => {
                                     const aStruct = await formatAddress(cmp.findParentBy(function (c) { return c instanceof Tine.widgets.dialog.EditDialog }).record, field.key + '_')
                                     navigator.clipboard.writeText(aStruct.join('\n'));
-                                    Ext.ux.Notification.show(i18n._('Copied to clipboard'), window.formatMessage('"{value}" was copied to clipboard', {value: _.map(aStruct, Ext.util.Format.htmlEncode).join('\n')}));
+                                    Ext.ux.Notification.show(i18n._('Copied to clipboard'), window.formatMessage('"{value}" was copied to clipboard', {value: aStruct.join('\n')}));
                                 }
                             }],
                         });

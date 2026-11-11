@@ -20,7 +20,7 @@ class FieldClipboardPlugin extends FieldTriggerPlugin {
         this.field.el.dom.select()
         document.execCommand("copy")
         this.field.el.dom.setSelectionRange(0, 0)
-        Ext.ux.Notification.show(i18n._('Copied to clipboard'), window.formatMessage('"{value}" was copied to clipboard', {value: Ext.util.Format.htmlEncode(this.field.getValue())}));
+        Ext.ux.Notification.show(i18n._('Copied to clipboard'), window.formatMessage('"{value}" was copied to clipboard', {value: this.field.getValue()}));
     }
 }
 

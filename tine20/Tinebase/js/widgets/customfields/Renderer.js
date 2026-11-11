@@ -55,7 +55,7 @@ Tine.widgets.customfields.Renderer = function(){
                             cfData = _.get(customfields, cfName, customfields),
                             record = Tine.Tinebase.data.Record.setFromJson(cfData, recordClass);
 
-                        return record.getTitle();
+                        return Ext.util.Format.htmlEncode(record.getTitle());
                     };
                 } else {
                     renderers[key] = function(value, metaData, record) {
@@ -90,7 +90,7 @@ Tine.widgets.customfields.Renderer = function(){
                     ? value[recordClass.getMeta('titleProperty')] + ' '
                     : value + '';
             })
-            return title;
+            return Ext.util.Format.htmlEncode(title);
         },
 
         
@@ -115,7 +115,7 @@ Tine.widgets.customfields.Renderer = function(){
                 var renderedValue = this.render(app, cfDef, data);
 
                 html += '<div class="customfield-rendered-row print-single-details-row">' +
-                    '<span class="customfield-rendered-label">'+ cfDef.get('definition').label + '</span>' +
+                    '<span class="customfield-rendered-label">'+ Ext.util.Format.htmlEncode(cfDef.get('definition').label) + '</span>' +
                     '<span class="customfield-rendered-value">'+ renderedValue + '</span>' +
                 '</div>';
             }, this);

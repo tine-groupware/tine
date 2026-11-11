@@ -7,8 +7,7 @@
  */
 
 const renderer = (value, index, record) => {
-    const url = record.getUrl()
-    return '<a href=' + Tine.Tinebase.EncodingHelper.encode(url, 'href') + ' target="_blank">' + url + '</a>';
+    return Tine.Tinebase.common.urlRenderer(record.getUrl());
 }
 
 Tine.widgets.grid.RendererManager.register('Calendar', 'FreeBusyUrl', 'url', renderer, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);

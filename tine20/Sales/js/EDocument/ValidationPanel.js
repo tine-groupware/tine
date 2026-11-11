@@ -17,7 +17,7 @@ Tine.Sales.EDocumentValidationPanel = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Sales');
 
-        this.window.setTitle(this.app.formatMessage(`Validation Report: { title }`, { title: this.nodeRecord.getTitle() }))
+        this.window.setTitle(this.app.formatMessage(`Validation Report: { title }`, { title: Ext.util.Format.htmlEncode(this.nodeRecord.getTitle()) }))
         this.cancelButtonText = this.app.i18n._('Close');
 
         this.html = `<iframe

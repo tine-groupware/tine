@@ -136,7 +136,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
             
         } else {
             this.root = new Ext.tree.AsyncTreeNode({
-                text: this.account.get('name'),
+                text: Ext.util.Format.htmlEncode(this.account.get('name')),
                 draggable: false,
                 allowDrop: false,
                 expanded: true,
@@ -174,7 +174,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
         Tine.Felamimail.FolderSelectPanel.superclass.afterRender.call(this);
         
         var title = (! this.allAccounts) 
-            ? String.format(this.app.i18n._('Folders of account {0}'), this.account.get('name'))
+            ? String.format(this.app.i18n._('Folders of account {0}'), Ext.util.Format.htmlEncode(this.account.get('name')))
             : this.app.i18n._('Folders of all accounts');
             
         this.window.setTitle(title);

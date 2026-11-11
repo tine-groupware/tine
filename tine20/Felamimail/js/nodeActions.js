@@ -176,7 +176,7 @@ Tine.Felamimail.nodeActions.DeleteFolderAction = {
             height: 180,
             width: 350,
             title: app.i18n._('Do you really want to delete the following folders?'),
-            text: targetNodes.map((n) => n.attributes.localname).join('</br>'),
+            text: targetNodes.map((n) => Ext.util.Format.htmlEncode(n.attributes.localname)).join('</br>'),
             scope: this,
             handler: async function (button) {
                 if (button === 'yes') {
@@ -349,7 +349,7 @@ Tine.Felamimail.nodeActions.EditAccountAction = {
                 'update': _.bind(function(record) {
                     const account = new Tine.Felamimail.Model.Account(Ext.util.JSON.decode(record));
                     // update tree node + store
-                    selectedNode.setText(account.get('name'));
+                    selectedNode.setText(Ext.util.Format.htmlEncode(account.get('name')));
                     
                     // reload tree node + remove all folders of this account from store ?
                     app.folderStore.resetQueryAndRemoveRecords('parent_path', '/' + account.id);
