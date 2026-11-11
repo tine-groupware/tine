@@ -656,7 +656,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 return strcmp($a['name'], $b['name']);
             });
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $coreRegistryData = Tinebase_Core::getCoreRegistryData();
             $config = array_merge($coreRegistryData, [
                 'has_gtc'           => !!Calendar_Config::getInstance()->get(Calendar_Config::POLL_GTC),
@@ -678,10 +678,10 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 Tinebase_Expressive_Middleware_CheckRouteAuth::loginFor($url);
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } finally {
             $assertAclUsage();
@@ -762,14 +762,14 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
             // @TODO: queue some sort of notification for organizer?
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($returnAttendees->toArray()));
 
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } finally {
             $assertAclUsage();
@@ -821,12 +821,12 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
             // @TODO: queue some sort of notification
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } finally {
             $assertAclUsage();
@@ -867,11 +867,11 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             // TODO what to send now? - we don't have a generic poll notification yet
 //            Calendar_Controller_EventNotifications::getInstance()->sendNotificationToAttender($currentAttendee)
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            return new \Laminas\Diactoros\Response('php://memory', 404);
+            return new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            return new \Laminas\Diactoros\Response('php://memory', 401);
+            return new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
         } finally {
             $assertAclUsage();
         }
