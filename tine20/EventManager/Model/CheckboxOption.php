@@ -78,6 +78,7 @@ class EventManager_Model_CheckboxOption  extends Tinebase_Record_NewAbstract
             self::FLD_DESCRIPTION   => [
                 self::LABEL             => 'Description', //_('Description')
                 self::TYPE              => self::TYPE_FULLTEXT,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_MARKDOWN,
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],

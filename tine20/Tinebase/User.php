@@ -290,6 +290,9 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     throw new Tinebase_Exception_InvalidArgument("User backend type $backendType not implemented.");
             }
         } catch (Tinebase_Exception_Backend_Ldap $e) {
+            $e->setLogToSentry(false);
+            $e->setLogLevelMethod('warn');
+            Tinebase_Exception::log($e);
             if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}) {
                 Tinebase_Config::getInstance()->clearCache();
                 try {
@@ -1023,6 +1026,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
      *
      * @param Tinebase_Record_RecordSet $usersInSyncBackend
      * @param array $userIdsInSqlBackend
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected static function _syncDeletedUsers(Tinebase_Record_RecordSet $usersInSyncBackend, array $userIdsInSqlBackend)
     {
@@ -1030,17 +1037,24 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
         $deletedInSyncBackend = array_diff($userIdsInSqlBackend, $usersInSyncBackend->getArrayOfIds());
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' About to delete / expire ' . count($deletedInSyncBackend) . ' users in SQL backend...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' About to delete / expire ' . count($deletedInSyncBackend) . ' users in SQL backend...');
+        }
 
         foreach ($deletedInSyncBackend as $userToDelete) {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             try {
-                $user = self::_getLdapUserController()->getUserByPropertyFromSqlBackend('accountId', $userToDelete, 'Tinebase_Model_FullUser');
+                $user = self::_getLdapUserController()->getUserByPropertyFromSqlBackend(
+                    'accountId',
+                    $userToDelete,
+                    Tinebase_Model_FullUser::class);
 
                 if (in_array($user->accountLoginName, self::getSystemUsernames())) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Skipping system user ' . $user->accountLoginName);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Skipping system user ' . $user->accountLoginName);
+                    }
                     Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                     $transactionId = null;
                     continue;
@@ -1049,26 +1063,35 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 // at first, we expire+deactivate the user
                 $now = Tinebase_DateTime::now();
                 if (! $user->accountExpires || $user->accountStatus !== Tinebase_Model_User::ACCOUNT_STATUS_DISABLED) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Disable user and set expiry date of ' . $user->accountLoginName . ' to ' . $now);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Disable user and set expiry date of ' . $user->accountLoginName . ' to ' . $now);
+                    }
                     $user->accountExpires = $now;
                     $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
                     self::_getLdapUserController()->updateUserInSqlBackend($user);
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' User already expired ' . print_r($user->toArray(), true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' User already expired ' . $user->accountLoginName);
+                    }
 
                     $deleteAfterMonths = Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_DELETE_AFTER);
                     if ($user->accountExpires->isEarlier($now->subMonth($deleteAfterMonths))) {
                         // if he or she is already expired longer than configured expiry, we remove them!
-                        // this will trigger the plugin Addressbook which will make a soft delete and especially runs the addressbook sync backends if any configured
+                        // this will trigger the plugin Addressbook which will make a soft delete and especially
+                        // runs the addressbook sync backends if any configured
                         self::_getLdapUserController()->deleteUser($userToDelete);
 
-                        // now we make the addressbook hard delete, which is ok, because we went through the addressbook_controller_contact::delete already
-                        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($user->contact_id)) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                . ' Deleting user contact of ' . $user->accountLoginName);
-
+                        // now we make the addressbook hard delete, which is ok, because we went through
+                        // the addressbook_controller_contact::delete already
+                        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true
+                            && ! empty($user->contact_id)
+                        ) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                    . ' Deleting user contact of ' . $user->accountLoginName);
+                            }
                             $contactsBackend = new Addressbook_Backend_Sql();
                             $contactsBackend->delete($user->contact_id);
                         }
@@ -1079,12 +1102,17 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                 $transactionId = null;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' ' . $tenf->getMessage());
+                }
+                $transactionId = null;
             } finally {
                 if (null !== $transactionId) {
                     Tinebase_TransactionManager::getInstance()->rollBack();
                 }
             }
-
             Tinebase_Lock::keepLocksAlive();
         }
 

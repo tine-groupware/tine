@@ -93,6 +93,7 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
             self::FLD_NAME_OPTION       => [
                 self::LABEL                 => 'Name', // _('Name')
                 self::TYPE                  => self::TYPE_FULLTEXT,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_MARKDOWN,
                 self::NULLABLE              => true,
                 self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
