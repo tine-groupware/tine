@@ -30,19 +30,19 @@ class EventManager_Frontend_RssFeed
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $tenf);
             }
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $terna);
             }
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_AccessDenied $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             }
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();

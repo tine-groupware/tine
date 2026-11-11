@@ -656,16 +656,16 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         $assertAclUsage = $this->assertPublicUsage();
         try {
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['success' => true]));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_AccessDenied $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
@@ -677,7 +677,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         $assertAclUsage = $this->assertPublicUsage();
         try {
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
 
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                 EventManager_Model_Event::class,
@@ -723,13 +723,13 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
             $response->getBody()->write(json_encode($eventsArray));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_AccessDenied $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
@@ -741,7 +741,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         $assertAclUsage = $this->assertPublicUsage();
         try {
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $event = $this->get($event_id);
             Tinebase_CustomField::getInstance()->resolveRecordCustomFields($event);
 
@@ -797,13 +797,13 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
             $response->getBody()->write(json_encode($eventArray));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_AccessDenied $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
@@ -862,14 +862,14 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                     try {
                         $decoded = JWT::decode($token, new \Firebase\JWT\Key($key, 'HS256'));
                     } catch (Exception $jwtException) {
-                        $response = new \Laminas\Diactoros\Response('php://memory', 400);
+                        $response = new \Laminas\Diactoros\Response('php://memory', 400, ['Content-Type' => 'application/json']);
                         $response->getBody()->write(json_encode(['error' => 'Invalid or expired token']));
                         return $response;
                     }
 
                     $email_registrant = $decoded->email ?? '';
                     if ($email_registrant === '') {
-                        $response = new \Laminas\Diactoros\Response('php://memory', 400);
+                        $response = new \Laminas\Diactoros\Response('php://memory', 400, ['Content-Type' => 'application/json']);
                         $response->getBody()->write(json_encode(['error' => 'Invalid or expired token']));
                         return $response;
                     }
@@ -966,7 +966,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                         $accountOwner[] = $contact->toArray();
                     }
 
-                    $response = new \Laminas\Diactoros\Response();
+                    $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
                     $response->getBody()->write(json_encode([
                         $accountOwner,
                         $registrations_data,
@@ -975,16 +975,16 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                     return $response;
                 }
             }
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode([]));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_AccessDenied $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
@@ -1037,7 +1037,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         $assertAclUsage = $this->assertPublicUsage();
         try {
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $images = EventManager_Controller_ImageMetadata::getInstance()->search();
             foreach ($images as $image) {
                 $image->image_vfs = EventManager_Controller_ImageMetadata::getImageUrl(
@@ -1054,13 +1054,13 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
             }
             $response->getBody()->write(json_encode($imagesArray));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_AccessDenied $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
@@ -1072,6 +1072,13 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         $assertAclUsage = $this->assertPublicUsage();
         try {
+            // NOTE: this is a public api - only serve images which are configured as event images
+            if (! is_string($imageId) || count(EventManager_Controller_ImageMetadata::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(EventManager_Model_ImageMetadata::class, [
+                    ['field' => EventManager_Model_ImageMetadata::FLD_NODE_ID, 'operator' => 'equals', 'value' => $imageId],
+                ]), null, false, true)) === 0) {
+                throw new Tinebase_Exception_NotFound('image not found');
+            }
             $image = Tinebase_Controller::getInstance()->getImage('Tinebase', $imageId, Tinebase_Model_Image::LOCATION_VFS_WATERMARK);
             if ($width != -1 && $height != -1) {
                 Tinebase_ImageHelper::resize($image, $width, $height, $ratiomode);
@@ -1079,13 +1086,13 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
             $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => $image->mime]);
             $response->getBody()->write($image->blob);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_AccessDenied $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
