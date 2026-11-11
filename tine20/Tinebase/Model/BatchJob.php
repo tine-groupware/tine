@@ -50,7 +50,7 @@ class Tinebase_Model_BatchJob extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => false,
         
-        self::EXPOSE_JSON_API           => true,
+        self::EXPOSE_JSON_API           => false, // for the time being we need to disable this until we have some sort of access list for batch jobs
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
