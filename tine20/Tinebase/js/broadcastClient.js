@@ -111,7 +111,7 @@ const init = async () => {
                     subscriptions = _.uniq(subscriptions.concat(Object.keys(win.popup.postal.subscriptions.recordchange) || []))
                 }
             });
-            if (topics.filter(value => subscriptions.indexOf(value) >= 0)) {
+            if (topics.some(value => subscriptions.indexOf(value) >= 0)) {
                 if (! await isOwnEvent(data)) {
                     handleEvent(data);
                 }
