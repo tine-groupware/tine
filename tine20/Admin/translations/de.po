@@ -100,6 +100,18 @@ msgstr "Import- und Export-Definitionen verwalten"
 msgid "Add and edit import and export definitions"
 msgstr "Hinzufügen, löschen und bearbeiten von Import- und Export-Definitionen"
 
+msgid "Manage scheduler tasks"
+msgstr ""
+
+msgid "Add and edit scheduler tasks."
+msgstr ""
+
+msgid "Manage logs"
+msgstr ""
+
+msgid "Add and delete application logs."
+msgstr ""
+
 msgid "View access log"
 msgstr "Zugriffsprotokoll ansehen"
 
@@ -318,57 +330,6 @@ msgstr "Gescheitert"
 msgid "success"
 msgstr "Erfolg"
 
-msgid "Groups"
-msgstr "Gruppen"
-
-msgid "Roles"
-msgstr "Rollen"
-
-msgid "Applications"
-msgstr "Anwendungen"
-
-msgid "Containers"
-msgstr "Container"
-
-msgid "Shared Tags"
-msgstr "Gemeinsame Tags"
-
-msgid "Custom Fields"
-msgstr "Zusatzfelder"
-
-msgid "Computers"
-msgstr "Computer"
-
-msgid "Log"
-msgstr "Log"
-
-msgid "Server Information"
-msgstr "Server Informationen"
-
-msgid "ActiveSync Devices"
-msgstr "ActiveSync Geräte"
-
-msgid "Email Accounts"
-msgstr "E-Mail Konten"
-
-msgid "Matrix Accounts"
-msgstr ""
-
-msgid "Import Export Definitions"
-msgstr "Import/Export-Definitionen"
-
-msgid "Admin"
-msgstr "Admin"
-
-msgid "Refresh"
-msgstr "Aktualisieren"
-
-msgid "Disabled"
-msgstr "Deaktiviert"
-
-msgid "Feature is disabled by configuration."
-msgstr "Funktion ist durch die Konfiguration deaktiviert."
-
 msgid "Default Addressbook for new contacts and groups"
 msgstr "Standard-Adressbuch für neue Kontakte und Gruppen"
 
@@ -392,6 +353,9 @@ msgstr "{0} Einstellungen"
 
 msgid "Search:"
 msgstr "Suche:"
+
+msgid "Disabled"
+msgstr "Deaktiviert"
 
 msgid "Enabled"
 msgstr "Aktiviert"
@@ -617,9 +581,6 @@ msgstr "Nur Systembenutzer*innen in der zugehörigen Addressbuch-Gruppe erlauben
 msgid "Group Members"
 msgstr "Gruppenmitglieder"
 
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
-
 msgid "Confirm"
 msgstr "Bestätigen"
 
@@ -664,6 +625,54 @@ msgid "ImportExportDefinition"
 msgid_plural "ImportExportDefinitions"
 msgstr[0] "ImportExportDefinition"
 msgstr[1] "ImportExportDefinitionen"
+
+msgid "Groups"
+msgstr "Gruppen"
+
+msgid "Roles"
+msgstr "Rollen"
+
+msgid "Applications"
+msgstr "Anwendungen"
+
+msgid "Containers"
+msgstr "Container"
+
+msgid "Shared Tags"
+msgstr "Gemeinsame Tags"
+
+msgid "Custom Fields"
+msgstr "Zusatzfelder"
+
+msgid "Computers"
+msgstr "Computer"
+
+msgid "Log"
+msgstr "Log"
+
+msgid "Server Information"
+msgstr "Server Informationen"
+
+msgid "ActiveSync Devices"
+msgstr "ActiveSync Geräte"
+
+msgid "Email Accounts"
+msgstr "E-Mail Konten"
+
+msgid "Matrix Accounts"
+msgstr ""
+
+msgid "Import Export Definitions"
+msgstr "Import/Export-Definitionen"
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "Refresh"
+msgstr "Aktualisieren"
+
+msgid "Feature is disabled by configuration."
+msgstr "Funktion ist durch die Konfiguration deaktiviert."
 
 msgid "Configs"
 msgstr "Konfigurationen"
@@ -811,6 +820,28 @@ msgstr "Aktualisiere Tag"
 msgid "Could not save tag ({0})"
 msgstr "Konnte Tag ({0}) nicht speichern"
 
+#, python-brace-format
+msgid "restricted to {0} model"
+msgid_plural "restricted to {0} models"
+msgstr[0] "eingeschränkt auf {0} Datentyp"
+msgstr[1] "eingeschränkt auf {0} Datentypen"
+
+msgid "Restrict to Models"
+msgstr "Auf Datentypen einschränken"
+
+msgid "The tag can be used in the checked applications. Select an application to restrict the tag to some of its models."
+msgstr "Der Tag kann in den angehakten Anwendungen verwendet werden. Wählen Sie eine Anwendung, um den Tag auf einzelne ihrer Datentypen einzuschränken."
+
+#, python-brace-format
+msgid "Restrict {0} to Models"
+msgstr "{0} auf Datentypen einschränken"
+
+msgid "Without selection the tag can be used for all models of the application."
+msgstr "Ohne Auswahl kann der Tag für alle Datentypen der Anwendung verwendet werden."
+
+msgid "The application has no models with tags."
+msgstr "Die Anwendung hat keine Datentypen mit Tags."
+
 msgid "Allowed Contexts"
 msgstr "Erlaubte Kontexte"
 
@@ -875,9 +906,6 @@ msgstr ""
 
 msgid "Templates"
 msgstr ""
-
-msgid "Allowed Domains"
-msgstr "Erlaubte Domänen"
 
 msgid "Special characters are not allowed in login name."
 msgstr "Der Benutzer*innenname darf keine Sonderzeichen enthalten."
@@ -1084,6 +1112,9 @@ msgstr "SMTP"
 msgid "Would you like to move the contact to this Addressbook?"
 msgstr "Möchten Sie den Kontakt in dieses Adressbuch verschieben?"
 
+msgid "Contact"
+msgstr ""
+
 msgid "The selected contact will be updated"
 msgstr "Der ausgewählte Kontakt wird aktualisiert"
 
@@ -1146,3 +1177,9 @@ msgstr "Aufgaben Typ"
 
 msgid "Emails"
 msgstr "E-Mails"
+
+#~ msgid "Domain is not allowed. Check your SMTP domain configuration."
+#~ msgstr "Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
+
+#~ msgid "Allowed Domains"
+#~ msgstr "Erlaubte Domänen"

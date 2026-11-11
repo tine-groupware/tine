@@ -32,6 +32,11 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
      * @cfg {Bool} onlyUsableTags true to find only usable flags for the user (default: true)
      */
     onlyUsableTags: false,
+
+    /**
+     * @cfg {Tine.Tinebase.data.Record} taggedModel (optional) model the tags are for (tags restricted to other models are skipped)
+     */
+    taggedModel: null,
     
     emptyText: null,
     mode: 'remote',
@@ -139,6 +144,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         var filter = {
             name: (qevent.query && qevent.query != '') ? '%' + qevent.query + '%' : '',
             application: this.appName ?? '',
+            model: Tine.Tinebase.data.RecordMgr.get(this.taggedModel)?.getPhpClassName?.() ?? '',
             grant: (this.onlyUsableTags) ? 'use' : 'view' 
         };
         
@@ -187,27 +193,12 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
      */
     initTemplate: function() {
         this.tpl = new Ext.XTemplate(
-            '<tpl for=".">', 
-                '<div class="x-combo-list-item">',
-                    '<div class="tb-grid-tags dark-reverse" style="background-color:{values.color};">&#160;</div>',
-                    '<div class="x-widget-tag-tagitem-text" ext:qtip="', 
-                        '{[this.encode(values.name)]}', 
-                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
-                        '</i>&nbsp;[{occurrence}]',
-                        '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
-                        
-                        '&nbsp;{[this.encode(values.name)]}',
-                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
-                    '</div>',
-                '</div>', 
+            '<tpl for=".">',
+                '<div class="x-combo-list-item tw-tag-combo-item">{[this.label(values)]}</div>',
             '</tpl>',
             {
-                encode: function(value) {
-                     if (value) {
-                        return Tine.Tinebase.common.doubleEncode(value);
-                    } else {
-                        return '';
-                    }
+                label: function(values) {
+                    return Tine.widgets.tags.tagStyle.label(values);
                 }
             }
         );

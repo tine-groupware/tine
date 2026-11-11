@@ -133,6 +133,10 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
                 //'type'                          => '!?',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
+            'context_models'                => [
+                //'type'                          => '!?',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
         ],
     ];
     
@@ -189,7 +193,7 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
         
             } elseif ($implicitAddMissingTags === true) {
                 // No tag found, lets create a personal tag
-                $resolvedTag = Tinebase_Tags::GetInstance()->createTag(new Tinebase_Model_Tag(array(
+                $resolvedTag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
                     'type'        => Tinebase_Model_Tag::TYPE_PERSONAL,
                     'name'        => $tagName
                 )));

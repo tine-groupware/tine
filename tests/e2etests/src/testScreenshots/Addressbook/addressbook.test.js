@@ -135,17 +135,7 @@ describe('Contacts', () => {
     describe('ContextMenu', () => {
         let felamimailIcon;
 
-        test('test Tags', async () => {
-            await new Promise(r => setTimeout(r, 1000));
-            await expectPuppeteer(page).toClick('.x-grid3-row.x-grid3-row-first', {button: 'right'});
-            await expectPuppeteer(page).toClick('.action_tag.x-menu-item-icon');
-            await expectPuppeteer(page).toClick('.x-window .x-form-arrow-trigger');
-            await page.waitForSelector('.x-widget-tag-tagitem-text');
-            await page.hover('.x-widget-tag-tagitem-text');
-            await lib.makeScreenshot(page,{path: 'screenshots/Adressbuch/18_adressbuch_kontakten_tags_zuweisen.png'});
-            await page.keyboard.press('Escape');
-            await page.keyboard.press('Escape');
-        });
+        // NOTE: tags in the context menu (18_adressbuch_kontakten_tags_zuweisen.png) see testScreenshots/Tinebase/tags.test.js
 
         // @todo error Node is either not visible or not an HTMLElement
 

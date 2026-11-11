@@ -69,3 +69,22 @@ Tine.Tinebase.appMgr.isInitialised('UserManual').then(() => {
 
     Ext.ux.ItemRegistry.registerItem('Tinebase-MainContextMenu', Tine.UserManual.DebugItem, 10200);
 });
+/**
+ * help item of the tags menu (Tine.widgets.tags.TagsMenu)
+ * NOTE: the tags menu is not part of the component tree -> fixed context
+ */
+Tine.UserManual.TagsMenuHelpItem = function() {
+    return new Ext.Action({
+        hidden: !Tine.UserManual.registry,
+        text: i18n._('Help'),
+        iconCls: 'UserManualIconCls',
+        handler: function () {
+            Tine.UserManual.UserManualDialog.openWindow({
+                context: '/Tinebase/TagsMenu'
+            });
+        }
+    });
+};
+
+Ext.ux.ItemRegistry.registerItem('Tinebase-TagsMenu', function() { return new Ext.menu.Separator({ hidden: !Tine.UserManual.registry }); }, 10000);
+Ext.ux.ItemRegistry.registerItem('Tinebase-TagsMenu', Tine.UserManual.TagsMenuHelpItem, 10100);

@@ -55,11 +55,23 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
      * record class of records to filter for (required)
      */
     recordClass: null,
+
+    /**
+     * @cfg {String} mode remote|local
+     * remote: tags get attached to the selected records on the server
+     * local: onLocalOk gets called with the selected tags
+     */
+    mode: 'remote',
+
+    /**
+     * @cfg {Function} onLocalOk (mode local) called with selected tags data
+     */
+    onLocalOk: Ext.emptyFn,
     
     getFormItems: function() {
         this.gridPanel = new Tine.widgets.grid.PickerGridPanel({
             height: 'auto',
-            searchComboConfig: {app: this.app},
+            searchComboConfig: {app: this.app, taggedModel: this.recordClass},
             recordClass: Tine.Tinebase.Model.Tag,
             store: new Ext.data.SimpleStore({
                 fields: Tine.Tinebase.Model.Tag
@@ -127,7 +139,14 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
             this.win.close();
             return;
         }
+
+        if (this.mode === 'local') {
+            this.win.close();
+            this.onLocalOk(tags);
+            return;
+        }
         
+        this.attachedTags = tags;
         this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: i18n._('Attaching Tag')});
         this.loadMask.show();
 
@@ -154,7 +173,7 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     },
     
     onSuccess: function() {
-        this.updateHandler.call(this.updateHandlerScope || this);
+        this.updateHandler.call(this.updateHandlerScope || this, this.attachedTags);
         this.loadMask.hide();
         this.win.close();
     }

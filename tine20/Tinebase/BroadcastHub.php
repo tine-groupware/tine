@@ -46,9 +46,20 @@ class Tinebase_BroadcastHub
         if ($tam->hasOpenTransactions() === false) {
             $this->push($verb, $model, $recordId, $containerId);
         } else {
-            $tam->registerAfterCommitCallback(
-                function() use($verb, $model, $recordId, $containerId) {
-                    Tinebase_BroadcastHub::getInstance()->push($verb, $model, $recordId, $containerId);
+            // the same message is pushed once per transaction only
+            $key = $verb . '|' . $model . '|' . $recordId . '|' . $containerId;
+            if (isset($this->_pendingAfterCommit[$key])) {
+                return;
+            }
+            $this->_pendingAfterCommit[$key] = true;
+
+            $tam->registerAfterCommitCallback(function () use ($verb, $model, $recordId, $containerId, $key) {
+                $bchub = Tinebase_BroadcastHub::getInstance();
+                unset($bchub->_pendingAfterCommit[$key]);
+                $bchub->push($verb, $model, $recordId, $containerId);
+            });
+            $tam->registerOnRollbackCallback(function () use ($key) {
+                unset(Tinebase_BroadcastHub::getInstance()->_pendingAfterCommit[$key]);
             });
         }
     }
@@ -57,6 +68,7 @@ class Tinebase_BroadcastHub
     protected $_isActive;
     protected $_redis;
     protected $_pubSubName;
+    protected array $_pendingAfterCommit = [];
 
     /**
      * the constructor

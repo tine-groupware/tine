@@ -34,7 +34,6 @@ require('./ExceptionHandler');
 require('./PagingToolbar');
 require('./EventDetailsPanel');
 require('./MainScreenCenterPanel');
-require('./EventContextTagsItem');
 require('./EventContextAttendeesItem');
 require('./WestPanel');
 require('./EventEditDialog');
@@ -61,3 +60,43 @@ require('./floorplan/src/openViewBtn');
 require('./ViewInCalendarDialog');
 require('./AttendeeCombo');
 require('./SyncContainerConfigEditDialog');
+
+/**
+ * generic tags menu in event context menu, changes are saved when the menu gets closed
+ */
+Ext.ux.ItemRegistry.registerItem('Calendar-MainScreenPanel-ContextMenu', function(config) {
+    const app = Tine.Tinebase.appMgr.get('Calendar');
+    const centerPanel = app.getMainScreen().getCenterPanel();
+    const event = config.event;
+    let changed = false;
+    let item = null;
+
+    const save = () => {
+        if (!changed) return;
+        changed = false;
+        centerPanel.getCalendarPanel(centerPanel.activeView).getView().editing = event;
+        centerPanel.onUpdateEvent(event, false, 'update');
+    };
+
+    item = new Tine.widgets.tags.TagsMenuItem({
+        hidden: centerPanel.isActiveView('Grid') || !(event && event.get('editGrant')
+            && app.featureEnabled('featureExtendedEventContextActions')),
+        requiredGrant: null,
+        menuConfig: {
+            recordClass: Tine.Calendar.Model.Event,
+            mode: 'local',
+            getRecords: () => event ? [event] : [],
+            onLocalChange: () => {
+                changed = true;
+                // e.g. tags added via dialog after menu got closed
+                if (!item.ownerCt?.isVisible()) save();
+            }
+        },
+        listeners: {
+            render: () => item.ownerCt.on('hide', save)
+        }
+    });
+
+    return item;
+}, 130);
+

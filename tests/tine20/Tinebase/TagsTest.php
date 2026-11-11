@@ -318,6 +318,85 @@ class Tinebase_TagsTest extends TestCase
         $this->assertEquals(2, $tags->count());
     }
 
+    /**
+     * tags can be restricted to models of an application
+     */
+    public function testSearchTagsForModel()
+    {
+        $salesAppId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
+        $crmAppId = Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId();
+
+        $appTag = $this->_createSharedTag(['name' => 'modelTest app'], [$salesAppId]);
+        $offerTag = $this->_createSharedTag(['name' => 'modelTest offer'], [$salesAppId]);
+        $this->_instance->purgeContexts($offerTag->getId());
+        $this->_instance->setContexts([$crmAppId], $offerTag->getId(), [Sales_Model_DocumentPosition_Offer::class]);
+        $anyTag = $this->_createSharedTag(['name' => 'modelTest any']);
+        $this->_instance->purgeContexts($anyTag->getId());
+        $this->_instance->setContexts(['any'], $anyTag->getId(), [Sales_Model_DocumentPosition_Invoice::class]);
+
+        $this->assertEqualsCanonicalizing([$crmAppId, $salesAppId], $this->_instance->getContexts($offerTag->getId()));
+        $this->assertSame([Sales_Model_DocumentPosition_Offer::class], $this->_instance->getContextModels($offerTag->getId()));
+        $this->assertSame([], $this->_instance->getContextModels($appTag->getId()));
+        $this->assertSame([Sales_Model_DocumentPosition_Invoice::class], $this->_instance->getContextModels($anyTag->getId()));
+
+        $search = function (array $filter): array {
+            $names = $this->_instance->searchTags(new Tinebase_Model_TagFilter(array_merge($filter, ['name' => 'modelTest'])))
+                ->name;
+            sort($names);
+            return $names;
+        };
+
+        // app search without model finds all tags of the app
+        $this->assertSame(['modelTest any', 'modelTest app', 'modelTest offer'], $search(['application' => 'Sales']));
+        // 'any' with a model restricts the app of the model
+        $this->assertSame(['modelTest app', 'modelTest offer'],
+            $search(['model' => Sales_Model_DocumentPosition_Offer::class]));
+        $this->assertSame(['modelTest any', 'modelTest app'],
+            $search(['model' => Sales_Model_DocumentPosition_Invoice::class]));
+        $this->assertSame(['modelTest app'], $search(['model' => Sales_Model_Product::class]));
+        $this->assertSame(['modelTest any', 'modelTest offer'], $search(['model' => Crm_Model_Lead::class]));
+        $this->assertSame(['modelTest any'], $search(['application' => 'Addressbook']));
+        // empty application (e.g. from tag combo without app)
+        $this->assertSame(['modelTest any', 'modelTest offer'], $search(['application' => '', 'model' => Crm_Model_Lead::class]));
+    }
+
+    public function testGetUsableTags()
+    {
+        $salesAppId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
+
+        $offerTag = $this->_createSharedTag(['name' => 'usableTest offer'], [$salesAppId]);
+        $this->_instance->purgeContexts($offerTag->getId());
+        $this->_instance->setContexts([$salesAppId], $offerTag->getId(), [Sales_Model_DocumentPosition_Offer::class]);
+        $anyTag = $this->_createSharedTag(['name' => 'usableTest any']);
+        $deletedTag = $this->_createSharedTag(['name' => 'usableTest deleted']);
+        $this->_instance->deleteTags($deletedTag->getId());
+
+        $tags = [];
+        foreach ($this->_instance->getUsableTags() as $tag) {
+            $tags[$tag['name']] = $tag;
+        }
+
+        $this->assertArrayNotHasKey('usableTest deleted', $tags, 'deleted tags are not usable');
+        $this->assertSame([['application_id' => '0', 'model' => '']], $tags['usableTest any']['usage_contexts']);
+        $this->assertSame(
+            [['application_id' => (string)$salesAppId, 'model' => Sales_Model_DocumentPosition_Offer::class]],
+            $tags['usableTest offer']['usage_contexts']
+        );
+        $this->assertSame($offerTag->color, $tags['usableTest offer']['color']);
+
+        $json = (new Tinebase_Frontend_Json())->getUsableTags();
+        $this->assertSame(count($json['results']), $json['totalcount']);
+        $this->assertContains($anyTag->getId(), array_column($json['results'], 'id'));
+        $this->assertNotContains($deletedTag->getId(), array_column($json['results'], 'id'));
+    }
+
+    public function testSetContextsInvalidModel()
+    {
+        $tag = $this->_createSharedTag(['name' => 'modelTest invalid']);
+        $this->expectException(Tinebase_Exception_InvalidArgument::class);
+        $this->_instance->setContexts(['any'], $tag->getId(), ['Sales_Model_NotExisting']);
+    }
+
     public function testUpdateTagWithoutRights()
     {
         $sharedTag = $this->_createSharedTag(['name' => 'test'], null, 'sclever');

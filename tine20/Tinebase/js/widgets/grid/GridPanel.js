@@ -250,6 +250,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     listenMessageBus: true,
 
     /**
+     * @cfg {Bool} tagsRowTint
+     * tint rows with the colors of their tags (see Tine.widgets.grid.TagsRowTintPlugin)
+     */
+    tagsRowTint: false,
+
+    /**
      * @cfg {Boolean} hasFavoritesPanel
      */
     hasFavoritesPanel: true,
@@ -1103,7 +1109,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             hidden:         ! this.recordClass.getField('tags'),
             selectionModel: this.grid.getSelectionModel(),
             recordClass:    this.recordClass,
-            updateHandler:  this.loadGridData.createDelegate(this),
+            updateHandler:  () => this.loadGridData(),
             app:            this.app
         });
 
@@ -1114,6 +1120,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             updateHandler:  this.loadGridData.createDelegate(this),
             app:            this.app
         });
+
+        if (this.recordClass.getField('tags')) {
+            this.action_tagsMenu = new Tine.widgets.tags.TagsMenuItem({
+                menuConfig: {
+                    recordClass: this.recordClass,
+                    selectionModel: this.grid.getSelectionModel(),
+                    mode: 'remote',
+                    onRemoteUpdate: this.onTagsUpdated.createDelegate(this)
+                }
+            });
+        }
 
         this.action_resolveDuplicates = new Ext.Action({
             requiredGrant: null,
@@ -1141,7 +1158,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.action_tagsMassAttach,
             this.action_tagsMassDetach,
             this.action_resolveDuplicates
-        ]);
+        ].concat(this.action_tagsMenu || []));
 
         // init actionToolbar (needed for correct fitertoolbar init atm -> fixme)
         this.getActionToolbar();
@@ -2093,6 +2110,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // activate grid header menu for column selection
         this.gridConfig.plugins = this.gridConfig.plugins ? this.gridConfig.plugins : [];
         this.gridConfig.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
+        if (this.tagsRowTint && this.recordClass.hasField('tags')) {
+            this.gridConfig.plugins.push({ ptype: 'tw-tagsrowtint' });
+        }
 
         const configs = Tine.widgets.grid.ColumnManager.getResolvedColumnsConfig(
             this.gridConfig?.cm?.config ?? this.gridConfig?.columns,
@@ -2125,6 +2145,43 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.grid.on('headerclick', this.onHeaderClick, this);
 
         this.grid.on('rowcontextmenu', this.onRowContextMenu, this);
+        this.grid.on('cellclick', this.onCellClick, this);
+    },
+
+    /**
+     * click on tags cell opens tags menu
+     */
+    onCellClick: function(grid, row, col, e) {
+        if (!this.action_tagsMenu || this.action_tagsMassAttach.hidden
+            || grid.getColumnModel().getDataIndex(col) !== 'tags' || e.ctrlKey || e.shiftKey) {
+            return;
+        }
+
+        const sm = grid.getSelectionModel();
+        if (!sm.isSelected(row)) {
+            sm.selectRow(row);
+        }
+        // NOTE: tags menu item is disabled via actionUpdater if user has no edit grant
+        this.actionUpdater.updateActions(sm, this.getFilteredContainers());
+        if (this.action_tagsMenu.disabled) {
+            return;
+        }
+
+        if (!this.tagsMenu) {
+            this.tagsMenu = new Tine.widgets.tags.TagsMenu(Object.assign({}, this.action_tagsMenu.menuConfig));
+        }
+        this.tagsMenu.show(grid.getView().getCell(row, col), 'tl-bl?');
+    },
+
+    /**
+     * tags got updated via tags menu
+     */
+    onTagsUpdated: function(records, options) {
+        if (options?.reload || this.grid.getSelectionModel().isFilterSelect) {
+            this.loadGridData();
+        } else if (this.detailsPanel && this.updateOnSelectionChange) {
+            this.detailsPanel.onDetailsUpdate(this.grid.getSelectionModel());
+        }
     },
 
     getDragDropText: function() {
@@ -2420,8 +2477,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 items.push('-', this.actions_export);
             }
 
-            if (this.action_tagsMassAttach && ! this.action_tagsMassAttach.hidden) {
-                items.push('-', this.action_tagsMassAttach, this.action_tagsMassDetach);
+            if (this.action_tagsMenu && ! this.action_tagsMassAttach.hidden) {
+                items.push('-', this.action_tagsMenu);
             }
 
             // lookup additional items
@@ -2789,7 +2846,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         */
 
         // fix selection of one record if shift/ctrl key is not pressed any longer
-        if (e.button === 0 && !e.shiftKey && !e.ctrlKey && !e.getTarget('.x-grid3-row-checker')) {
+        // NOTE: click on tags cell of a selected row opens tags menu for the whole selection
+        const isTagsMenuClick = this.action_tagsMenu && sm.isSelected(row) && e.getTarget('.x-grid3-td-tags');
+        if (e.button === 0 && !e.shiftKey && !e.ctrlKey && !e.getTarget('.x-grid3-row-checker') && !isTagsMenuClick) {
             if (sm.getCount() === 1 && sm.isSelected(row)) {
                 // return;
             } else {

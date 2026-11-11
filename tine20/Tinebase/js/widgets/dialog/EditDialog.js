@@ -628,6 +628,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.recordClass.hasField('tags')) {
             items.push(new Tine.widgets.tags.TagPanel({
                 app: this.appName,
+                recordClass: this.recordClass,
                 border: false,
                 // bodyStyle: 'border:1px solid #B5B8C8;'
             }));

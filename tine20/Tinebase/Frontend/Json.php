@@ -533,6 +533,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * get all tags the current user may use, with their contexts (client side tags cache)
+     *
+     * @return array
+     */
+    public function getUsableTags(): array
+    {
+        $tags = Tinebase_Tags::getInstance()->getUsableTags();
+
+        return [
+            'results'    => $tags,
+            'totalcount' => count($tags),
+        ];
+    }
+
+    /**
     * search tags by foreign filter
     *
     * @param  array $filterData

@@ -390,7 +390,7 @@ Den Reiter Historie finden Sie immer als letzten in der Objekt-Bearbeitungsmaske
 
 Da die Anzahl dieser Datensätze sehr schnell eine große Zahl erreichen kann, ist oberhalb dieser Tabelle eine Suchfilterfunktion eingebaut, die hier zwei Suchbegriffe enthält: Schnellsuche, für die Suche nach einer bestimmten Zeichenkette und Zeit, für die Eingrenzung eines Eintrages auf einen bestimmten Zeitabschnitt. Additiv funktioniert die Suche nach den gleichen Prinzipien, wie wir Sie weiter oben in diesem Kapitel bereits besprochen haben, d.h. Sie können Suchalgorithmen über den +-Knopf miteinander verbinden. Und über den --Knopf löschen Sie einen Suchalgorithmus wieder.
 
-### Tags
+### Tags { #tags data-ctx="/Tinebase/TagsPanel" }
 
 <!--Tags-->
 Kommen wir nun zu den Tags. {{ branding.title }} unterscheidet zwischen persönlichen und systemübergreifend gültigen, sogenannten gemeinsamen Tags. Wie Sie letztere vergeben, besprechen wir in [Administration - Gemeinsame Tags](oa_Admin.md/#gemeinsame-tags). Persönliche Tags hingegen können Sie in jeder Objekt-Bearbeitungsmaske, unten rechts mit dem kleinen Pluszeichen, neben dem Pulldown Tag Name, anlegen:
@@ -403,7 +403,7 @@ Kommen wir nun zu den Tags. {{ branding.title }} unterscheidet zwischen persönl
 ![Abbildung: Das Eingabefeld für einen persönlichen Tag]({{ img_url_mobile }}StandardBedienhinweise/19_standardbedienhinweise_hr_eingabemaske_neu_tag_light.png#only-light){.mobile-img}
 ![Abbildung: Das Eingabefeld für einen persönlichen Tag]({{ img_url_mobile }}StandardBedienhinweise/19_standardbedienhinweise_hr_eingabemaske_neu_tag_dark.png#only-dark){.mobile-img}
 
-Mit dem Anlegen eines solchen persönlichen Tags ist dann automatisch das entsprechende Datenbankobjekt auch markiert; darüber hinaus steht Ihnen der angelegte Tag auch für alle anderen beliebigen Datenbankobjekte jeder Teilanwendung zur Verfügung. Vorhandene Tags (sowohl private als auch gemeinsame) ordnen Sie dem Objekt zu, indem Sie das Pulldown Tag Name anklicken:
+Mit dem Anlegen eines solchen persönlichen Tags ist dann automatisch das entsprechende Datenbankobjekt auch markiert; darüber hinaus steht Ihnen der angelegte Tag auch für alle anderen beliebigen Datenbankobjekte jeder Teilanwendung zur Verfügung. Vorhandene Tags (sowohl persönliche als auch gemeinsame) ordnen Sie dem Objekt zu, indem Sie das Pulldown Tag Name anklicken:
 
 <!-- SCREENSHOT -->
 ![Abbildung: Die Auswahl bestehender Tags]({{ img_url_desktop }}StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl_light.png#only-light){.desktop-img}
@@ -412,3 +412,78 @@ Mit dem Anlegen eines solchen persönlichen Tags ist dann automatisch das entspr
 ![Abbildung: Die Auswahl bestehender Tags]({{ img_url_tablet }}StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Auswahl bestehender Tags]({{ img_url_mobile }}StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl_light.png#only-light){.mobile-img}
 ![Abbildung: Die Auswahl bestehender Tags]({{ img_url_mobile }}StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl_dark.png#only-dark){.mobile-img}
+
+Angepinnte Tags (siehe [Tags anpinnen](#tags-anpinnen)), die der Datensatz noch nicht hat, werden unter den Tags des Datensatzes blass angezeigt. Ein Klick darauf ordnet den Tag dem Datensatz zu.
+
+#### Tags in der Tabelle { #tags-tabelle }
+
+<!--Tags,Tabelle-->
+In den Tabellen der Anwendungen zeigt die Spalte Tags die Tags eines Datensatzes als kleine farbige Symbole. Fahren Sie mit der Maus darüber, sehen Sie Name und Beschreibung der Tags. Hat ein Datensatz viele Tags, werden die ersten angezeigt und dahinter die Anzahl der weiteren (z.B. +2).
+
+Ein Klick in die Tags-Zelle öffnet das Tags-Menü für die ausgewählten Datensätze (siehe [Tags über das Kontextmenü](#tags-menu)). Ist die Spalte ausgeblendet, können Sie sie über das Tabellensymbol <img src="{{icon_url}}icon_column.svg" alt="drawing" width="16"/> rechts im Tabellenkopf einblenden.
+
+<!-- SCREENSHOT -->
+![Abbildung: Die Spalte Tags in der Tabelle des Adressbuchs]({{ img_url_desktop }}StandardBedienhinweise/111_standardbedienhinweise_tags_tabelle_light.png#only-light){.desktop-img}
+![Abbildung: Die Spalte Tags in der Tabelle des Adressbuchs]({{ img_url_desktop }}StandardBedienhinweise/111_standardbedienhinweise_tags_tabelle_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Spalte Tags in der Tabelle des Adressbuchs]({{ img_url_tablet }}StandardBedienhinweise/111_standardbedienhinweise_tags_tabelle_light.png#only-light){.tablet-img}
+![Abbildung: Die Spalte Tags in der Tabelle des Adressbuchs]({{ img_url_tablet }}StandardBedienhinweise/111_standardbedienhinweise_tags_tabelle_dark.png#only-dark){.tablet-img}
+![Abbildung: Die Spalte Tags in der Tabelle des Adressbuchs]({{ img_url_mobile }}StandardBedienhinweise/111_standardbedienhinweise_tags_tabelle_light.png#only-light){.mobile-img}
+![Abbildung: Die Spalte Tags in der Tabelle des Adressbuchs]({{ img_url_mobile }}StandardBedienhinweise/111_standardbedienhinweise_tags_tabelle_dark.png#only-dark){.mobile-img}
+
+#### Tags über das Kontextmenü { #tags-menu data-ctx="/Tinebase/TagsMenu" }
+
+<!--Tags,Kontextmenü,Schnellauswahl-->
+Am schnellsten vergeben Sie Tags über das Kontextmenü der Tabelle. Markieren Sie einen oder mehrere Datensätze und öffnen Sie mit einem Rechtsklick das Kontextmenü:
+
+* In der Zeile Tags stehen Ihre angepinnten und zuletzt verwendeten Tags als Symbole. Ein Klick auf ein Symbol vergibt den Tag sofort bzw. entfernt ihn wieder. Ein voll gefärbtes Symbol bedeutet: Alle markierten Datensätze haben diesen Tag. Ein blasses Symbol bedeutet: Nur einige oder keiner der Datensätze hat den Tag.
+* Zeigen Sie mit der Maus auf Tags, öffnet sich das Tags-Menü. Es enthält die angepinnten Tags, die Tags der markierten Datensätze und die zuletzt verwendeten Tags.
+
+Die Checkbox vor einem Tag zeigt, welche der markierten Datensätze den Tag haben:
+
+* Haken: alle markierten Datensätze
+* Minus: nur einige; die Anzahl steht hinter dem Tag-Namen, z.B. 1/2
+* leer: keiner
+
+Ein Klick auf den Tag schaltet ihn um: Haben nicht alle markierten Datensätze den Tag, erhalten ihn alle. Haben ihn bereits alle, wird er bei allen entfernt. In den Tabellen des Hauptfensters wird die Änderung sofort gespeichert. In Tabellen innerhalb eines Bearbeitungsdialogs, z.B. den Positionen eines Angebots, wird sie erst mit dem Datensatz gespeichert.
+
+<!-- SCREENSHOT -->
+![Abbildung: Das Tags-Menü im Kontextmenü der Tabelle]({{ img_url_desktop }}StandardBedienhinweise/112_standardbedienhinweise_tags_kontextmenue_light.png#only-light){.desktop-img}
+![Abbildung: Das Tags-Menü im Kontextmenü der Tabelle]({{ img_url_desktop }}StandardBedienhinweise/112_standardbedienhinweise_tags_kontextmenue_dark.png#only-dark){.desktop-img}
+![Abbildung: Das Tags-Menü im Kontextmenü der Tabelle]({{ img_url_tablet }}StandardBedienhinweise/112_standardbedienhinweise_tags_kontextmenue_light.png#only-light){.tablet-img}
+![Abbildung: Das Tags-Menü im Kontextmenü der Tabelle]({{ img_url_tablet }}StandardBedienhinweise/112_standardbedienhinweise_tags_kontextmenue_dark.png#only-dark){.tablet-img}
+![Abbildung: Das Tags-Menü im Kontextmenü der Tabelle]({{ img_url_mobile }}StandardBedienhinweise/112_standardbedienhinweise_tags_kontextmenue_light.png#only-light){.mobile-img}
+![Abbildung: Das Tags-Menü im Kontextmenü der Tabelle]({{ img_url_mobile }}StandardBedienhinweise/112_standardbedienhinweise_tags_kontextmenue_dark.png#only-dark){.mobile-img}
+
+Unter den Tags finden Sie:
+
+* Tags hinzufügen... öffnet einen Dialog, in dem Sie mehrere Tags auf einmal auswählen und auch neue persönliche Tags anlegen können.
+* Tag(s) entfernen... öffnet einen Dialog, in dem Sie die zu entfernenden Tags über Checkbuttons auswählen.
+* Hilfe öffnet diesen Abschnitt des Handbuchs.
+
+<!-- SCREENSHOT -->
+![Abbildung: Mehrere Tags auf einmal hinzufügen]({{ img_url_desktop }}StandardBedienhinweise/113_standardbedienhinweise_tags_hinzufuegen_light.png#only-light){.desktop-img}
+![Abbildung: Mehrere Tags auf einmal hinzufügen]({{ img_url_desktop }}StandardBedienhinweise/113_standardbedienhinweise_tags_hinzufuegen_dark.png#only-dark){.desktop-img}
+![Abbildung: Mehrere Tags auf einmal hinzufügen]({{ img_url_tablet }}StandardBedienhinweise/113_standardbedienhinweise_tags_hinzufuegen_light.png#only-light){.tablet-img}
+![Abbildung: Mehrere Tags auf einmal hinzufügen]({{ img_url_tablet }}StandardBedienhinweise/113_standardbedienhinweise_tags_hinzufuegen_dark.png#only-dark){.tablet-img}
+![Abbildung: Mehrere Tags auf einmal hinzufügen]({{ img_url_mobile }}StandardBedienhinweise/113_standardbedienhinweise_tags_hinzufuegen_light.png#only-light){.mobile-img}
+![Abbildung: Mehrere Tags auf einmal hinzufügen]({{ img_url_mobile }}StandardBedienhinweise/113_standardbedienhinweise_tags_hinzufuegen_dark.png#only-dark){.mobile-img}
+
+!!! note "Hinweis"
+    Haben Sie über n ausgewählt die Option Alle Seiten auswählen verwendet, kann das Tags-Menü nicht anzeigen, welche Datensätze einen Tag haben. Ein Klick auf einen Tag vergibt ihn dann an alle ausgewählten Datensätze.
+
+#### Tags anpinnen { #tags-anpinnen }
+
+<!--Tags,anpinnen-->
+Tags, die Sie häufig brauchen, können Sie anpinnen. Klicken Sie dazu im Tags-Menü auf die Stecknadel rechts neben dem Tag. Angepinnte Tags stehen immer oben im Tags-Menü und in der Zeile Tags des Kontextmenüs. Ein weiterer Klick auf die Stecknadel löst den Tag wieder.
+
+Angepinnte Tags merkt sich {{ branding.title }} für jede Art von Datensatz getrennt, also z.B. für Kontakte anders als für Angebotspositionen. Zuletzt verwendete Tags kommen automatisch dazu, ohne dass Sie sie anpinnen müssen.
+
+#### Welche Tags angeboten werden { #tags-angebot }
+
+<!--Tags,Rechte,Kontexte-->
+Angeboten werden nur Tags, die Sie verwenden dürfen und die für die jeweilige Art von Datensatz freigegeben sind. Ein Administrator kann gemeinsame Tags auf bestimmte Anwendungen oder Arten von Datensätzen beschränken (siehe [Administration - Gemeinsame Tags](oa_Admin.md/#gemeinsame-tags)). Wird ein Tag gelöscht, verschwindet er auch aus Ihren angepinnten und zuletzt verwendeten Tags. Änderungen an gemeinsamen Tags durch andere sehen Sie, ohne {{ branding.title }} neu laden zu müssen.
+
+#### Farbig markierte Zeilen { #tags-zeilenfarbe }
+
+<!--Tags,Farbe-->
+In einigen Tabellen, z.B. bei den Positionen von Angeboten und anderen Belegen in Sales, werden die Zeilen wie mit einem Textmarker in den Farben ihrer Tags eingefärbt. Hat eine Zeile mehrere Tags, gehen deren Farben von links nach rechts ineinander über. So sehen Sie auf einen Blick, welche Positionen z.B. noch geprüft werden müssen.

@@ -5,10 +5,11 @@ import lib from '../../lib/browser.js';
 // - levels can be chosen manually in the grid's column menu and are remembered
 
 // NOTE: columns not available in every installation (e.g. evaluation dimensions) are ignored
+// NOTE: tags column (tags menu) is shown in all levels
 const levelColumns = {
-    small: ['title', 'quantity', 'unit'],
-    medium: ['pos_number', 'type', 'title', 'quantity', 'unit'],
-    big: ['pos_number', 'type', 'title', 'quantity', 'unit', 'eval_dim_cost_center', 'product_id'],
+    small: ['tags', 'title', 'quantity', 'unit'],
+    medium: ['tags', 'pos_number', 'type', 'title', 'quantity', 'unit'],
+    big: ['tags', 'pos_number', 'type', 'title', 'quantity', 'unit', 'eval_dim_cost_center', 'product_id'],
 };
 // popup widths resulting in the given level (the dialog's side panel takes some space)
 const levelWidths = {small: 500, medium: 800, big: 1500, large: 2300};
@@ -63,8 +64,13 @@ const resizePopup = async (page, width) => {
  */
 const expectedColumns = (state, level) => levelColumns[level].filter((col) => state.allColumns.includes(col)).sort();
 
+// leading columns in this order (as far as visible)
+const leadingColumns = ['pos_number', 'type', 'tags'];
+
 const expectLevelColumns = (state, level) => {
     expect(state.visibleColumns.slice().sort()).toEqual(expectedColumns(state, level));
+    const leading = leadingColumns.filter((col) => state.visibleColumns.includes(col));
+    expect(state.visibleColumns.slice(0, leading.length)).toEqual(leading);
 };
 
 /**

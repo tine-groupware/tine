@@ -1502,12 +1502,6 @@ msgstr "Save cloud account anyway?"
 msgid "Select a { collectionName }..."
 msgstr "Select a { collectionName }..."
 
-msgid "Usage:&#160;"
-msgstr "Usage:&#160;"
-
-msgid "personal"
-msgstr "personal"
-
 msgid "No Information"
 msgstr "No Information"
 
@@ -2310,6 +2304,9 @@ msgstr "No valid time format (use Hours:Minutes)"
 msgid "Not a valid time"
 msgstr "Not a valid time"
 
+msgid "Clear Value"
+msgstr "Clear Value"
+
 msgid "Copied to clipboard"
 msgstr "Copied to clipboard"
 
@@ -2359,6 +2356,9 @@ msgstr "Delete Image"
 msgid "Show Original Image"
 msgstr "Show Original Image"
 
+msgid "Lock/Unlock"
+msgstr "Lock/Unlock"
+
 msgid "When a preference is locked, a normal user cannot edit the preference anymore."
 msgstr "When a preference is locked, a normal user cannot edit the preference anymore."
 
@@ -2400,6 +2400,12 @@ msgstr "Please sort by \"{0}\""
 #, python-brace-format
 msgid "To use manual sorting, you need to sort by column \"{0}\""
 msgstr "To use manual sorting, you need to sort by column \"{0}\""
+
+msgid "oneColumn"
+msgstr "oneColumn"
+
+msgid "Layout"
+msgstr "Layout"
 
 msgid "Choose more column categories."
 msgstr "Choose more column categories."
@@ -2749,6 +2755,12 @@ msgstr "Username"
 msgid "Please enter your credentials"
 msgstr "Please enter your credentials"
 
+msgid "Discard changes?"
+msgstr "Discard changes?"
+
+msgid "Do you want to overwrite the local changes with the data from the original record?"
+msgstr "Do you want to overwrite the local changes with the data from the original record?"
+
 msgid "OK"
 msgstr "OK"
 
@@ -2931,9 +2943,6 @@ msgstr "Below you find a list of all supported import formats and a sample file,
 
 msgid "Below you find a list of all supported import formats."
 msgstr "Below you find a list of all supported import formats."
-
-msgid "Choose File and Format"
-msgstr "Choose File and Format"
 
 msgid "Choose Import File"
 msgstr "Choose Import File"
@@ -3141,9 +3150,6 @@ msgstr "Please enter the new Password:"
 msgid "Send SMS with new password"
 msgstr "Send SMS with new password"
 
-msgid "Password has expired in accordance with the password policy and needs to be changed"
-msgstr "Password has expired in accordance with the password policy and needs to be changed"
-
 msgid "The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message."
 msgstr "The character string {{ password }} is automatically replaced by the password when the message is sent and must be included in the message."
 
@@ -3170,6 +3176,9 @@ msgstr "Wrong Password"
 
 msgid "Invalid second factor password given"
 msgstr "Invalid second factor password given"
+
+msgid "Choose File and Format"
+msgstr "Choose File and Format"
 
 msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
@@ -3348,8 +3357,17 @@ msgstr "No record"
 msgid "{recordName} is not valid."
 msgstr "{recordName} is not valid."
 
-msgid "Edit copy"
-msgstr "Edit copy"
+msgid "Edit this copy"
+msgstr "Edit this copy"
+
+msgid "Edit original"
+msgstr "Edit original"
+
+msgid "{contextRecordGender, select, male {The associated} female {The associated} other {The associated}} {contextRecordName} keeps its own copy. Changes to this copy apply only to {contextRecordGender, select, male {this} female {this} other {this}} {contextRecordName}, {recordGender, select, male {the} female {the} other {the}} original {recordName} remains unchanged."
+msgstr "{contextRecordGender, select, male {The associated} female {The associated} other {The associated}} {contextRecordName} keeps its own copy. Changes to this copy apply only to {contextRecordGender, select, male {this} female {this} other {this}} {contextRecordName}, {recordGender, select, male {the} female {the} other {the}} original {recordName} remains unchanged."
+
+msgid "Edit copy or original"
+msgstr "Edit copy or original"
 
 #, python-brace-format
 msgid "Search for {0} ..."
@@ -3373,6 +3391,9 @@ msgstr "Search for records..."
 #, python-brace-format
 msgid "No {0} could be found. Please try changing your filter criteria or view options."
 msgstr "No {0} could be found. Please try changing your filter criteria or view options."
+
+msgid "Checker"
+msgstr "Checker"
 
 msgid "Image"
 msgstr "Image"
@@ -3563,17 +3584,14 @@ msgstr "select a field"
 msgid "Delete this filter"
 msgstr "Delete this filter"
 
-msgid "show details"
-msgstr "show details"
+msgid "Filters"
+msgstr "Filters"
 
-msgid "Always show advanced filters"
-msgstr "Always show advanced filters"
+msgid "Show advanced filters"
+msgstr "Show advanced filters"
 
-msgid "hide details"
-msgstr "hide details"
-
-msgid "show"
-msgstr "show"
+msgid "Hide Filters"
+msgstr "Hide Filters"
 
 #, python-brace-format
 msgid "Your view is limited by {0} criteria:"
@@ -3761,6 +3779,12 @@ msgstr "ID needs to follow the syntax PARENTID:ID"
 msgid "Setting new language..."
 msgstr "Setting new language..."
 
+msgid "action bar"
+msgstr "action bar"
+
+msgid "modules and filters"
+msgstr "modules and filters"
+
 msgid "has been opened"
 msgstr "has been opened"
 
@@ -3769,6 +3793,9 @@ msgstr "is empty. There is no data to be shown."
 
 msgid "Save current view as favorite"
 msgstr "Save current view as favorite"
+
+msgid "Main content"
+msgstr "Main content"
 
 msgid "containers"
 msgstr "containers"
@@ -3974,6 +4001,12 @@ msgstr "Detach tag(s)"
 msgid "Select Tag(s) to detach"
 msgstr "Select Tag(s) to detach"
 
+msgid "Unpin tag"
+msgstr "Unpin tag"
+
+msgid "Pin tag"
+msgstr "Pin tag"
+
 msgid "No Tags to display"
 msgstr "No Tags to display"
 
@@ -4031,6 +4064,9 @@ msgstr "Could not delete Tag(s)."
 
 msgid "Could not update tag."
 msgstr "Could not update tag."
+
+msgid "personal"
+msgstr "personal"
 
 msgid "Detach Tags"
 msgstr "Detach Tags"
@@ -4805,6 +4841,9 @@ msgstr "Deactivation date"
 msgid "Tine 2.0 URL"
 msgstr "Tine 2.0 URL"
 
+msgid "Privacy Policy"
+msgstr "Privacy Policy"
+
 msgid "Hello"
 msgstr "Hello"
 
@@ -4816,9 +4855,6 @@ msgstr "Your %1$s Team"
 
 msgid "Terms of Service"
 msgstr "Terms of Service"
-
-msgid "Privacy Policy"
-msgstr "Privacy Policy"
 
 msgid "Contact Us"
 msgstr "Contact Us"
