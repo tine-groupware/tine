@@ -121,7 +121,7 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
     },
 
     getSchema(color) {
-        if (! String(color).match(/[0-9a-fA-F]{6}/)) {
+        if (! String(color).match(/^[0-9a-fA-F]{6}$/)) {
             return this.gray;
         }
 
@@ -131,6 +131,10 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
     },
 
     getCustomSchema: function(color) {
+        // NOTE: colors are user data and end up in style attributes
+        if (! String(color).match(/^[0-9a-fA-F]{6}$/)) {
+            return this.gray;
+        }
         if (!this.customColorSchemataCache[color]) {
             const solid = "#" + color;
             const light = this.shadeColor(0.4, solid);
