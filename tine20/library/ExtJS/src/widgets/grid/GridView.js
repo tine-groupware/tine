@@ -1463,7 +1463,8 @@ viewConfig: {
     // private
     autoExpand : function(preventUpdate){
         var g = this.grid, cm = this.cm;
-        if(!this.userResized && g.autoExpandColumn){
+        // NOTE: don't overwrite width the user has set manually (e.g. restored from state)
+        if(!this.userResized && g.autoExpandColumn && !cm.getColumnById(g.autoExpandColumn)?.useManualWidth){
             var tw = cm.getTotalWidth(false);
             var aw = this.grid.getGridEl().getWidth(true)-this.getScrollOffset();
             if(tw != aw){

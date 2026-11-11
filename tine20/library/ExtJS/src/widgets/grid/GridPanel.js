@@ -679,6 +679,7 @@ function(grid, rowIndex, columnIndex, e) {
                     }
                     if (!cm.isResizable(i)) continue;
                     c.width = s.width;
+                    c.useManualWidth = !!s.useManualWidth;
                 }
             }
             _.forEachRight( _.sortBy(_.filter(cm.columns, c => c.hasOwnProperty('forceIndex')), ['forceIndex', 'prio', 'id']), c => {
