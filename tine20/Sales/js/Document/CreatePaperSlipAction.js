@@ -56,7 +56,7 @@ const createAttachedDocument = async (config) => {
         console.error(e)
         record = await record.constructor.getProxy().promiseLoadRecord(record)
         config.editDialog && config.editDialog.loadRecord ? config.editDialog.loadRecord(record) : null
-        e.message = app.formatMessage('Cannot create { typeName } for { recordName }: { title } ({e.code}) { e.message }', { recordName, typeName, title: config.record.getTitle(), e })
+        e.message = app.formatMessage('Cannot create { typeName } for { recordName }: { title } ({e.code}) { e.message }', { recordName, typeName, title: Ext.util.Format.htmlEncode(config.record.getTitle()), e: {code: e.code, message: Ext.util.Format.htmlEncode(e.message)} })
         win.Tine.Tinebase.ExceptionHandler.handleRequestException(e, async () => {
             win.close();
         });

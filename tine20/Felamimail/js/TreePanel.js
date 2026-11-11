@@ -912,7 +912,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                     '</tr>',
                     '<tr>',
                         '<td>', this.app.i18n._('Name on Server:'), '</td>',
-                        '<td>', folder.get('globalname'), '</td>',
+                        '<td>', Ext.util.Format.htmlEncode(folder.get('globalname')), '</td>',
                     '</tr>',
                     '<tr>',
                         '<td>', this.app.i18n._('Last update:'), '</td>',

@@ -72,7 +72,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         record.reject()
                         let detailsHTML = e.code === 480 ? JSON.parse(e.response).data.html : ''
                         this.errors.push(e)
-                        this.errorMsgs.push(this.app.formatMessage('Cannot book { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: record.getTitle(), e })
+                        this.errorMsgs.push(this.app.formatMessage('Cannot book { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: Ext.util.Format.htmlEncode(record.getTitle()), e: {code: e.code, message: Ext.util.Format.htmlEncode(e.message)} })
                             + (detailsHTML ? `&nbsp;<a data-error-num="${this.errorMsgs.length}" href="#">(details)</a>` : ''))
                     }
                 })

@@ -122,7 +122,7 @@ Tine.Tinebase.ExceptionHandler = function() {
      * @param {Function} callbackOnOk
      * @param {Object}   callbackOnOkScope
      */
-    var handleRequestException = function(exception, callback, callbackScope, callbackOnOk, callbackOnOkScope) {
+    var handleRequestException = async function(exception, callback, callbackScope, callbackOnOk, callbackOnOkScope) {
         if (! exception.code && exception.responseText) {
             // we need to decode the exception first
             var response = Ext.util.JSON.decode(exception.responseText);
@@ -188,7 +188,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 403:
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._('Insufficient Rights'),
-                    msg: exception.message ? Tine[exception.appName].i18n._(exception.message) : i18n._('Sorry, you are not permitted to perform this action'),
+                    msg: exception.message ? await Tine.Tinebase.common.sanitizeHtml(Tine[exception.appName].i18n._(exception.message)) : i18n._('Sorry, you are not permitted to perform this action'),
                     icon: Ext.MessageBox.ERROR
                 }));
                 break;
@@ -229,7 +229,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.ERROR,
                     title: formatMessage('There were Errors:'),
-                    msg: formatMessage('({e.code}) { e.message }', {e: exception})
+                    msg: await Tine.Tinebase.common.sanitizeHtml(formatMessage('({e.code}) { e.message }', {e: exception}))
                         + (exception.html ? `&nbsp;<a data-error-num="0" href="#">(details)</a>` : ''),
                     onMessageClick: (e) => {
                         if (_.get(e.target, 'dataset', {}).hasOwnProperty('errorNum')) {
@@ -245,7 +245,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 503:
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._('Service Unavailable'),
-                    msg: exception.message ? i18n._(exception.message)
+                    msg: exception.message ? await Tine.Tinebase.common.sanitizeHtml(i18n._(exception.message))
                         : i18n._('The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator.'),
                     fn: (btn) => {
                         if (btn === 'ok') {
@@ -266,7 +266,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                 
             // invalid record exception
             case 505:
-                var message = exception.message ? '<br /><b>' + i18n._('Server Message:') + '</b><br />' + exception.message : '';
+                var message = exception.message ? '<br /><b>' + i18n._('Server Message:') + '</b><br />' + await Tine.Tinebase.common.sanitizeHtml(exception.message) : '';
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._('Invalid Data'),
                     msg: i18n._('Your input data is not valid. Please provide valid data.') + message
@@ -313,7 +313,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 600:
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._(exception.title),
-                    msg: Ext.util.Format.nl2br(i18n._(exception.message))
+                    msg: await Tine.Tinebase.common.sanitizeHtml(Ext.util.Format.nl2br(i18n._(exception.message)))
                 }));
                 break;
                 
@@ -340,7 +340,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                     }
                     Ext.Msg.confirm(
                         exception.title,
-                        exception.message,
+                        await Tine.Tinebase.common.sanitizeHtml(exception.message),
                     async function(button) {
                             if (button === 'no' && !exception?.sendRequestOnRejection) {
                                 return false;
@@ -366,7 +366,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                 }
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._(exception.title),
-                    msg: Ext.util.Format.nl2br(i18n._(exception.message))
+                    msg: await Tine.Tinebase.common.sanitizeHtml(Ext.util.Format.nl2br(i18n._(exception.message)))
                 }));
                 break;
                 
@@ -374,7 +374,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 912: 
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._(exception.title),
-                    msg: i18n._(exception.message)
+                    msg: await Tine.Tinebase.common.sanitizeHtml(i18n._(exception.message))
                 }));
                 break;
                 

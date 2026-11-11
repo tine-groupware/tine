@@ -206,10 +206,20 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                     readOnly: true,
                     anchor: '95%'
                 },
-                html: '<div class="tb-exceptiondialog-details">' +
-                        '<p class="tb-exceptiondialog-msg">' + this.exception.message + '</p>' +
-                        '<p class="tb-exceptiondialog-trace">' + this.exception.traceHTML + '</p>' +
-                    '</div>'
+                html: '<div class="tb-exceptiondialog-details"></div>',
+                listeners: {
+                    // server message and trace are html - sanitize (async, DOMPurify is loaded on demand)
+                    afterrender: async (panel) => {
+                        const [msg, trace] = await Promise.all([
+                            Tine.Tinebase.common.sanitizeHtml(this.exception.message),
+                            Tine.Tinebase.common.sanitizeHtml(this.exception.traceHTML)
+                        ]);
+                        panel.body?.update('<div class="tb-exceptiondialog-details">' +
+                            '<p class="tb-exceptiondialog-msg">' + msg + '</p>' +
+                            '<p class="tb-exceptiondialog-trace">' + trace + '</p>' +
+                        '</div>');
+                    }
+                }
             }]
         });
         

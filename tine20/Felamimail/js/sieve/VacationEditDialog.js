@@ -87,7 +87,7 @@ Tine.Felamimail.sieve.VacationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
 
         this.getForm().loadRecord(this.record);
         
-        var title = String.format(this.app.i18n._('Vacation Message for {0}'), this.account.get('name'));
+        var title = String.format(this.app.i18n._('Vacation Message for {0}'), Ext.util.Format.htmlEncode(this.account.get('name')));
         this.window.setTitle(title);
         
         this.checkStates();

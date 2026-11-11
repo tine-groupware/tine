@@ -451,7 +451,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             }
 
             if (this.ftb.filterModelMap && this.ftb.filterModelMap[f.field]) {
-                criterias.push(this.ftb.filterModelMap[f.field].label);
+                criterias.push(Ext.util.Format.htmlEncode(this.ftb.filterModelMap[f.field].label));
             } else if (f.condition == 'OR' || f.condition == 'AND'){
                 criterias = criterias.concat(this.getCriteriasText(f.filters));
             }

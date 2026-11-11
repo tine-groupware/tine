@@ -78,7 +78,7 @@ Tine.Projects.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerCo
                 {
                     encode: function(values) {
                         var ret = '<b>' + Ext.util.Format.htmlEncode(values.title) + '</b>';
-                        if(values.number) ret += ' (' + values.number + ')';
+                        if(values.number) ret += ' (' + Ext.util.Format.htmlEncode(values.number) + ')';
                         return ret;
                         
                     }

@@ -13,6 +13,12 @@ Ext.ns('Ext.ux.Notification');
     
 Ext.ux.Notification = function(){
     return {
+        /**
+         * NOTE: title and text are plain text (browser notifications don't support html)
+         *
+         * @param {String} title
+         * @param {String} text
+         */
         show: function(title, text){
             // webkit notifications
             if (window.webkitNotifications !== undefined && window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
@@ -31,7 +37,7 @@ Ext.ux.Notification = function(){
             // default behaviour
 
             } else {
-                Ext.ux.MessageBox.msg(title, Ext.util.Format.nl2br(text));
+                Ext.ux.MessageBox.msg(Ext.util.Format.htmlEncode(title), Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(text)));
             }
         }
     };

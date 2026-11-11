@@ -2607,7 +2607,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             result.push({
                 id: cfConfig.id,
-                header: cfConfig.get('definition').label,
+                header: Ext.util.Format.htmlEncode(cfConfig.get('definition').label),
                 dataIndex: '#' + cfName,
                 type: cfConfig.get('definition').type,
                 renderer: Tine.widgets.customfields.Renderer.get(this.app, cfConfig),

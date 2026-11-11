@@ -257,7 +257,7 @@ const plugin = {
                         }, []);
 
                         return {
-                            text: role.role.name,
+                            text: Ext.util.Format.htmlEncode(role.role.name),
                             menu: [{
                                 xtype: 'menutextitem',
                                 text: app.i18n._('Event Types')
@@ -265,7 +265,7 @@ const plugin = {
                                 return {
                                     xtype: 'menucheckitem',
                                     checked: false,
-                                    text: _.get(type, 'name', 'without type')
+                                    text: Ext.util.Format.htmlEncode(_.get(type, 'name', 'without type'))
                                 }
                             }))
                         }

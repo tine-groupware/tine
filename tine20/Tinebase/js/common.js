@@ -14,7 +14,7 @@ const { isObject, isArray, map, isString, get, escapeRegExp, each, find, compact
 const { htmlEncode, htmlDecode, date: dateFormat, number, round, capitalize} = require('Ext/util/Format')
 const { normalizeColor } = require('./util/colors')
 const tagStyle = require('./widgets/tags/tagStyle')
-const { parse, parsePurified, parseInline, parseInlinePurified } = require('util/markdown')
+const { parse, parsePurified, parseInline, parseInlinePurified, getDOMPurify } = require('util/markdown')
 
 /**
  * static common helpers
@@ -431,7 +431,7 @@ const common = {
     relationsRenderer: function(relations, metaData) {
         if (isString(relations)) {
             // e.g. history panel
-            return relations;
+            return htmlEncode(relations);
         }
 
         // _('No Access') - we need this string in other apps if relation is not shown e.g. record_removed_reason
@@ -625,7 +625,55 @@ const common = {
     },
 
     urlRenderer: function (url) {
-        return '<a href=' + Tine.Tinebase.EncodingHelper.encode(url, 'href') + ' target="_blank">' + Tine.Tinebase.EncodingHelper.encode(url, 'shorttext') + '</a>';
+        if (!url) {
+            return '';
+        }
+        const href = Tine.Tinebase.common.sanitizeHref(url);
+        const text = Tine.Tinebase.EncodingHelper.encode(url, 'shorttext');
+
+        return href ? '<a href="' + Tine.Tinebase.common.attrEncode(href) + '" target="_blank" rel="noopener noreferrer">' + text + '</a>' : text;
+    },
+
+    /**
+     * returns given url if it is safe to be used as link target or '' if not (e.g. javascript: or data: urls)
+     *
+     * @param {String} url
+     * @return {String}
+     */
+    sanitizeHref: function (url) {
+        const value = String(url ?? '').trim();
+        // browsers ignore whitespace and control chars in the scheme part
+        const normalized = value.replace(/[\u0000- \u007f-\u009f]/g, '');
+        const scheme = normalized.match(/^([a-z][a-z0-9+.-]*):/i);
+
+        if (scheme && ['http', 'https', 'ftp', 'ftps', 'mailto', 'tel', 'sip', 'webcal', 'dav', 'davs', 'caldav', 'caldavs'].indexOf(scheme[1].toLowerCase()) < 0) {
+            return '';
+        }
+
+        return value;
+    },
+
+    /**
+     * alias for DOMPurify.sanitize - loads DOMPurify on demand
+     *
+     * NOTE: use this only where html is wanted, plain text must be encoded (htmlEncode)
+     *
+     * @param {String} html
+     * @param {Object} config DOMPurify config
+     * @return {Promise<String>}
+     */
+    sanitizeHtml: async function (html, config) {
+        return (await getDOMPurify()).sanitize([null, undefined].indexOf(html) >= 0 ? '' : String(html), config);
+    },
+
+    /**
+     * alias for Ext.util.Format.attrEncode - encodes given value for the use in html attributes
+     *
+     * @param {String} value
+     * @return {String}
+     */
+    attrEncode: function (value) {
+        return Ext.util.Format.attrEncode(value);
     },
 
     /**
@@ -644,7 +692,7 @@ const common = {
                 }
             }
         }
-        return result;
+        return htmlEncode(result);
     },
 
     countryRenderer: function (v) {
@@ -660,7 +708,7 @@ const common = {
      * TODO use title fn? allow to configure displayed field(s)?
      */
     foreignRecordRenderer: function(record, metaData) {
-        return record && record.name ? record.name : '';
+        return record && record.name ? htmlEncode(record.name) : '';
     },
 
     /**
@@ -858,7 +906,9 @@ const common = {
      * @return {String}
      */
     doubleEncode: function(value) {
-        return htmlEncode(htmlEncode(value));
+        const encoded = htmlEncode(value);
+        // NOTE: second pass must be attribute safe (htmlEncode might add markup)
+        return get(encoded, 'isExpression') ? encoded : Tine.Tinebase.common.attrEncode(encoded);
     },
 
     /**

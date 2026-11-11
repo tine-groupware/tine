@@ -69,7 +69,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             if (! this.record.id) {
                 this.window.setTitle(this.app.i18n._('Add New Purchase Invoice'));
             } else {
-                this.window.setTitle(String.format(this.app.i18n._('Edit Purchase Invoice "{0}"'), this.record.getTitle()));
+                this.window.setTitle(String.format(this.app.i18n._('Edit Purchase Invoice "{0}"'), Ext.util.Format.htmlEncode(this.record.getTitle())));
             }
         }
         

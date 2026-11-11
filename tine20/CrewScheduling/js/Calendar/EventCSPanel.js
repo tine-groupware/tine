@@ -62,10 +62,10 @@ Ext.ux.ItemRegistry.registerItem('Calendar-Event-EditDialog-TabPanel',  Ext.exte
 
         if (conflictingTypeIds.length) {
             Ext.Msg.alert(this.app.i18n._("Role Config can't be Added"), this.app.formatMessage('A role config for {role} with event types "{types}" already exists.', {
-                role: r.get('role').name,
-                types: newTypesIds.length ? _.map(conflictingTypeIds, (id) => {
+                role: Ext.util.Format.htmlEncode(r.get('role').name),
+                types: newTypesIds.length ? Ext.util.Format.htmlEncode(_.map(conflictingTypeIds, (id) => {
                     return _.find(r.get('event_types'), { id }).name;
-                }).join(', ') : this.app.i18n._('without event type')
+                }).join(', ')) : this.app.i18n._('without event type')
             }));
             return false;
         }

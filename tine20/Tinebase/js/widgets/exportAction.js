@@ -65,7 +65,7 @@ Tine.widgets.exportAction.getExportMenuItems = function (recordClass, exportConf
             exportScope: scope,
             recordClass: recordClass,
             definition: definition,
-            text: app.i18n._hidden(definition.label ? definition.label : definition.name),
+            text: Ext.util.Format.htmlEncode(app.i18n._hidden(definition.label ? definition.label : definition.name)),
             format: '',
             definitionId: definition.id,
             iconCls: definition.icon_class,

@@ -397,7 +397,7 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
                     allowCancel: true,
                     height: roleConfigs.length * 30 + 100,
                     options: await async.map(roleConfigs, async roleConfig => { return { name: roleConfig.id,
-                        text: '<span>' + _.map(roleConfig.event_types, 'description').join(', ') + ` <span class="cs-count">${(await getEventRoleAttendee(roleConfig, event)).length}</span></span>`
+                        text: '<span>' + Ext.util.Format.htmlEncode(_.map(roleConfig.event_types, 'description').join(', ')) + ` <span class="cs-count">${(await getEventRoleAttendee(roleConfig, event)).length}</span></span>`
                     } })
                 })}) : (roleConfigs[0] || []);
 
@@ -807,8 +807,9 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
                 columns.push({
                     // NOTE: ext can't cope with spaces in id's (which get clss)
                     id: `${String(groupName).replaceAll(' ', '¿')}:${role.get('key')}`,
-                    header: name + emblem,
-                    tooltip: role.get('description'),
+                    header: Ext.util.Format.htmlEncode(name) + emblem,
+                    // NOTE: qtips are html
+                    tooltip: Ext.util.Format.htmlEncode(role.get('description')),
                     sortable: false,
                     width: 100,
                     menuDisabled: true,
@@ -825,7 +826,7 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
                 colspan: 1
             }].concat(groups.map((groupName) => {
                 return {
-                    header: `<b>${groupName}</b>`,
+                    header: `<b>${Ext.util.Format.htmlEncode(groupName)}</b>`,
                     align: 'center',
                     colspan: this.rolesVisible.length
                 };
@@ -854,7 +855,7 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
 
             colMenu.add(new Ext.menu.CheckItem({
                 itemId: role.get('key'),
-                text: name + emblem,
+                text: Ext.util.Format.htmlEncode(name) + emblem,
                 checked: this.rolesVisible.indexOf(role.get('key')) >= 0,
                 hideOnClick:false
             }));

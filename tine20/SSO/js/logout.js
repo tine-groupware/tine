@@ -1,3 +1,6 @@
+const escapeHtml = (value) => String(value ?? '')
+    .replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
 const ssoLogout = async (config) => {
     const keyPrefix = `${window.location.pathname}-sso-logout-client`
     let responses = []
@@ -34,10 +37,10 @@ const ssoLogout = async (config) => {
         sessionStorage.setItem(`${keyPrefix}-responses`, JSON.stringify(responses))
         document.body.innerHTML =
             `<body>` +
-              `<p class="pulsate">logout from ${url}...</p>` +
-              `<form method="post" action="${url}">` +
+              `<p class="pulsate">logout from ${escapeHtml(url)}...</p>` +
+              `<form method="post" action="${escapeHtml(url)}">` +
                 Object.keys(data).map(key => {
-                    return `<input type="hidden" name="${key}" value="${data[key]}"/>`
+                    return `<input type="hidden" name="${escapeHtml(key)}" value="${escapeHtml(data[key])}"/>`
                 }).join() +
                 `<input type="submit" value="continue" style="display: none;"/>` +
               `</form>` +

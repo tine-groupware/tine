@@ -9,7 +9,7 @@ Ext.ux.Printer.ComboRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
         return '' +
         '<div class="rp-print-single-details-row">' +
             '<span class="rp-print-single-label">' + field.fieldLabel + '</span>' +
-            '<span class="rp-print-single-value">' + field.getRawValue() + '</span>' +
+            '<span class="rp-print-single-value">' + Ext.util.Format.htmlEncode(field.getRawValue()) + '</span>' +
         '</div>';
 
     }

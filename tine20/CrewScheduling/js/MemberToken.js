@@ -22,10 +22,10 @@ Tine.CrewScheduling.MemberToken = function() {
 
     Tine.CrewScheduling.MemberToken.superclass.constructor.call(this,
         '<tpl for=".">',
-            '<table class="cs-member-token" style="{[this.getTokenStyles(values)]}" tine-cs-token-id="{signatureId}"><tr>',
+            '<table class="cs-member-token" style="{[this.getTokenStyles(values)]}" tine-cs-token-id="{signatureId:htmlEncode}"><tr>',
                 '<td class="cs-count">{[Ext.isNumber(values.count) ? values.count : "?"]}</td>',
-                '<td class="cs-initials" ext:qtip="{[this.doubleEncode(values.n_fileas)]}">{initials}</td>',
-                '<td class="cs-name">{n_fileas}</td>',
+                '<td class="cs-initials" ext:qtip="{[this.doubleEncode(values.n_fileas)]}">{initials:htmlEncode}</td>',
+                '<td class="cs-name">{n_fileas:htmlEncode}</td>',
                 '<td class="cs-dates">{[this.renderDays(values.days || [])]}</td>',
                 '<td class="cs-partners">{[this.renderPartners(values.partners || [])]}</td>',
                 '<td class="cs-roles">{[this.renderRoles(values.crewscheduling_roles || values.roles || [])]}</td>',
@@ -141,8 +141,8 @@ Ext.extend(Tine.CrewScheduling.MemberToken, Ext.XTemplate, {
             'ext:qtip="{1}" >{0}</span>',
 
             Ext.util.Format.htmlEncode(role.key),
-            Tine.Tinebase.common.doubleEncode(role.name) + (eventTypes ? (`&nbsp;(${_.map(eventTypes, 'name').join(', ')})`) : ''),
-            role.color,
+            Tine.Tinebase.common.doubleEncode(role.name) + (eventTypes ? (`&nbsp;(${Tine.Tinebase.common.doubleEncode(_.map(eventTypes, 'name').join(', '))})`) : ''),
+            Tine.Tinebase.common.attrEncode(role.color),
             role.colorRGB ? role.colorRGB[0] : null,
             role.colorRGB ? role.colorRGB[1] : null,
             role.colorRGB ? role.colorRGB[2] : null

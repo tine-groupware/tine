@@ -33,7 +33,7 @@ Tine.widgets.relation.Renderer = function(){
 
                 html += '<div class="customfield-rendered-row print-single-details-row">' +
                     '<span class="customfield-rendered-label">'+ app.i18n._(model) + '</span>' +
-                    '<span class="customfield-rendered-value">'+ record.getTitle() + '</span>' +
+                    '<span class="customfield-rendered-value">'+ Ext.util.Format.htmlEncode(record.getTitle()) + '</span>' +
                 '</div>';
             }, this);
 

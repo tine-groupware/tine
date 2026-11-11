@@ -54,7 +54,7 @@ Ext.namespace('Tine.Felamimail.sieve');
         const data = this.record.data.sieve_notification_email.split(',');
         this.sieveNotifyGrid.setStoreFromArray(data.map((e) => {return {'email': e}}));
 
-        var title = String.format(this.app.i18n._('Notification for {0}'), this.record.get('name'));
+        var title = String.format(this.app.i18n._('Notification for {0}'), Ext.util.Format.htmlEncode(this.record.get('name')));
         this.window.setTitle(title);
 
         this.loadMask.hide();

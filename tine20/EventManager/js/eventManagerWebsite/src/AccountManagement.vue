@@ -117,6 +117,7 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue';
+import { escape as escapeHtml } from 'lodash';
 import { useRoute } from 'vue-router';
 import { useFormatMessage } from './index.es6';
 
@@ -403,7 +404,7 @@ function openCancelConfirmation(registration) {
   const eventId = registration.event_id;
   showModal({
     title: formatMessage('Cancel Registration'),
-    message: `${formatMessage('Do you really want to cancel your registration for')} "<strong>${getEventName(eventId)}</strong>"`,
+    message: `${formatMessage('Do you really want to cancel your registration for')} "<strong>${escapeHtml(getEventName(eventId))}</strong>"`,
     type: 'confirm',
     okOnly: false,
     okText: formatMessage('Yes'),

@@ -1169,7 +1169,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             } else {
                 (async () => {
                     const title = await asString(this.record.getTitle());
-                    this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, title));
+                    // NOTE: asString returns plain text, but window titles are html
+                    this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, Ext.util.Format.htmlEncode(title)));
                 })();
 
                 if (! this.el.findParent('.x-window')) {

@@ -59,7 +59,7 @@ Tine.widgets.customfields.Renderer = function(){
 
                         try {
                             var r = Tine.Tinebase.data.Record.setFromJson(cfData, recordClass);
-                            return r ? r.getTitle() : '';
+                            return r ? Ext.util.Format.htmlEncode(r.getTitle()) : '';
                         } catch (e) {
                             Tine.log.warn('customfields.Renderer: could not parse record cf "' + cfName + '"', e);
                             return '';
@@ -98,7 +98,7 @@ Tine.widgets.customfields.Renderer = function(){
                     ? value[recordClass.getMeta('titleProperty')] + ' '
                     : value + '';
             })
-            return title;
+            return Ext.util.Format.htmlEncode(title);
         },
 
         
@@ -123,7 +123,7 @@ Tine.widgets.customfields.Renderer = function(){
                 var renderedValue = this.render(app, cfDef, data);
 
                 html += '<div class="customfield-rendered-row print-single-details-row">' +
-                    '<span class="customfield-rendered-label">'+ cfDef.get('definition').label + '</span>' +
+                    '<span class="customfield-rendered-label">'+ Ext.util.Format.htmlEncode(cfDef.get('definition').label) + '</span>' +
                     '<span class="customfield-rendered-value">'+ renderedValue + '</span>' +
                 '</div>';
             }, this);

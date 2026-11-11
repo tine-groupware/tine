@@ -10,9 +10,16 @@ Tine.widgets.dialog.MultiOptionsDialog = function(config) {
     this.scope = config.scope || window;
 }
 
+/**
+ * SECURITY NOTE: questionText and option texts starting with '<' are rendered as HTML (v-html)!
+ *   The developer is responsible for encoding all user data in such texts
+ *   (e.g. Ext.util.Format.htmlEncode(record.getTitle())). Plain texts (not starting with '<')
+ *   are rendered as text. Never pass unencoded user data at the beginning of a text.
+ */
 Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Tine.widgets.dialog.ModalDialog, {
     /**
-     * @cfg {Array} options
+     * @cfg {Array} options [{text, name, checked, disabled}]
+     *   NOTE: text is rendered as HTML if it starts with '<' - encode user data! (see SECURITY NOTE above)
      * @see {Ext.fom.CheckBoxGroup}
      */
     options: null,
@@ -22,6 +29,7 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Tine.widgets.dialog.ModalDial
     scope: null,
     /**
      * @cfg {String} questionText defaults to i18n._('What would you like to do?')
+     *   NOTE: rendered as HTML if it starts with '<' - encode user data! (see SECURITY NOTE above)
      */
     questionText: null,
     /**
