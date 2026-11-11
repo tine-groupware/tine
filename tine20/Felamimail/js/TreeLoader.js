@@ -85,7 +85,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             folder_id: attr.id,
             folderNode: true,
             allowDrop: true,
-            text: this.app.i18n._hidden(attr.localname)
+            text: Ext.util.Format.htmlEncode(this.app.i18n._hidden(attr.localname))
         });
         
         // show standard folders icons 
@@ -109,7 +109,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         }
         if (attr.globalname.match(/^inbox$/i)) {
             attr.cls = 'felamimail-node-inbox';
-            attr.text = this.app.i18n._hidden('INBOX');
+            attr.text = Ext.util.Format.htmlEncode(this.app.i18n._hidden('INBOX'));
         }
         if (attr.globalname.match(/^junk$/i)) {
             attr.cls = 'felamimail-node-junk';
