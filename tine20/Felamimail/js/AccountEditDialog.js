@@ -338,7 +338,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 if (!disabled && me.record.get('type') === 'adblist' && contact?.name) {
                     const listItem = document.createElement('a');
                     listItem.className = 'felamimail-location';
-                    listItem.innerHTML = contact.name;
+                    listItem.textContent = contact.name;
                     listItem.setAttribute('data-record-class', 'Addressbook.List');
                     listItem.setAttribute('data-record-id', contact.id);
                     

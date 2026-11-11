@@ -48,6 +48,7 @@ const escapeMarkdown = (text) => {
 }
 
 export {
+    getDOMPurify,
     parse,
     parsePurified,
     parseInline,

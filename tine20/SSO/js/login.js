@@ -29,7 +29,7 @@ import(/* webpackChunkName: "Tinebase/js/tinebase" */ 'tinebase.js').then(functi
                         title: i18n._('Authentication Successfully'),
                         closeable: false,
                         msg: (rpInfo.label ?
-                            String.format(i18n._('Please proceed with {0}.'), rpInfo.label) :
+                            String.format(i18n._('Please proceed with {0}.'), Ext.util.Format.htmlEncode(rpInfo.label)) :
                             i18n._('Please proceed with your device or program.')) + '<br /><br />' + i18n._('You can close this page now.')
                     });
                 }
@@ -47,7 +47,7 @@ import(/* webpackChunkName: "Tinebase/js/tinebase" */ 'tinebase.js').then(functi
                     icon: Ext.MessageBox.QUESTION,
                     title: i18n._('Enter Device Code'),
                     msg: rpInfo.label ?
-                        String.format(i18n._('Please enter the device code for {0}.'), rpInfo.label) :
+                        String.format(i18n._('Please enter the device code for {0}.'), Ext.util.Format.htmlEncode(rpInfo.label)) :
                         i18n._('Please enter the device code provided by external device or program.'),
                     closeable: false,
                     prompt: true,
@@ -56,7 +56,7 @@ import(/* webpackChunkName: "Tinebase/js/tinebase" */ 'tinebase.js').then(functi
                         document.body.innerHTML =`
                             <body>
                                 <p class="pulsate">Authenticating Device...</p>
-                                <form method="post" action="${url.replace(/device\/user\/.*$/, `device/user/${userCode}`)}">
+                                <form method="post" action="${Ext.util.Format.htmlEncode(url.replace(/device\/user\/.*$/, `device/user/${encodeURIComponent(userCode)}`))}">
                                     <input type="hidden" name="confirmed" value="1"/>
                                     <input type="submit" value="continue" style="display: none;"/>
                                 </form>
@@ -79,12 +79,12 @@ import(/* webpackChunkName: "Tinebase/js/tinebase" */ 'tinebase.js').then(functi
             allowBrowserPasswordManager: Tine.Tinebase.registry.get('allowBrowserPasswordManager'),
             // headsUpText: i18n._('SSO'),
             infoText:
-                (rpInfo.logo ? '<img class="tb-login-infotext-logo" src="' + rpInfo.logo + '" />' : '') +
+                (rpInfo.logo ? '<img class="tb-login-infotext-logo" src="' + Ext.util.Format.htmlEncode(rpInfo.logo) + '" />' : '') +
                 (rpInfo.label ? '<p class="tb-login-infotext-label">' + (window.initialData.sso?.userCode ?
-                    String.format(i18n._('Login for {0} (external device/program)'), rpInfo.label) :
-                    String.format(i18n._('After successful login you will be redirected to {0}'), rpInfo.label))  +
+                    String.format(i18n._('Login for {0} (external device/program)'), Ext.util.Format.htmlEncode(rpInfo.label)) :
+                    String.format(i18n._('After successful login you will be redirected to {0}'), Ext.util.Format.htmlEncode(rpInfo.label)))  +
                 '</p>' : '') +
-                (rpInfo.description ? '<p class="tb-login-infotext-description">' + rpInfo.description + '</p>' : ''),
+                (rpInfo.description ? '<p class="tb-login-infotext-description">' + Ext.util.Format.htmlEncode(rpInfo.description) + '</p>' : ''),
             scope: this,
             onLoginPress: function (additionalParams) {
                 Ext.MessageBox.wait(window.i18n._hidden('Logging you in...'), window.i18n._hidden('Please wait'), { estimate: 3000 });

@@ -30,7 +30,7 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
 
         (async () => {
             const title = await asString(this.record.getTitle());
-            this.window.setTitle(this.app.formatMessage('Trac Document { title }', { title }));
+            this.window.setTitle(this.app.formatMessage('Trac Document { title }', { title: Ext.util.Format.htmlEncode(title) }));
         })();
 
 

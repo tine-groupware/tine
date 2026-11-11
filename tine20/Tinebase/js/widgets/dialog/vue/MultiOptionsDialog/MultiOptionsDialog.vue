@@ -10,6 +10,7 @@
 
 <template>
   <div>
+    <!-- SECURITY: texts starting with '<' are rendered as HTML - callers are responsible for encoding user data -->
     <div v-if="questionText?.trim?.().startsWith('<')" v-html="questionText" class="mb-3"></div>
     <BAlert v-else-if="questionText != null && questionText?.trim?.().length != 0" :variant="props.alertVariant ?? 'info'" :model-value="true">{{questionText}}</BAlert>
     <BFormRadioGroup v-if="!props.allowMultiple" v-model="selectedOption" stacked>

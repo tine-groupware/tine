@@ -1536,8 +1536,8 @@ const checkWaitingList = () => {
 
   if (isFull || isExpired.value) {
     const expiredMessage = isExpired.value
-      ? `${formatMessage('The registration date for')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('has expired. If you register you will be on our waiting list. Do you still want to register?')}`
-      : `${formatMessage('The event')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('is full. If you register you will be on our waiting list. Do you still want to register?')}`;
+      ? `${formatMessage('The registration date for')} "<strong>${_.escape(eventDetails.value.name)}</strong>" ${formatMessage('has expired. If you register you will be on our waiting list. Do you still want to register?')}`
+      : `${formatMessage('The event')} "<strong>${_.escape(eventDetails.value.name)}</strong>" ${formatMessage('is full. If you register you will be on our waiting list. Do you still want to register?')}`;
 
     showModal({
       title: formatMessage('Waiting list'),
@@ -1734,7 +1734,7 @@ const requestParentConsent = async () => {
 const openCancelConfirmation = () => {
   showModal({
     title: formatMessage('Cancel Registration'),
-    message: `${formatMessage('Do you really want to cancel your registration for')} "<strong>${eventDetails.value.name}</strong>"`,
+    message: `${formatMessage('Do you really want to cancel your registration for')} "<strong>${_.escape(eventDetails.value.name)}</strong>"`,
     type: 'confirm',
     okOnly: false,
     okText: formatMessage('Yes'),

@@ -60,7 +60,7 @@ Tine.widgets.grid.RendererManager.register('Timetracker', 'Timesheet', 'accounti
 });
 
 Tine.widgets.grid.RendererManager.register('Timetracker', 'Timeaccount', 'status', function(row, index, record) {
-    return Tine.Tinebase.appMgr.get('Timetracker').i18n._hidden(record.get('status'));
+    return Ext.util.Format.htmlEncode(Tine.Tinebase.appMgr.get('Timetracker').i18n._hidden(record.get('status')));
 });
 
 Tine.widgets.grid.RendererManager.register('Timetracker', 'Timeaccount', 'is_open', function(row, index, record) {

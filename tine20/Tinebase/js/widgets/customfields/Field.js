@@ -58,7 +58,8 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
             def = cfConfig.get('definition'),
             uiConfig = def && def.uiconfig ? def.uiconfig : {},
             fieldDef = {
-                fieldLabel: def.label,
+                // NOTE: labels are html, customfield labels are user (admin) data
+                fieldLabel: Ext.util.Format.htmlEncode(def.label),
                 name: 'customfield_' + cfConfig.get('name'),
                 xtype: (def.value_search == 1) ? 'customfieldsearchcombo' : uiConfig.xtype,
                 customfieldId: cfConfig.id,

@@ -1089,6 +1089,8 @@ viewConfig: {
     getColumnTooltip : function(i){
         var tt = this.cm.getColumnTooltip(i);
         if(tt){
+            // NOTE: tooltips may contain user data - encode for attribute (qtips are still rendered as html)
+            tt = Ext.util.Format.attrEncode(tt);
             if(Ext.QuickTips.isEnabled()){
                 return 'ext:qtip="'+tt+'"';
             }else{

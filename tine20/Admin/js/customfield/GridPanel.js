@@ -89,7 +89,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     labelRenderer: function(value) {
-        return this.app.i18n._(value.label);
+        return Ext.util.Format.htmlEncode(this.app.i18n._(value.label));
     },
     
     /**

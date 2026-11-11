@@ -224,7 +224,8 @@ Tine.Admin.Tags.Main = {
             columns: [
                 { id: 'id', header: this.translation.gettext('ID'), hidden: true, width: 40 },
                 { id: 'color', header: this.translation.gettext('Color'), renderer: function (color,meta,record) {
-                    return '<div style="background-color:' + (color || '#fff') + ';" class="tb-grid-tags dark-reverse" title="' + record.get('name') + ' (' +  i18n._('Usage:&#160;') + record.get('occurrence') + ')">&#160;</div>';
+                    const attrEncode = Tine.Tinebase.common.attrEncode;
+                    return '<div style="background-color:' + attrEncode(color || '#fff') + ';" class="tb-grid-tags dark-reverse" title="' + attrEncode(record.get('name')) + ' (' +  i18n._('Usage:&#160;') + attrEncode(record.get('occurrence')) + ')">&#160;</div>';
                 }},
                 { id: 'name', header: this.translation.gettext('Name') },
                 { id: 'description', header: this.translation.gettext('Description'),width: 500},

@@ -66,7 +66,7 @@ Tine.CrewScheduling.ExportDialog = Ext.extend(Tine.widgets.dialog.ExportDialog, 
             height: 260,
             title: this.app.i18n._('Choose Roles'),
             items: _.map(me.app.getMainScreen().csRolesStore.data.items, function(role) {
-                return {xtype: 'checkbox', boxLabel: role.get('name'), name: role.get('key'), checked: _.findIndex(me.rolesVisible, function (k) { return k == role.get('key'); }) > -1 ? true : false};
+                return {xtype: 'checkbox', boxLabel: Ext.util.Format.htmlEncode(role.get('name')), name: role.get('key'), checked: _.findIndex(me.rolesVisible, function (k) { return k == role.get('key'); }) > -1 ? true : false};
             })
         }/*, {
             xtype: 'checkbox',
