@@ -148,7 +148,7 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 
         await this.handleAttachments();
         
-        this.window.setTitle(this.record.get('name'));
+        this.window.setTitle(Ext.util.Format.htmlEncode(this.record.get('name')));
 
         if (this.cardPanelsByRecordId[this.record.id]) {
             previewPanel = this.cardPanel.get(this.cardPanelsByRecordId[this.record.id]);
