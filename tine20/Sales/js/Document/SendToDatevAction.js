@@ -61,7 +61,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             !(/.*(timesheet|resource|ip-volum).*/).test(attachment.name)
                             : true;
                         const attachmentNode = new Ext.tree.TreeNode({
-                            text: attachment.name,
+                            text: Ext.util.Format.htmlEncode(attachment.name),
                             id: attachment.id,
                             disabled: !isValid,
                             checked: isValid && idx === 0,
