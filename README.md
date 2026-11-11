@@ -1,11 +1,11 @@
-# tine - more than groupware
+# tine - More Than Groupware
 tine is the ideal software for digital collaboration in companies and organizations. From powerful groupware
 functionalities to clever add-ons, tine combines everything to make daily team collaboration easier.
 
 For more information please visit our [homepage](https://www.tine-groupware.de) and don't miss our latest
 [podcast](https://www.tine-groupware.de/podcast-2/) episodes.
 
-## Official resources
+## Official Resources
 * [Matrix chat room #tine20org:matrix.org](https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org)
 * [Mastodon](https://mastodon.social/@tinegroupware)
 * [Bluesky](https://bsky.app/profile/tine-groupware.bsky.social)
@@ -13,7 +13,7 @@ For more information please visit our [homepage](https://www.tine-groupware.de) 
 * [OCI images](https://hub.docker.com/u/tinegroupware)
 * [Video Tutorials](https://tutorials.tine-groupware.de/)
 
-## quick start
+## Quick Start
 tine consists of a number of integrated services which are provided as oci images. The easiest way to get you own
 evaluation copy up and running on premise, please follow our [quick-start-guide](https://docs.tine-groupware.de/main/operators/Installation_Guide/#quickstart).
 
@@ -23,7 +23,7 @@ professional hosting environment.
 On Premise options are available also but should be evaluated carefully as running tine performant, secure and high
 available is not an easy task and usually pays of for large installations or restricted environments only.
 
-## support
+## Support
 **Please note:** All our [packages](https://www.tine-groupware.de/produkte/) include support options and a separate
 issue tracking system. Issue tracking here is for our developers' community only.
 
@@ -39,13 +39,13 @@ elsewhere.
 There is no commercial support for the developers' community versions at all. Please be fair and don't try to suck community
 resources if you are not willing or able to contribute to the community.
 
-## documentation & training
+## Documentation & Training
 A nightly version of our documentation is published to https://docs.tine-groupware.de/.
 
 As tine is extremely powerful, feature rich and customizable we emphasize to train your operators, admins and users properly.
 Introducing tine in your organisation is a project itself.
 
-## licenses, copyrights and trademarks
+## Licenses, Copyrights and Trademarks
 tine is released under the terms of the AGPLv3 License mainly.
 
 In short this means: Any customisations, changes or additions you do to the code needs to be made available under the
@@ -57,55 +57,55 @@ legal fraught from other parties.
 
 see [tine LICENSE file](https://github.com/tine-groupware/tine/blob/main/LICENSE.md)
 
-## user limitation
+## User Limitation
 
 Please note! When using the current tine releases (from version 2023.11 or the weekly releases),
- only five user accounts are available without a licence key.
+ only five user accounts are available without a license key.
 
-## beta program
+## Beta Program
 You can run tine business edition with up to five users permanently without any costs and support. If you are an active
 developers' community member you can apply for our _beta program_ to get a license file for more users and addons.
 
 As a member of the beta program we expect you to actively contribute to the project. There are a number of possibilities
 to do so. If you have an idea, don't hesitate to contact us.
 
-## dev setup
+## Development Setup
 To build and use tine directly from source code please use the [tine-dev setup](https://github.com/tine-groupware/tine-dev)
 and follow the instructions of the repo.
 
 **Please note:** The dev setup is not suited for production usage. You should run it in a restricted demilitarized zone only!
 
-## requirements / supported clients
+## Requirements and Supported Clients
 
 ### ActiveSync Clients
-- iOS to version 26
-- Android to version 16
+- iOS to version 27
+- Android to version 17
 
 ### WebDAV Clients
 - OwnCloud Client to version 6.0
-- Windows Explorer to version 11
-- macOS X Finder to macOS 26
-- KDE Plasma to version 6.4
-- Gnome/Nautilus to version 48
+- Windows File Explorer to version 11
+- macOS X Finder to version 27
+- KDE Plasma to version 6.8
+- Gnome/Nautilus to version 50
 
 ### CalDAV Clients
-- Mozilla Thunderbird to version 140.3
-- eM Client to version 10.1
-- iCal to version 26
-- Reminders to macOS 26
-- iOS to version 26
+- Mozilla Thunderbird to version 160
+- eM Client to version 11.1
+- iCal (MacOS) to version 27
+- Reminders (MacOS) to version 27
+- iOS to version 27
 - DAVx5 to version 4.5
 
 ### CardDAV Clients
-- macOS/iOS Contacts to version 26
-- CardBook (Thunderbird addon)
+- macOS/iOS Contacts to version 27
+- CardBook (Thunderbird addon) to version 107
 - DAVx5 to version 4.5
 
 ### Server
 - PHP version 8.2 to 8.5
 - MySQL 8.0.12 to version 8.0.44
-- MariaDB 10.4 to version 12.2
+- MariaDB 10.4 to version 13.0.2
+- Nginx to version 1.31
 - Apache to version 2.4
-- Nginx to version 1.26
+- Valkey to version 9.1
 - Redis to version 7.0
-- Valkey to version 9.0
