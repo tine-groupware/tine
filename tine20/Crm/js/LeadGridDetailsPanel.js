@@ -74,9 +74,9 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                     for (var j=0; j < fields.length; j++) {
                         if (data[fields[j].dataField]) {
                             if (fields[j].dataField == 'url') {
+                                // NOTE: urlRenderer does not link unsafe urls (e.g. javascript:)
                                 a.push(labelMarkup + fields[j].label + ':</label> '
-                                    + '<a href="' + Ext.util.Format.htmlEncode(data[fields[j].dataField]) + '" target="_blank">' 
-                                    + Ext.util.Format.htmlEncode(data[fields[j].dataField]) + '</a>');
+                                    + Tine.Tinebase.common.urlRenderer(data[fields[j].dataField]));
                             } else {
                                 a.push(labelMarkup + fields[j].label + ':</label> '  + Ext.util.Format.htmlEncode(data[fields[j].dataField]));
                             }
