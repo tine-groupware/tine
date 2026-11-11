@@ -8,13 +8,13 @@
 
 Tine.widgets.grid.RendererManager.register('HumanResources', 'FreeTimeType', 'name', (value, index, record) => {
     const app = Tine.Tinebase.appMgr.get('HumanResources');
-    return app.i18n._hidden(value);
+    return Ext.util.Format.htmlEncode(app.i18n._hidden(value));
 });
 
 Tine.widgets.grid.RendererManager.register('HumanResources', 'FreeTimeType', 'abbreviation', (value, index, record) => {
     const app = Tine.Tinebase.appMgr.get('HumanResources');
     const name = app.i18n._hidden(record.get('name'));
-    return name.match(/.*\[(.+)\].*/)?.[1] || value;
+    return Ext.util.Format.htmlEncode(name.match(/.*\[(.+)\].*/)?.[1] || value);
 });
 
 

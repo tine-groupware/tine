@@ -105,6 +105,7 @@ Tine.widgets.grid.RendererManager.register('HumanResources', 'WorkingTimeScheme'
         case 'template': v = i18n._('Template'); break;
         case 'individual': v = i18n._('Individual'); break;
         case 'shared': v = i18n._('Shared'); break;
+        default: v = Ext.util.Format.htmlEncode(v);
     }
 
     return v;
