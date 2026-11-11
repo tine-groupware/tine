@@ -124,7 +124,7 @@ Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Con
  * @singleton
  */
 const urlRenderer = function (url) {
-    return '<a href=' + Tine.Tinebase.EncodingHelper.encode(url, 'href') + ' target="_blank">' + Tine.Tinebase.EncodingHelper.encode(url, 'shorttext') + '</a>';
+    return Tine.Tinebase.common.urlRenderer(url);
 };
 
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'url', urlRenderer, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
@@ -149,7 +149,8 @@ const avatarRenderer = function(n_short, metadata, record) {
     }
 
     const colorSchema = Tine.Calendar.colorMgr.getSchema(record && record.get('color') ? record.get('color') : Tine.Calendar.ColorManager.stringToColour(shortName).substring(1,6));
-    return shortName ? `<span class="adb-avatar-wrap" ext:qtip="${fullName}" style="background-color: ${colorSchema.color}; color: ${colorSchema.text}">${shortName}</span>` : '';
+    const attrEncode = Tine.Tinebase.common.attrEncode;
+    return shortName ? `<span class="adb-avatar-wrap" ext:qtip="${Tine.Tinebase.common.doubleEncode(fullName)}" style="background-color: ${attrEncode(colorSchema.color)}; color: ${attrEncode(colorSchema.text)}">${Ext.util.Format.htmlEncode(shortName)}</span>` : '';
 }
 
 

@@ -121,7 +121,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
                                     this.externalDomainInfo.setVisible(value && domainValidation.isValid && !domainValidation.isInternalDomain);
                                     this.externalDomainInfo.setText(String.format(this.app.i18n._('Mailinglist with address {0} is managed in an external process. ' +
-                                        'Changing group members here will not change the recipients of that list.'), value));
+                                        'Changing group members here will not change the recipients of that list.'), Ext.util.Format.htmlEncode(value)));
 
                                     if (this.mailingListPanel) {
                                         const errorMessage = this.mailingListPanel.validateMailingList(value);
