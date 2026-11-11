@@ -253,10 +253,10 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
 
         try {
             $result = $this->_getDefaultGDPRData($contactId);
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($result));
         } catch (Exception $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
@@ -313,10 +313,10 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                 ]);
             }
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['success' => true]));
         } catch (Exception $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
@@ -334,10 +334,10 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
             $dipRecord = $this->_updateDipr($request, $contactId);
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($this->_getDefaultGDPRData($contactId)));
         } catch (Exception $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
@@ -357,10 +357,10 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             $dipId = $result['dipId'] ?? null;
             $result = array_merge($result, $this->_getDefaultGDPRData($contact, $dipId));
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($result));
         } catch (Exception $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
@@ -381,10 +381,10 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             }
 
             $result = array_merge($result, $this->_getDefaultGDPRData(null, $dipId));
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($result));
         } catch (Exception $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
@@ -555,10 +555,10 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                 $this->_createAcceptedDipr($dataIntendedPurpose->getId(), $contact);
             }
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($this->_getDefaultGDPRData($contact->getId(), $dipId)));
         } catch (Exception $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();

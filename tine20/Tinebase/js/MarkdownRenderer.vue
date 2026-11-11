@@ -14,6 +14,7 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
+import { escape } from 'lodash'
 
 const props = defineProps({
   content: {
@@ -60,7 +61,8 @@ const renderMarkdown = async () => {
     renderedHtml.value = purify.sanitize(html)
   } catch (error) {
     console.error('Error rendering markdown:', error)
-    renderedHtml.value = props.content
+    // never fall back to unsanitized html
+    renderedHtml.value = escape(props.content)
   }
 }
 
