@@ -136,7 +136,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
         this.window.onlyOfficeDocumentKey = _.get(config, 'document.key');
         this.window.onlyOfficeDocumentDirty = false;
 
-        this.window.setTitle([Tine.title, 'ONLYOFFICE', this.record.get('name')].join(' - '));
+        this.window.setTitle([Tine.title, 'ONLYOFFICE', Ext.util.Format.htmlEncode(this.record.get('name'))].join(' - '));
         this.window.rename(Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.prototype.windowNamePrefix + this.record.id);
 
         const localeParts = _.split(Tine.Tinebase.registry.get('locale').locale, '_');
