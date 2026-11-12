@@ -1391,21 +1391,35 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param string $userId
      * @return array
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public function getUserProfile($userId)
+    public function getUserProfile($userId): array
     {
-        // NOTE: $userProfile is a contact where non readable fields are clearad out!
-        $userProfile = Tinebase_UserProfile::getInstance()->get($userId);
-        
-        // NOTE: This hurts! We don't have methods to call in our frontends yet which convert
-        //       a record to the json representaion :( Thus image link will be broken!
-        $userProfile->setTimezone(Tinebase_Core::getUserTimezone());
-        
-        return array(
-            'userProfile'      => $userProfile->toArray(),
+        $result = [
             'readableFields'   => Tinebase_UserProfile::getInstance()->getReadableFields(),
             'updateableFields' => Tinebase_UserProfile::getInstance()->getUpdateableFields(),
-        );
+        ];
+
+        try {
+            // NOTE: $userProfile is a contact where non-readable fields are cleared out!
+            $userProfile = Tinebase_UserProfile::getInstance()->get($userId);
+        } catch (Tinebase_Exception_InvalidArgument|Tinebase_Exception_NotFound $te) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                    . $te->getMessage());
+            }
+            return array_merge($result, [
+                'userProfile' => [],
+            ]);
+        }
+        
+        // NOTE: This hurts! We don't have methods to call in our frontends yet which convert
+        //       a record to the json representation :( Thus image link will be broken!
+        $userProfile->setTimezone(Tinebase_Core::getUserTimezone());
+        
+        return array_merge($result, [
+            'userProfile' => $userProfile->toArray(),
+        ]);
     }
     
     /**
@@ -1557,8 +1571,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveConfig($recordData)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, TRUE));
-        
         $controllerName = $recordData['id'] . '_Controller';
         $appController = Tinebase_Controller_Abstract::getController($controllerName);
         $appController->saveConfigSettings($recordData['settings']);
