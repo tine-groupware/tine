@@ -69,7 +69,7 @@ LOCAL=$1
 # other branches' version %B
 REMOTE=$3
 
-OUTPUT=$BASE
+OUTPUT=$LOCAL
 
 TEMP=`mktemp /tmp/merge-po.XXXX`
 
