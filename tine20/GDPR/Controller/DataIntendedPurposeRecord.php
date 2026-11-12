@@ -473,13 +473,13 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
 
         try {
             $result = $callback();
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($result));
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . $e->getMessage());
 
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();

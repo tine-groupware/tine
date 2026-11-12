@@ -900,20 +900,25 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $content = fread($handle, $file->revision_size);
             fclose($handle);
 
-            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => $file->contenttype]);
+            // NOTE: content type and name are supplied by the (anonymous) uploader - never let the browser render it inline
+            $response = new \Laminas\Diactoros\Response(headers: [
+                'Content-Type' => $file->contenttype ?: 'application/octet-stream',
+                'Content-Disposition' => 'attachment',
+                'X-Content-Type-Options' => 'nosniff',
+            ]);
             $response->getBody()->write($content);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_AccessDenied $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             Tinebase_Exception::log($tesg);
-            $response = new \Laminas\Diactoros\Response('php://memory', 500);
+            $response = new \Laminas\Diactoros\Response('php://memory', 500, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode('File access failed'));
         } finally {
             $assertAclUsage();
@@ -933,35 +938,35 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
             $registration = $this->_processRegistration($request, $event_id, false, $email);
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($registration->toArray()));
         } catch (Tinebase_Exception_AccessDenied $tead) {
             Tinebase_Exception::log($tead);
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => $tead->getMessage()]));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             Tinebase_Exception::log($tesg);
-            $response = new \Laminas\Diactoros\Response('php://memory', 422);
+            $response = new \Laminas\Diactoros\Response('php://memory', 422, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => $tesg->getMessage()]));
         } catch (Tinebase_Exception_Record_Validation $terv) {
             Tinebase_Exception::log($terv);
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terv->getMessage()));
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Exception::log($tenf);
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
             Tinebase_Exception::log($terna);
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_ConcurrencyConflict $tecc) {
             Tinebase_Exception::log($tecc);
-            $response = new \Laminas\Diactoros\Response('php://memory', 409);
+            $response = new \Laminas\Diactoros\Response('php://memory', 409, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tecc->getMessage()));
         } catch (Throwable $t) {
             Tinebase_Exception::log($t);
-            $response = new \Laminas\Diactoros\Response('php://memory', 500);
+            $response = new \Laminas\Diactoros\Response('php://memory', 500, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => 'Registration failed']));
         } finally {
             $assertAclUsage();
@@ -1273,11 +1278,11 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 'participantName' => $participantName,
             ]);
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['success' => true]));
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
-            $response = new \Laminas\Diactoros\Response('php://memory', 400);
+            $response = new \Laminas\Diactoros\Response('php://memory', 400, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
         } finally {
             $assertAclUsage();
@@ -1310,15 +1315,15 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
             Tinebase_Core::getCache()->remove('EventManagerParentConsent_' . $decoded->pendingId);
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($registration->toArray()));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             Tinebase_Exception::log($tesg);
-            $response = new \Laminas\Diactoros\Response('php://memory', 422);
+            $response = new \Laminas\Diactoros\Response('php://memory', 422, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => $tesg->getMessage()]));
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
-            $response = new \Laminas\Diactoros\Response('php://memory', 400);
+            $response = new \Laminas\Diactoros\Response('php://memory', 400, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => 'Registration failed']));
         } finally {
             $assertAclUsage();
@@ -1386,7 +1391,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         try {
             [$decoded, $pending] = $this->_loadPendingParentConsent($token);
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode([
                 'eventId'        => $decoded->eventId,
                 'parentEmail'    => $decoded->parentEmail,
@@ -1394,7 +1399,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 'replies'        => $pending['replies'] ?? [],
             ]));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 400);
+            $response = new \Laminas\Diactoros\Response('php://memory', 400, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => $tesg->getMessage()]));
         } finally {
             $assertAclUsage();
@@ -1600,7 +1605,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 throw new Tinebase_Exception_AccessDenied('Unknown file option');
             }
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             if (isset($_FILES['files']) && is_array($_FILES['files']['name'])) {
                 $file_count = count($_FILES['files']['name']);
                 $old_booked_options = $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} ?: [];
@@ -1694,20 +1699,20 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 $response->getBody()->write(json_encode($registration->toArray()));
             }
         } catch (Tinebase_Exception_Record_Validation $terv) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terv->getMessage()));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tead->getMessage()));
         } catch (Throwable $t) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $t);
-            $response = new \Laminas\Diactoros\Response('php://memory', 500);
+            $response = new \Laminas\Diactoros\Response('php://memory', 500, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => 'Upload failed']));
         } finally {
             $assertAclUsage();
@@ -1732,7 +1737,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $email = $sessionEmail !== '' ? $sessionEmail : trim((string) ($request['email'] ?? ''));
 
             if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $email)) {
-                $response = new \Laminas\Diactoros\Response();
+                $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
                 $response->getBody()->write(json_encode(['needsEmail' => true]));
                 return $response;
             }
@@ -1746,7 +1751,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
             if ($sessionEmail !== '') {
                 // no double opt-in mail needed, the client redirects directly
-                $response = new \Laminas\Diactoros\Response();
+                $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
                 $response->getBody()->write(json_encode([$link]));
                 return $response;
             }
@@ -1761,10 +1766,10 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             }
             $this->_sendMessageWithTemplate('SendRegistrationLink', $context);
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['success' => true]));
         } catch (Exception $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
@@ -1800,20 +1805,20 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 $this->update($registration);
             }
 
-            $response = new \Laminas\Diactoros\Response();
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['success' => true]));
         } catch (Tinebase_Exception_Record_Validation $terv) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 400);
+            $response = new \Laminas\Diactoros\Response('php://memory', 400, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => $terv->getMessage()]));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => 'Registration not found']));
         } catch (Tinebase_Exception_Record_NotAllowed | Tinebase_Exception_AccessDenied $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
             Tinebase_Exception::log($tesg);
-            $response = new \Laminas\Diactoros\Response('php://memory', 500);
+            $response = new \Laminas\Diactoros\Response('php://memory', 500, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => 'Deregistration failed']));
         } finally {
             $assertAclUsage();

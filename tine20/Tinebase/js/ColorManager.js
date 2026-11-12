@@ -60,6 +60,11 @@ Ext.apply(Tine.Tinebase.ColorManager.prototype, {
     },
 
     getCustomSchema: function(color) {
+        // NOTE: colors are user data and end up in style attributes
+        color = colors.normalizeColor(color);
+        if (! color) {
+            return this.gray;
+        }
         if (!this.customColorSchemataCache[color]) {
             this.customColorSchemataCache[color] = colors.getCustomSchema(color);
         }

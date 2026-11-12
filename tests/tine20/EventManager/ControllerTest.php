@@ -248,6 +248,53 @@ class EventManager_ControllerTest extends TestCase
         self::assertNotEquals($tempf_id, $node_id);
     }
 
+    public function testPublicGetFileIsServedAsAttachment()
+    {
+        $event = $this->_getEvent();
+        $this->_createSharedEventCalendar();
+        EventManager_Controller_Event::getInstance()->create($event);
+        EventManager_Controller_Option::getInstance()->create($this->_getFileOption($event->getId()));
+        $event = EventManager_Controller_Event::getInstance()->get($event->getId());
+        $nodeId = $event->{EventManager_Model_Event::FLD_OPTIONS}->getFirstRecord()
+            ->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+            ->{EventManager_Model_FileOption::FLD_NODE_ID};
+
+        $oldGet = $_GET;
+        try {
+            $_GET = ['eventId' => $event->getId()];
+            $response = EventManager_Controller_Registration::getInstance()->publicApiGetFile($nodeId);
+            self::assertSame(200, $response->getStatusCode());
+            // uploaded files must never be rendered inline (content type is client supplied)
+            self::assertSame('attachment', $response->getHeaderLine('Content-Disposition'));
+            self::assertSame('nosniff', $response->getHeaderLine('X-Content-Type-Options'));
+
+            $_GET = [];
+            $response = EventManager_Controller_Registration::getInstance()->publicApiGetFile($nodeId);
+            self::assertSame(403, $response->getStatusCode());
+            self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
+        } finally {
+            $_GET = $oldGet;
+        }
+    }
+
+    public function testPublicGetImageOnlyServesEventImages()
+    {
+        $event = $this->_getEvent();
+        $this->_createSharedEventCalendar();
+        EventManager_Controller_Event::getInstance()->create($event);
+        EventManager_Controller_Option::getInstance()->create($this->_getFileOption($event->getId()));
+        $event = EventManager_Controller_Event::getInstance()->get($event->getId());
+        // an existing node which is not configured as event image
+        $nodeId = $event->{EventManager_Model_Event::FLD_OPTIONS}->getFirstRecord()
+            ->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+            ->{EventManager_Model_FileOption::FLD_NODE_ID};
+
+        $response = EventManager_Controller_Event::getInstance()->publicApiGetImage($nodeId);
+        self::assertSame(404, $response->getStatusCode());
+        self::assertSame('application/json', $response->getHeaderLine('Content-Type'));
+        self::assertStringContainsString('image not found', (string) $response->getBody());
+    }
+
     public function testFileUploadToRegistration()
     {
         $event = $this->_getEvent();
