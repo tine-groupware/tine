@@ -83,6 +83,7 @@ and follow the instructions of the repo.
 
 ### WebDAV Clients
 - OwnCloud Client to version 6.0
+- TineDrive to version 6.0
 - Windows File Explorer to version 11
 - macOS X Finder to version 27
 - KDE Plasma to version 6.8

@@ -415,4 +415,251 @@ END:VCALENDAR&#13;
         
         return $container;
     }    
+
+    /**
+     * test that a declined recur instance is not synced
+     *
+     * The user declines the second instance of a recurring event with a
+     * Thunderbird-like PUT (full series plus exception with RECURRENCE-ID,
+     * If-Match set). With the noSyncDeclinedAttendeeEvents flag enabled (set
+     * by Tinebase_Server_WebDAV from the EXCLUDE_CANCELLED_EVENTS_WEBDAV
+     * preference in production) the following sync-collection must not return
+     * the declined exception as separate VEVENT. The base event is returned
+     * with an EXDATE for the declined instance instead.
+     */
+    public function testDeclinedRecurInstanceNotSynced()
+    {
+        $user = Tinebase_Core::getUser();
+        $eventController = Calendar_Controller_Event::getInstance();
+
+        // personal container: the user is organizer and attendee and has full grants
+        $container = $this->_getCalendarTestContainer();
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId());
+        $event = new Calendar_Model_Event([
+            'summary'        => 'Declined recur instance sync test',
+            'dtstart'        => Tinebase_DateTime::now()->addDay(1)->setTime(10, 0, 0),
+            'dtend'          => Tinebase_DateTime::now()->addDay(1)->setTime(10, 30, 0),
+            'rrule'          => 'FREQ=DAILY;COUNT=5',
+            'uid'            => Tinebase_Record_Abstract::generateUID(),
+            'container_id'   => $container->getId(),
+            'organizer'      => $contact->getId(),
+            'attendee'       => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
+                'user_id'        => $user->contact_id,
+                'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
+            ]]),
+        ]);
+        $event = $eventController->create($event);
+        $containerUri = '/calendars/' . $user->contact_id . '/' . $container->getId();
+
+        // initial sync: only the base event, without EXDATE
+        $initialSync = $this->_syncCollection($containerUri, '');
+        $baseHref = $containerUri . '/' . $event->getId() . '.ics';
+        $this->assertArrayHasKey($baseHref, $initialSync['responses'], 'initial sync must contain the base event');
+        $this->assertNotNull(
+            $initialSync['responses'][$baseHref]['calendarData'],
+            'initial sync must return calendar-data'
+        );
+        $this->assertNotNull($initialSync['responses'][$baseHref]['etag'], 'initial sync must return the etag');
+        $this->assertStringContainsString('RRULE', $initialSync['responses'][$baseHref]['calendarData']);
+        $this->assertStringNotContainsString('EXDATE', $initialSync['responses'][$baseHref]['calendarData']);
+
+        // enable the exclusion (in production Tinebase_Server_WebDAV sets this from the
+        // EXCLUDE_CANCELLED_EVENTS_WEBDAV preference)
+        $oldFlag = $eventController->doNoSyncDeclinedAttendeeEvents(true);
+        $noSyncRaii = new Tinebase_RAII(fn() => $eventController->doNoSyncDeclinedAttendeeEvents($oldFlag));
+        Calendar_Controller_MSEventFacade::unsetInstance();
+
+        // decline the second instance with a Thunderbird-like PUT (If-Match triggers a full update)
+        $oldUserAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64; rv:115.0) Gecko/20100101 Thunderbird/115.0';
+        $ifMatch = new Zend\Http\Header\IfMatch($initialSync['responses'][$baseHref]['etag']);
+        Tinebase_Core::getRequest()->getHeaders()->addHeader($ifMatch);
+        try {
+            $card = $this->_declineRecurInstance($initialSync['responses'][$baseHref]['calendarData'], $user);
+            // a fresh server per request: Sabre\DAV\Tree caches nodes and production
+            // creates a new server for every http request
+            $server = $this->_getWebDavServer();
+            $server->httpRequest = new Sabre\HTTP\Request(
+                'PUT',
+                $baseHref,
+                ['If-Match' => $ifMatch->getFieldValue()],
+                $card
+            );
+            $server->httpResponse = new Tinebase_WebDav_Sabre_ResponseMock();
+            $server->exec();
+
+            $this->assertSame(204, $server->httpResponse->getStatus(), 'PUT failed: ' . $server->httpResponse->body);
+        } finally {
+            Tinebase_Core::getRequest()->getHeaders()->removeHeader($ifMatch);
+            $_SERVER['HTTP_USER_AGENT'] = $oldUserAgent;
+        }
+
+        // the declined exception is persisted and the own attender is declined
+        $exceptions = $eventController->getRecurExceptions($eventController->get($event->getId()), false);
+        $this->assertCount(1, $exceptions, 'expected exactly one recur exception after the decline PUT');
+        $exception = $exceptions->getFirstRecord();
+        $attender = $exception->attendee->find('user_id', $user->contact_id);
+        $this->assertNotNull($attender, 'the exception must have an attender for the user');
+        $this->assertSame(Calendar_Model_Attender::STATUS_DECLINED, $attender->status);
+
+        // second sync: the base event is returned with an EXDATE, no VEVENT for the declined instance
+        $secondSync = $this->_syncCollection($containerUri, $initialSync['syncToken']);
+        $this->assertArrayHasKey($baseHref, $secondSync['responses'], 'second sync must contain the base event');
+        $this->assertCount(1, $secondSync['responses'], 'the declined exception must not be synced as separate entry');
+
+        $vobject = \Sabre\VObject\Reader::read($secondSync['responses'][$baseHref]['calendarData']);
+        $baseVevent = null;
+        $recurrenceIds = [];
+        foreach ($vobject->VEVENT as $vevent) {
+            if ($recurrenceId = $vevent->{'RECURRENCE-ID'}) {
+                $recurrenceIds[] = (string) $recurrenceId;
+            }
+            if ($vevent->RRULE) {
+                $baseVevent = $vevent;
+            }
+        }
+        $this->assertNotNull($baseVevent, 'second sync must contain the base event with RRULE');
+        $this->assertEmpty($recurrenceIds, 'second sync must not contain a VEVENT for the declined instance');
+
+        $exdate = $baseVevent->EXDATE;
+        $this->assertNotNull($exdate, 'the declined instance must be excluded via EXDATE on the base event');
+        $this->assertSame(
+            $exception->dtstart->getTimestamp(),
+            $exdate->getDateTime()->getTimestamp(),
+            'the EXDATE must be the declined occurrence'
+        );
+    }
+
+    /**
+     * create a sabre DAV server backed by the tine webdav tree
+     *
+     * @return \Sabre\DAV\Server
+     */
+    protected function _getWebDavServer()
+    {
+        $server = new \Sabre\DAV\Server(
+            new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()),
+            new Tinebase_WebDav_Sabre_SapiMock()
+        );
+        $server->addPlugin(new \Sabre\CalDAV\Plugin());
+        $server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
+        return $server;
+    }
+
+    /**
+     * run a sync-collection REPORT and parse the multistatus response
+     *
+     * @param string $containerUri
+     * @param string $syncToken
+     * @return array{syncToken: string, responses: array<string, array{etag: ?string, calendarData: ?string}>}
+     */
+    protected function _syncCollection($containerUri, $syncToken)
+    {
+        $body = '<?xml version="1.0" encoding="UTF-8"?>
+                <A:sync-collection xmlns:A="DAV:">
+                    <A:sync-token>' . $syncToken . '</A:sync-token>
+                    <A:sync-level>1</A:sync-level>
+                    <A:prop>
+                        <A:getetag/>
+                        <C:calendar-data xmlns:C="urn:ietf:params:xml:ns:caldav"/>
+                    </A:prop>
+                </A:sync-collection>';
+        $server = $this->_getWebDavServer();
+        $server->httpRequest = new Sabre\HTTP\Request('REPORT', $containerUri, ['DEPTH' => '1'], $body);
+        $server->httpResponse = new Tinebase_WebDav_Sabre_ResponseMock();
+        $server->exec();
+
+        $this->assertSame(
+            207,
+            $server->httpResponse->getStatus(),
+            'sync-collection failed: ' . $server->httpResponse->body
+        );
+
+        $doc = new DOMDocument();
+        $this->assertTrue($doc->loadXML($server->httpResponse->body), 'invalid multistatus XML');
+        $xpath = new DOMXPath($doc);
+        $xpath->registerNamespace('d', 'DAV:');
+        $xpath->registerNamespace('c', 'urn:ietf:params:xml:ns:caldav');
+
+        $newSyncToken = '';
+        if ($token = $xpath->query('//d:sync-token')->item(0)) {
+            $newSyncToken = $token->nodeValue;
+        }
+
+        $responses = [];
+        foreach ($xpath->query('//d:response') as $response) {
+            $href = $response->getElementsByTagNameNS('DAV:', 'href')->item(0)->nodeValue;
+            $entry = ['etag' => null, 'calendarData' => null];
+            foreach ($xpath->query('./d:propstat/d:prop', $response) as $prop) {
+                if ($n = $prop->getElementsByTagNameNS('DAV:', 'getetag')->item(0)) {
+                    $entry['etag'] = $n->nodeValue;
+                }
+                if ($n = $prop->getElementsByTagNameNS('urn:ietf:params:xml:ns:caldav', 'calendar-data')->item(0)) {
+                    $entry['calendarData'] = $n->nodeValue;
+                }
+            }
+            $responses[$href] = $entry;
+        }
+
+        return ['syncToken' => $newSyncToken, 'responses' => $responses];
+    }
+
+    /**
+     * build a Thunderbird-like PUT body: the full series plus a declined
+     * exception for the second occurrence of the given recurring event
+     *
+     * @param string $calendarData
+     * @param Tinebase_Model_FullUser $user
+     * @return string
+     */
+    protected function _declineRecurInstance($calendarData, $user)
+    {
+        $vobject = \Sabre\VObject\Reader::read($calendarData);
+        $base = null;
+        foreach ($vobject->VEVENT as $vevent) {
+            if ($vevent->RRULE) {
+                $base = $vevent;
+                break;
+            }
+        }
+        $this->assertNotNull($base, 'expected a recurring VEVENT in the calendar-data');
+
+        $day = new DateInterval('P1D');
+        $exception = clone $base;
+        $vobject->add($exception);
+        $exception->remove('RRULE');
+        $exception->DTSTART->setDateTime($base->DTSTART->getDateTime()->add($day));
+        $exception->DTEND->setDateTime($base->DTEND->getDateTime()->add($day));
+        $dtstartParams = [];
+        foreach ($exception->DTSTART->parameters() as $param) {
+            $dtstartParams[$param->name] = $param->getValue();
+        }
+        $exception->add('RECURRENCE-ID', $exception->DTSTART->getValue(), $dtstartParams);
+
+        // decline the own attender
+        $identifiers = array_filter([$user->accountEmailAddress, (string) $user->contact_id]);
+        $declined = false;
+        foreach ($exception->select('ATTENDEE') as $attendee) {
+            $value = (string) $attendee->getValue();
+            foreach ($identifiers as $identifier) {
+                if (str_contains($value, $identifier)) {
+                    $attendee['PARTSTAT'] = 'DECLINED';
+                    $declined = true;
+                    break 2;
+                }
+            }
+        }
+        $this->assertTrue($declined, 'the own attender was not found in the VEVENT');
+
+        // thunderbird also refreshes DTSTAMP and bumps SEQUENCE on the series
+        $sequence = ((int) ($base->SEQUENCE ? $base->SEQUENCE->getValue() : 0)) + 1;
+        $base->DTSTAMP = gmdate('Ymd\\THis\\Z');
+        $base->SEQUENCE = (string) $sequence;
+        $exception->DTSTAMP = gmdate('Ymd\\THis\\Z');
+        $exception->SEQUENCE = (string) $sequence;
+
+        return $vobject->serialize();
+    }
 }
