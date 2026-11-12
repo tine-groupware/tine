@@ -1828,3 +1828,6 @@ msgstr ""
 
 msgid "Depending on content format"
 msgstr ""
+
+msgid "Show Details"
+msgstr ""

@@ -1828,3 +1828,6 @@ msgstr "Only forward email as a .eml attachment"
 
 msgid "Depending on content format"
 msgstr "Depending on content format"
+
+msgid "Show Details"
+msgstr "Show Details"

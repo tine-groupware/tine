@@ -3198,9 +3198,6 @@ msgstr ""
 msgid "Delete All States?"
 msgstr ""
 
-msgid "Really delete all client states)"
-msgstr ""
-
 msgid "State List"
 msgstr ""
 
@@ -4875,4 +4872,7 @@ msgid "Neighbours only"
 msgstr ""
 
 msgid "Preview"
+msgstr ""
+
+msgid "Really delete all client states?"
 msgstr ""
