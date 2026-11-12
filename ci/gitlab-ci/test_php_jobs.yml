@@ -508,4 +508,7 @@ php-unit-update-tests-merge-request:
       changes:
         paths:
           - "tine20/*/Model/**/*"
+          - "tine20/*/Config/*"
           - "tine20/*/Setup/Update/**/*"
+          - "tine20/Setup/SchemaTool.php"
+          - "tine20/Tinebase/ModelConfiguration.php"
