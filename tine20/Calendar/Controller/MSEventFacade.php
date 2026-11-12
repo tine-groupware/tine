@@ -254,11 +254,25 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
 
         // if an id filter is set, we need to fetch exceptions in a second query
         if ($_filter->getFilter('id', true, true)) {
-            $events->merge($this->_eventController->search(new Calendar_Model_EventFilter(array(
-                array('field' => 'base_event_id', 'operator' => 'in',      'value' => $events->id),
-                array('field' => 'id',            'operator' => 'notin',   'value' => $events->id),
-                array('field' => 'recurid',       'operator' => 'notnull', 'value' => null),
-            )), _action: $_action));
+            $exceptionFilterData = [
+                ['field' => 'base_event_id', 'operator' => 'in',      'value' => $events->id],
+                ['field' => 'id',            'operator' => 'notin',   'value' => $events->id],
+                ['field' => 'recurid',       'operator' => 'notnull', 'value' => null],
+            ];
+            // checkFilterACL() needs the container to exclude the declined exceptions of the calendar user
+            if ($this->_eventController->doNoSyncDeclinedAttendeeEvents()
+                && ($containerFilter = $_filter->findFilterWithoutOr('container_id'))
+                    instanceof Tinebase_Model_Filter_Container
+                && 1 === count($containerIds = $containerFilter->getContainerIds())
+            ) {
+                $exceptionFilterData[] = [
+                    'field' => 'container_id', 'operator' => 'equals', 'value' => current($containerIds)
+                ];
+            }
+            $events->merge($this->_eventController->search(
+                new Calendar_Model_EventFilter($exceptionFilterData),
+                _action: $_action
+            ));
         }
 
         if ($this->_eventController->doNoSyncDeclinedAttendeeEvents()) {
