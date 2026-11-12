@@ -4,21 +4,14 @@
 # usage:
 #   git config merge.pofile.driver "tine20/scripts/git/merge-po-files %A %O %B"
 #
+# Merges on message level (msgctxt + msgid):
+#  - messages changed on one side only are taken from that side
+#  - messages added on either side are added
+#  - messages removed on one side are removed (unless changed on the other side)
+#  - messages changed differently on both sides are conflicts (msgcat markers, exit 1)
+# Obsolete messages ("#~", the gettext graveyard) are dropped.
+#
 set -e
-
-# failure handler
-on_error() {
-  local parent_lineno="$1"
-  local message="$2"
-  local code="${3:-1}"
-  if [[ -n "$message" ]] ; then
-    echo "Error on or near line ${parent_lineno}: ${message}; exiting with status ${code}"
-  else
-    echo "Error on or near line ${parent_lineno}; exiting with status ${code}"
-  fi
-  exit 255
-}
-# trap 'on_error ${LINENO}' ERR
 
 # given a file, find the path that matches its contents
 show_file() {
@@ -28,29 +21,23 @@ show_file() {
 
 # wraps msgmerge with default options
 m_msgmerge() {
-  msgmerge --no-wrap --force-po --quiet --no-fuzzy-matching $@
+  msgmerge --no-wrap --force-po --quiet --no-fuzzy-matching "$@"
 }
 
 # wraps msgcat with default options
 m_msgcat() {
-  msgcat --no-wrap --force-po $@
+  msgcat --no-wrap --force-po "$@"
 }
 
-
-# removes the "graveyard strings" from the input
-strip_graveyard() {
-  sed -e '/^#~/d'
-}
-
-# removes the "graveyard strings" from the input
-replace_graveyard() {
-  sed -e 's/^#~ //g'
+# wraps msgattrib with default options
+m_msgattrib() {
+  msgattrib --no-wrap --force-po "$@"
 }
 
 # select messages with a conflict marker
 # pass -v to inverse selection
 grep_conflicts() {
-  msggrep --no-wrap $@ --msgstr -F -e '#-#-#' -
+  msggrep --no-wrap "$@" --msgstr -F -e '#-#-#' -
 }
 
 # select messages from $1 that are also in $2 but whose contents have changed
@@ -58,17 +45,24 @@ extract_changes() {
   msgcat --no-wrap -o - $1 $2 \
     | grep_conflicts \
     | m_msgmerge -o - $1 - \
-    | strip_graveyard
+    | m_msgattrib --no-obsolete -
+}
+
+# select messages from $1 that are not in $2
+subtract() {
+  msgcomm --no-wrap --force-po --less-than=2 -o - $1 $2 \
+    | msgcomm --no-wrap --force-po --more-than=1 -o - - $1
 }
 
 # see https://git-scm.com/docs/gitattributes#_performing_a_three_way_merge
-# common ancestor’s version %O
-BASE=$2
 # current version %A
 LOCAL=$1
+# common ancestor’s version %O
+BASE=$2
 # other branches' version %B
 REMOTE=$3
 
+# git only takes the result from %A
 OUTPUT=$LOCAL
 
 TEMP=`mktemp /tmp/merge-po.XXXX`
@@ -78,10 +72,10 @@ echo "Using custom PO merge driver (`show_file ${LOCAL}`; $TEMP)"
 # Extract the PO header from the current branch (top of file until first empty line)
 sed -e '/^$/q' < $LOCAL > ${TEMP}.header
 
-# clean input files
-msguniq --no-wrap --force-po -o ${TEMP}.base   --unique ${BASE}
-msguniq --no-wrap --force-po -o ${TEMP}.local  --unique ${LOCAL}
-msguniq --no-wrap --force-po -o ${TEMP}.remote --unique ${REMOTE}
+# clean input files: one entry per message, active messages only
+for v in base:${BASE} local:${LOCAL} remote:${REMOTE}; do
+  msguniq --no-wrap --force-po --use-first ${v#*:} | m_msgattrib --no-obsolete -o ${TEMP}.${v%%:*} -
+done
 
 # messages changed on local
 extract_changes ${TEMP}.local ${TEMP}.base > ${TEMP}.local-changes
@@ -106,15 +100,25 @@ m_msgcat -o ${TEMP}.remote-only --unique ${TEMP}.remote-changes ${TEMP}.conflict
 # the big merge
 m_msgcat -o ${TEMP}.merge1 ${TEMP}.unchanged ${TEMP}.conflicts ${TEMP}.local-only ${TEMP}.remote-only
 
-# create a template to filter messages actually needed (those on local and remote)
-m_msgcat -o - ${TEMP}.local ${TEMP}.remote \
-  | m_msgmerge -o ${TEMP}.merge2 ${TEMP}.merge1 -
+# messages removed on local or remote
+subtract ${TEMP}.base ${TEMP}.local  > ${TEMP}.local-removed
+subtract ${TEMP}.base ${TEMP}.remote > ${TEMP}.remote-removed
+m_msgcat -o - --use-first ${TEMP}.local-removed ${TEMP}.remote-removed > ${TEMP}.removed-all
+# changed messages are kept even if removed on the other side
+m_msgcat -o ${TEMP}.changes --use-first ${TEMP}.local-changes ${TEMP}.remote-changes
+subtract ${TEMP}.removed-all ${TEMP}.changes > ${TEMP}.removed
+
+# messages still in use: those on local or remote, minus the removed ones
+# (messages added on both sides with different translations get conflict markers here)
+m_msgcat -o ${TEMP}.union ${TEMP}.local ${TEMP}.remote
+subtract ${TEMP}.union ${TEMP}.removed > ${TEMP}.used
+m_msgcat -o ${TEMP}.template --use-first ${TEMP}.header ${TEMP}.used
+
+# filter the merge by the template, drop what msgmerge sends to the graveyard
+m_msgmerge -o - ${TEMP}.merge1 ${TEMP}.template | m_msgattrib --no-obsolete -o ${TEMP}.merge2 -
 
 # final merge, adds saved header
-m_msgcat -o ${TEMP}.merge3 --use-first ${TEMP}.header ${TEMP}.merge2
-
-# produce output file (overwrites input LOCAL file)
-cat ${TEMP}.merge3 | replace_graveyard > $OUTPUT
+m_msgcat -o ${OUTPUT} --use-first ${TEMP}.header ${TEMP}.merge2
 
 # check for conflicts
 if grep '#-#' $OUTPUT > /dev/null ; then
