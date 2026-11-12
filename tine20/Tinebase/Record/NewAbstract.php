@@ -1459,6 +1459,8 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
 
         if (is_array($_data)) {
             $recordData = $_data;
+        } else if (in_array($_data, [null, ''])) {
+            $recordData = [];
         } else {
             $recordData = Zend_Json::decode($_data);
         }
