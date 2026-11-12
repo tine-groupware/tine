@@ -1,9 +1,9 @@
 <?php
 /**
- * Tine 2.0
- * 
+ * tine Groupware - https://www.tine-groupware.de/
+ *
  * @package     Calendar
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl-3.0.html
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2010-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
@@ -92,6 +92,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected $_keepAttenderStatus = false;
 
     protected $_moveExternalOrganizerToContainer = true;
+
+    /**
+     * assert the calendar user as attendee of external organizer events in _inspectEvent()
+     * NOTE: set to false when the attendee are saved separately (recur exceptions)
+     */
+    protected bool $_assertExternalOrganizerCalendarUser = true;
 
     protected bool $_onlyGenerateNotificationsNoSend = false;
 
@@ -1642,12 +1648,22 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $originalDtstart = $_event->getOriginalDtStart();
                 $dtStartHasDiff = $originalDtstart->compare($_event->dtstart) != 0; // php52 compat
                 
+                $assertCalUserRaii = null;
+                $attendees = null;
                 if (! $dtStartHasDiff) {
                     $attendees = $_event->attendee;
                     unset($_event->attendee);
+                    // the attendee are saved separately (here or by the caller) -> do not add the calendar user
+                    // in _inspectEvent(), as this creates a duplicate attendee
+                    $oldAssertCalUser = $this->_assertExternalOrganizerCalendarUser;
+                    $this->_assertExternalOrganizerCalendarUser = false;
+                    $assertCalUserRaii = new Tinebase_RAII(
+                        fn() => $this->_assertExternalOrganizerCalendarUser = $oldAssertCalUser
+                    );
                 }
                 unset($_event->notes);
                 $persistentExceptionEvent = $this->create($_event, $_checkBusyConflicts);
+                unset($assertCalUserRaii);
                 
                 if (! $dtStartHasDiff) {
                     // we save attendee seperatly to preserve their attributes
@@ -2562,10 +2578,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $calendarUserId = Tinebase_Core::getUser()->contact_id;
             }
             
-            $attendee = $_record->assertAttendee(new Calendar_Model_Attender(array(
-                'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'      => $calendarUserId
-            )), false, false, false);
+            $attendee = $this->_assertExternalOrganizerCalendarUser ?
+                $_record->assertAttendee(new Calendar_Model_Attender(array(
+                    'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'      => $calendarUserId
+                )), false, false, false) : null;
             
             if ($attendee && $container instanceof Tinebase_Model_Container) {
                 $attendee->displaycontainer_id = $container->getId();

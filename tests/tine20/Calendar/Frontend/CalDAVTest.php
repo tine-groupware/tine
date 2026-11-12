@@ -1,10 +1,10 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
- * 
+ * tine Groupware - https://www.tine-groupware.de/
+ *
  * @package     Calendar
- * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl-3.0.html
+ * @copyright   Copyright (c) 2011-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -364,6 +364,258 @@ END:VCALENDAR&#13;
 
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:supported-calendar-component-set/cal:comp[@name="VTODO"]');
         $this->assertGreaterThanOrEqual(1, $nodes->length);
+    }
+
+    /**
+     * Thunderbird declines one instance of an event series with an external organizer.
+     * With the preference EXCLUDE_CANCELLED_EVENTS_WEBDAV, Thunderbird must not receive the declined instance.
+     */
+    public function testThunderbirdDeclineRecurInstanceOfExternalOrganizerSeriesExcludeCancelled(): void
+    {
+        $prefs = Tinebase_Core::getPreference(Calendar_Config::APP_NAME);
+        $prefs->setValue(Calendar_Preference::EXCLUDE_CANCELLED_EVENTS_WEBDAV, true);
+        $prefRaii = new Tinebase_RAII(fn() => $prefs->resetAppPrefsCache());
+        $this->assertTrue((bool)$prefs->getValueForUser(
+            Calendar_Preference::EXCLUDE_CANCELLED_EVENTS_WEBDAV,
+            Tinebase_Core::getUser()->getId()
+        ), 'preference is not set');
+
+        $oldUserAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
+        $userAgentRaii = new Tinebase_RAII(function () use ($oldUserAgent) {
+            if (null === $oldUserAgent) {
+                unset($_SERVER['HTTP_USER_AGENT']);
+            } else {
+                $_SERVER['HTTP_USER_AGENT'] = $oldUserAgent;
+            }
+        });
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Thunderbird/128.5.0';
+
+        // external organizer event series (daily, 5 instances), the current user is an attendee
+        $personalContainer = $this->_getCalendarTestContainer();
+        $externalOrganizerEmail = 'external.organizer@' . Tinebase_Record_Abstract::generateUID(8) . '.example.org';
+        $dtstart = Tinebase_DateTime::now()->addDay(1)->setTime(10, 0);
+
+        $calCtrl = Calendar_Controller_Event::getInstance();
+        $oldSendNotifications = $calCtrl->sendNotifications(false);
+        $notificationRaii = new Tinebase_RAII(fn() => $calCtrl->sendNotifications($oldSendNotifications));
+
+        $series = $calCtrl->create(new Calendar_Model_Event([
+            'summary'           => 'external organizer series',
+            'dtstart'           => $dtstart,
+            'dtend'             => $dtstart->getClone()->addHour(1),
+            'originator_tz'     => Tinebase_Core::getUserTimezone(),
+            'rrule'             => 'FREQ=DAILY;INTERVAL=1;COUNT=5',
+            'container_id'      => $personalContainer->getId(),
+            'organizer_type'    => Calendar_Model_Event::ORGANIZER_TYPE_EMAIL,
+            'organizer_email'   => $externalOrganizerEmail,
+            'attendee'          => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [
+                [
+                    'user_type' => Calendar_Model_Attender::USERTYPE_EMAIL,
+                    'user_email' => $externalOrganizerEmail,
+                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+                    'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
+                ], [
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'   => Tinebase_Core::getUser()->contact_id,
+                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+                    'status'    => Calendar_Model_Attender::STATUS_NEEDSACTION,
+                ],
+            ]),
+        ]));
+        $this->assertTrue($series->hasExternalOrganizer(), 'event series must have an external organizer');
+        $this->assertNotSame(
+            $personalContainer->getId(),
+            $series->getIdFromProperty('container_id'),
+            'event series must be in the external organizer container'
+        );
+
+        $calendarUri = '/' . \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id . '/'
+            . $personalContainer->getId() . '/';
+        $eventUri = $calendarUri . $series->getId() . '.ics';
+
+        // Thunderbird fetches the event series
+        $response = $this->_execThunderbirdRequest(new Sabre\HTTP\Request('GET', $eventUri));
+        $responseBody = $response->getBodyAsString();
+        $this->assertSame(200, $response->getStatus(), $responseBody);
+        $etag = $response->getHeader('ETag');
+        $vcalendar = \Sabre\VObject\Reader::read($responseBody);
+        $this->assertCount(1, $vcalendar->select('VEVENT'));
+
+        // Thunderbird declines the second instance: it adds an override VEVENT with RECURRENCE-ID and PARTSTAT=DECLINED
+        $baseVEvent = $vcalendar->VEVENT;
+        $secondInstanceStart = $baseVEvent->DTSTART->getDateTime()->modify('+1 day');
+        $override = clone $baseVEvent;
+        unset($override->RRULE);
+        unset($override->EXDATE);
+        unset($override->VALARM);
+        $override->{'RECURRENCE-ID'} = $secondInstanceStart;
+        $override->DTSTART = $secondInstanceStart;
+        $override->DTEND = $baseVEvent->DTEND->getDateTime()->modify('+1 day');
+        $ownAttendeeFound = false;
+        $ownMailto = strtolower('mailto:' . Tinebase_Core::getUser()->accountEmailAddress);
+        foreach ($override->ATTENDEE as $attendee) {
+            if ($ownMailto === strtolower($attendee->getValue())) {
+                $attendee['PARTSTAT'] = 'DECLINED';
+                $ownAttendeeFound = true;
+            }
+        }
+        $this->assertTrue($ownAttendeeFound, 'own attendee missing in vcalendar: ' . $vcalendar->serialize());
+        $vcalendar->add($override);
+
+        $request = new Sabre\HTTP\Request('PUT', $eventUri, [
+            'If-Match'      => $etag,
+            'Content-Type'  => 'text/calendar; charset=utf-8',
+        ]);
+        $request->setBody($vcalendar->serialize());
+        $response = $this->_execThunderbirdRequest($request);
+        $this->assertContains($response->getStatus(), [200, 201, 204], $response->getBodyAsString());
+
+        // the server stored the decline of the second instance
+        $exceptions = $calCtrl->search(new Calendar_Model_EventFilter([
+            ['field' => 'base_event_id', 'operator' => 'equals', 'value' => $series->getId()],
+            ['field' => 'recurid', 'operator' => 'notnull', 'value' => null],
+        ]));
+        $this->assertCount(1, $exceptions, 'declined instance must be stored as recur exception');
+        $declinedInstance = $exceptions->getFirstRecord();
+        $this->assertSame(
+            $secondInstanceStart->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s'),
+            $declinedInstance->dtstart->getClone()->setTimezone('UTC')->format('Y-m-d H:i:s')
+        );
+        $ownExceptionAttendee = $declinedInstance->attendee->filter(
+            fn(Calendar_Model_Attender $attender) => $attender->user_type === Calendar_Model_Attender::USERTYPE_USER
+                && $attender->getUserId() === Tinebase_Core::getUser()->contact_id
+        );
+        $this->assertCount(1, $ownExceptionAttendee, 'own attendee must exist once in the declined instance: '
+            . print_r($declinedInstance->attendee->toArray(), true));
+        $this->assertSame(Calendar_Model_Attender::STATUS_DECLINED, $ownExceptionAttendee->getFirstRecord()->status);
+
+        // Thunderbird syncs the calendar: list the events
+        $request = new Sabre\HTTP\Request('PROPFIND', $calendarUri, [
+            'Depth'         => '1',
+            'Content-Type'  => 'application/xml; charset=utf-8',
+        ]);
+        $request->setBody('<?xml version="1.0" encoding="UTF-8"?>
+<D:propfind xmlns:D="DAV:"><D:prop><D:getcontenttype/><D:resourcetype/><D:getetag/></D:prop></D:propfind>');
+        $response = $this->_execThunderbirdRequest($request);
+        $responseBody = $response->getBodyAsString();
+        $this->assertSame(207, $response->getStatus(), $responseBody);
+        $xpath = $this->_getMultiStatusXPath($responseBody);
+        $hrefs = [];
+        foreach ($xpath->query('//d:multistatus/d:response/d:href') as $hrefNode) {
+            $hrefs[] = $hrefNode->nodeValue;
+        }
+        $this->assertContains($eventUri, $hrefs, 'event series must still be synced: ' . print_r($hrefs, true));
+        $this->assertNotContains(
+            $calendarUri . $declinedInstance->getId() . '.ics',
+            $hrefs,
+            'declined instance must not be synced as separate object'
+        );
+
+        // Thunderbird syncs the calendar: fetch the event data
+        $request = new Sabre\HTTP\Request('REPORT', $calendarUri, [
+            'Depth'         => '1',
+            'Content-Type'  => 'application/xml; charset=utf-8',
+        ]);
+        $request->setBody('<?xml version="1.0" encoding="UTF-8"?>
+<C:calendar-multiget xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:caldav">
+  <D:prop><D:getetag/><C:calendar-data/></D:prop>
+  <D:href>' . $eventUri . '</D:href>
+</C:calendar-multiget>');
+        $response = $this->_execThunderbirdRequest($request);
+        $responseBody = $response->getBodyAsString();
+        $this->assertSame(207, $response->getStatus(), $responseBody);
+        $xpath = $this->_getMultiStatusXPath($responseBody);
+        $calendarDataNodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:calendar-data');
+        $this->assertSame(1, $calendarDataNodes->length, $responseBody);
+
+        $syncedVCalendar = \Sabre\VObject\Reader::read($calendarDataNodes->item(0)->nodeValue);
+        $vevents = $syncedVCalendar->select('VEVENT');
+        $this->assertCount(1, $vevents, 'declined instance must not be synced: ' . $syncedVCalendar->serialize());
+        $syncedBaseVEvent = $syncedVCalendar->VEVENT;
+        $this->assertFalse(isset($syncedBaseVEvent->{'RECURRENCE-ID'}), 'base event expected');
+
+        $exdates = [];
+        foreach ($syncedBaseVEvent->select('EXDATE') as $exdateProperty) {
+            foreach ($exdateProperty->getDateTimes() as $exdate) {
+                $exdates[] = $exdate->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s');
+            }
+        }
+        $this->assertContains(
+            $secondInstanceStart->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s'),
+            $exdates,
+            'declined instance must be excluded from the series: ' . $syncedVCalendar->serialize()
+        );
+
+        unset($notificationRaii);
+        unset($userAgentRaii);
+        unset($prefRaii);
+    }
+
+    /**
+     * execute a CalDAV request like Tinebase_Server_WebDAV::handle()
+     *
+     * @param \Sabre\HTTP\Request $request
+     * @return Tinebase_WebDav_Sabre_ResponseMock
+     */
+    protected function _execThunderbirdRequest(\Sabre\HTTP\Request $request): Tinebase_WebDav_Sabre_ResponseMock
+    {
+        $request->setHeader('User-Agent', $_SERVER['HTTP_USER_AGENT']);
+
+        // same as Tinebase_Server_WebDAV::handle(): use the user preference for declined events
+        $calCtrl = Calendar_Controller_Event::getInstance();
+        $oldNoSyncValue = $calCtrl->doNoSyncDeclinedAttendeeEvents(false);
+        $noSyncRaii = new Tinebase_RAII(fn() => $calCtrl->doNoSyncDeclinedAttendeeEvents($oldNoSyncValue));
+        $excludeDeclined = Tinebase_Core::getPreference(Calendar_Config::APP_NAME)->getValueForUser(
+            Calendar_Preference::EXCLUDE_CANCELLED_EVENTS_WEBDAV,
+            Tinebase_Core::getUser()->getId()
+        );
+        if ($excludeDeclined) {
+            $calCtrl->doNoSyncDeclinedAttendeeEvents(true);
+        }
+
+        // the tine request is the same as the WebDAV request in Tinebase_Server_WebDAV
+        $ifMatchHeader = null;
+        if ($request->hasHeader('If-Match')) {
+            $ifMatchHeader = new Zend\Http\Header\IfMatch($request->getHeader('If-Match'));
+            Tinebase_Core::getRequest()->getHeaders()->addHeader($ifMatchHeader);
+        }
+        $ifMatchRaii = new Tinebase_RAII(function () use ($ifMatchHeader) {
+            if (null !== $ifMatchHeader) {
+                Tinebase_Core::getRequest()->getHeaders()->removeHeader($ifMatchHeader);
+            }
+        });
+
+        Calendar_Frontend_WebDAV::clearClassCache();
+        $server = new \Sabre\DAV\Server(
+            new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()),
+            new Tinebase_WebDav_Sabre_SapiMock()
+        );
+        $server->setBaseUri('/');
+        $server->addPlugin(new \Sabre\CalDAV\Plugin());
+        $server->httpRequest = $request;
+        $response = new Tinebase_WebDav_Sabre_ResponseMock();
+        $server->httpResponse = $response;
+        $server->exec();
+
+        unset($ifMatchRaii);
+        unset($noSyncRaii);
+
+        return $response;
+    }
+
+    /**
+     * @param string $body
+     * @return DOMXPath
+     */
+    protected function _getMultiStatusXPath(string $body): DOMXPath
+    {
+        $responseDoc = new DOMDocument();
+        $responseDoc->loadXML($body);
+        $xpath = new DOMXPath($responseDoc);
+        $xpath->registerNamespace('d', 'DAV:');
+        $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
+
+        return $xpath;
     }
 
     /**

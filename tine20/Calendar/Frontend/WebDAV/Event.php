@@ -786,45 +786,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     protected function _getVEvent()
     {
         if ($this->_vevent == null) {
-            $this->_vevent = $this->_getConverter()->fromTine20Model($this->_getRecordForOutput());
+            $this->_vevent = $this->_getConverter()->fromTine20Model($this->getRecord());
 
             static::_addXPropsToVEvent($this->_vevent, $this->_container);
         }
 
         return $this->_vevent->serialize();
-    }
-
-    /**
-     * returns the event used for the vcalendar output.
-     * if EXCLUDE_CANCELLED_EVENTS_WEBDAV is enabled, recur exceptions declined by
-     * the calendar user are marked as deleted so they are exported as EXDATE
-     *
-     * a clone is returned to keep the original record untouched for the update path (toTine20Model)
-     *
-     * @return Calendar_Model_Event
-     */
-    protected function _getRecordForOutput()
-    {
-        $record = $this->getRecord();
-
-        if (
-            ! Calendar_Controller_Event::getInstance()->doNoSyncDeclinedAttendeeEvents() ||
-            ! $record->exdate instanceof Tinebase_Record_RecordSet ||
-            null === ($calendarUser = Calendar_Controller_MSEventFacade::getInstance()->getCalendarUser())
-        ) {
-            return $record;
-        }
-
-        $record = clone $record;
-
-        foreach ($record->exdate as $exception) {
-            $attender = Calendar_Model_Attender::getAttendee($exception->attendee, $calendarUser);
-            if ($attender && Calendar_Model_Attender::STATUS_DECLINED === $attender->status) {
-                $exception->is_deleted = true;
-            }
-        }
-
-        return $record;
     }
 
     protected static function _addXPropsToVEvent($_vevent, $_container)
