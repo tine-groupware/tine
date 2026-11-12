@@ -663,7 +663,8 @@ const common = {
         if (!url) {
             return '';
         }
-        const href = Tine.Tinebase.common.sanitizeHref(url);
+        const fullUrl = /^[a-z][a-z0-9+.\-]*:\/\//i.test(url) ? url : 'https://' + url;
+        const href = Tine.Tinebase.common.sanitizeHref(fullUrl);
         const text = Tine.Tinebase.EncodingHelper.encode(url, 'shorttext');
 
         return href ? '<a href="' + Tine.Tinebase.common.attrEncode(href) + '" target="_blank" rel="noopener noreferrer">' + text + '</a>' : text;

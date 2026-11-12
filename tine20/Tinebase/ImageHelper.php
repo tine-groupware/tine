@@ -190,7 +190,10 @@ class Tinebase_ImageHelper
             $blob = Tinebase_Helper::getFileOrUriContents($imagePath);
             $mime = '';
 
-            if (str_ends_with($imagePath, '.ico')) {
+            $path = strtolower((string) parse_url($imagePath, PHP_URL_PATH));
+            if (str_ends_with($path, '.svg')) {
+                $mime = 'image/svg+xml';
+            } elseif (str_ends_with($path, '.ico')) {
                 $mime = 'image/x-icon';
             } elseif ($blob) {
                 $info = self::getImageInfoFromBlob($blob);
