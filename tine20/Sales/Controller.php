@@ -153,6 +153,18 @@ class Sales_Controller extends Tinebase_Controller_Event
             'model' => Sales_Model_EDocument_EAS::class,
             'label' => 'Electronic Address Schema' // _('Electronic Address Schema')
         )));
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => 'sales_edocument_pmc',
+            'application_id' => $application,
+            'model' => Sales_Model_EDocument_PaymentMeansCode::class,
+            'label' => 'Payment Means' // _('Payment Means')
+        )));
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => 'sales_edocument_uom',
+            'application_id' => $application,
+            'model' => Sales_Model_EDocument_UnitOfMeasure::class,
+            'label' => 'Unit of measure' // _('Unit of measure')
+        )));
 
         $result->addRecord(new CoreData_Model_CoreData(array(
             'id' => 'sales_division',

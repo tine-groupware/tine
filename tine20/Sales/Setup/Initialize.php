@@ -475,7 +475,63 @@ class Sales_Setup_Initialize extends Setup_Initialize
         self::initializeEDocumentEAS();
         self::initializeEDocumentPaymentMeansCode();
         self::initializeEDocumentVATEX();
+        self::initializeEDocumentUnitOfMeasure();
     }
+
+    public static function initializeEDocumentUnitOfMeasure(): void
+    {
+        $active = ['piece', 'hour', 'week', 'month', 'year', 'gigabyte', 'gibibyte'];
+        $uomData = json_decode(file_get_contents(__DIR__ . '/UN_ECE_Recommendation_N_20_3.json'), true);
+        foreach ($uomData['daten'] as $uom) {
+            Sales_Controller_EDocument_UnitOfMeasure::getInstance()->create(new Sales_Model_EDocument_UnitOfMeasure([
+                Sales_Model_EDocument_UnitOfMeasure::FLD_CODE => $uom[0],
+                Sales_Model_EDocument_UnitOfMeasure::FLD_NAME => [[
+                    Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_LANGUAGE => 'en',
+                    Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_TEXT => $uom[1],
+                ]],
+                Sales_Model_EDocument_UnitOfMeasure::FLD_ACTIVE => in_array($uom[1], $active),
+            ]));
+        }
+    }
+
+    public static array $eDocumentEASActiveCodes = [
+        '0204' => 'Leitweg-ID',
+        "9910" => "Hungary VAT number",
+        "9922" => "Andorra VAT number",
+        "9923" => "Albania VAT number",
+        "9924" => "Bosnia and Herzegovina VAT number",
+        "9925" => "Belgium VAT number",
+        "9926" => "Bulgaria VAT number",
+        "9927" => "Switzerland VAT number",
+        "9928" => "Cyprus VAT number",
+        "9929" => "Czech Republic VAT number",
+        "9930" => "Germany VAT number",
+        "9931" => "Estonia VAT number",
+        "9932" => "United Kingdom VAT number",
+        "9933" => "Greece VAT number",
+        "9934" => "Croatia VAT number",
+        "9935" => "Ireland VAT number",
+        "9936" => "Liechtenstein VAT number",
+        "9937" => "Lithuania VAT number",
+        "9938" => "Luxemburg VAT number",
+        "9939" => "Latvia VAT number",
+        "9940" => "Monaco VAT number",
+        "9941" => "Montenegro VAT number",
+        "9942" => "Macedonia, the former Yugoslav Republic of VAT number",
+        "9943" => "Malta VAT number",
+        "9944" => "Netherlands VAT number",
+        "9945" => "Poland VAT number",
+        "9946" => "Portugal VAT number",
+        "9947" => "Romania VAT number",
+        "9948" => "Serbia VAT number",
+        "9949" => "Slovenia VAT number",
+        "9950" => "Slovakia VAT number",
+        "9951" => "San Marino VAT number",
+        "9952" => "Turkey VAT number",
+        "9953" => "Holy See (Vatican City State) VAT number",
+        "9955" => "Swedish VAT number",
+        "9957" => "French VAT number",
+    ];
 
     public static function initializeEDocumentEAS(): void
     {
@@ -485,6 +541,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 Sales_Model_EDocument_EAS::FLD_NAME => $eas[1],
                 Sales_Model_EDocument_EAS::FLD_CODE => $eas[0],
                 Sales_Model_EDocument_EAS::FLD_REMARK => $eas[2],
+                Sales_Model_EDocument_EAS::FLD_ACTIVE => (bool)((static::$eDocumentEASActiveCodes[$eas[0]] ?? false)),
             ]));
         }
     }
@@ -548,9 +605,11 @@ class Sales_Setup_Initialize extends Setup_Initialize
             switch ($row[0]) {
                 case '58': // SEPA credit transfer
                     $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_CONFIG_CLASS} = Sales_Model_EDocument_PMC_PayeeFinancialAccount::class;
+                    $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_ACTIVE} = true;
                     break;
                 case '59': // SEPA direct debit
                     $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_CONFIG_CLASS} = Sales_Model_EDocument_PMC_PaymentMandate::class;
+                    $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_ACTIVE} = true;
                     break;
                 default:
                     $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_CONFIG_CLASS} = Sales_Model_EDocument_PMC_NoConfig::class;
