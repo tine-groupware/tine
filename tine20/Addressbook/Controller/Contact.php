@@ -227,9 +227,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         Tinebase_UserProfile::getInstance()->checkRight($_userId);
         
         $contact = $this->getContactByUserId($_userId, TRUE);
-        $userProfile = Tinebase_UserProfile::getInstance()->doProfileCleanup($contact);
-        
-        return $userProfile;
+        return Tinebase_UserProfile::getInstance()->doProfileCleanup($contact);
     }
 
     /**
