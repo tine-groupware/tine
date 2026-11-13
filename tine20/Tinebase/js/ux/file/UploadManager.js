@@ -819,12 +819,16 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
      * @param tasks
      */
     async moveQueuedTasksToMainChannel(tasks) {
+        // keep File objects in memory only; Safari Private Mode can't store Blobs in IndexedDB
+        tasks = tasks.map(task => {
+            const fo = task.args?.fileObject;
+            this.fileObjects[task.args?.uploadId] = fo ?? null;
+            const isHandle = fo && typeof fo.getFile === 'function';
+            return { ...task, args: { ...task.args, fileObject: isHandle ? fo : null } };
+        });
+
         await this.mainQueueChannel.clearByTag(this.tag.ADDED);
         await this.mainQueueChannel.addBatch(tasks);
-    
-        tasks.forEach(task => {
-            this.fileObjects[task.args?.uploadId] = task.args?.fileObject ?? null;
-        });
         
         const allTasks = await this.getAllTasks();
         const queueTasks = await this.mainQueueChannel.storage.all();
