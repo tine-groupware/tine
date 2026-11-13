@@ -304,12 +304,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
         $this->_controller = $_controller ?? $this->_getController(isset($_additionalOptions['ignoreACL']) && $_additionalOptions['ignoreACL']);
 
-        $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
-        $this->_tinebaseTranslate = Tinebase_Translation::getTranslation('Tinebase');
-        $this->_locale = Tinebase_Core::getLocale();
         if (null === $this->_config) {
             $this->_config = $this->_getExportConfig($_additionalOptions);
         }
+        $this->_locale = $this->_resolveLocale($_additionalOptions);
+        $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName, $this->_locale);
+        $this->_tinebaseTranslate = Tinebase_Translation::getTranslation('Tinebase', $this->_locale);
         if (null !== $this->_config->header) {
             $this->_writeGenericHeader = (bool)$this->_config->header;
         }
@@ -643,6 +643,62 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         return $config;
+    }
+
+    /**
+     * get the export locale. Order of precedence:
+     * 1. locale in additional options
+     * 2. locale in export definition (plugin_options)
+     * 3. locale of current user (Tinebase_Core::getLocale())
+     *
+     * @param array $_additionalOptions
+     * @return Zend_Locale
+     */
+    protected function _resolveLocale($_additionalOptions = array())
+    {
+        $candidates = [
+            'options' => $_additionalOptions['locale'] ?? null,
+            // NOTE: additional options are merged into $this->_config, so we read the definition options directly
+            'definition' => $this->_getDefinitionLocale(),
+        ];
+
+        foreach ($candidates as $source => $candidate) {
+            if (empty($candidate)) {
+                continue;
+            }
+            if ($candidate instanceof Zend_Locale) {
+                return $candidate;
+            }
+            if (is_string($candidate) && Zend_Locale::isLocale($candidate)) {
+                try {
+                    return new Zend_Locale($candidate);
+                } catch (Zend_Locale_Exception) {
+                }
+            }
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Invalid locale in export '
+                . $source . ': ' . print_r($candidate, true));
+        }
+
+        return Tinebase_Core::getLocale();
+    }
+
+    /**
+     * get locale defined in the export definition (without additional options)
+     *
+     * @return string|null
+     */
+    protected function _getDefinitionLocale()
+    {
+        if (null === $this->_definition) {
+            return $this->_config?->locale;
+        }
+        try {
+            $locale = Tinebase_ImportExportDefinition::getInstance()
+                ->getOptionsAsZendConfigXml($this->_definition)->locale;
+        } catch (Tinebase_Exception_InvalidArgument) {
+            $locale = null;
+        }
+        return $locale;
     }
 
     protected function _getTemplateFilename()
