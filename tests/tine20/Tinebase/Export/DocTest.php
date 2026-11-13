@@ -188,6 +188,71 @@ class Tinebase_Export_DocTest extends TestCase
         }
     }
 
+    /**
+     * @param array $additionalOptions
+     * @param string|null $definitionLocale
+     * @return Tinebase_Export_Abstract
+     */
+    protected function _getExportForLocaleTest(array $additionalOptions = [], ?string $definitionLocale = null)
+    {
+        $definitionFile = dirname(__DIR__, 4) . '/tine20/Addressbook/Export/definitions/adb_doc.xml';
+        $tmpDefinitionFile = null;
+        if (null !== $definitionLocale) {
+            $tmpDefinitionFile = Tinebase_TempFile::getTempPath() . '.xml';
+            file_put_contents($tmpDefinitionFile, str_replace('</config>',
+                '<locale>' . $definitionLocale . '</locale></config>', file_get_contents($definitionFile)));
+            $definitionFile = $tmpDefinitionFile;
+        }
+
+        try {
+            return Tinebase_Export::factory(new Addressbook_Model_ContactFilter(), array_merge([
+                'format'             => 'doc',
+                'definitionFilename' => $definitionFile,
+                'template'           => dirname(__DIR__) . '/files/export/addressbook_contact_twigTemplate.docx',
+            ], $additionalOptions), Addressbook_Controller_Contact::getInstance());
+        } finally {
+            if ($tmpDefinitionFile) {
+                @unlink($tmpDefinitionFile);
+            }
+        }
+    }
+
+    protected function _getExportLocale(Tinebase_Export_Abstract $export): string
+    {
+        $refProp = new ReflectionProperty(Tinebase_Export_Abstract::class, '_locale');
+        return (string)$refProp->getValue($export);
+    }
+
+    public function testLocaleFallbackToCoreLocale()
+    {
+        $export = $this->_getExportForLocaleTest();
+        static::assertSame((string)Tinebase_Core::getLocale(), $this->_getExportLocale($export));
+    }
+
+    public function testLocaleFromDefinition()
+    {
+        $export = $this->_getExportForLocaleTest([], 'fr');
+        static::assertSame('fr', $this->_getExportLocale($export));
+
+        $refProp = new ReflectionProperty(Tinebase_Export_Abstract::class, '_translate');
+        static::assertSame('fr', (string)$refProp->getValue($export)->getLocale());
+    }
+
+    public function testLocaleFromOptionsOverridesDefinition()
+    {
+        $export = $this->_getExportForLocaleTest(['locale' => 'es'], 'fr');
+        static::assertSame('es', $this->_getExportLocale($export));
+
+        $export = $this->_getExportForLocaleTest(['locale' => new Zend_Locale('it')], 'fr');
+        static::assertSame('it', $this->_getExportLocale($export));
+    }
+
+    public function testInvalidOptionsLocaleFallsBackToDefinition()
+    {
+        $export = $this->_getExportForLocaleTest(['locale' => 'invalid-locale-xyz'], 'fr');
+        static::assertSame('fr', $this->_getExportLocale($export));
+    }
+
     public function testDocConvertToPdf()
     {
         if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} != true
