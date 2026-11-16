@@ -215,6 +215,12 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
     public function update007(): void
     {
         Setup_SchemaTool::updateSchema([
+            Sales_Model_DocumentPosition_Credit::class,
+            Sales_Model_DocumentPosition_Delivery::class,
+            Sales_Model_DocumentPosition_Invoice::class,
+            Sales_Model_DocumentPosition_Offer::class,
+            Sales_Model_DocumentPosition_Order::class,
+            Sales_Model_DocumentPosition_PurchaseInvoice::class,
             Sales_Model_EDocument_EAS::class,
             Sales_Model_EDocument_PaymentMeansCode::class,
             Sales_Model_EDocument_UnitOfMeasure::class,
@@ -237,6 +243,27 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
             $eas = Sales_Controller_EDocument_EAS::getInstance()->getByCode((string)$code);
             $eas->{Sales_Model_EDocument_EAS::FLD_ACTIVE} = true;
             Sales_Controller_EDocument_EAS::getInstance()->update($eas);
+        }
+
+        $db = $this->getDb();
+        $unitMapping = [
+            'PIECE' => Sales_Controller_EDocument_UnitOfMeasure::getInstance()->getByCode('H87'),
+        ];
+        foreach ([
+                    Sales_Model_DocumentPosition_Credit::TABLE_NAME,
+                    Sales_Model_DocumentPosition_Delivery::TABLE_NAME,
+                    Sales_Model_DocumentPosition_Invoice::TABLE_NAME,
+                    Sales_Model_DocumentPosition_Offer::TABLE_NAME,
+                    Sales_Model_DocumentPosition_Order::TABLE_NAME,
+                    Sales_Model_DocumentPosition_PurchaseInvoice::TABLE_NAME,
+                ] as $table) {
+            $quotedTable = $db->quoteIdentifier(SQL_TABLE_PREFIX . $table);
+            if ($db->query($db->quoteInto('SELECT count(*) FROM ' . $quotedTable . ' WHERE `unit` IS NOT NULL AND `unit` NOT IN (?)', $unitMapping))->fetchColumn() > 0) {
+                throw new Tinebase_Exception('found unmapped position unit, adjust $unitMapping and rerun update');
+            }
+            foreach ($unitMapping as $old => $new) {
+                $db->update(SQL_TABLE_PREFIX . $table, ['unit' => $new->getId()], $db->quoteInto('unit = ?', $old));
+            }
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '19.8', self::RELEASE019_UPDATE008);

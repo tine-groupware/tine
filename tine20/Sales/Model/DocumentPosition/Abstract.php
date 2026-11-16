@@ -354,9 +354,13 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             ],
             self::FLD_UNIT                      => [
                 self::LABEL                         => 'Unit', // _('Unit')
-                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::TYPE                          => self::TYPE_RECORD,
+                self::LENGTH                        => 40,
                 self::NULLABLE                      => true,
-                self::NAME                          => Sales_Config::PRODUCT_UNIT,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_EDocument_UnitOfMeasure::MODEL_NAME_PART,
+                ],
             ],
             self::FLD_UNIT_PRICE_TYPE     => [
                 self::LABEL                         => 'Price Type', //_('Price Type')

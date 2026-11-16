@@ -78,6 +78,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_EDocument_PMC_PayeeFinancialAccount::MODEL_NAME_PART,
         Sales_Model_EDocument_PMC_PaymentMandate::MODEL_NAME_PART,
         Sales_Model_EDocument_PaymentMeansCode::MODEL_NAME_PART,
+        Sales_Model_EDocument_UnitOfMeasure::MODEL_NAME_PART,
+        Sales_Model_EDocument_UnitOfMeasureLocalization::MODEL_NAME_PART,
         Sales_Model_EDocument_XRechnungElement::MODEL_NAME_PART,
         Sales_Model_Einvoice_XRechnung::MODEL_NAME_PART,
         Sales_Model_EDocument_XRechnungElement::MODEL_NAME_PART,
