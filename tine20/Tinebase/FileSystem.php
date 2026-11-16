@@ -5286,7 +5286,7 @@ class Tinebase_FileSystem implements
         }
     }
 
-    protected function _sendAvScanNotification($fileObjectIds)
+    protected function _sendAvScanNotification(array $fileObjectIds): void
     {
         try {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -5335,9 +5335,17 @@ class Tinebase_FileSystem implements
 
             $paths = [];
             foreach ($nodes as $node) {
-                $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(
-                    Tinebase_FileSystem::getInstance()->getPathOfNode($node, true)
-                );
+                try {
+                    $path = Tinebase_FileSystem::getInstance()->getPathOfNode($node, true);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage()
+                        );
+                    }
+                    continue;
+                }
+                $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($path);
                 $filePath = $pathRecord->flatpath;
                 $pathParts = explode('/', trim($filePath, '/'));
                 if ($app = Tinebase_Application::getInstance()->getApplicationById($pathParts[0])) {
@@ -5351,11 +5359,15 @@ class Tinebase_FileSystem implements
                 ];
             }
 
+            if (empty($paths)) {
+                // no more files found -> exit
+                return;
+            }
             $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName($roleName);
             $recipientIds = Tinebase_Role::getInstance()->getRoleMembersAccounts($adminRole->getId());
             $recipients = Tinebase_User::getInstance()->getMultiple(array_unique($recipientIds), Tinebase_Model_FullUser::class)
                 ->contact_id;
-            
+
             $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
                 Tinebase_Core::getUser()->accountId));
             $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
