@@ -22,6 +22,8 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
     protected const RELEASE019_UPDATE004 = __CLASS__ . '::update004';
     protected const RELEASE019_UPDATE005 = __CLASS__ . '::update005';
     protected const RELEASE019_UPDATE006 = __CLASS__ . '::update006';
+    protected const RELEASE019_UPDATE007 = __CLASS__ . '::update007';
+    protected const RELEASE019_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -43,6 +45,10 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
             ],
+            self::RELEASE019_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE019_UPDATE000          => [
@@ -56,6 +62,10 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
             self::RELEASE019_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE019_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
     ];
@@ -200,5 +210,35 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '19.6', self::RELEASE019_UPDATE006);
+    }
+
+    public function update007(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_EDocument_EAS::class,
+            Sales_Model_EDocument_PaymentMeansCode::class,
+            Sales_Model_EDocument_UnitOfMeasure::class,
+            Sales_Model_EDocument_UnitOfMeasureLocalization::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '19.7', self::RELEASE019_UPDATE007);
+    }
+
+    public function update008(): void
+    {
+        Sales_Setup_Initialize::initializeEDocumentUnitOfMeasure();
+
+        foreach (['58', '59'] as $code) {
+            $paymentMeans = Sales_Controller_EDocument_PaymentMeansCode::getInstance()->getByCode($code);
+            $paymentMeans->{Sales_Model_EDocument_PaymentMeansCode::FLD_ACTIVE} = true;
+            Sales_Controller_EDocument_PaymentMeansCode::getInstance()->update($paymentMeans);
+        }
+        foreach (array_keys(Sales_Setup_Initialize::$eDocumentEASActiveCodes) as $code) {
+            $eas = Sales_Controller_EDocument_EAS::getInstance()->getByCode((string)$code);
+            $eas->{Sales_Model_EDocument_EAS::FLD_ACTIVE} = true;
+            Sales_Controller_EDocument_EAS::getInstance()->update($eas);
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '19.8', self::RELEASE019_UPDATE008);
     }
 }

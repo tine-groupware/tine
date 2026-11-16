@@ -18,6 +18,7 @@ class Sales_Model_EDocument_PaymentMeansCode extends Tinebase_Record_NewAbstract
 
     public const FLD_NAME = 'name';
     public const FLD_CODE = 'code';
+    public const FLD_ACTIVE = 'active';
     public const FLD_DESCRIPTION = 'description';
     public const FLD_CONFIG_CLASS = 'config_class';
 
@@ -27,7 +28,7 @@ class Sales_Model_EDocument_PaymentMeansCode extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                       => 2,
+        self::VERSION                       => 3,
         self::APP_NAME                      => Sales_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'Payment Means' , // ngettext('Payment Means', 'Payment Means', n)
@@ -61,6 +62,11 @@ class Sales_Model_EDocument_PaymentMeansCode extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::QUERY_FILTER                  => true,
+            ],
+            self::FLD_ACTIVE                    => [
+                self::LABEL                         => 'Active', // _('Active')
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
             ],
             self::FLD_DESCRIPTION               => [
                 self::LABEL                         => 'Description', // _('Description')

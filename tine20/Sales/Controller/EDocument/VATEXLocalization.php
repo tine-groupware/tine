@@ -11,8 +11,6 @@
  *
  */
 
-use Tinebase_Model_Filter_Abstract as TMFA;
-
 /**
  * VATEXLocalization controller class for Sales application
  *

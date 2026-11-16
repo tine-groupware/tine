@@ -18,6 +18,7 @@ class Sales_Model_EDocument_EAS extends Tinebase_Record_NewAbstract
 
     public const FLD_NAME = 'name';
     public const FLD_CODE = 'code';
+    public const FLD_ACTIVE = 'active';
     public const FLD_REMARK = 'remark';
 
     /**
@@ -26,7 +27,7 @@ class Sales_Model_EDocument_EAS extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                       => 2,
+        self::VERSION                       => 3,
         self::APP_NAME                      => Sales_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'Electronic Address Schema', // ngettext('Electronic Address Schema', 'Electronic Address Schemas', n)
@@ -61,6 +62,11 @@ class Sales_Model_EDocument_EAS extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::QUERY_FILTER                  => true,
+            ],
+            self::FLD_ACTIVE                    => [
+                self::LABEL                         => 'Active', // _('Active')
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
             ],
             self::FLD_REMARK                      => [
                 self::LABEL                         => 'Remark', // _('Remark')
