@@ -89,7 +89,7 @@
           @ok="handleModalAction"
           @cancel="handleModalCancel"
         >
-          <p v-html="modal.message"></p>
+          <p class="modal-message" v-html="modal.message"></p>
 
           <form v-if="modal.input" class="form-group" novalidate @submit.prevent="submitModalInput">
             <b-form-input
@@ -262,8 +262,11 @@ const handleEmailSubmit = async (email) => {
       }
 
       showModal({
-        title: formatMessage('Confirmation E-Mail Sent'),
-        message: formatMessage('Please check your emails (check your spam folder if necessary) and click on the confirmation link to continue.'),
+        title: formatMessage('Email sent for authentication'),
+        message: formatMessage('Almost there – your registration isn’t complete yet.\n' +
+          'We’ve sent you an email. Please click on the link in this email to complete your registration.\n' +
+          '\n' +
+          'Haven’t received an email? Please check your spam folder as well.'),
         type: 'confirm',
         okOnly: true,
       });
@@ -489,6 +492,10 @@ getEvent();
     color: white !important;
     box-shadow: 0 2px 6px rgba(44, 62, 80, 0.3);
   }
+}
+
+.modal-message {
+  white-space: pre-line;
 }
 
 .modal-content {
