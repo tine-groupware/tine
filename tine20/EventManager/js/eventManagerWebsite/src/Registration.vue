@@ -211,7 +211,7 @@
                       <MarkdownRenderer :content="option.name_option" />
                       <div v-if="option.option_config">
                         <MarkdownRenderer v-if="option.option_config.description" :content="option.option_config.description" />
-                        <div v-if="option.option_config.price">{{formatMessage('Price')}} {{option.option_config.price}}</div>
+                        <div v-if="option.option_config.price">{{formatMessage('Price')}} {{option.option_config.price}} €</div>
                       </div>
                     </b-form-checkbox>
                   </div>
