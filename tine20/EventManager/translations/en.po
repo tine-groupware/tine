@@ -351,12 +351,6 @@ msgstr "Registration Registrant Fields"
 msgid "Registrant Fields"
 msgstr "Registrant Fields"
 
-msgid "Waiting List"
-msgstr "Waiting List"
-
-msgid "This event is fully booked. The person you are registering will be placed on the waiting list."
-msgstr "This event is fully booked. The person you are registering will be placed on the waiting list."
-
 msgid "Manage Your Registrations"
 msgstr "Manage Your Registrations"
 
@@ -477,11 +471,19 @@ msgstr "Please enter your email address to continue:"
 msgid "Enter your email address"
 msgstr "Enter your email address"
 
-msgid "Confirmation E-Mail Sent"
-msgstr "Confirmation E-Mail Sent"
+msgid "Email sent for authentication"
+msgstr "Email sent for authentication"
 
-msgid "Please check your emails (check your spam folder if necessary) and click on the confirmation link to continue."
-msgstr "Please check your emails (check your spam folder if necessary) and click on the confirmation link to continue."
+msgid ""
+"Almost there – your registration isn’t complete yet.\n"
+"We’ve sent you an email. Please click on the link in this email to complete your registration.\n"
+"\n"
+"Haven’t received an email? Please check your spam folder as well."
+msgstr ""
+"Almost there – your registration isn’t complete yet.\n"
+"We’ve sent you an email. Please click on the link in this email to complete your registration.\n"
+"\n"
+"Haven’t received an email? Please check your spam folder as well."
 
 msgid "Registration Error"
 msgstr "Registration Error"
@@ -729,6 +731,9 @@ msgstr "Notify Participants"
 msgid "All Confirmed Participants"
 msgstr "All Confirmed Participants"
 
+msgid "Waiting List"
+msgstr "Waiting List"
+
 msgid "Currently there are no confirmed participants"
 msgstr "Currently there are no confirmed participants"
 
@@ -760,6 +765,9 @@ msgstr[1] "Options"
 
 msgid "Rules"
 msgstr "Rules"
+
+msgid "Event Option"
+msgstr "Event Option"
 
 msgid "Option Template"
 msgstr "Option Template"
@@ -831,9 +839,6 @@ msgid_plural "Booked Options"
 msgstr[0] "Booked Option"
 msgstr[1] "Booked Options"
 
-msgid "Event Option"
-msgstr "Event Option"
-
 msgid "Selection Config"
 msgstr "Selection Config"
 
@@ -885,6 +890,9 @@ msgstr "Location Record"
 
 msgid "Fee"
 msgstr "Fee"
+
+msgid "Unlimited places"
+msgstr "Unlimited places"
 
 msgid "Event Registrations"
 msgstr "Event Registrations"

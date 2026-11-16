@@ -351,12 +351,6 @@ msgstr ""
 msgid "Registrant Fields"
 msgstr ""
 
-msgid "Waiting List"
-msgstr ""
-
-msgid "This event is fully booked. The person you are registering will be placed on the waiting list."
-msgstr ""
-
 msgid "Manage Your Registrations"
 msgstr ""
 
@@ -477,10 +471,14 @@ msgstr ""
 msgid "Enter your email address"
 msgstr ""
 
-msgid "Confirmation E-Mail Sent"
+msgid "Email sent for authentication"
 msgstr ""
 
-msgid "Please check your emails (check your spam folder if necessary) and click on the confirmation link to continue."
+msgid ""
+"Almost there – your registration isn’t complete yet.\n"
+"We’ve sent you an email. Please click on the link in this email to complete your registration.\n"
+"\n"
+"Haven’t received an email? Please check your spam folder as well."
 msgstr ""
 
 msgid "Registration Error"
@@ -729,6 +727,9 @@ msgstr ""
 msgid "All Confirmed Participants"
 msgstr ""
 
+msgid "Waiting List"
+msgstr ""
+
 msgid "Currently there are no confirmed participants"
 msgstr ""
 
@@ -759,6 +760,9 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Rules"
+msgstr ""
+
+msgid "Event Option"
 msgstr ""
 
 msgid "Option Template"
@@ -831,9 +835,6 @@ msgid_plural "Booked Options"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Event Option"
-msgstr ""
-
 msgid "Selection Config"
 msgstr ""
 
@@ -884,6 +885,9 @@ msgid "Location Record"
 msgstr ""
 
 msgid "Fee"
+msgstr ""
+
+msgid "Unlimited places"
 msgstr ""
 
 msgid "Event Registrations"

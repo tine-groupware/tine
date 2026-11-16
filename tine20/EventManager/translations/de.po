@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-10-12 14:43+0200\n"
+"PO-Revision-Date: 2026-11-16 15:31+0100\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.9\n"
+"X-Generator: Poedit 3.10\n"
 
 msgid "Type"
 msgstr "Typ"
@@ -355,12 +355,6 @@ msgstr "Kontaktanmeldungsfelder der Anmeldenden"
 msgid "Registrant Fields"
 msgstr "Anmeldendekontaktfelder"
 
-msgid "Waiting List"
-msgstr "Warteliste"
-
-msgid "This event is fully booked. The person you are registering will be placed on the waiting list."
-msgstr "Diese Veranstaltung ist ausgebucht. Die von Ihnen angemeldete Person wird auf die Warteliste gesetzt."
-
 msgid "Manage Your Registrations"
 msgstr "Anmeldungen Verwalten"
 
@@ -481,11 +475,19 @@ msgstr "Bitte geben Sie Ihre E-Mail-Adresse ein, um fortzufahren:"
 msgid "Enter your email address"
 msgstr "Geben Sie Ihre E-Mail-Adresse ein"
 
-msgid "Confirmation E-Mail Sent"
-msgstr "Bestätigungs-E-Mail gesendet"
+msgid "Email sent for authentication"
+msgstr "E-Mail zur Authentifizierung gesendet"
 
-msgid "Please check your emails (check your spam folder if necessary) and click on the confirmation link to continue."
-msgstr "Bitte überprüfen Sie Ihre E-Mails (Beachten Sie ggf. Ihren SPAM Ordner) und klicken Sie auf den Bestätigungslink, um fortzufahren."
+msgid ""
+"Almost there – your registration isn’t complete yet.\n"
+"We’ve sent you an email. Please click on the link in this email to complete your registration.\n"
+"\n"
+"Haven’t received an email? Please check your spam folder as well."
+msgstr ""
+"Fast geschafft – Ihre Anmeldung ist noch nicht abgeschlossen.\n"
+"Wir haben Ihnen eine E-Mail geschickt. Bitte klicken Sie auf den Link in dieser E-Mail, um Ihre Anmeldung durchzuführen.\n"
+"\n"
+"Keine E-Mail erhalten? Bitte prüfen Sie auch Ihren Spam-Ordner."
 
 msgid "Registration Error"
 msgstr "Anmeldungsfehler"
@@ -733,6 +735,9 @@ msgstr "Teilnehmende benachrichtigen"
 msgid "All Confirmed Participants"
 msgstr "Alle bestätigten Teilnehmende"
 
+msgid "Waiting List"
+msgstr "Warteliste"
+
 msgid "Currently there are no confirmed participants"
 msgstr "Derzeit gibt es keine bestätigten Teilnehmer."
 
@@ -764,6 +769,9 @@ msgstr[1] "Optionen"
 
 msgid "Rules"
 msgstr "Regeln"
+
+msgid "Event Option"
+msgstr "Veranstaltungsoption"
 
 msgid "Option Template"
 msgstr "Optionsvorlage"
@@ -835,9 +843,6 @@ msgid_plural "Booked Options"
 msgstr[0] "Gebuchte Option"
 msgstr[1] "Gebuchte Optionen"
 
-msgid "Event Option"
-msgstr "Veranstaltungsoption"
-
 msgid "Selection Config"
 msgstr "Auswahlkonfiguration"
 
@@ -889,6 +894,9 @@ msgstr "Standort"
 
 msgid "Fee"
 msgstr "Gebühr"
+
+msgid "Unlimited places"
+msgstr ""
 
 msgid "Event Registrations"
 msgstr "Veranstaltungsanmeldungen"
