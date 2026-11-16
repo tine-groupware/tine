@@ -64,6 +64,7 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_MailTest::class);
         $suite->addTestSuite(Tinebase_NotificationTest::class);
         $suite->addTestSuite(Tinebase_Model_Filter_TextTest::class);
+        $suite->addTestSuite(Tinebase_Model_PaginationTest::class);
         $suite->addTestSuite(Tinebase_TagsTest::class);
         $suite->addTestSuite(Tinebase_Log_AllTests::class);
         $suite->addTestSuite(Tinebase_TempFileTest::class);
