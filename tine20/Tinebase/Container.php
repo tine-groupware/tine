@@ -1983,6 +1983,35 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     }
 
     /**
+     * locks container rows with SELECT ... FOR UPDATE
+     *
+     * Call this as the first statement of a transaction, before a non-locking read creates the read view.
+     * This prevents "1020 Record has changed since last read" (MariaDB innodb_snapshot_isolation) on
+     * foreign key checks and content_seq updates if other transactions change the container concurrently.
+     *
+     * @param array<string|Tinebase_Model_Container>|string|Tinebase_Model_Container $containerIds
+     */
+    public function lockContainersForUpdate(array|string|Tinebase_Model_Container $containerIds): void
+    {
+        $ids = [];
+        foreach (is_array($containerIds) ? $containerIds : [$containerIds] as $containerId) {
+            $ids[] = Tinebase_Model_Container::convertContainerId($containerId);
+        }
+        $ids = array_unique($ids);
+        // always lock in the same order to avoid deadlocks
+        sort($ids);
+
+        foreach ($ids as $id) {
+            $this->_db->select()
+                ->forUpdate(true)
+                ->from($this->_tablePrefix . $this->_tableName, ['id'])
+                ->where($this->_db->quoteIdentifier('id') . ' = ?', $id)
+                ->query()
+                ->fetchAll();
+        }
+    }
+
+    /**
      * increase content sequence of container
      * - should be increased for each create/update/delete operation in this container
      * 
