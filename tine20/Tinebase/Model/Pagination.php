@@ -31,6 +31,11 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
     public const FLD_START = 'start';
 
     /**
+     * allowed sort values: identifier or table.identifier (no sql expressions)
+     */
+    public const SORT_FIELD_REGEX = '/^\w+(\.\w+)*$/D';
+
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -336,7 +341,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                     isset($recordsFields[$field]['config']['modelName']) &&
                     isset($recordsFields[$field]['config'][Tinebase_Record_Abstract::SPECIAL_TYPE]) &&
                     Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING === $recordsFields[$field]['config'][Tinebase_Record_Abstract::SPECIAL_TYPE]) {
-                /** @var Tinebase_Record_Interface $relatedModel */
+                /** @var class-string<Tinebase_Record_Interface> $relatedModel */
                 $relatedModel = $recordsFields[$field]['config'][Tinebase_Record_Abstract::RECORD_CLASS_NAME];
                 if (null === ($relatedMC = $relatedModel::getConfiguration())) {
                     $e = new Tinebase_Exception_InvalidArgument('related model not a modelconfig model in pagination: '
@@ -499,8 +504,18 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
     {
         $order = array();
         foreach ((array)$this->sort as $index => $sort) {
-            if ($tableName && $_schema && !str_contains((string) $sort, '.')
-                && ! preg_match('/foreignSortCol/', (string) $sort)
+            // only accept plain (optionally qualified) identifiers - never raw sql expressions
+            if (!is_string($sort) || !preg_match(self::SORT_FIELD_REGEX, $sort)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' skip invalid sort field: ' . print_r($sort, true)
+                    );
+                }
+                continue;
+            }
+
+            if (
+                $tableName && $_schema && strpos($sort, '.') === false
                 && array_key_exists($tableName, $_schema) && !in_array($sort, array_keys($_schema[$tableName]))
             ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
@@ -508,7 +523,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 continue;
             }
 
-            if (!str_contains((string) $sort, '(') && !str_contains((string) $sort, '.')) {
+            if (strpos($sort, '.') === false) {
                 $found = false;
                 foreach ($columns as $col) {
                     if ($col[1] === $sort) {
@@ -529,12 +544,21 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                     $sort = $tableName . '.' . $sort;
                 }
             }
-            $order[] = $sort . ' ' . (is_array($this->dir)
-                ? $this->dir[$index]
-                : $this->dir
-            );
+            $dir = is_array($this->dir) ? ($this->dir[$index] ?? null) : $this->dir;
+            $order[] = $sort . ' ' . static::sanitizeDir($dir);
         }
         return $order;
+    }
+
+    /**
+     * returns ASC or DESC - any other value is replaced by ASC
+     *
+     * @param mixed $dir
+     * @return string
+     */
+    public static function sanitizeDir($dir): string
+    {
+        return is_string($dir) && 'DESC' === strtoupper(trim($dir)) ? 'DESC' : 'ASC';
     }
 
     public static function setContext(array $context)
@@ -559,9 +583,17 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 $_data['sort'] = [$_data['sort']];
             }
             foreach ($_data['sort'] as &$val) {
-                if (!preg_match('/^[#\w\.\-]+$/', (string) $val)) {
+                if (!is_string($val) || !preg_match('/^[#\w\.\-]+$/D', $val)) {
                     $val = '';
                 }
+            }
+            unset($val);
+        }
+        if (isset($_data['dir'])) {
+            if (is_array($_data['dir'])) {
+                $_data['dir'] = array_map([static::class, 'sanitizeDir'], $_data['dir']);
+            } else {
+                $_data['dir'] = static::sanitizeDir($_data['dir']);
             }
         }
     }
