@@ -1,3 +1,17 @@
+/**
+ * tine Groupware
+ *
+ * @package     EventManager
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Tonia Wulff <t.wulff@metaways.de>
+ * @copyright   Copyright (c) 2026 Metaways Infosystems GmbH (https://www.metaways.de)
+ *
+ */
+
+.EventManagerIconCls {
+  background-image: url(../../images/icon-set/icon_eventmanager.svg) !important;
+}
+
 .x-grid3-row.eventmanager-template-row .x-grid3-cell {
   background-color: #f5f5f5 !important;
   font-style: italic;
