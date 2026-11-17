@@ -737,15 +737,20 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
 
         filter.withinCombo.setValue(comboValue);
 
-        var pickerValue = '';
-        var serverValue = null;
-        if (Ext.isDate(filter.data.value)) {
-            pickerValue = filter.data.value;
-        } else if (Ext.isDate(Date.parseDate(filter.data.value, Date.patterns.ISO8601Long))) {
-            pickerValue = Date.parseDate(filter.data.value, Date.patterns.ISO8601Long);
-        } else if (String(filter.data.value).match(/^day/)) {
-            serverValue = filter.data.value;
-            pickerValue = new Date().clearTime().add(Date.DAY, serverValue === 'dayThis' ? 0 : (serverValue === 'dayNext' ? +1 : -1));
+        const dayOffsets = {dayLast: -1, dayThis: 0, dayNext: 1};
+        const resolveDay = (v) => dayOffsets.hasOwnProperty(v) ?
+            new Date().clearTime().add(Date.DAY, dayOffsets[v]) : v;
+
+        let pickerValue = '';
+        const isoDate = Date.parseDate(filter.data.value, Date.patterns.ISO8601Long);
+        const filterValue = filter.data.value;
+
+        if (Ext.isDate(filterValue)) {
+            pickerValue = filterValue;
+        } else if (Ext.isDate(isoDate)) {
+            pickerValue = isoDate;
+        } else if (dayOffsets.hasOwnProperty(filterValue)) {
+            pickerValue = resolveDay(filterValue);
         } else if (Ext.isDate(this.defaultValue)) {
             pickerValue = this.defaultValue;
         }
@@ -758,22 +763,21 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             listeners: {
                 'specialkey': function(field, e) {
                      if(e.getKey() == e.ENTER){
-                         serverValue = null;
                          this.onFiltertrigger();
                      }
                 },
                 'select': () => {
-                    serverValue = null;
                     this.onFiltertrigger();
                 },
                 scope: this
             }
         });
-        filter.datePicker.origGetValue = filter.datePicker.getValue;
-        filter.datePicker.getValue = function(v) {
-            v = this.origGetValue();
-            return serverValue || v;
-        }
+
+        filter.datePicker.origSetValue = filter.datePicker.setValue;
+
+        filter.datePicker.setValue = function(v) {
+            return this.origSetValue(resolveDay(v));
+        };
         
         filter.numberfield = new Ext.form.NumberField({
             hidden: valueType != 'numberfield',
