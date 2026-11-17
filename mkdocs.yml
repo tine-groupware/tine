@@ -1,9 +1,12 @@
 site_name: tine groupware docs
 site_url: https://www.tine-groupware.de
-repo_url: https://github.com/tine-groupware/tine
+# no repo_url: Material fetches repo facts from api.github.com in the browser. The repo is linked in
+# extra.social (footer).
 
 theme:
   name: material
+  # fonts are self-hosted (docs/assets/vendor/fonts), Material would load them from Google Fonts
+  font: false
   logo: images/logo.svg
   favicon: images/favicon.png
   palette:
@@ -24,10 +27,13 @@ theme:
     - navigation.indexes
 
 extra_css:
+  - assets/vendor/fonts/fonts.css
   - assets/extra.css
 
 extra_javascript:
   - assets/theme-param.js
+  # self-hosted, Material loads it from unpkg otherwise (see docs/developers/mkdocs.md "diagrams")
+  - assets/vendor/mermaid/mermaid.min.js
 
 use_directory_urls: false
 
@@ -55,7 +61,11 @@ markdown_extensions:
           class: arithmatex
           format: "!!python/object/apply:pymdownx.arithmatex.arithmatex_inline_format {kwds: {mode: generic}}"
   - pymdownx.snippets
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - admonition
   - pymdownx.details
   - attr_list

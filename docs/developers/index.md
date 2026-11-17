@@ -10,3 +10,5 @@ The complete API documentation is available in the [API Documentation](api/index
 ## Docker DEV Environment
 
 ... can be found here: [tine-dev repository on GitHub](https://github.com/tine-groupware/tine-dev)
+
+AI coding clients (e.g. Claude Code) run in tine-dev as well, see [AI coding](aicoding.md).
