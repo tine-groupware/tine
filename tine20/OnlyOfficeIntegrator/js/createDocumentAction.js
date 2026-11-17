@@ -11,15 +11,22 @@ Promise.all([
     Tine.Tinebase.appMgr.isInitialised('OnlyOfficeIntegrator')
 ]).then(() => {
     const app = Tine.Tinebase.appMgr.get('OnlyOfficeIntegrator');
-    
+    // default name + extension per document type
+    const nameMap = {
+        'text': ['New Document', '.docx'],
+        'spreadsheet': ['New Spreadsheet', '.xlsx'],
+        'presentation': ['New Presentation', '.pptx']
+    };
+    const getDefaultName = (type) => app.i18n._hidden(nameMap[type][0]);
+
     const createDocument = async function (type) {
         const baseAction = this.ownerCt.ownerCt.baseAction;
         const action = baseAction.initialConfig;
         const filteredContainers = action.filteredContainers;
         const path = await action.getPath(baseAction, type);
-        const name = _.isFunction(action.getName) ? await action.getName(baseAction, type) : null;
-        if (!name) return;
-        const createNewPromise = Tine.OnlyOfficeIntegrator.createNew(type, path, name);
+        const fileName = _.isFunction(action.getName) ? await action.getName(baseAction, type) : getDefaultName(type);
+        if (!fileName) return;
+        const createNewPromise = Tine.OnlyOfficeIntegrator.createNew(type, path, fileName);
         const win = Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
             recordData: JSON.stringify({}),
             id: new Date().getTime(),
@@ -84,14 +91,9 @@ Promise.all([
         },
         getName: async function (baseAction, type) {
             return new Promise((resolve) => {
-                const nameMap = {
-                    'text': ['New Document', '.docx'],
-                    'spreadsheet': ['New Spreadsheet', '.xlsx'],
-                    'presentation': ['New Presentation', '.pptx']
-                };
                 const grid = baseAction.initialConfig.selectionModel.grid.ownerCt.ownerCt;
                 const localDocument = new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
-                    name: app.i18n._hidden(nameMap[type][0]) + nameMap[type][1],
+                    name: getDefaultName(type) + nameMap[type][1],
                     type: 'file',
                     account_grants: {
                         addGrant: true,
