@@ -39,7 +39,7 @@ class Sales_Controller_EDocument_EAS extends Tinebase_Controller_Record_Abstract
         ]);
         $this->_modelName = Sales_Model_EDocument_EAS::class;
         $this->_purgeRecords = false;
-        $this->_doContainerACLChecks = false;
+        $this->_doContainerACLChecks = true;
     }
 
     public function getByCode(string $code): ?Sales_Model_EDocument_EAS
@@ -49,5 +49,27 @@ class Sales_Controller_EDocument_EAS extends Tinebase_Controller_Record_Abstract
                 [TMFA::FIELD => Sales_Model_EDocument_EAS::FLD_CODE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $code],
             ]))->getFirstRecord();
         return $eas;
+    }
+
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
+    {
+        return;
+    }
+
+    protected function _checkGrant($_record, $_action, $_throw = true, $_errorMessage = 'No Permission.', $_oldRecord = null)
+    {
+        if (!$this->_doContainerACLChecks) {
+            return true;
+        }
+        if ($_action === self::ACTION_GET) {
+            return true;
+        }
+        if (!Tinebase_Core::getUser()->hasRight(Sales_Config::APP_NAME, Tinebase_Acl_Rights::ADMIN)) {
+            if ($_throw) {
+                throw new Tinebase_Exception_AccessDenied($_errorMessage);
+            }
+            return false;
+        }
+        return true;
     }
 }
