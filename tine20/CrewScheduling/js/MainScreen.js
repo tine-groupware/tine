@@ -97,6 +97,8 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
     attendeeValidation: null,
 
     /* private */
+    // NOTE: like Tine.widgets.MainScreen, e.g. e2e tests scope their selectors with it
+    cls: 't-app-crewscheduling',
     layout: 'border',
     colorManager: null,
 
