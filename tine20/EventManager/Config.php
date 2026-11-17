@@ -38,7 +38,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
     public const OPTION_REQUIRED_TYPE = 'optionRequiredType';
     public const RULE_TYPE = 'ruleType';
     public const CRITERIA_TYPE = 'criteriaType';
-    public const DEFAULT_CONTACT_EVENT_CONTAINER = 'defaultContactEventContainer'; // deprecated. todo delete in 2027.11
+    public const DEFAULT_CONTACT_EVENT_CONTAINER = 'defaultContactEventContainer';
     public const ALLOWED_FILE_TYPE = 'allowedFileType';
 
     public const EVENT_FOLDER_FILEMANAGER_PATH = 'eventFolderFileManagerPath';

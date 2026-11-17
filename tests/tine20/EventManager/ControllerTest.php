@@ -186,15 +186,15 @@ class EventManager_ControllerTest extends TestCase
         // check if available places and booked places back to start
         self::assertEquals(
             $created_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
-            ->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES},
+                ->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES},
             $option_after_delete->{EventManager_Model_Option::FLD_OPTION_CONFIG}
-            ->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES}
+                ->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES}
         );
         self::assertEquals(
             $created_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
-            ->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES},
+                ->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES},
             $option_after_delete->{EventManager_Model_Option::FLD_OPTION_CONFIG}
-            ->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES}
+                ->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES}
         );
     }
 
@@ -621,7 +621,348 @@ class EventManager_ControllerTest extends TestCase
         EventManager_Controller_Event::getInstance()->create($this->_getEvent(mb_strtoupper($name)));
     }
 
+    /************ files on deregistration / delete *************/
+
+    /**
+     * deregistering moves the participant folder (with the uploaded files) into
+     * "<Registrations>/<Deregistered>/<participant>" and removes the booked options
+     */
+    public function testDeregistrationMovesFilesToDeregisteredFolder()
+    {
+        [$event, $fileOption] = $this->_createEventWithFileOption();
+        $registration = $this->_createRegistrationWithUploadedFile($event, $fileOption);
+        $nodeId = $this->_getUploadedNodeId($registration->getId());
+
+        $pathBefore = $this->_getNodePath($nodeId);
+        $participantDir = dirname($pathBefore);
+        self::assertStringNotContainsString('/' . $this->_getDeregisteredName() . '/', $pathBefore);
+
+        $this->_deregister($registration->getId());
+
+        self::assertSame(
+            dirname($participantDir) . '/' . $this->_getDeregisteredName() . '/'
+            . basename($participantDir) . '/' . basename($pathBefore),
+            $this->_getNodePath($nodeId)
+        );
+        self::assertFalse(
+            Tinebase_FileSystem::getInstance()->isDir($participantDir),
+            'participant folder must be moved, not copied'
+        );
+
+        $registration = $this->_getExpandedRegistration($registration->getId());
+        self::assertSame('3', $this->_getKeyFieldId($registration->{EventManager_Model_Registration::FLD_STATUS}));
+        self::assertCount(0, $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} ?: []);
+    }
+
+    /**
+     * participants with the same name get their own upload folder ("<name> (<short registration id>)"),
+     * so uploads with the same file name don't overwrite each other
+     */
+    public function testParticipantsWithSameNameGetSeparateUploadFolders()
+    {
+        [$event, $fileOption] = $this->_createEventWithFileOption();
+        $first = $this->_createRegistrationWithUploadedFile($event, $fileOption);
+        $second = $this->_createRegistrationWithUploadedFile($event, $fileOption);
+
+        $firstNodeId = $this->_getUploadedNodeId($first->getId());
+        $secondNodeId = $this->_getUploadedNodeId($second->getId());
+        self::assertNotSame($firstNodeId, $secondNodeId, 'second upload overwrote the first one');
+
+        $firstPath = $this->_getNodePath($firstNodeId);
+        $secondPath = $this->_getNodePath($secondNodeId);
+        self::assertSame(basename($firstPath), basename($secondPath), 'precondition: same file name');
+        self::assertSame(dirname(dirname($firstPath)), dirname(dirname($secondPath)), 'both below "Registrations"');
+
+        foreach ([[$first, $firstPath], [$second, $secondPath]] as [$registration, $path]) {
+            self::assertSame(
+                EventManager_Controller_Registration::getParticipantFolderName('participant test', $registration->getId()),
+                basename(dirname($path))
+            );
+        }
+    }
+
+    /**
+     * same registration deregistered, reactivated with a new upload and deregistered again:
+     * the second move must not overwrite the first one in "Deregistered"
+     */
+    public function testDeregistrationIntoExistingFolderGetsNumberedName()
+    {
+        [$event, $fileOption] = $this->_createEventWithFileOption();
+        $registration = $this->_createRegistrationWithUploadedFile($event, $fileOption);
+
+        $firstNodeId = $this->_getUploadedNodeId($registration->getId());
+        $firstPathBefore = $this->_getNodePath($firstNodeId);
+        $this->_deregister($registration->getId());
+        $firstPathAfter = $this->_getNodePath($firstNodeId);
+
+        // reactivate with a new upload -> same registration id -> same folder name as the moved one
+        $reactivated = $this->_getExpandedRegistration($registration->getId());
+        $reactivated->{EventManager_Model_Registration::FLD_STATUS} = '1';
+        $reactivated->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = new Tinebase_Record_RecordSet(
+            EventManager_Model_BookedOption::class,
+            [$this->_getUploadBookedOption($event->getId(), $fileOption)]
+        );
+        EventManager_Controller_Registration::getInstance()->update($reactivated);
+
+        $nodeId = $this->_getUploadedNodeId($registration->getId());
+        $pathBefore = $this->_getNodePath($nodeId);
+        $participantDir = dirname($pathBefore);
+        self::assertNotSame($firstNodeId, $nodeId, 'new upload overwrote the moved file');
+        self::assertSame($firstPathBefore, $pathBefore, 'new upload is not in "<Registrations>/<participant>"');
+        self::assertSame($firstPathAfter, $this->_getNodePath($firstNodeId), 'moved file was touched');
+
+        $this->_deregister($registration->getId());
+
+        self::assertSame(
+            dirname($participantDir) . '/' . $this->_getDeregisteredName() . '/'
+            . basename($participantDir) . ' (2)/' . basename($pathBefore),
+            $this->_getNodePath($nodeId)
+        );
+        self::assertSame($firstPathAfter, $this->_getNodePath($firstNodeId), 'first move was overwritten');
+    }
+
+    public function testGetParticipantFolderName()
+    {
+        $id = 'a1b2c3d4e5f6';
+        self::assertSame('Doe, Jane (a1b2c3)', EventManager_Controller_Registration::getParticipantFolderName('Doe, Jane', $id));
+        // a "/" would create a sub folder
+        self::assertSame('AC-DC, Fan (a1b2c3)', EventManager_Controller_Registration::getParticipantFolderName('AC/DC, Fan', $id));
+        self::assertSame('participant (a1b2c3)', EventManager_Controller_Registration::getParticipantFolderName('  ', $id));
+        self::assertSame('Doe, Jane', EventManager_Controller_Registration::getParticipantFolderName('Doe, Jane', ''));
+    }
+
+    /**
+     * files that are already in "Deregistered" must not be nested into "Deregistered/Deregistered"
+     */
+    public function testMoveFilesToDeregisteredIsIdempotent()
+    {
+        [$event, $fileOption] = $this->_createEventWithFileOption();
+        $registration = $this->_createRegistrationWithUploadedFile($event, $fileOption);
+        $nodeId = $this->_getUploadedNodeId($registration->getId());
+        $registration = $this->_getExpandedRegistration($registration->getId());
+
+        $controller = EventManager_Controller_Registration::getInstance();
+        $controller->moveFilesToDeregistered($registration);
+        $pathAfterFirstMove = $this->_getNodePath($nodeId);
+        self::assertStringContainsString('/' . $this->_getDeregisteredName() . '/', $pathAfterFirstMove);
+
+        $controller->moveFilesToDeregistered($registration);
+        self::assertSame($pathAfterFirstMove, $this->_getNodePath($nodeId));
+    }
+
+    /**
+     * registrations without uploaded files: nothing to move, the booked places are released
+     */
+    public function testDeregistrationWithoutFilesReleasesCheckboxPlaces()
+    {
+        $event = $this->_getEvent();
+        $this->_createSharedEventCalendar();
+        EventManager_Controller_Event::getInstance()->create($event);
+        $option = EventManager_Controller_Option::getInstance()->create($this->_getOption($event->getId()));
+        $registration = EventManager_Controller_Registration::getInstance()
+            ->create($this->_getRegistration($event->getId(), $option));
+
+        $bookedBefore = $this->_getCheckboxBookedPlaces($option->getId());
+        $this->_deregister($registration->getId());
+
+        self::assertSame($bookedBefore - 1, $this->_getCheckboxBookedPlaces($option->getId()));
+        $registration = $this->_getExpandedRegistration($registration->getId());
+        self::assertSame('3', $this->_getKeyFieldId($registration->{EventManager_Model_Registration::FLD_STATUS}));
+        self::assertCount(0, $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} ?: []);
+    }
+
+    /**
+     * deleting a registration (e.g. in the admin ui) also moves the files to "Deregistered"
+     */
+    public function testDeleteRegistrationMovesFilesToDeregisteredFolder()
+    {
+        [$event, $fileOption] = $this->_createEventWithFileOption();
+        $registration = $this->_createRegistrationWithUploadedFile($event, $fileOption);
+        $nodeId = $this->_getUploadedNodeId($registration->getId());
+        $participantDir = dirname($this->_getNodePath($nodeId));
+
+        EventManager_Controller_Registration::getInstance()->delete([$registration->getId()]);
+
+        self::assertStringStartsWith(
+            dirname($participantDir) . '/' . $this->_getDeregisteredName() . '/' . basename($participantDir) . '/',
+            $this->_getNodePath($nodeId)
+        );
+    }
+
+    /************ keepFilesAfterUpdate *************/
+
+    /**
+     * uploaded files of the old registration are appended to the new booked options,
+     * old checkbox/text selections and file acknowledgements (no node) are replaced
+     */
+    public function testKeepFilesAfterUpdateKeepsOnlyUploadedFiles()
+    {
+        $old = new EventManager_Model_Registration([], true);
+        $old->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = new Tinebase_Record_RecordSet(
+            EventManager_Model_BookedOption::class,
+            [
+                $this->_getInMemoryBookedOption('checkbox-option', EventManager_Model_Selections_Checkbox::class, [
+                    'booked' => true,
+                ]),
+                $this->_getInMemoryBookedOption('file-option', EventManager_Model_Selections_File::class, [
+                    'node_id'   => 'node-1',
+                    'file_name' => 'upload.pdf',
+                ]),
+                $this->_getInMemoryBookedOption('acknowledge-option', EventManager_Model_Selections_File::class, [
+                    'file_acknowledgement' => true,
+                ]),
+            ]
+        );
+        $new = [
+            $this->_getInMemoryBookedOption('checkbox-option', EventManager_Model_Selections_Checkbox::class, [
+                'booked' => false,
+            ]),
+        ];
+
+        $result = EventManager_Controller_Registration::getInstance()->keepFilesAfterUpdate($old, $new);
+
+        self::assertInstanceOf(Tinebase_Record_RecordSet::class, $result);
+        self::assertSame(['checkbox-option', 'file-option'], array_map(
+            fn($bo) => (string) $bo->{EventManager_Model_BookedOption::FLD_OPTION},
+            $result->asArray()
+        ));
+        self::assertFalse((bool) $result[0]->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}->booked);
+        self::assertSame('node-1', $result[1]->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}->node_id);
+    }
+
+    /**
+     * a deregistered registration has no booked options (null) - must not break the re-registration
+     */
+    public function testKeepFilesAfterUpdateWithoutOldBookedOptions()
+    {
+        $new = [
+            $this->_getInMemoryBookedOption('checkbox-option', EventManager_Model_Selections_Checkbox::class, [
+                'booked' => true,
+            ]),
+        ];
+        foreach ([null, new Tinebase_Record_RecordSet(EventManager_Model_BookedOption::class, [])] as $oldOptions) {
+            $old = new EventManager_Model_Registration([], true);
+            $old->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = $oldOptions;
+
+            $result = EventManager_Controller_Registration::getInstance()->keepFilesAfterUpdate($old, $new);
+            self::assertCount(1, $result);
+        }
+    }
+
     /************ protected helper funcs *************/
+
+    /**
+     * @return array [event, fileOption]
+     */
+    protected function _createEventWithFileOption(): array
+    {
+        $event = $this->_getEvent();
+        $this->_createSharedEventCalendar();
+        EventManager_Controller_Event::getInstance()->create($event);
+        $fileOption = EventManager_Controller_Option::getInstance()->create($this->_getFileOption($event->getId()));
+        return [$event, $fileOption];
+    }
+
+    /**
+     * registration with a freshly uploaded file (temp file -> stored in "<Registrations>/<participant>")
+     *
+     * NOTE: the booked option must reference a NEW temp file - referencing the option's own node
+     * would point the registration to the option's template document instead of an upload
+     */
+    protected function _createRegistrationWithUploadedFile(
+        EventManager_Model_Event $event,
+        EventManager_Model_Option $fileOption
+    ): EventManager_Model_Registration {
+        $registration = $this->_getRegistration($event->getId());
+        $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = new Tinebase_Record_RecordSet(
+            EventManager_Model_BookedOption::class,
+            [$this->_getUploadBookedOption($event->getId(), $fileOption)]
+        );
+        return EventManager_Controller_Registration::getInstance()->create($registration);
+    }
+
+    protected function _getUploadBookedOption(
+        string $eventId,
+        EventManager_Model_Option $fileOption
+    ): EventManager_Model_BookedOption {
+        $tempFile = $this->_getTempFile();
+        return new EventManager_Model_BookedOption([
+            'event_id'               => $eventId,
+            'option'                 => $fileOption->getId(),
+            'selection_config'       => new EventManager_Model_Selections_File([
+                'node_id'   => $tempFile->getId(),
+                'file_name' => $tempFile->name,
+                'file_type' => $tempFile->type,
+                'file_size' => $tempFile->size,
+            ], true),
+            'selection_config_class' => EventManager_Model_Selections_File::class,
+        ], true);
+    }
+
+    protected function _getInMemoryBookedOption(
+        string $optionId,
+        string $selectionClass,
+        array $selection
+    ): EventManager_Model_BookedOption {
+        return new EventManager_Model_BookedOption([
+            'option'                 => $optionId,
+            'selection_config'       => new $selectionClass($selection, true),
+            'selection_config_class' => $selectionClass,
+        ], true);
+    }
+
+    protected function _getExpandedRegistration(string $registrationId): EventManager_Model_Registration
+    {
+        $registration = EventManager_Controller_Registration::getInstance()->get($registrationId);
+        Tinebase_Record_Expander::expandRecord($registration);
+        return $registration;
+    }
+
+    protected function _deregister(string $registrationId): void
+    {
+        $registration = $this->_getExpandedRegistration($registrationId);
+        $registration->{EventManager_Model_Registration::FLD_STATUS} = '3';
+        EventManager_Controller_Registration::getInstance()->update($registration);
+    }
+
+    protected function _getUploadedNodeId(string $registrationId): string
+    {
+        $registration = $this->_getExpandedRegistration($registrationId);
+        foreach ($registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} ?: [] as $bookedOption) {
+            if (
+                $bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
+                === EventManager_Model_Selections_File::class
+            ) {
+                $config = $bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG};
+                $nodeId = is_array($config) ? ($config['node_id'] ?? null) : $config->node_id;
+                self::assertNotEmpty($nodeId);
+                return (string) $nodeId;
+            }
+        }
+        self::fail('registration ' . $registrationId . ' has no uploaded file');
+    }
+
+    protected function _getNodePath(string $nodeId): string
+    {
+        return Tinebase_FileSystem::getInstance()->getPathOfNode($nodeId, true);
+    }
+
+    protected function _getDeregisteredName(): string
+    {
+        return Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME)->_('Deregistered');
+    }
+
+    protected function _getCheckboxBookedPlaces(string $optionId): int
+    {
+        return (int) EventManager_Controller_Option::getInstance()->get($optionId)
+            ->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+            ->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES};
+    }
+
+    protected function _getKeyFieldId($value): string
+    {
+        return (string) ($value instanceof Tinebase_Record_Interface ? $value->getId() : $value);
+    }
 
     /**
      * get event

@@ -1083,6 +1083,9 @@ msgstr ""
 msgid "EventManager"
 msgstr ""
 
+msgid "Event Contacts"
+msgstr ""
+
 msgid "Templates"
 msgstr ""
 
