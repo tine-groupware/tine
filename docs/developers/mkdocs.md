@@ -2,7 +2,7 @@
 
 ## technical quickstart
 The docs setup is included in our default docker dev setup (see `docs` in `pullup.json`)
-You just need to navigate your browser to (http://localhost:4030)
+You just need to navigate your browser to https://docs.local.tine-dev.de/ (live reload on changes)
 
 To serve the docs stand-alone use
 ``` sh
@@ -14,6 +14,25 @@ docker run --rm -it -p 8000:8000 -v ${PWD}:/docs dockerregistry.metaways.net/tin
 ```
 visit http://localhost:8000
 
+
+## diagrams
+Draw diagrams with [Mermaid](https://mermaid.js.org/) in a `mermaid` code block, not as images: the source
+stays text (readable diffs, editable without a drawing tool), and GitLab/GitHub render it as well. Write them in
+English like the rest of the docs. Example (see [developers](index.md#docker-dev-environment)):
+
+````markdown
+``` mermaid
+flowchart LR
+    client["AI coding client"] -- MCP --> devctl
+    devctl -- docker socket --> daemon["Docker daemon"]
+```
+````
+
+The docs must not load anything from external servers: mermaid is self-hosted in `docs/assets/vendor/mermaid`
+(see `README.txt` there for updates) and included via `extra_javascript` in `mkdocs.yml` - without it the
+Material theme would load mermaid from unpkg.
+
+Try diagrams in the [Mermaid live editor](https://mermaid.live/).
 
 ## build and push docs
 ``` sh
