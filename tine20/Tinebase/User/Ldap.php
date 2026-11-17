@@ -139,7 +139,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function __construct(array $_options = array())
     {
         parent::__construct($_options);
-        
+
         if (empty($_options['userUUIDAttribute'])) {
             $_options['userUUIDAttribute'] = 'entryUUID';
         }
@@ -184,10 +184,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
 
         $this->_options = $_options;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Registering " . print_r($this->_options, true));
-        
+
         $this->_userUUIDAttribute  = strtolower((string) $this->_options['userUUIDAttribute']);
         $this->_groupUUIDAttribute = strtolower((string) $this->_options['groupUUIDAttribute']);
         $this->_baseDn             = $this->_options['baseDn'];
@@ -199,7 +196,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         if (! $this->_ldap instanceof Tinebase_Ldap) {
             $this->_ldap = new Tinebase_Ldap($this->_options);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Binding to LDAP host: '
+                    . ($this->_options['host'] ?? '- empty -'));
+            }
             try {
+                // TODO we should do this lazily (on demand) - if LDAP is not available,
+                //      this could otherwise block requests that do not need ldap connections...
                 $this->_ldap->bind();
             } catch (Zend_Ldap_Exception $zle) {
                 // @todo move this to Tinebase_Ldap?
