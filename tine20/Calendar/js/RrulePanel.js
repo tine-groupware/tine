@@ -25,6 +25,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
      */
     eventEditDialog: null,
 
+    autoHeight: true,
     layout: 'fit',
     frame: true,
     canonicalName: 'RecurrenceConfig',
@@ -344,7 +345,8 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         const intervalPars = this.intervalString.split('{0}');
         const intervalBeforeString = intervalPars[0];
         const intervalAfterString = intervalPars[1];
-        
+        this.intervalId = Ext.id();
+
         this.interval = new Ext.form.NumberField({
             requiredGrant : 'editGrant',
             style         : 'text-align:right;',
@@ -358,19 +360,18 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         if (! this.items) {
             this.items = [];
         }
-        
-        if (this.freq !== 'YEARLY') {
+
+        this.hasInterval = this.freq !== 'YEARLY';
+        if (this.hasInterval) {
             this.items = [{
-                layout: 'column',
-                items: [{
-                    width: 70,
-                    html: intervalBeforeString
-                },
-                    this.interval,
-                {
-                    style: 'padding-top: 2px;',
-                    html: intervalAfterString
-                }]
+                border: false,
+                autoHeight: true,
+                hidden: !this.hasInterval,
+                html: '<div style="display:flex; align-items:center; gap:5px;">' +
+                    '<div style="width: 60px;">' + intervalBeforeString + '</div>' +
+                    '<div style="display:inline-block; width:60px;" id="' + this.intervalId + '"></div>' +
+                    '<div>' + intervalAfterString + '</div>' +
+                    '</div>',
             }].concat(this.items);
         }
 
@@ -453,7 +454,12 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         if (! (untilradioel && countradioel)) {
             return this.onLimitRender.defer(100, this, arguments);
         }
-        
+
+        if (this.hasInterval) {
+            const intervalel = Ext.get(this.intervalId);
+            this.interval.render(intervalel);
+        }
+
         this.untilRadio.render(untilradioel);
         this.until.render(untilel);
         this.until.wrap.setWidth(80);
@@ -578,7 +584,6 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
             bydayItems.push({
                 boxLabel: Date.dayNames[d],
                 name: Tine.Calendar.RrulePanel.prototype.wkdays[d],
-                listeners: { render: cmp => cmp.wrap.addClass('dark-reverse') }
             })
         }
         
