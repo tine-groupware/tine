@@ -6,7 +6,7 @@ description: >-
 license: AGPL-3.0
 metadata:
   author: Cornelius Weiss
-  version: "0.1"
+  version: "0.2"
 ---
 
 # Docs
@@ -21,6 +21,16 @@ metadata:
 * build is done by local docker container
 * Dockerfile for the container is in the /docs folder
 * build of docs can be accessed at https://docs.local.tine-dev.de/
+
+### Diagrams
+
+* Draw diagrams with Mermaid in a ```` ``` mermaid ```` code block, never as image files (no SVG/PNG in the repo):
+  the source stays text and GitLab/GitHub render it as well. See `docs/developers/mkdocs.md` "diagrams".
+* Diagrams are in English like the rest of the docs.
+* The docs must not load anything from external servers: mermaid is self-hosted (`docs/assets/vendor/mermaid`,
+  included via `extra_javascript` in `mkdocs.yml`). Don't add CDN scripts, fonts or other external assets, see
+  `docs/developers/mkdocs.md` "no external requests" (fonts are self-hosted too, no `repo_url`).
+* Prefer `flowchart TB` over `LR` for more than a few nodes: the content column is narrow, wide diagrams get tiny.
 
 ### Screenshots
 

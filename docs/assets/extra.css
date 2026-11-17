@@ -103,3 +103,7 @@
     background: #f1f6ff; /* hellblauer Akzent */
     border-color: #90caf9;
 }
+/* the logo is white (on the colored header) - don't invert it with the svg icons above */
+[data-md-color-scheme="slate"] .md-logo img[src$=".svg"] {
+    filter: none;
+}
