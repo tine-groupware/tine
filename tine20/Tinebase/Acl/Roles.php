@@ -94,8 +94,8 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      * we read all right for the given user at once and cache them in the internal class cache
      *
      * @param   string|Tinebase_Model_Application $_application the application (one of: app name, id or record)
-     * @param   int $_accountId the numeric id of a user account
-     * @param   int $_right the right to check for
+     * @param   string $_accountId the numeric id of a user account
+     * @param   string $_right the right to check for
      * @return  bool
      */
     public function hasRight($_application, $_accountId, $_right)

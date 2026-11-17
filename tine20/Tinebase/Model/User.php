@@ -294,7 +294,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * check if current user has a given right for a given application
      *
      * @param string|Tinebase_Model_Application $_application the application (one of: app name, id or record)
-     * @param int $_right the right to check for
+     * @param string $_right the right to check for
      * @return bool
      */
     public function hasRight($_application, $_right)
