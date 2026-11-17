@@ -452,7 +452,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: attachment['filename'],
                         type: attachment['content-type'],
                         size: attachment['size'],
-                        id: message.id + '_' + attachment['partId']
+                        id: message.id + '_' + attachment['partId'],
+                        attachment_type: 'attachment',
                     };
                     attachments.push(attachment);
                 }
@@ -465,7 +466,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 name: message.get('subject'),
                 type: 'message/rfc822',
                 size: message.get('size'),
-                id: message.id
+                id: message.id,
+                attachment_type: 'attachment',
             };
             if (node) {
                 rfc822Attachment = _.assign(rfc822Attachment, {
@@ -473,7 +475,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     size: node.size,
                     path: node.path,
                     name: node.name,
-                    attachment_type: 'attachment',
                 });
             }
             attachments.push(rfc822Attachment);
