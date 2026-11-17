@@ -18,7 +18,7 @@ visit http://localhost:8000
 ## diagrams
 Draw diagrams with [Mermaid](https://mermaid.js.org/) in a `mermaid` code block, not as images: the source
 stays text (readable diffs, editable without a drawing tool), and GitLab/GitHub render it as well. Write them in
-English like the rest of the docs. Example (see [developers](index.md#docker-dev-environment)):
+English like the rest of the docs. Example (see [AI coding](aicoding.md)):
 
 ````markdown
 ``` mermaid
