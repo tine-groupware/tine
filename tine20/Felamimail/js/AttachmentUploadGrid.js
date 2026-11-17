@@ -36,13 +36,9 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
         });
 
         Tine.Felamimail.AttachmentUploadGrid.superclass.initComponent.call(this);
-
+        this.on('rowcontextmenu', this.onRowContextMenu, this);
         this.on('beforeedit', this.onBeforeEdit.createDelegate(this));
         this.store.on('add', this.onStoreAddRecords, this);
-
-        if (this.action_rename) {
-            _.set(this, 'action_rename.initialConfig.actionUpdater', this.renameActionUpdater);
-        }
     },
 
     onStoreAddRecords: function(store, rs, idx) {
@@ -51,12 +47,10 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
         });
     },
 
-    renameActionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
-        const isTempfile = !!_.get(records, '[0].data.tempFile');
-        const enabled = !!isTempfile;
-
-        action.setDisabled(!enabled);
-        action.baseAction.setDisabled(!enabled);
+    onRowContextMenu: function(grid, row, e) {
+        const record = this.store.getAt(row);
+        const allowRename = !record.get('attachment_type') || record.get('attachment_type') === 'attachment';
+        this.action_rename.setDisabled(!allowRename);
     },
 
     onBeforeEdit: function (e) {

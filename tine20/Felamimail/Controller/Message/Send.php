@@ -1183,6 +1183,24 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 $part = $this->_getMessagePartAttachment($attachment);
         }
 
+        if ($part && !in_array($attachmentType, [
+            'systemlink_fm',
+            'download_public',
+            'download_public_fm',
+            'download_protected',
+            'download_protected_fm',
+            'filenode'
+        ])) {
+            if (!empty($part->filename) && $attachment['name'] !== $part->filename) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . 'rename attachment to: ' . $attachment['name']  . ' (original name: ' . $part->filename . ')');
+                }
+            }
+
+            $part->filename = $attachment['name'];
+        }
+
         return $part;
     }
 

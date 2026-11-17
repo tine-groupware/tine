@@ -1369,10 +1369,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _getAttachmentFilename($part, $allowEmpty = false)
     {
-        $filename = $part['disposition']['parameters']['filename']
-            ?? $part['parameters']['name']
-            ?? $part['disposition']['parameters']['filename*']
+        $filename = $part['parameters']['name']
             ?? $part['parameters']['name*']
+            ?? $part['disposition']['parameters']['filename']
+            ?? $part['disposition']['parameters']['filename*']
             ?? null;
 
         if (!$filename && !$allowEmpty) {
