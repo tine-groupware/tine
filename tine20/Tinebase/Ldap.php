@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     Tinebase
  * @subpackage  Ldap
- * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -43,27 +43,32 @@ class Tinebase_Ldap extends Zend_Ldap
             'tryUsernameSplit'          => null
         ));
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' LDAP options: ' . print_r($options, true));
-
-        $returnValue = parent::__construct($options);
-
-        return $returnValue;
+        return parent::__construct($options);
     }
 
     public function connect($host = null, $port = null, $useSsl = null, $useStartTls = null)
     {
+        // prevent ldap_connect to "hang" without a network timeout (0 = no timeout)
+        $timeout = Tinebase_Config::getInstance()->get(Tinebase_Config::LDAP_NETWORK_TIMEOUT);
+        $optionsToSet = [
+            [LDAP_OPT_NETWORK_TIMEOUT, $timeout, 'network timeout: ' . $timeout],
+        ];
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::LDAP_DISABLE_TLSREQCERT)) {
-            if (!@ldap_set_option(null, LDAP_OPT_X_TLS_REQUIRE_CERT, LDAP_OPT_X_TLS_NEVER)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()
-                    ->warn(__METHOD__ . '::' . __LINE__ . ' ldap_set_option "tls require cert: never" failed!');
-            }
+            $optionsToSet[] = [LDAP_OPT_X_TLS_REQUIRE_CERT, LDAP_OPT_X_TLS_NEVER, 'tls require cert: never'];
         } else {
-            if (!@ldap_set_option(null, LDAP_OPT_X_TLS_REQUIRE_CERT, LDAP_OPT_X_TLS_DEMAND)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()
-                    ->warn(__METHOD__ . '::' . __LINE__ . ' ldap_set_option "tls require cert: demand" failed!');
+            $optionsToSet[] = [LDAP_OPT_X_TLS_REQUIRE_CERT, LDAP_OPT_X_TLS_DEMAND, 'tls require cert: demand'];
+        }
+
+        foreach ($optionsToSet as [$option, $value, $label]) {
+            if (!@ldap_set_option(null, $option, $value)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' ldap_set_option "' . $label . '" failed!'
+                    );
+                }
             }
         }
+
         parent::connect($host, $port, $useSsl, $useStartTls);
 
         return $this;
