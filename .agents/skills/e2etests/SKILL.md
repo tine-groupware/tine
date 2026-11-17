@@ -67,6 +67,36 @@ E2E tests verify what a user sees and does. They must always use the real UI:
 - If a feature can't be reached through the real UI (e.g. missing test data like a contact image), create that data via API or upload it via the UI instead of faking it in the DOM.
 - Unit-level behaviour (pure logic, edge cases) belongs into Jest unit tests (`tests/js/jest`), not into E2E tests.
 
+## Scope Selectors to the App
+
+Main screens of apps opened before stay in the DOM (hidden). A generic selector on `global.page` can match a
+hidden button / field of another app, then the test hangs or clicks the wrong element, depending on which apps
+ran before.
+
+- **In page context, scope every non app specific selector** with the app class `.t-app-<appname>` (lowercase app
+  name), e.g. `const APP = '.t-app-crewscheduling'` and `${APP} .x-btn-text`. This applies to all helpers taking a
+  selector: `clickOnElement`, `clickOnElementWithLabel`, `waitForElement`, `waitForSelector`, own
+  `querySelectorAll` in `evaluate` / `waitForFunction`, and `getEditDialog` (its default selector is
+  `.x-btn-text`, so pass it: ``getEditDialog('Filter', global.page, {selector: `${APP} .x-btn-text`})``).
+- **Check that the app has the class:** `Tine.widgets.MainScreen` sets it automatically. Apps with an own main
+  screen (e.g. extending `Ext.Panel`) may lack it, then add `cls: 't-app-<appname>'` to the main screen in the same
+  MR instead of working around it in the test (e.g. with `offsetParent !== null` filters).
+- **No scoping needed:**
+  - selectors in a popup (`getEditDialog` result), it only contains the dialog
+  - modal message boxes (`.modal.vue-message-box`, `answerMessageBox`), they are not app specific
+- **Can't be scoped:** elements Ext renders into `<body>` (menus `.x-menu`, drag proxies `.x-dd-drag-proxy`,
+  combo lists, tooltips). Only consider visible ones, and keep in mind that `waitForElement(..., {hidden: true})`
+  waits until *all* matches are hidden (for drag proxies / menus this means "no drag / menu open anywhere", which
+  is usually what you want). Explain this in a comment, reviewers will ask.
+
+## Code Comments
+
+Reviewers read the test without the context of the session that wrote it:
+
+- Write comments in plain English sentences, no shorthand or invented verbs (`ands words` → "matches each word on
+  its own (AND)").
+- Explain *why* (app behaviour, timing, a non obvious selector), with an example where it helps.
+
 ## Core Principles
 
 1. **No Hardcoded Delays**: Eliminate `setTimeout`. Use dynamic waiting (`waitForSelector`, `waitForFunction`).
@@ -75,7 +105,8 @@ E2E tests verify what a user sees and does. They must always use the real UI:
 4. **Dialog Handling**: Use `getEditDialog(btnText)` for popups. Handles loading masks and content readiness.
 5. **Simplify**: Prefer minimal, readable waiting logic over over-engineered helpers.
 6. **Use the library first**: Check `src/lib/browser.js` before writing own `waitForFunction` or navigation code (e.g. `waitForElement` with `{hidden: true}`, `getBrowser(app, module)`).
-6. **Real Dialogs Only**: Test through real dialogs and user interactions, no DOM tricks (see above).
+7. **Real Dialogs Only**: Test through real dialogs and user interactions, no DOM tricks (see above).
+8. **Scope Selectors**: Prefix generic selectors in page context with `.t-app-<appname>` (see above).
 
 ## Library Reference
 
@@ -107,6 +138,8 @@ E2E tests verify what a user sees and does. They must always use the real UI:
 - [ ] Use `getEditDialog` for popup interactions
 - [ ] Validate test runs successfully after changes
 - [ ] Document any app-specific quirks or selectors
+- [ ] All generic selectors on `global.page` are scoped with `.t-app-<appname>`, incl. `getEditDialog` (look for `global.page, '.x-` and `getEditDialog('…')` without `selector` option)
+- [ ] Comments are understandable without the session context
 
 ## Additional Resources
 

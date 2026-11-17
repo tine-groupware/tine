@@ -48,6 +48,7 @@ Tine.CrewScheduling.MemberSelectionPanel = Ext.extend(Ext.Panel, {
         this.filterCells = [];
 
         this.filterField = new Ext.ux.form.ClearableTextField({
+            cls: 'cs-member-filter',
             width: 'auto',
             emptyText: this.app.i18n._('Filter by name'),
             enableKeyEvents: true
