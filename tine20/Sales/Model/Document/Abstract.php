@@ -205,6 +205,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION => [],
                         'tags' => [],
+                        Sales_Model_DocumentPosition_Abstract::FLD_UNIT => [Tinebase_Record_Expander::EXPANDER_FULL => true],
                     ],
                 ],
                 self::FLD_ATTACHED_DOCUMENTS => [],

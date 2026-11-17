@@ -191,6 +191,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                         Sales_Model_Product::FLD_SUBPRODUCTS        => [],
                     ],
                 ],
+                self::FLD_UNIT                              => [Tinebase_Record_Expander::EXPANDER_FULL => true],
             ],
         ],
 
