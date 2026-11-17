@@ -258,7 +258,7 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
                     Sales_Model_DocumentPosition_PurchaseInvoice::TABLE_NAME,
                 ] as $table) {
             $quotedTable = $db->quoteIdentifier(SQL_TABLE_PREFIX . $table);
-            if ($db->query($db->quoteInto('SELECT count(*) FROM ' . $quotedTable . ' WHERE `unit` IS NOT NULL AND `unit` NOT IN (?)', $unitMapping))->fetchColumn() > 0) {
+            if ($db->query($db->quoteInto('SELECT count(*) FROM ' . $quotedTable . ' WHERE `unit` IS NOT NULL AND `unit` NOT IN (?)', array_keys($unitMapping)))->fetchColumn() > 0) {
                 throw new Tinebase_Exception('found unmapped position unit, adjust $unitMapping and rerun update');
             }
             foreach ($unitMapping as $old => $new) {
