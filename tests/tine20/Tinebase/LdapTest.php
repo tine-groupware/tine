@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
- * 
+ * tine Groupware - https://www.tine-groupware.de/
+ *
  * @package     Tinebase
  * @subpackage  Ldap
- * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2016-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -31,5 +31,27 @@ class Tinebase_LdapTest extends TestCase
 
         $decodedSid = Tinebase_Ldap::decodeSid($sid);
         $this->assertEquals($decodedSid, $sid);
+    }
+
+    /**
+     * test that the ldap network timeout from config is applied on connect
+     */
+    public function testLdapNetworkTimeoutAppliedOnConnect()
+    {
+        $config = Tinebase_Config::getInstance();
+        $config->set(Tinebase_Config::LDAP_NETWORK_TIMEOUT, 7);
+        try {
+            $ldap = new Tinebase_Ldap(['host' => 'localhost', 'port' => 389]);
+            $ldap->connect();
+
+            // ldap_connect() is lazy, so no network i/o happened here;
+            // read the (global) option back via a plain connection resource
+            $probe = ldap_connect('ldap://localhost:389');
+            $timeout = null;
+            $this->assertTrue(ldap_get_option($probe, LDAP_OPT_NETWORK_TIMEOUT, $timeout));
+            $this->assertSame(7, $timeout);
+        } finally {
+            $config->delete(Tinebase_Config::LDAP_NETWORK_TIMEOUT);
+        }
     }
 }

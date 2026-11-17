@@ -459,6 +459,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public const LDAP_DISABLE_TLSREQCERT = 'ldapDisableTlsReqCert';
 
     /**
+     * ldap network timeout in seconds (0 = no timeout)
+     *
+     * @var string
+     */
+    public const LDAP_NETWORK_TIMEOUT = 'ldapNetworkTimeout';
+
+    /**
      * overwritten ldap fields
      *
      * @var string
@@ -2278,6 +2285,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE => false,
             self::SETBYSETUPMODULE => true,
             self::DEFAULT_STR => false
+        ),
+        // TODO should this be added to LDAP config array/struct?
+        self::LDAP_NETWORK_TIMEOUT => array(
+                                    //_('LDAP Network Timeout')
+            self::LABEL => 'LDAP Network Timeout',
+                                    //_('LDAP network timeout in seconds (0 = no timeout)')
+            self::DESCRIPTION => 'LDAP network timeout in seconds (0 = no timeout)',
+            self::TYPE => self::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => 5
         ),
         // TODO should this be added to LDAP config array/struct?
         // TODO does this depend on LDAP readonly option?
