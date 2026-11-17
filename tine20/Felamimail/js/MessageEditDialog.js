@@ -928,12 +928,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
             this.to = this.to.concat(this.replyTo.get('to'));
             this.cc = this.replyTo.get('cc');
+            this.bcc = this.replyTo.get('bcc');
 
-            // remove own email and all non-email strings/objects from to/cc
+            // remove own email and all non-email strings/objects from to/cc/bcc
             const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
             const ownEmailRegexp = new RegExp(window.lodash.escapeRegExp(account.get('email')));
 
-            Ext.each(['to', 'cc'], function (field) {
+            Ext.each(['to', 'cc', 'bcc'], function (field) {
                 this[field] = _.filter(this[field], (addressData) => {
                     const email = addressData.email ?? addressData;
                     return Ext.isString(email) && email.match(/@/) && ! ownEmailRegexp.test(email);
