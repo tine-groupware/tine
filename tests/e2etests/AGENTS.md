@@ -118,6 +118,7 @@ E2E tests verify what a user sees and does. They must always use the real UI:
 
 ### Debugging
 
+- Watch / inspect tests in a running Chrome: `TEST_BROWSER_URL`, see README "Debug in a Running Browser" - from a container (tine-dev) via `http://172.118.200.1:9222` (Chrome started with `--remote-debugging-address=0.0.0.0`)
 - `console.log()` / `.warn()` / `.error()` appears in terminal output
 - **Does not work** inside `waitForFunction()` / `page.evaluate()` — use `throw new Error()` or return results and log externally
 
