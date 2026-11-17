@@ -16,6 +16,7 @@ class EventManager_AllTests
         $suite = new \PHPUnit\Framework\TestSuite('EventManager All Tests');
         if (Tinebase_Application::getInstance()->isInstalled('EventManager')) {
             $suite->addTestSuite('EventManager_ControllerTest');
+            $suite->addTestSuite('EventManager_PublicApiRegistrationTest');
         }
         return $suite;
     }

@@ -30,12 +30,6 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     use Tinebase_Controller_SingletonTrait;
 
     /**
-     * Store participant data before deletion to use in _inspectAfterDelete
-     * @var array
-     */
-    protected $_participantsBeforeDelete = [];
-
-    /**
      * Store notification data (recipients, participant, registrant) before deletion
      * @var array
      */
@@ -54,6 +48,11 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         EventManager_Model_CheckboxOption::class  => EventManager_Model_Selections_Checkbox::class,
         EventManager_Model_TextInputOption::class => EventManager_Model_Selections_TextInput::class,
         EventManager_Model_FileOption::class      => EventManager_Model_Selections_File::class,
+    ];
+
+    private const CONTACT_NAME_FIELDS = [
+        'salutation', 'n_prefix', 'n_given', 'n_middle', 'n_family', 'n_suffix', 'n_short',
+        'org_name', 'org_unit', 'title',
     ];
 
     /**
@@ -117,12 +116,17 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         ]);
     }
 
-    private function _copyContactData($target, iterable $source): void
+    private function _copyContactData($target, iterable $source, bool $skipEmpty = false): void
     {
         foreach ($source as $field => $value) {
-            if ($target->has($field) && !in_array($field, self::PROTECTED_CONTACT_FIELDS, true)) {
-                $target->$field = ($value === '') ? null : $value;
+            if (!$target->has($field) || in_array($field, self::PROTECTED_CONTACT_FIELDS, true)) {
+                continue;
             }
+            $isEmpty = $value === null || (is_string($value) && trim($value) === '');
+            if ($isEmpty && $skipEmpty) {
+                continue;
+            }
+            $target->$field = $isEmpty ? null : $value;
         }
     }
 
@@ -138,6 +142,10 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             }
         }
         $this->_normalizeBookedOptions($_record);
+        // the backend only sets the id on save - the upload folder name needs it
+        if (!$_record->getId()) {
+            $_record->setId(Tinebase_Record_Abstract::generateUID());
+        }
         $this->_handleRegistrationFileUpload($_record);
     }
 
@@ -167,17 +175,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
         if ($isDeregistration) {
             if (!empty($_record->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS})) {
-                foreach ($_record->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $bookedOption) {
-                    if (
-                        $bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
-                        === EventManager_Model_Selections_File::class
-                    ) {
-                        $participantName = EventManager_Controller_Register_Contact::getInstance()
-                            ->get($_record->{EventManager_Model_Registration::FLD_PARTICIPANT}
-                                ->{EventManager_Model_Register_Contact::ID})->n_fileas;
-                        $this->createDeregisteredFolder($bookedOption, $participantName);
-                    }
-                }
+                $this->moveFilesToDeregistered($_record);
                 $this->_deleteBookedOptions($_record);
             }
             $this->_sendProcessEmail($_record, 'SendDeregistrationEmail');
@@ -229,21 +227,6 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                     Tinebase_Exception::log($e);
                 }
             }
-
-            if ($registration->{EventManager_Model_Registration::FLD_PARTICIPANT}) {
-                try {
-                    $participantName = EventManager_Controller_Register_Contact::getInstance()
-                        ->get($registration->{EventManager_Model_Registration::FLD_PARTICIPANT}
-                            ->{EventManager_Model_Register_Contact::ID})->n_fileas;
-                    $this->_participantsBeforeDelete[$id] = $participantName;
-                } catch (Tinebase_Exception_NotFound $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' Participant not found: ' . $e->getMessage());
-                    }
-                    $this->_participantsBeforeDelete[$id] = null;
-                }
-            }
         }
         return parent::delete($_ids);
     }
@@ -254,15 +237,10 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $this->_processBookedOptionsAfterDelete($_record);
 
         $id = $_record->getId();
-        $participantName  = $this->_participantsBeforeDelete[$id] ?? null;
         $notificationData = $this->_notificationDataBeforeDelete[$id] ?? null;
-        unset($this->_participantsBeforeDelete[$id], $this->_notificationDataBeforeDelete[$id]);
+        unset($this->_notificationDataBeforeDelete[$id]);
 
-        if ($participantName && $_record->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}) {
-            foreach ($_record->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $bookedOption) {
-                $this->createDeregisteredFolder($bookedOption, $participantName);
-            }
-        }
+        $this->moveFilesToDeregistered($_record);
 
         if ($notificationData !== null) {
             $this->_sendProcessEmail($_record, 'SendDeregistrationEmail', $notificationData);
@@ -566,32 +544,17 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
                 $event_id = $_registration->{EventManager_Model_Registration::FLD_EVENT_ID};
 
-                // Build participant-specific folder path
-                $participant_name = 'participant';
-                try {
-                    $regId = $_registration->getId();
-                    $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                        EventManager_Model_Register_Contact::class,
-                        [
-                            [
-                                'field' => 'registration_id',
-                                'operator' => 'equals',
-                                'value' => $regId
-                            ],
-                            [
-                                'field' => 'registration_type',
-                                'operator' => 'equals',
-                                'value' => 'participant'
-                            ],
-                        ],
-                    );
-                    $participant = EventManager_Controller_Register_Contact::getInstance()->search($filter)->getFirstRecord();
-                    $participant_name = $participant->n_fileas;
-                } catch (Tinebase_Exception_NotFound $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' Exception: ' . $e->getMessage());
-                    }
+                // reuse existing folder (also keeps folders of older registrations without suffix),
+                // otherwise name it from the participant + registration id
+                $existingDir = $this->_getParticipantFolder($_registration);
+                $participantRecord = $_registration->{EventManager_Model_Registration::FLD_PARTICIPANT};
+                if ($existingDir !== null) {
+                    $participant_name = basename($existingDir);
+                } else {
+                    $name = $participantRecord instanceof Tinebase_Record_Interface
+                        ? (string) self::computeContactNames($participantRecord)['n_fileas']
+                        : '';
+                    $participant_name = self::getParticipantFolderName($name, (string) $_registration->getId());
                 }
 
                 $translation = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
@@ -812,51 +775,81 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         }
     }
 
-    public function createDeregisteredFolder(
-        EventManager_Model_BookedOption $booked_option,
-        string $participant_name
-    ): void {
-        if (isset($booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS})) {
+    public const PARTICIPANT_FOLDER_ID_LENGTH = 6;
+    public static function getParticipantFolderName(string $participantName, string $registrationId): string
+    {
+        $name = trim(str_replace('/', '-', $participantName)) ?: 'participant';
+        $suffix = substr($registrationId, 0, self::PARTICIPANT_FOLDER_ID_LENGTH);
+        return $suffix === '' ? $name : $name . ' (' . $suffix . ')';
+    }
+
+    private function _getParticipantFolder(EventManager_Model_Registration $registration): ?string
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        foreach ($registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} ?: [] as $bookedOption) {
             if (
-                $booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
-                === 'EventManager_Model_Selections_File'
+                $bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
+                !== EventManager_Model_Selections_File::class
             ) {
-                $node_id = $booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
-                    ->{EventManager_Model_Selections_File::FLD_NODE_ID};
-                if (!empty($node_id)) {
-                    $file_system = Tinebase_FileSystem::getInstance();
-                    $path_of_node = $file_system->getPathOfNode($node_id, true);
-                    $path_of_node = explode('folders/', $path_of_node)[1];
-                    $translation = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
-                    $new_folder_path = explode(($participant_name . '/'), $path_of_node)[0]
-                        . $translation->_('Deregistered');
-                    $prefix = Tinebase_FileSystem::getInstance()
-                            ->getApplicationBasePath('Filemanager') . '/folders/';
-                    $node_controller = Filemanager_Controller_Node::getInstance();
-                    if (!Tinebase_FileSystem::getInstance()->isDir($prefix . $new_folder_path)) {
-                        $node_controller->createNodes(
-                            [$new_folder_path],
-                            [Tinebase_Model_Tree_FileObject::TYPE_FOLDER]
-                        );
-                    }
-                    $new_folder_path = $new_folder_path . '/' . $participant_name;
-                    if (!Tinebase_FileSystem::getInstance()->isDir($prefix . $new_folder_path)) {
-                        $node_controller->createNodes(
-                            [$new_folder_path],
-                            [Tinebase_Model_Tree_FileObject::TYPE_FOLDER]
-                        );
-                    }
-                    $deregistered_participant = $file_system->copy(
-                        $prefix . $path_of_node,
-                        $prefix . $new_folder_path
-                    );
-                    if ($deregistered_participant) {
-                        Filemanager_Controller_Node::getInstance()->deleteNodes([$path_of_node]);
-                        $path_of_node = explode(($participant_name . '/'), $path_of_node)[0] . $participant_name;
-                        Filemanager_Controller_Node::getInstance()->deleteNodes([$path_of_node]);
-                    }
-                }
+                continue;
             }
+            $nodeId = self::_configNodeId($bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG});
+            if (!$nodeId) {
+                continue;
+            }
+            try {
+                $path = $fs->getPathOfNode($nodeId, true);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                continue; // e.g. still a temp file
+            }
+            $relative = explode('folders/', $path, 2)[1] ?? null;
+            if ($relative) {
+                return dirname($relative);
+            }
+        }
+        return null;
+    }
+
+    public function moveFilesToDeregistered(EventManager_Model_Registration $registration): void
+    {
+        $participantDir = $this->_getParticipantFolder($registration);
+        if ($participantDir === null) {
+            return;
+        }
+
+        $translation = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+        $deregisteredName = $translation->_('Deregistered');
+        if (basename(dirname($participantDir)) === $deregisteredName) {
+            return; // already moved
+        }
+        $deregisteredDir = dirname($participantDir) . '/' . $deregisteredName;
+
+        // FS layer on purpose: runs after the token check, the anonymous user has no delete grant
+        $fs = Tinebase_FileSystem::getInstance();
+        $prefix = $fs->getApplicationBasePath('Filemanager') . '/folders/';
+
+        try {
+            if (!$fs->isDir($prefix . $deregisteredDir)) {
+                $fs->mkdir($prefix . $deregisteredDir);
+            }
+
+            $base = $deregisteredDir . '/' . basename($participantDir);
+            $target = $base;
+            for ($i = 2; $fs->fileExists($prefix . $target); $i++) {
+                $target = $base . ' (' . $i . ')';
+            }
+
+            if (false === $fs->rename($prefix . $participantDir, $prefix . $target)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Could not move ' . $participantDir . ' to ' . $target);
+            }
+            // rename() only drops the folder's own path from the stat cache - the cached paths of the
+            // files inside still resolve to the moved nodes, so a new upload with the same name into
+            // a new "<Registrations>/<participant>" folder would overwrite the moved file instead
+            $fs->clearStatCache();
+        } catch (Exception $e) {
+            // never block a deregistration because of the files
+            Tinebase_Exception::log($e);
         }
     }
 
@@ -976,6 +969,20 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
     private function _processRegistration(array $request, $event_id, bool $parentConsentGiven, string $verifiedEmail)
     {
+        $tm = Tinebase_TransactionManager::getInstance();
+        $transactionId = $tm->startTransaction(Tinebase_Core::getDb());
+        try {
+            $registration = $this->_doProcessRegistration($request, $event_id, $parentConsentGiven, $verifiedEmail);
+            $tm->commitTransaction($transactionId);
+            return $registration;
+        } catch (Throwable $t) {
+            $tm->rollBack();
+            throw $t;
+        }
+    }
+
+    private function _doProcessRegistration(array $request, $event_id, bool $parentConsentGiven, string $verifiedEmail)
+    {
         $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
 
         $isOnBehalf = $this->_resolveIsOnBehalf($request);
@@ -999,13 +1006,19 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $request['contactDetails']['registration_id'] = $requestedRegistrationId;
             $request['registrantDetails']['registration_id'] = $requestedRegistrationId;
         } else {
-            $ownerContact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($verifiedEmail);
+            // same lookup as _syncAddressbookContact(), so both pick the same contact
+            $ownerContact = $this->_findContactByEmail(
+                $verifiedEmail,
+                $isOnBehalf
+                    ? ($request['registrantDetails']['n_given'] ?? null)
+                    : ($request['contactDetails']['n_given'] ?? null)
+            );
             $ownerId = $ownerContact?->getId();
 
             if ($isOnBehalf) {
                 // the registrant is the token owner, and the participant must never be linked to the token owner
                 $request['registrantDetails']['id'] = $ownerId;
-                if ($ownerId !== '' && (string) ($request['contactDetails']['id'] ?? '') === $ownerId) {
+                if (!empty($ownerId) && (string) ($request['contactDetails']['id'] ?? '') === $ownerId) {
                     $request['contactDetails']['id'] = '';
                 }
             } else {
@@ -1041,6 +1054,18 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         }
 
         $isSelfRegistration = !$isOnBehalf;
+
+        if ($isSelfRegistration) {
+            $participantContact = $this->_syncAddressbookContact($request['contactDetails'], true);
+            $registrantContact = $participantContact;
+        } else {
+            // registrant first: a participant without email is stored as a dependant of the registrant's contact
+            $registrantContact = $this->_syncAddressbookContact($request['registrantDetails'], true);
+            $participantContact = $this->_syncAddressbookContact($request['contactDetails'], false);
+            if (!$participantContact && $registrantContact) {
+                $participantContact = $this->_syncDependantContact($request['contactDetails'], $registrantContact);
+            }
+        }
 
         $registrant = $isSelfRegistration
             ? $this->getOrCreateRegisterContact($request['contactDetails'], 'registrant')
@@ -1127,7 +1152,8 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 $booked_options = $this->keepFilesAfterUpdate($registration, $booked_options);
                 $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = $booked_options;
                 $registration->{EventManager_Model_Registration::FLD_REGISTRANT_IS_LEGAL_GUARDIAN} = $isLegalGuardian;
-                $registration->{EventManager_Model_Registration::FLD_COMMUNICATION_PREFERENCE} = $communicationPreference;
+                $registration
+                    ->{EventManager_Model_Registration::FLD_COMMUNICATION_PREFERENCE} = $communicationPreference;
 
                 $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = !$isSelfRegistration;
 
@@ -1144,10 +1170,18 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                     $request['registrantDetails'],
                     $isSelfRegistration
                 );
+
+                $this->_setOriginalId($registration
+                    ->{EventManager_Model_Registration::FLD_PARTICIPANT}, $participantContact);
+                $this->_setOriginalId($registration
+                    ->{EventManager_Model_Registration::FLD_REGISTRANT}, $registrantContact);
                 $registration = $this->update($registration);
             }
         } else {
+            $this->_setOriginalId($participant, $participantContact);
+            $this->_setOriginalId($registrant, $registrantContact);
             $has_registrant = !$isSelfRegistration;
+
             $registration = new EventManager_Model_Registration([
                 'event_id' => EventManager_Controller_Event::getInstance()->get($event_id),
                 'participant' => $participant,
@@ -1437,8 +1471,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         }
 
         $this->_copyContactData($participantReg, $participantData ?? []);
-        $participantReg->n_fileas = $this->getNFileas($participantReg);
-        $participantReg->n_fn = $this->getNFn($participantReg);
+        $this->_applyContactNames($participantReg);
 
         $participantReg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_ID}
             = $registration->getId();
@@ -1456,8 +1489,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $sourceData = $isSelfRegistration ? $participantData : $registrantData;
 
         $this->_copyContactData($registrantReg, $sourceData ?? []);
-        $registrantReg->n_fileas = $this->getNFileas($registrantReg);
-        $registrantReg->n_fn = $this->getNFn($registrantReg);
+        $this->_applyContactNames($registrantReg);
 
         $registrantReg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_ID}
             = $registration->getId();
@@ -1480,90 +1512,208 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         return $registration;
     }
 
-    private function getNFn($record): string
+    public static function computeContactNames(Tinebase_Record_Interface $record): array
     {
-        $parts = [
-            trim($record->n_salutation ?? ''),
-            trim($record->n_given ?? ''),
-            trim($record->n_family ?? ''),
-        ];
-
-        return implode(' ', array_filter($parts, fn($part) => $part !== ''));
+        $data = ['n_fn' => null, 'n_fileas' => null];
+        foreach (self::CONTACT_NAME_FIELDS as $field) {
+            $data[$field] = $record->has($field) ? $record->{$field} : null;
+        }
+        $tmp = new Addressbook_Model_Contact($data, true);
+        return ['n_fn' => $tmp->n_fn, 'n_fileas' => $tmp->n_fileas];
     }
-    private function getNFileas($record)
-    {
-        $family = trim($record->n_family ?? '');
-        $given  = trim($record->n_given ?? '');
 
-        if ($family && $given) {
-            return $family . ', ' . $given;
+    private function _applyContactNames(Tinebase_Record_Interface $record): void
+    {
+        foreach (self::computeContactNames($record) as $field => $value) {
+            $record->{$field} = $value;
+        }
+    }
+
+    private function _getContactNameValues(Addressbook_Model_Contact $contact): array
+    {
+        $values = [];
+        foreach (self::CONTACT_NAME_FIELDS as $field) {
+            $values[$field] = $contact->{$field};
+        }
+        return $values;
+    }
+
+    private function _syncAddressbookContact(array $data, bool $emailVerified): ?Addressbook_Model_Contact
+    {
+        $email = strtolower(trim((string) ($data['email'] ?? '')));
+        if ($email === '') {
+            return null;
         }
 
-        return $family ?: $given;
+        $containerId = EventManager_Config::getInstance()
+            ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
+
+        $cc = Addressbook_Controller_Contact::getInstance();
+        $oldAcl = $cc->doContainerACLChecks(false);
+        try {
+            $contact = $this->_findContactByEmail($email, $data['n_given'] ?? null);
+
+            if (!$contact) {
+                $contact = new Addressbook_Model_Contact([], true);
+                $this->_copyContactData($contact, $data, true);
+                $contact->email = $email;
+                $contact->container_id = $containerId;
+                $this->_applyContactNames($contact);
+                return $cc->create($contact);
+            }
+
+            if (
+                $emailVerified
+            ) {
+                $namesBefore = $this->_getContactNameValues($contact);
+                $this->_copyContactData($contact, $data, true);
+                if ($this->_getContactNameValues($contact) !== $namesBefore) {
+                    $this->_applyContactNames($contact);
+                }
+                return $cc->update($contact);
+            }
+
+            return $contact;
+        } finally {
+            $cc->doContainerACLChecks($oldAcl);
+        }
     }
 
-    public function getContactByContactInformation($contactInformation, $registrationType)
-    {
-        $contact = null;
-        if (!empty($contactInformation['registration_id'])) {
-            $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                EventManager_Model_Register_Contact::class,
-                [
-                    [
-                        'field' => 'registration_id',
-                        'operator' => 'equals',
-                        'value' => $contactInformation['registration_id']
-                    ],
-                    [
-                        'field' => 'registration_type',
-                        'operator' => 'equals',
-                        'value' => $registrationType
-                    ],
-                ],
+    public const RELATION_TYPE_DEPENDANT = 'EVENTMANAGER_DEPENDANT';
+
+    /**
+     * Participant without email, registered on behalf of someone else (e.g. a child):
+     * the email can't identify the contact, so it is looked up among the contacts related to
+     * the registrant's contact by first + last name. If none matches, a new contact is created
+     * and related to the registrant, so it shows up as dependant on the account page.
+     *
+     * Runs without ACL/right checks: called after the registrant was verified via JWT.
+     */
+    private function _syncDependantContact(
+        array $data,
+        Addressbook_Model_Contact $registrantContact
+    ): ?Addressbook_Model_Contact {
+        $normalize = fn($value): string => mb_strtolower(trim((string) $value));
+        $givenName = $normalize($data['n_given'] ?? '');
+        $familyName = $normalize($data['n_family'] ?? '');
+        if ($givenName === '' && $familyName === '') {
+            return null; // nothing to match or name a contact by
+        }
+
+        $cc = Addressbook_Controller_Contact::getInstance();
+        $restore = $cc->assertPublicUsage();
+        try {
+            $relations = Tinebase_Relations::getInstance()->getRelations(
+                Addressbook_Model_Contact::class,
+                Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                $registrantContact->getId(),
+                null,
+                [],
+                true
             );
-            $denormalized_contacts = EventManager_Controller_Register_Contact::getInstance()->search($filter);
-            $contact = $denormalized_contacts->getFirstRecord();
+
+            foreach ($relations as $relation) {
+                $related = $relation->related_record;
+                if (!$related instanceof Addressbook_Model_Contact) {
+                    continue;
+                }
+                if (
+                    $normalize($related->n_given) === $givenName
+                    && $normalize($related->n_family) === $familyName
+                ) {
+                    // the registrant is verified and manages this dependant: take over non-empty fields
+                    $namesBefore = $this->_getContactNameValues($related);
+                    $this->_copyContactData($related, $data, true);
+                    if ($this->_getContactNameValues($related) !== $namesBefore) {
+                        $this->_applyContactNames($related);
+                    }
+                    return $related->isDirty() ? $cc->update($related) : $related;
+                }
+            }
+
+            $contact = new Addressbook_Model_Contact([], true);
+            $this->_copyContactData($contact, $data, true);
+            $contact->email = null;
+            $contact->container_id = EventManager_Config::getInstance()
+                ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
+            $this->_applyContactNames($contact);
+            $contact = $cc->create($contact);
+
+            Tinebase_Relations::getInstance()->addRelation(new Tinebase_Model_Relation([
+                'own_model'       => Addressbook_Model_Contact::class,
+                'own_backend'     => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                'own_id'          => $registrantContact->getId(),
+                'related_degree'  => Tinebase_Model_Relation::DEGREE_CHILD,
+                'related_model'   => Addressbook_Model_Contact::class,
+                'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                'related_id'      => $contact->getId(),
+                'type'            => self::RELATION_TYPE_DEPENDANT,
+            ], true), $registrantContact);
+
+            return $contact;
+        } finally {
+            $restore();
         }
-        return $contact;
     }
 
-    public function getOrCreateRegisterContact($contactInformation, $registrationType)
+    private function _setOriginalId($registerContact, ?Addressbook_Model_Contact $contact): void
+    {
+        if (
+            $registerContact instanceof EventManager_Model_Register_Contact
+            && $contact
+            && empty($registerContact->{EventManager_Model_Register_Contact::FLD_ORIGINAL_ID})
+        ) {
+            $registerContact->{EventManager_Model_Register_Contact::FLD_ORIGINAL_ID} = $contact->getId();
+        }
+    }
+
+    public function getOrCreateRegisterContact(array $contactInformation, string $registrationType)
     {
         $assertAclUsage = $this->assertPublicUsage();
-        $contact = null;
         try {
-            $contact = $this->getContactByContactInformation($contactInformation, $registrationType);
-            if (!$contact) {
-                $contactData = array_map(function ($value) {
-                    return $value;
-                }, $contactInformation);
-                // create a new contact but do not save it for first time registration
-                $contact = new Addressbook_Model_Contact($contactData);
-            } elseif (!empty($contact->registration_id)) {
-                return $contact;
-            } else {
-                $newDenormalizedContact = new EventManager_Model_Register_Contact();
-                $this->_copyContactData($newDenormalizedContact, $contactInformation);
-                $contact = $newDenormalizedContact;
+            if (!empty($contactInformation['registration_id'])) {
+                $existing = EventManager_Controller_Register_Contact::getInstance()->search(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        EventManager_Model_Register_Contact::class,
+                        [
+                            ['field' => 'registration_id', 'operator' => 'equals',
+                                'value' => $contactInformation['registration_id']],
+                            ['field' => 'registration_type', 'operator' => 'equals',
+                                'value' => $registrationType],
+                        ]
+                    )
+                )->getFirstRecord();
+                if ($existing) {
+                    return $existing;
+                }
             }
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . $e->getMessage());
+
+            // new snapshot, saved together with the registration
+            $registerContact = new EventManager_Model_Register_Contact([], true);
+            $this->_copyContactData($registerContact, $contactInformation);
+            $registerContact->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} = $registrationType;
+            $this->_applyContactNames($registerContact);
+            return $registerContact;
         } finally {
             $assertAclUsage();
         }
-        return $contact;
     }
 
+    /**
+     * the public registration form only sends checkbox/text replies - uploaded files of the
+     * existing registration must survive an update of the registration
+     */
     public function keepFilesAfterUpdate($register_participant, $booked_options)
     {
-        $old_booked_options = $register_participant->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS};
+        // null after a deregistration (_deleteBookedOptions)
+        $old_booked_options = $register_participant->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} ?: [];
         foreach ($old_booked_options as $old_booked_option) {
             if (
                 $old_booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
-                === 'EventManager_Model_Selections_File'
-                && $old_booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
-                    ->{EventManager_Model_Selections_File::FLD_NODE_ID}
+                === EventManager_Model_Selections_File::class
+                && self::_configNodeId(
+                    $old_booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                )
             ) {
                 $booked_options[] = $old_booked_option;
             }
@@ -1591,7 +1741,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                     if (
                         !filter_var(
                             $cfg->{EventManager_Model_FileOption::FLD_FILE_UPLOAD}
-                                ?? false,
+                            ?? false,
                             FILTER_VALIDATE_BOOLEAN
                         )
                     ) {
@@ -1699,19 +1849,23 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 $response->getBody()->write(json_encode($registration->toArray()));
             }
         } catch (Tinebase_Exception_Record_Validation $terv) {
+            Tinebase_Exception::log($terv);
             $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terv->getMessage()));
         } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Exception::log($tenf);
             $response = new \Laminas\Diactoros\Response('php://memory', 404, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tenf->getMessage()));
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            Tinebase_Exception::log($terna);
             $response = new \Laminas\Diactoros\Response('php://memory', 401, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($terna->getMessage()));
         } catch (Tinebase_Exception_AccessDenied $tead) {
+            Tinebase_Exception::log($tead);
             $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($tead->getMessage()));
         } catch (Throwable $t) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $t);
+            Tinebase_Exception::log($t);
             $response = new \Laminas\Diactoros\Response('php://memory', 500, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode(['error' => 'Upload failed']));
         } finally {
@@ -1743,7 +1897,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             }
 
             $token = JWT::encode(['email' => $email], $key, 'HS256');
-            $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($email);
+            $contact = $this->_findContactByEmail($email);
 
             $link = $event_id === 'null'
                 ? '/EventManager/view/account/' . $token
@@ -1775,6 +1929,64 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $assertAclUsage();
         }
         return $response;
+    }
+
+    /**
+     * Finds the Addressbook contact for an email address, in all containers.
+     *
+     * - exact match on email / email_home
+     * - if several contacts share the address (e.g. a family email), the one whose n_given
+     *   matches $givenName wins, otherwise the first one (users before plain contacts)
+     *
+     * Runs without ACL/right checks: the anonymous user of the public endpoints has no grants
+     * on the contact containers. Only call this with an email address the caller may act for
+     * (verified via JWT, or the recipient of the mail that is about to be sent).
+     */
+    private function _findContactByEmail(string $email, ?string $givenName = null): ?Addressbook_Model_Contact
+    {
+        $email = strtolower(trim($email));
+        if ($email === '') {
+            return null;
+        }
+
+        $contactController = Addressbook_Controller_Contact::getInstance();
+        $restore = $contactController->assertPublicUsage();
+        try {
+            $candidates = $contactController->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+                    [
+                        'condition' => 'OR',
+                        'filters' => [
+                            ['field' => 'email', 'operator' => 'equals', 'value' => $email],
+                            ['field' => 'email_home', 'operator' => 'equals', 'value' => $email],
+                        ],
+                    ],
+                ]),
+                new Tinebase_Model_Pagination([
+                    'sort' => 'type',
+                    'dir' => 'DESC',
+                    'limit' => 50,
+                ])
+            );
+        } finally {
+            $restore();
+        }
+
+        if (count($candidates) === 0) {
+            return null;
+        }
+
+        $normalize = fn($name): string => mb_strtolower(trim((string) $name));
+        $wanted = $normalize($givenName);
+        if ($wanted !== '') {
+            foreach ($candidates as $candidate) {
+                if ($normalize($candidate->n_given) === $wanted) {
+                    return $candidate;
+                }
+            }
+        }
+
+        return $candidates->getFirstRecord();
     }
 
     private function _getLoggedInUserEmail(): string
@@ -1985,11 +2197,33 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             throw new Tinebase_Exception_AccessDenied('Registration does not belong to this event');
         }
 
-        $registrant = $this->getContactByContactInformation(
-            ['registration_id' => $registration->getId()],
-            'registrant'
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            EventManager_Model_Register_Contact::class,
+            [
+                [
+                    'field' => 'registration_id',
+                    'operator' => 'equals',
+                    'value' => $registration->getId()
+                ],
+                [
+                    'field' => 'registration_type',
+                    'operator' => 'equals',
+                    'value' => 'registrant'
+                ],
+            ],
         );
-        $registrantEmail = strtolower(trim((string) ($registrant->email ?? '')));
+
+        $rcController = EventManager_Controller_Register_Contact::getInstance();
+        $restore = $rcController->assertPublicUsage();
+        try {
+            $registrant = $rcController->search($filter)->getFirstRecord();
+            $registrantEmail = strtolower(trim((string) ($registrant->email ?? '')));
+        } finally {
+            $restore();
+        }
+        /*$registrant = EventManager_Controller_Register_Contact::getInstance()->search($filter)
+            ->getFirstRecord();
+        $registrantEmail = strtolower(trim((string) ($registrant->email ?? '')));*/
 
         if ($registrantEmail === '' || !hash_equals($registrantEmail, $email)) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to access this registration');
