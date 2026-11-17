@@ -28,7 +28,8 @@ metadata:
   the source stays text and GitLab/GitHub render it as well. See `docs/developers/mkdocs.md` "diagrams".
 * Diagrams are in English like the rest of the docs.
 * The docs must not load anything from external servers: mermaid is self-hosted (`docs/assets/vendor/mermaid`,
-  included via `extra_javascript` in `mkdocs.yml`). Don't add CDN scripts, fonts or other external assets.
+  included via `extra_javascript` in `mkdocs.yml`). Don't add CDN scripts, fonts or other external assets, see
+  `docs/developers/mkdocs.md` "no external requests" (fonts are self-hosted too, no `repo_url`).
 * Prefer `flowchart TB` over `LR` for more than a few nodes: the content column is narrow, wide diagrams get tiny.
 
 ### Screenshots

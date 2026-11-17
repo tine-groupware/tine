@@ -34,6 +34,19 @@ Material theme would load mermaid from unpkg.
 
 Try diagrams in the [Mermaid live editor](https://mermaid.live/).
 
+## no external requests
+The docs must not load anything from external servers (privacy). Everything the theme would fetch is self-hosted:
+
+* mermaid: `docs/assets/vendor/mermaid` (`extra_javascript`)
+* fonts: `docs/assets/vendor/fonts` (`extra_css`) with `theme.font: false` - Material loads them from Google Fonts
+  otherwise
+* no `repo_url`: Material fetches repo facts from api.github.com in the browser; the repo is linked in the footer
+  (`extra.social`)
+
+The Material privacy plugin, which would do this automatically, doesn't work with our setup: it ignores
+`assets_include`/`assets_exclude` (downloads all screenshots) and breaks the screenshot links, probably together with
+the i18n plugin. Known exception: the manual screenshots are loaded from our s3 (`extra.img_url_*`).
+
 ## build and push docs
 ``` sh
 cd tine.git
