@@ -135,10 +135,14 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     getQuickFilterRowField: function(ftb) {
 
         if (!ftb.quickFilterRow) {
-            let quickFilterRow = ftb.filterStore.find('field', 'query')
-            if (quickFilterRow === -1) {
-                quickFilterRow = new ftb.record({field: this.quickFilterField, value: this.quickFilter.getValue()});
-                ftb.addFilter(quickFilterRow);
+            const index = ftb.filterStore.find('field', this.quickFilterField);
+            if (index >= 0) {
+                // sync with the existing quick filter row (find returns the index, not the record)
+                ftb.quickFilterRow = ftb.filterStore.getAt(index);
+                this.bind(ftb);
+            } else {
+                // renderFilterRow -> onAddFilter makes it the quickFilterRow
+                ftb.addFilter(new ftb.record({field: this.quickFilterField, value: this.quickFilter.getValue()}));
             }
         }
         return ftb.quickFilterRow;
@@ -254,8 +258,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
                 ftb.quickFilterRow = filter;
                 this.bind(ftb);
             }
-            // preset quickFilter with filterrow value
-            this.syncField(filter.formFields.value);
+            // preset quickFilter with the value of the row it is synced with. An additional query row (e.g. a new
+            // row, query is the default field) must not overwrite it with its (empty) value.
+            if (filter === ftb.quickFilterRow) {
+                this.syncField(filter.formFields.value);
+            }
         }
     },
     
@@ -297,7 +304,8 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             this.onBeforeDeleteFilter(filter, ftb);
         }
         
-        if (newField === ftb.quickFilterField) {
+        // NOTE: quickFilterField is a property of the plugin, not of the filter toolbar
+        if (newField === this.quickFilterField) {
             this.onAddFilter(filter, ftb);
         }
     },
