@@ -42,7 +42,9 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TriggerField, {
      */
     initComponent : function(){
         this.clearer = new FieldClearerPlugin({
-            onTriggerClick: this.onTrigger1Click.createDelegate(this),
+            // resolve onTrigger1Click on click: users of the field extend it after construction (e.g. the quick filter
+            // plugin adds the search with the cleared filter by createSequence)
+            onTriggerClick: () => this.onTrigger1Click(),
         })
         this.plugins = this.plugins || [];
         this.plugins.unshift(this.clearer);
