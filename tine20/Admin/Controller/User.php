@@ -361,8 +361,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
 
+        $containerIdsToLock = $this->_getContactContainerIdsToLock($_user, $oldUser);
+
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            $this->_lockContactContainers($containerIdsToLock);
 
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'update', $oldUser);
 
@@ -576,8 +579,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $_user);
         }
 
+        $containerIdsToLock = $this->_getContactContainerIdsToLock($_user);
+
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            $this->_lockContactContainers($containerIdsToLock);
 
             if (!in_array($_user->accountLoginName, Tinebase_User::getSystemUsernames())) {
                 $this->_checkMaxUsers();
@@ -884,6 +890,53 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     protected function _handleUserDeleteConfirmation($_accountIds)
     {
         Tinebase_Controller_ActionLog::getInstance()->addActionLogUserDelete($_accountIds);
+    }
+
+    /**
+     * returns the ids of the addressbook containers that get the user contact
+     * - call this before the transaction starts, as it can read from the database
+     *
+     * @return array<string>
+     */
+    protected function _getContactContainerIdsToLock(
+        Tinebase_Model_FullUser $user,
+        ?Tinebase_Model_FullUser $oldUser = null
+    ): array {
+        if (! Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
+            return [];
+        }
+
+        $containerIds = [];
+        foreach ([$user->container_id, $oldUser?->container_id] as $containerId) {
+            if (! empty($containerId)) {
+                $containerIds[] = Tinebase_Model_Container::convertContainerId($containerId);
+            }
+        }
+        if (empty($user->container_id)) {
+            // Tinebase_User::user2Contact() uses the default internal addressbook in this case
+            $containerIds[] = self::getDefaultInternalAddressbook();
+        }
+
+        return array_unique($containerIds);
+    }
+
+    /**
+     * locks the contact containers with SELECT ... FOR UPDATE
+     *
+     * Do this as the first statement of the transaction. Other transactions change the container row
+     * (content_seq) for each contact change. With MariaDB innodb_snapshot_isolation, the contact insert / update
+     * then fails with "1020 Record has changed since last read" if the read view is older than the change.
+     *
+     * @param array<string> $containerIds
+     */
+    protected function _lockContactContainers(array $containerIds): void
+    {
+        if (empty($containerIds)) {
+            return;
+        }
+        // NOTE: inside of an outer transaction the read view can exist already. The lock still serializes
+        //       the concurrent changes of the containers.
+        Tinebase_Container::getInstance()->lockContainersForUpdate($containerIds);
     }
 
     protected function _inspectBeforeUpdateOrCreate(Tinebase_Model_FullUser $user, ?Tinebase_Model_FullUser $oldUser = null)
