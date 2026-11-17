@@ -54,4 +54,17 @@ class EventManager_Setup_Uninitialize extends Setup_Uninitialize
             [EventManager_Model_Event::class]
         );
     }
+
+    protected function _uninitializeDeleteEventContacts()
+    {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
+        $container_id = EventManager_Config::getInstance()
+            ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
+        if ($container_id) {
+            Tinebase_Container::getInstance()->deleteContainer($container_id);
+        }
+    }
 }

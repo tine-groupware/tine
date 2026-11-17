@@ -851,7 +851,8 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
     public function publicApiGetAccountDetails($token)
     {
-        $assertAclUsage = $this->assertPublicUsage();
+        //$assertAclUsage = $this->assertPublicUsage();
+        $restoreFns = [$this->assertPublicUsage()];
         try {
             if ($token) {
                 if (!$key = EventManager_Config::getInstance()->{EventManager_Config::JWT_SECRET}) {
@@ -862,16 +863,28 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                     try {
                         $decoded = JWT::decode($token, new \Firebase\JWT\Key($key, 'HS256'));
                     } catch (Exception $jwtException) {
-                        $response = new \Laminas\Diactoros\Response('php://memory', 400, ['Content-Type' => 'application/json']);
+                        $response = new \Laminas\Diactoros\Response(
+                            'php://memory', 400, ['Content-Type' => 'application/json']
+                        );
                         $response->getBody()->write(json_encode(['error' => 'Invalid or expired token']));
                         return $response;
                     }
 
                     $email_registrant = $decoded->email ?? '';
                     if ($email_registrant === '') {
-                        $response = new \Laminas\Diactoros\Response('php://memory', 400, ['Content-Type' => 'application/json']);
+                        $response = new \Laminas\Diactoros\Response(
+                            'php://memory', 400, ['Content-Type' => 'application/json']
+                        );
                         $response->getBody()->write(json_encode(['error' => 'Invalid or expired token']));
                         return $response;
+                    }
+
+                    foreach ([
+                                 Addressbook_Controller_Contact::getInstance(),
+                                 EventManager_Controller_Register_Contact::getInstance(),
+                                 EventManager_Controller_Registration::getInstance(),
+                             ] as $ctrl) {
+                        $restoreFns[] = $ctrl->assertPublicUsage();
                     }
 
                     $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($email_registrant);
@@ -987,7 +1000,9 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
             $response = new \Laminas\Diactoros\Response('php://memory', 403, ['Content-Type' => 'application/json']);
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
-            $assertAclUsage();
+            foreach (array_reverse($restoreFns) as $restore) {
+                $restore();
+            }
         }
         return $response;
     }
