@@ -44,9 +44,10 @@ extension (`mcp__claude-in-chrome__*`). Setup for the user is described in `test
 Workflow:
 
 1. **Check the debug port:** `curl -s http://127.0.0.1:9222/json/version`. If it does not answer, ask the user to start the instance (command in README).
+   In a container (tine-dev: the agent or the `e2etests` container) use `http://172.118.200.1:9222` instead (the `chrome-proxy` service of tine-dev, README "From a container"): the user has to start Chrome with `--remote-debugging-address=0.0.0.0` in addition. An empty reply means Chrome is not running or was started without it - tell the user the command. Never use `host.docker.internal`, Chrome rejects host names.
 2. **Use the right extension instance:** several browsers may be connected (e.g. the user's normal Chrome). Verify by opening a tab via the extension and checking it appears in `node scripts/cdp-inspect.js list`. If not, let the user pick with `switch_browser`.
 3. **Open the test tab first:** navigate an extension tab to `TEST_URL`. `getConnectedPage()` reuses the first tab whose URL starts with `TEST_URL`; otherwise the test opens a new tab outside the extension's tab group, which the agent can't see.
-4. **Run the test** with `TEST_BROWSER_URL=http://127.0.0.1:9222` (set in `.env` or inline). The test clears cookies/storage of `TEST_URL`, logs in and only disconnects at the end, so the final state stays visible.
+4. **Run the test** with `TEST_BROWSER_URL=http://127.0.0.1:9222` (container: `http://172.118.200.1:9222`, set in `.env` or inline). The test clears cookies/storage of `TEST_URL`, logs in and only disconnects at the end, so the final state stays visible.
 5. **Inspect:** main tab via the extension (screenshot, console, `javascript_tool` for `Tine`/`Ext` state). Popup windows (edit dialogs) are not in the tab group, so use `node scripts/cdp-inspect.js screenshot all` / `eval <index> '<js>'`.
 
 Pitfalls:

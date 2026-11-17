@@ -147,6 +147,22 @@ google-chrome \
 Then set `TEST_BROWSER_URL=http://127.0.0.1:9222` in `.env` and run the tests as usual.  
 Doing this ignores TEST_MODE, so it implicitly sets `TEST_MODE=debug`.
 
+#### From a container (tine-dev)
+
+When the tests run in a container (the `e2etests` container of tine-dev) or the agent runs in one (AI coding
+clients of tine-dev), `127.0.0.1` is the container itself:
+
+- Start Chrome with `--remote-debugging-address=0.0.0.0` in addition to the options above. By default it only
+  listens on `127.0.0.1` of the host, which the containers can't reach.
+- Use `TEST_BROWSER_URL=http://172.118.200.1:9222` in the container. This is the service `chrome-proxy` of
+  tine-dev (`compose/e2etest.yml`) with a fixed IP, it forwards to port 9222 of the host.
+
+Chrome rejects debugging requests with a host name like `host.docker.internal` ("Host header is specified and is
+not an IP address or localhost"), and the IP of the host differs per platform - that's why the proxy is needed.
+
+Note: with `--remote-debugging-address=0.0.0.0` everyone who can reach port 9222 of your machine controls that
+Chrome instance (and the sessions of its profile). Close it when you are done, or restrict the port with a firewall.
+
 The tests:
 
 - reuse an open tab showing `TEST_URL` (or open a new one) instead of a fresh browser
