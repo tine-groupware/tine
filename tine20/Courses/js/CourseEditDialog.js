@@ -168,7 +168,15 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.action_import.setDisabled(disabled);
         this.action_addNewMember.setDisabled(disabled);
         this.action_saveAndClose.setDisabled(!Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts'));
-        
+
+        const type = this.record.get('type');
+        if (type?.value && type?.records?.results) {
+            const typeRecordData = type.records.results.find(r => r.id === type.value);
+            if (typeRecordData) {
+                this.record.set('type', typeRecordData);
+            }
+        }
+
         Tine.Courses.CourseEditDialog.superclass.onRecordLoad.call(this);
     },
     
@@ -192,10 +200,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         this.record.set('members', members);
-
-        if (this.record.data?.type?.length > 0) {
-            this.record.set('type', this.record.data.type[0].id);
-        }
     },
     
     /**
@@ -243,25 +247,13 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name:'name',
                         allowBlank: false
                     }, {
-                        xtype:'tinerecordspickercombobox',
+                        xtype: 'tinerecordpickercombobox',
                         name: 'type',
                         allowBlank: false,
                         fieldLabel: this.app.i18n._('Course / School Type'),
                         recordClass: Tine.Courses.Model.CourseType,
                         recordProxy: Tine.Courses.courseTypeBackend,
                         displayField: 'name',
-                        setValue: function (value, editDialog) {
-                            if (this.vueEventBus) {
-                                this.reset();
-                                this.suspendEvents();
-                                const resolvedValue = value.records.results.filter((record) => {return record.id === value.value;} );
-                                async.forEach(resolvedValue, async (recordData) => {
-                                    await this.addRecord(Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass))
-                                }).then (() => {
-                                    this.resumeEvents()
-                                })
-                            }
-                        },
                     }, {
                         name: 'description',
                         fieldLabel: this.app.i18n._('Description'),
