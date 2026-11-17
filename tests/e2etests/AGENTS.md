@@ -87,6 +87,14 @@ E2E tests verify what a user sees and does. They must always use the real UI:
 - Use `waitForElement(page, selector, {hidden: true})` to wait until elements are gone / not displayed, `{visible: true}` until they are shown
 - Use `waitForFunction` only for conditions no helper covers (e.g. field values, component state)
 
+### Selectors
+
+- **Scope selectors to the app** in page context: `.t-app-<appname> .x-btn-text` instead of `.x-btn-text`, also for
+  `getEditDialog(text, page, {selector})`. Hidden main screens of apps opened before stay in the DOM.
+- If the app's main screen lacks the `t-app-<appname>` class (own main screen not based on `Tine.widgets.MainScreen`), add it.
+- Not needed in popups and for modal message boxes; not possible for elements rendered into `<body>` (menus, drag
+  proxies, combo lists). Details: `.agents/skills/e2etests/SKILL.md`
+
 ### Form Filling
 
 - Use `formFillInputField(page, selector, value)` for text inputs (simulates typing delay)
@@ -133,6 +141,7 @@ E2E tests verify what a user sees and does. They must always use the real UI:
 - [ ] Use `getEditDialog` for popup interactions
 - [ ] Validate test runs successfully after changes
 - [ ] Document any app-specific quirks or selectors
+- [ ] Scope generic selectors on `global.page` with `.t-app-<appname>`
 
 ### Guidelines
 
