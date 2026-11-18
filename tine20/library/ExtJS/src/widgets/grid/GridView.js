@@ -1247,6 +1247,11 @@ viewConfig: {
                 if(r){
                     Ext.fly(r).removeClass(this.lastRowCls);
                 }
+                // The row is not in the DOM yet. Clear the empty placeholder first, otherwise the row would be
+                // appended after it and hasRows() would keep reporting "no rows".
+                if(!this.hasRows()){
+                    this.mainBody.dom.innerHTML = '';
+                }
                 Ext.DomHelper.insertHtml('beforeEnd', this.mainBody.dom, html);
             }
             if(!isUpdate){
@@ -1254,7 +1259,10 @@ viewConfig: {
                 this.processRows(firstRow);
             }else if(firstRow === 0 || firstRow >= last){
                 //ensure first/last row is kept after an update.
-                Ext.fly(this.getRow(firstRow)).addClass(firstRow === 0 ? this.firstRowCls : this.lastRowCls);
+                var updatedRow = this.getRow(firstRow);
+                if(updatedRow){
+                    Ext.fly(updatedRow).addClass(firstRow === 0 ? this.firstRowCls : this.lastRowCls);
+                }
             }
         }
         this.syncFocusEl(firstRow);
@@ -1540,8 +1548,19 @@ viewConfig: {
                 return;
             }
         }
+        // NOTE: no rows rendered yet (e.g. the view was rendered empty before the records were added): the view is
+        //       not in sync with the store, inserting just this row would put it at the wrong position (records
+        //       before it are missing) - render all rows instead
+        if(!this.hasRows()){
+            this.refresh();
+            this.fireEvent('rowupdated', this, index, record);
+            return;
+        }
         this.insertRows(ds, index, index, true);
-        this.getRow(index).rowIndex = index;
+        var row = this.getRow(index);
+        if(row){
+            row.rowIndex = index;
+        }
         this.onRemove(ds, record, index+1, true);
         this.fireEvent('rowupdated', this, index, record);
     },
