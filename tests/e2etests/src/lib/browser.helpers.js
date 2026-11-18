@@ -481,6 +481,13 @@ export default {
                 throw new Error('makeScreenshot: missing path for saving a screenshot');
             }
 
+            // a page might still be rendering (e.g. a popup that just opened) - wait until tine has set
+            // its color scheme class, otherwise the mode switch below has nothing to replace
+            await page.waitForFunction(
+                () => /(^|\s)(light|dark)-mode(\s|$)/.test(document.body.className),
+                {timeout: this.getEnvInt('TEST_TIMEOUT_ACTIONABLE')}
+            );
+
             for (const mode of modes) {
                 const filePath = basePath.replace(
                     /(\.\w+)$/,
@@ -644,7 +651,8 @@ export default {
     },
 
     /**
-     * Returns the first tab showing TEST_URL of a connected browser, or a new tab.
+     * Returns the first tab showing TEST_URL of a connected browser (no popup window), or a new tab.
+     * Popup windows of TEST_URL left by a former run are closed.
      * Cookies and storage of TEST_URL are cleared, so the test starts logged out.
      *
      * @param {puppeteer.Browser} browser
@@ -653,7 +661,12 @@ export default {
     getConnectedPage: async function (browser) {
         const testUrl = this.getEnvStr('TEST_URL');
         const pages = await browser.pages();
-        const page = pages.find(p => p.url().startsWith(testUrl)) || await browser.newPage();
+
+        // popup windows of tine (edit dialogs) have the same URL, a former run may have left some open: close them,
+        // and only reuse a tab that is no popup (popups have an opener)
+        const isPopup = p => !!p.target().opener();
+        await Promise.all(pages.filter(p => p.url().startsWith(testUrl) && isPopup(p)).map(p => p.close()));
+        const page = pages.find(p => !p.isClosed() && p.url().startsWith(testUrl) && !isPopup(p)) || await browser.newPage();
 
         const session = await page.createCDPSession();
         await session.send('Storage.clearDataForOrigin', {

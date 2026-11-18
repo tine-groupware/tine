@@ -16,11 +16,7 @@ describe('test email rendering', () => {
       await expectPuppeteer(page).toMatchElement('.t-app-felamimail .x-toolbar-left-row .x-btn-text', {text: 'Nachrichten importieren'});
 
       const selector = '.t-app-felamimail .x-toolbar-left-row input[type="file"]';
-      const fileInput = await page.waitForSelector(selector, {timeout: 2000});
-      if (!fileInput) {
-        throw new Error(`File input not found: ${selector}`);
-      }
-      await fileInput.uploadFile(fileToUpload);
+      await lib.uploadFile(page, fileToUpload, selector);
 
       try {
         // There might be a pop-up telling us that only .eml is allowed for no reason

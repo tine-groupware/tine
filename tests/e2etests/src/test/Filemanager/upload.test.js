@@ -31,8 +31,9 @@ describe('filemanager', () => {
                 await expectPuppeteer(page).toClick('.t-app-filemanager button', {text: 'Ordner anlegen',visibile:true});
                 await page.type('.x-layer.x-editor.x-small-editor.x-grid-editor input', folder);
                 await page.keyboard.press('Enter');
-                await page.click('.t-app-filemanager .x-btn-image.x-tbar-loading');
-                await new Promise(r => setTimeout(r, 5000));
+                // the new folder is added to the grid after it was saved (a reload while saving drops it)
+                await lib.waitForElement(page, '.x-grid-editor', {hidden: true});
+                await lib.waitForAppReady(page);
                 await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name' ,{text:folder});
                 await new Promise(r => setTimeout(r, 1000));
             });
