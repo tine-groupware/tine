@@ -469,10 +469,6 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
                 if ($dkimValidator->validateBoolean()) {
                     [, $domain] = explode('@', $_message->from_email, 2);
                     $trustedMailDomains = Tinebase_Controller_Instance::getInstance()->getTrustedMailDomains();
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' Mail domains: ' . print_r($trustedMailDomains, true));
-                    }
 
                     foreach ($trustedMailDomains as $server => $data) {
                         if (preg_match("/^$server$/", $domain)) {

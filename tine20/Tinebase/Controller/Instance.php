@@ -54,23 +54,33 @@ class Tinebase_Controller_Instance extends Tinebase_Controller_Record_Abstract
             if (count($domains) > 0) {
                 $pattern = '(' . implode('|', array_map(fn($d) => preg_quote($d, '/'), $domains)) . ')';
                 $image = $instance[Tinebase_Model_Instance::FLD_FLAG_ICON_FILE];
-                if (empty($image)) {
-                    $image = $instance[Tinebase_Model_Instance::FLD_URL] . DIRECTORY_SEPARATOR . 'favicon';
-                }
 
-                if (!empty($image) && !str_contains($image, 'icon-set')) {
-                    try {
-                        $image = Tinebase_ImageHelper::getDataUrl($image);
-                    } catch (Exception $e){
-                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                            Tinebase_Core::getLogger()->warn(
-                                __METHOD__ . '::' . __LINE__ . ' Failed to load the flag icon from : ' . $image);
+                $url = trim($instance[Tinebase_Model_Instance::FLD_URL]);
+                if (!str_contains($url, '://')) {
+                    $url = 'https://' . $url;
+                }
+                $parts = parse_url($url);
+                $isValidUrl = in_array(strtolower($parts['scheme'] ?? ''), ['http', 'https'], true)
+                    && !empty($parts['host']);
+
+                // no flag icon, or not an icon-set icon -> use the instance favicon
+                if (empty($image) || !str_contains($image, 'icon-set')) {
+                    $image = null;
+                    if ($isValidUrl) {
+                        try {
+                            $image = Tinebase_ImageHelper::getDataUrl(rtrim($url, '/') . '/favicon');
+                        } catch (Exception $e) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                                Tinebase_Core::getLogger()->warn(
+                                    __METHOD__ . '::' . __LINE__ . ' Failed to load the flag icon from : ' . $url
+                                );
+                            }
                         }
                     }
                 }
 
                 $trustedMailDomains[$pattern] = [
-                    'id'    => $instance[Tinebase_Model_Instance::FLD_URL],
+                    'id'    => rtrim(preg_replace('#^https?://#i', '', $url), '/'),
                     'name' => $instance[Tinebase_Model_Instance::FLD_NAME],
                     'image' => $image,
                 ];

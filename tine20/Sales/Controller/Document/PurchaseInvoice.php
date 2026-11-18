@@ -266,9 +266,9 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
                 //$validationResult = (new Sales_EDocument_Service_Validate)->validateXRechnungContent($xmlContent);
 
                 if (self::TYPE_UBL === $type) {
-                    $xmlContent = (new Sales_EDocument_Service_ConvertToXr())->convertUbl($xmlContent);
+                    $xmlContent = (new Sales_EDocument_Service_Convert())->convertUbl($xmlContent);
                 } else {
-                    $xmlContent = (new Sales_EDocument_Service_ConvertToXr())->convertCii($xmlContent);
+                    $xmlContent = (new Sales_EDocument_Service_Convert())->convertCii($xmlContent);
                 }
                 $xr = new SimpleXMLElement($xmlContent, namespaceOrPrefix: 'urn:ce.eu:en16931:2017:xoev-de:kosit:standard:xrechnung-1');
 
@@ -286,9 +286,9 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
             //$validationResult = (new Sales_EDocument_Service_Validate)->validateXRechnungContent($xmlContent);
 
             if (self::TYPE_UBL === $type) {
-                $xmlContent = (new Sales_EDocument_Service_ConvertToXr())->convertUbl($xmlContent);
+                $xmlContent = (new Sales_EDocument_Service_Convert())->convertUbl($xmlContent);
             } else {
-                $xmlContent = (new Sales_EDocument_Service_ConvertToXr())->convertCii($xmlContent);
+                $xmlContent = (new Sales_EDocument_Service_Convert())->convertCii($xmlContent);
             }
 
             $purchaseInvoice = Sales_Model_Document_PurchaseInvoice::fromXR($xmlContent);

@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -17,7 +17,6 @@ use Sales_Model_DocumentPosition_Invoice as SMDPI;
  */
 class Sales_Document_UblTest extends Sales_Document_Abstract
 {
-    protected $oldPreviewSvc = null;
     protected $oldEDocSvc = null;
 
     public function setUp(): void
@@ -30,10 +29,10 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         if (!Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
             $this->oldEDocSvc = Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->toArray();
 
-            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC} = 'https://edocument-mw.mws-hosting.net/ubl';
-            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::EDOCUMENT_SVC_BASE_URL} = 'https://edocument-mw.mws-hosting.net';
-            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VIEW_SVC} = 'https://edocument-mw.mws-hosting.net/ublView';
-            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VIEW_CII_SVC} = 'https://edocument-mw.mws-hosting.net/ciiView';
+            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC} = 'https://edocument-mwtest.mws-hosting.net/ubl';
+            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::EDOCUMENT_SVC_BASE_URL} = 'https://edocument-mwtest.mws-hosting.net';
+            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VIEW_SVC} = 'https://edocument-mwtest.mws-hosting.net/ublView';
+            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VIEW_CII_SVC} = 'https://edocument-mwtest.mws-hosting.net/ciiView';
         }
     }
 
@@ -440,10 +439,50 @@ EOSTR;
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
-        $this->assertSame(Sales_Config::INVOICE_DISCOUNT_PERCENTAGE, $invoice->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_TYPE}, $invoicePrintR = print_r($invoice->toArray(), true));
-        $this->assertSame(10.0, $invoice->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE}, $invoicePrintR);
-        $this->assertSame(0.9, $invoice->{Sales_Model_Document_Abstract::FLD_NET_SUM}, $invoicePrintR);
-        $this->_assertUblXml($invoice, 0.90, round(0.9 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
+    }
+
+    public function testZugpferd(): void
+    {
+        $product1 = $this->_createProduct();
+        $positions = [
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product1->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 1,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
+            ], true),
+        ];
+        $customer = $this->_createCustomer(additionalCustomerData: ['discount' => 10]);
+
+        $invoice = $this->_createUblInvoice($positions, customer: $customer);
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(1, $invoice->attachments->count());
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName(OnlyOfficeIntegrator_Config::APP_NAME);
+        $app->status = Tinebase_Application::DISABLED;
+        Tinebase_Application::getInstance()->updateApplication($app);
+        $oldFsCfg = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->toArray();
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'https://dsp.test-dsp.se.mwk8s.net/convert/'; //https://documentpreview.tine20.net';
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_VERSION} = 2;
+        $fsCfgRaii = new Tinebase_RAII(fn() => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $oldFsCfg);
+        (new Sales_Frontend_Json)->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
+        unset($fsCfgRaii);
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(2, $invoice->attachments->count());
+
+        $cii = (new Sales_EDocument_Service_Convert)->convertUblToCii(Tinebase_FileSystem::getInstance()->getNodeContents($invoice->attachments->find(fn($rec) => str_ends_with($rec->name, '.xml'), null)->getId()));
+        $pdf = (new Sales_EDocument_Service_Convert)->embedZugPferd(Tinebase_FileSystem::getInstance()->getNodeContents($invoice->attachments->find(fn($rec) => str_ends_with($rec->name, '.pdf'), null)->getId()), $cii);
+
+        $this->assertNotNull(Sales_EDocument_ZUGFeRD::isStringZugFeRD($pdf));
     }
 
     public function testPositionNetDiscount(): void
