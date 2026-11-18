@@ -439,6 +439,10 @@ EOSTR;
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $this->assertSame(Sales_Config::INVOICE_DISCOUNT_PERCENTAGE, $invoice->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_TYPE}, $invoicePrintR = print_r($invoice->toArray(), true));
+        $this->assertSame(10.0, $invoice->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE}, $invoicePrintR);
+        $this->assertSame(0.9, $invoice->{Sales_Model_Document_Abstract::FLD_NET_SUM}, $invoicePrintR);
+        $this->_assertUblXml($invoice, 0.90, round(0.9 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
     }
 
     public function testZugpferd(): void
