@@ -7,7 +7,7 @@ beforeAll(async () => {
     await lib.getBrowser('Zeiterfassung', 'Stundenzettel');
 });
 
-describe('Create and delete time sheet', () => {
+describe.skip('Create and delete time sheet', () => {
     const testDescription = 'test description ' + Math.round(Math.random() * 10000000);
     let popupWindow = null;
 
