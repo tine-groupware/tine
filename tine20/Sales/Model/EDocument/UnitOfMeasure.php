@@ -31,7 +31,7 @@ class Sales_Model_EDocument_UnitOfMeasure extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'Unit of measure', // ngettext('Unit of measure', 'Units of measure', n)
         self::RECORDS_NAME                  => 'Units of measure', // gettext('GENDER_Unit of measure')
-        self::TITLE_PROPERTY                => '{{ code }} - {{ name }}',
+        self::TITLE_PROPERTY                => self::FLD_NAME,
         self::DEFAULT_SORT_INFO             => [self::FIELD => self::FLD_CODE],
         self::MODLOG_ACTIVE                 => true,
         self::EXPOSE_JSON_API               => true,

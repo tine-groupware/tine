@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -980,7 +980,10 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             $data['record'] = $this;
             return $template->render($data);
         } else {
-            return $this->$titleProperty;
+            $title = $this->$titleProperty;
+            return $title instanceof Tinebase_Record_RecordSet && is_subclass_of($title->getRecordClassName(), Tinebase_Record_PropertyLocalization::class) ?
+                ($title->find(fn($rec) => $rec->{Tinebase_Record_PropertyLocalization::FLD_LANGUAGE} === Tinebase_Core::getLocale()->getLanguage(), null) ?? $title->find(fn($rec) => $rec->{Tinebase_Record_PropertyLocalization::FLD_LANGUAGE} === 'en', null))?->{Tinebase_Record_PropertyLocalization::FLD_TEXT}
+                : $title;
         }
     }
 
