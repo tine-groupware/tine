@@ -21,9 +21,9 @@ Daraus ergibt sich im Umkehrschluss als weitere Regel:
 
 * Je größer die Fertigungstiefe und Wertschöpfung im eigenen Unternehmen, je spezifischer das Produkt, je größer die Anzahl der am Produktions- und Verkaufsprozess beteiligten Mitarbeiter, je länger der Kontakt zu einem Kunden zwischen Verkauf und Lieferung, je größer auch die Beteiligung von Lieferanten und/oder Mitarbeitern des Kundenunternehmens am Verkaufs- und Lieferprozess, desto eher empfiehlt sich eine Groupware.
 
-Die (innerbetriebliche) Kommunikation hat hier eine deutlich größere Bedeutung als die reine Abwicklung eines Verkaufsprozesses. Wichtig ist auch die Abbildung von Hierarchien, Kompetenzen und Zuständigkeiten im eigenen Unternehmen. Typisch sind diese Anforderungen etwa bei Projektdienstleistern, wie z.B. Anlagenbauern oder Herstellern von kundenspezifischer Software, aber auch bei Banken oder Telekommunikations-Carriern.
+Die (innerbetriebliche) Kommunikation hat hier eine deutlich größere Bedeutung als die reine Abwicklung eines Verkaufsprozesses. Wichtig ist auch die Abbildung von Hierarchien, Kompetenzen und Zuständigkeiten im eigenen Unternehmen. Typisch sind diese Anforderungen etwa bei Projektdienstleistern, wie z.B. Anlagenbauern oder Herstellern von kundenspezifischer Software, aber auch bei Banken oder Telekommunikationsanbietern.
 
-Aber ist nicht auch bei einem eher vertriebsaffinen Unternehmen die innerbetriebliche Kommunikation wichtig, und muss nicht auch ein eher produktionsaffines Unternehmen viele Kontakte zu potentiellen Kunden haben, um kontinuierlich verkaufen zu können?
+Aber ist nicht auch bei einem eher vertriebs-affinen Unternehmen die innerbetriebliche Kommunikation wichtig, und muss nicht auch ein eher produktionsaffines Unternehmen viele Kontakte zu potenziellen Kunden haben, um kontinuierlich verkaufen zu können?
 
 Das ist natürlich richtig. Die beiden genannten Bereiche beschreiben Extreme, die so in der Wirtschaft nur selten in Reinform zu finden sind. Es empfiehlt sich aber, vor der Auswahl einer Software die durchaus unterschiedlichen Grundanforderungen bzw. Ansätze für das eigene Unternehmen zu prüfen. In vielen Unternehmen sind beide Systeme im Einsatz, weil man eben keinen Kompromiss gefunden hat oder finden wollte.  Allerdings besteht hier die Gefahr, dass Adressdatenbestände evtl. doppelt gepflegt werden (müssten) – und dann gibt es ja auch noch die ERP-Systeme... Wenn dann noch z.B. die zentrale Telefonanlage mit eigenem Telefonbuch hinzukommt, die Mitarbeiter eigene Kontakte in ihren Mobiltelefonen haben und alle diese Systeme voneinander nichts "wissen", sind Datenchaos und Mitarbeiterfrust vorprogrammiert.
 
@@ -35,30 +35,6 @@ _Lightweight Directory Access Protocol_, ein Standardprotokoll, das Betriebs-sys
 
 Um allerdings generell die Anzahl von Schnittstellen gering und beherrschbar zu halten, wählen Sie eine Software, die die benötigten Prozesse weitgehend vereint und zudem über offene Schnittstellen verfügt. {{ branding.title }} ist eine solche Software: Open Source und im Kern eine Groupware mit einer sehr leistungsfähigen Adressverwaltung, mit Kalender und E-Mail-Client. Dazu finden Sie viele Erweiterungen aus dem ERP-Bereich, wie Personal-, Projekt- und Arbeitszeitverwaltung, Dokumentenmanagement und eben auch ein basisfunktionales CRM sowie eine Sales-Anwendung.
 
-## {{ branding.title }} und Metaways
-
-In diesem Abschnitt wollen wir uns kurz mit den folgenden Fragen beschäftigen:
-
-* Was ist das Projekt "{{ branding.title }}"?
-
-* Welche Rolle spielt die Firma Metaways?
-
-* Wie ist das Verhältnis zwischen freier und kommerzieller Version?
-
-* Welche Version behandelt dieses Buch (nicht)? Und warum?
-
-{{ branding.title }} gibt es in zwei verschiedenen Editionen:
-
-<!--Community Edition {{ branding.title }}-->
-Zum einen gibt es die _Community Edition_ (CE), in deren Rahmen die Open Source Software {{ branding.title }} entwickelt wird. Sie richtet sich vornehmlich an Entwickler oder Anwender, die sich in den Entwicklungsprozess (z.B. durch Fehlersuche) einbringen wollen. Neue Funktionen werden zuerst in der CE entwickelt und dort gemeinsam getestet. Unterstützung gibt es für CE nur in Form von freiwilligem Community Support.
-
-<!--Business Edition {{ branding.title }}-->
-Die _Business Edition_ (BE) ist eine durch die Hamburger Firma Metaways Infosystems GmbH gepflegte Version von {{ branding.title }} für den Einsatz in Unternehmen. Sie erfüllt alle Anforderungen an den Einsatz von Open Source im geschäftlichen Umfeld. Für die BE gibt es professionellen Support mit festen Reaktionszeiten. Eine Version der BE wird stets zwei Jahre lang kontinuierlich mit Updates versorgt. Im Rahmen der Softwarepflege erhält die BE im Gegensatz zur CE keine neuen Leistungsmerkmale, sondern nur Fehlerkorrekturen. Die {{ branding.title }} BE ist als reine Software oder Cloud Service jeweils mit Service und Support verfügbar. Nähere Informationen hierzu erhalten Sie bei Metaways oder einem Channel-Partner.
-
-Dieses Buch bezieht sich auf die {{ branding.title }} BE in der Version 2019.11. Es soll einen Anwender im geschäftlichen Umfeld in die Lage versetzen, seine tägliche Arbeit mit {{ branding.title }} zu organisieren und zu optimieren.
-
-Da sich {{ branding.title }} CE im Verhältnis zur BE rascher weiterentwickelt, wird der CE-Benutzer an einigen Stellen Abweichungen zum tatsächlichen Verhalten der Software feststellen. Diese sind jedoch in der Regel so gering, dass sich das vorliegende Handbuch ebenso gut für die Arbeit mit {{ branding.title }} CE empfiehlt.
-
 ## Über dieses Buch
 
 ### An wen wendet sich das Buch?
@@ -69,9 +45,9 @@ Dieses Buch ist das offizielle Benutzerhandbuch für {{ branding.title }}. In di
 
 ### Wo findet man weitere/andere Informationen (der Firma Metaways bzw. der Community)?
 
-Weitere Informationen, besonders die Installation von {{ branding.title }} betreffend, erhalten Sie auf {{ branding.weburl }}. Dort finden Sie detaillierte Installationsanleitungen für alle unterstützten Betriebssysteme.
+Weitere Informationen, besonders die Installation von {{ branding.title }} betreffend, erhalten Sie auf [{{ branding.weburl }}]({{ branding.weburl }}). Dort finden Sie detaillierte Installationsanleitungen für alle unterstützten Betriebssysteme.
 
-Als Softwareentwickler haben Sie über {{ branding.repo_url }} den Zugang zu einer regen Community, in der Sie sich mit anderen Entwicklern und Anwendern austauschen können.
+Als Softwareentwickler haben Sie über das [Software Repository]({{ branding.repo_url }}) den Zugang zu einer regen Community, in der Sie sich mit anderen Entwicklern und Anwendern austauschen können.
 
 ### Wie Sie dieses Buch lesen sollten
 
