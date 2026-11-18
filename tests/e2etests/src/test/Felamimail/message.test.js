@@ -3,8 +3,34 @@ import lib from '../../lib/browser.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
+const personalFolderName = 'Persönliche Dateien von ' + process.env.TEST_USER;
+const uploadFileName = 'attachment.txt';
+
+/**
+ * removes the attachment uploaded by this test from the personal folder (left over by former runs)
+ */
+const removeUploadedFile = async () => {
+    // the json api functions (Tine.Filemanager.*) are created from the service map of the registry
+    await page.waitForFunction(() => typeof Tine.Filemanager?.searchNodes === 'function');
+    await page.evaluate(async (folderName, fileName) => {
+        const path = `/personal/${Tine.Tinebase.registry.get('currentAccount').accountLoginName}/${folderName}/`;
+        const result = await Tine.Filemanager.searchNodes([
+            {field: 'path', operator: 'equals', value: path},
+            {field: 'name', operator: 'equals', value: fileName}
+        ]);
+        if (result.results.length) {
+            await Tine.Filemanager.deleteNodes(result.results.map(node => node.path));
+        }
+    }, personalFolderName, uploadFileName);
+};
+
 beforeAll(async () => {
     await lib.getBrowser('E-Mail');
+    await removeUploadedFile();
+});
+
+afterAll(async () => {
+    await removeUploadedFile();
 });
 
 describe('message', () => {
@@ -43,14 +69,22 @@ describe('message', () => {
 
         const fileToUpload = 'src/test/Felamimail/attachment.txt';
         let filePickerWindow = await lib.getEditDialog('Datei hinzufügen', popupWindow);
-        await expectPuppeteer(filePickerWindow).toMatchElement('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER});
-        await expectPuppeteer(filePickerWindow).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, count: 2});
-        await new Promise(r => setTimeout(r, 15000)); //musst wait!
-        await filePickerWindow.waitForSelector('input[type=file]');
-        let inputUploadHandle = await filePickerWindow.$('input[type=file]');
-        await inputUploadHandle.uploadFile(fileToUpload);
+        // the file picker remembers the last used folder - select the personal folder in the tree
+        // "Meine Ordner" is collapsed in a fresh environment, so expand it first
+        const myFoldersNode = await expectPuppeteer(filePickerWindow).toMatchElement('.x-tree-node-el', {text: 'Meine Ordner'});
+        if (await myFoldersNode.evaluate(el => el.classList.contains('x-tree-node-collapsed'))) {
+            await (await myFoldersNode.$('.x-tree-ec-icon')).click();
+        }
+        // wait until the expand animation is done (Ext wraps the child container while sliding in)
+        await filePickerWindow.waitForFunction((name) => [...document.querySelectorAll('.x-tree-node-anchor span')]
+            .some(el => el.textContent.trim() === name && el.closest('ul.x-tree-node-ct').parentElement.matches('li.x-tree-node')),
+            {}, personalFolderName);
+        await expectPuppeteer(filePickerWindow).toClick('.x-tree-node-anchor span', {text: personalFolderName});
+        await expectPuppeteer(filePickerWindow).toMatchElement('.x-tree-node-el.x-tree-selected', {text: personalFolderName});
+        await lib.waitForAppReady(filePickerWindow);
+        await lib.uploadFile(filePickerWindow, fileToUpload);
         await new Promise(r => setTimeout(r, 5000));
-        await expectPuppeteer(filePickerWindow).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text:'attachment.txt'});
+        await expectPuppeteer(filePickerWindow).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: uploadFileName});
         await expectPuppeteer(filePickerWindow).toClick('button', {text: 'Ok'});
         
         await new Promise(r => setTimeout(r, 2000));

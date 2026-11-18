@@ -166,19 +166,39 @@ export default {
     },
 
     /**
-     * Uploads a file by finding an input element of type "file" on the page and using its uploadFile method.
+     * Uploads a file into an input element of type "file", like a user choosing it in the file dialog.
+     *
+     * Puppeteer's ElementHandle.uploadFile() only passes the path to Chrome, which reads the file from its own file
+     * system. With TEST_BROWSER_URL Chrome runs on another machine (e.g. the host, while the tests run in a
+     * container), where that path doesn't exist and the upload fails. Then the file is read here and handed to the
+     * input as a File object instead (DataTransfer), followed by the input and change events of a file selection.
      *
      * @param {puppeteer.Page} page - The page object to perform the file upload on.
-     * @param {string} file - The path to the file that should be uploaded.
+     * @param {string} file - The path to the file that should be uploaded (relative to tests/e2etests).
+     * @param {string} [selector='input[type=file]'] - The file input (first match).
      * @returns {Promise<void>} A promise that resolves when the file has been set for upload.
      */
-    uploadFile: async function (page, file) {
+    uploadFile: async function (page, file, selector = 'input[type=file]') {
         helpers.assertNotAborted('uploadFile');
 
-        let inputUploadHandle;
+        const inputUploadHandle = await page.waitForSelector(selector);
 
-        inputUploadHandle = await page.$('input[type=file]');
-        await inputUploadHandle.uploadFile(file);
+        if (!helpers.isConnectedBrowser()) {
+            await inputUploadHandle.uploadFile(file);
+            return;
+        }
+
+        const types = {'.txt': 'text/plain', '.csv': 'text/csv', '.eml': 'message/rfc822', '.pdf': 'application/pdf',
+            '.png': 'image/png', '.jpg': 'image/jpeg'};
+        await inputUploadHandle.evaluate((input, name, type, base64) => {
+            const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+            const transfer = new DataTransfer();
+            transfer.items.add(new File([bytes], name, {type}));
+            input.files = transfer.files;
+            input.dispatchEvent(new Event('input', {bubbles: true, composed: true}));
+            input.dispatchEvent(new Event('change', {bubbles: true}));
+        }, path.basename(file), types[path.extname(file).toLowerCase()] ?? 'application/octet-stream',
+            fs.readFileSync(file).toString('base64'));
     },
 
     /**

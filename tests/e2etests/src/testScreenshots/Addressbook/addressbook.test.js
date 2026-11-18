@@ -162,7 +162,9 @@ describe('Contacts', () => {
             let popupWindow = lib.getNewWindow();
             await felamimailIcon.click();
             popupWindow = await popupWindow
-            await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
+            // the popup is blank until tine has rendered the compose dialog
+            await lib.waitForElement(popupWindow, 'input[name=subject]', {visible: true});
+            await lib.waitForAppReady(popupWindow);
             await lib.makeScreenshot(popupWindow,{path: 'screenshots/Adressbuch/20_adressbuch_email_als_notiz.png'});
             await popupWindow.close();
         })
