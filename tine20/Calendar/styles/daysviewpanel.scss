@@ -398,8 +398,19 @@
     overflow: hidden;
 }
 
+// the tags (inline tag fan, see tagStyle.compact) are left of the title: as a block they take the whole line of the
+// one line high event and push the title out (wholeday events in the DaysView, all events in the TimelineView).
+// At most half of the width: in narrow events (e.g. month range of the TimelineView) a wide fan would push the title
+// below the float again - then the fan is cut instead.
 .cal-daysviewpanel-wholedayevent-tags {
-    padding: 1px 2px 0 3px;
+    float: left;
+    max-width: 50%;
+    overflow: hidden;
+    padding: 0 0 0 3px;
+
+    &:empty {
+        display: none;
+    }
 }
 
 .cal-daysviewpanel-event-cropleft {
