@@ -288,4 +288,20 @@ class Tinebase_Exception extends Exception
         }
         return false;
     }
+
+    /**
+     * Returns true if the database rolled back the transaction and a restart of the transaction can succeed.
+     * - 1213 "Deadlock found when trying to get lock"
+     * - 1020 "Record has changed since last read" (MariaDB innodb_snapshot_isolation)
+     *
+     * @param Throwable $e
+     * @return bool
+     */
+    public static function isDbTransactionRetryable(Throwable $e): bool
+    {
+        return $e instanceof Zend_Db_Statement_Exception && (
+            str_contains($e->getMessage(), 'Deadlock found') ||
+            str_contains($e->getMessage(), 'Record has changed since last read')
+        );
+    }
 }
