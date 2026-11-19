@@ -1,0 +1,7094 @@
+{
+    "metadaten": {
+        "kennung": "urn:xoev-de:kosit:codeliste:rec20_3",
+        "kennungInhalt": "urn:xoev-de:kosit:codeliste:rec20",
+        "version": "3",
+        "nameKurz": [
+            {
+                "value": "UN/ECE Recommendation N°20"
+            }
+        ],
+        "nameLang": [
+            {
+                "value": "Codes for Units of Measure Used in International Trade (UN/ECE Recommendation N°20)"
+            }
+        ],
+        "nameTechnisch": "rec20",
+        "herausgebernameLang": [
+            {
+                "value": "Koordinierungsstelle für IT-Standards"
+            }
+        ],
+        "herausgebernameKurz": [
+            {
+                "value": "KoSIT"
+            }
+        ],
+        "beschreibung": [
+            {
+                "value": "Die Codeliste basiert auf UN/ECE Recommendation N°20. Als gelöscht oder veraltet markierte Codes werden nicht in die Codeliste übernommen. Die Codeliste kann im Zusammenhang mit EN16931-1:2017 und der darauf basierenden XRechnung (Standard und Extension) verwendet werden. Für Verwendungshinweise in diesem Kontext siehe: EN16931-3-2, 3-3, 3-4 Annex A bzw. die XRechnung-Spezifikation. Des Weiteren enthält die Codeliste alle Einträge, die für die Nutzung im Kontext des Standards XBestellung benötigt werden."
+            },
+            {
+                "value": "Deutsche Übersetzung der Namen durch tine Groupware, nicht von der KoSIT veröffentlicht (die KoSIT-Codeliste enthält nur englische Namen)."
+            }
+        ],
+        "versionBeschreibung": [
+            {
+                "value": "Basiert auf Rec20r17."
+            }
+        ],
+        "aenderungZurVorversion": [
+            {
+                "value": "Änderungen gegenüber Version 2: Die Datengrundlage wurde auf Rec20r17 aktualisiert. Die folgenden als veraltet oder gelöscht markierten Codes wurden entfernt: 05, 06, 08, 16, 17, 18, 19, 26, 29, 30, 31, 32, 36, 43, 44, 45, 46, 47, 48, 53, 54, 62, 63, 64, 66, 69, 71, 72, 73, 76, 78, 84, 90, 92, 93, 94, 95, 96, 97, 98, 1A, 1B, 1C, 1D, 1E, 1F, 1G, 1H, 1J, 1K, 1L, 1M, 1X, 2V, 2W, 3E, 3G, 3H, 3I, 4A, 4B, 4E, 5C, 5F, 5G, 5H, 5I, 5K, 5P, 5Q, A1, A25, A50, A51, A52, A57, A58, A60, A61, A62, A63, A64, A65, A66, A67, A77, A78, A79, A80, A81, A82, A83, AJ, AM, AP, AR, ARE, ATT, AV, AW, B0, B2, B36, B37, B38, B39, B40, B5, B51, B6, B65, B9, BD, BE, BG, BH, BJ, BK, BL, BO, BR, BT, BW, BX, BZ, C1, C2, C4, C5, C6, C77, C98, CA, CH, CJ, CK, CL, CO, CQ, CR, CS, CT, CU, CV, CY, CZ, D14, D28, D35, D37, D38, D39, D40, D64, D66, D67, D7, D70, D71, D72, D75, D76, D79, D8, D9, D90, D92, D96, D97, D98, D99, DC, DE, DI, DQ, DR, DRM, DS, DU, DX, DY, E11, E2, E3, E5, EC, EP, EV, F1, F9, FB, FD, FE, FG, FM, G7, GC, GD, GH, GK, GN, GRT, GT, GW, GY, GZ, H1, H2, H78, HAR, HD, HE, HF, HI, HJ, HK, HL, HN, HO, HP, HS, HT, HY, IC, IF, II, IL, IM, IP, IT, J89, J94, JB, JG, JO, JR, K24, K25, K5, KD, KF, KG, KS, KTM, L61, L62, LC, LE, LI, LJ, LX, M0, MA, MF, MK, MQ, MT, MV, N2, NB, NBB, NC, ND, NE, NG, NH, NI, NJ, NN, NPL, NPR, NQ, NR, NRL, NTT, NV, NY, OP, OZ, P0, P3, P4, P6, P7, P8, P9, PA, PB, PE, PF, PG, PK, PL, PM, PN, PT, PU, PV, PW, PY, PZ, QD, QH, QK, QT, R4, RA, RD, RG, RK, RL, RN, RO, RS, RU, S5, S6, S7, S8, SA, SD, SE, SHT, SK, SL, SN, SO, SP, SS, SST, ST, SV, T1, T4, T5, T6, T7, T8, TA, TC, TD, TE, TF, TJ, TK, TL, TN, TQ, TR, TS, TSD, TSH, TT, TU, TV, TW, TY, UA, UD, UE, UF, UH, UM, VI, VQ, VS, W4, WH, WI, WR, WW, YL, YT, Z1, Z2, Z3, Z4, Z5, Z6 und Z8. Die Reihenfolge der Codes hat sich geändert (erst rein numerische Codes, dann alphanumerische Codes)."
+            }
+        ],
+        "handbuchVersion": "1.1",
+        "xoevHandbuch": true,
+        "gueltigAb": "2021-06-18",
+        "bezugsorte": []
+    },
+    "spalten": [
+        {
+            "spaltennameLang": "Code",
+            "spaltennameTechnisch": "Code",
+            "datentyp": "string",
+            "codeSpalte": true,
+            "verwendung": "required",
+            "empfohleneCodeSpalte": true
+        },
+        {
+            "spaltennameLang": "Name",
+            "spaltennameTechnisch": "Name",
+            "datentyp": "string",
+            "codeSpalte": false,
+            "verwendung": "required",
+            "empfohleneCodeSpalte": false
+        }
+    ],
+    "daten": [
+        [
+            "10",
+            "Gruppe"
+        ],
+        [
+            "11",
+            "Ausrüstung"
+        ],
+        [
+            "13",
+            "Ration"
+        ],
+        [
+            "14",
+            "Schuss"
+        ],
+        [
+            "15",
+            "Stange, militärisch"
+        ],
+        [
+            "20",
+            "20-Fuß-Container"
+        ],
+        [
+            "21",
+            "40-Fuß-Container"
+        ],
+        [
+            "22",
+            "Deziliter pro Gramm"
+        ],
+        [
+            "23",
+            "Gramm pro Kubikzentimeter"
+        ],
+        [
+            "24",
+            "theoretisches Pfund"
+        ],
+        [
+            "25",
+            "Gramm pro Quadratzentimeter"
+        ],
+        [
+            "27",
+            "theoretische Tonne"
+        ],
+        [
+            "28",
+            "Kilogramm pro Quadratmeter"
+        ],
+        [
+            "33",
+            "Kilopascal Quadratmeter pro Gramm"
+        ],
+        [
+            "34",
+            "Kilopascal pro Millimeter"
+        ],
+        [
+            "35",
+            "Milliliter pro Quadratzentimeter Sekunde"
+        ],
+        [
+            "37",
+            "Unze pro Quadratfuß"
+        ],
+        [
+            "38",
+            "Unze pro Quadratfuß pro 0,01 Zoll"
+        ],
+        [
+            "40",
+            "Milliliter pro Sekunde"
+        ],
+        [
+            "41",
+            "Milliliter pro Minute"
+        ],
+        [
+            "56",
+            "Sitas"
+        ],
+        [
+            "57",
+            "Mesh"
+        ],
+        [
+            "58",
+            "Kilogramm netto"
+        ],
+        [
+            "59",
+            "Teile pro Million (ppm)"
+        ],
+        [
+            "60",
+            "Gewichtsprozent"
+        ],
+        [
+            "61",
+            "Teile pro Milliarde (ppb, US)"
+        ],
+        [
+            "74",
+            "Millipascal"
+        ],
+        [
+            "77",
+            "Milli-Zoll"
+        ],
+        [
+            "80",
+            "Pfund pro Quadratzoll absolut"
+        ],
+        [
+            "81",
+            "Henry"
+        ],
+        [
+            "85",
+            "Foot-Pound-Force"
+        ],
+        [
+            "87",
+            "Pfund pro Kubikfuß"
+        ],
+        [
+            "89",
+            "Poise"
+        ],
+        [
+            "91",
+            "Stokes"
+        ],
+        [
+            "1I",
+            "Festpreis"
+        ],
+        [
+            "2A",
+            "Radiant pro Sekunde"
+        ],
+        [
+            "2B",
+            "Radiant pro Quadratsekunde"
+        ],
+        [
+            "2C",
+            "Röntgen"
+        ],
+        [
+            "2G",
+            "Volt Wechselstrom"
+        ],
+        [
+            "2H",
+            "Volt Gleichstrom"
+        ],
+        [
+            "2I",
+            "British Thermal Unit (international) pro Stunde"
+        ],
+        [
+            "2J",
+            "Kubikzentimeter pro Sekunde"
+        ],
+        [
+            "2K",
+            "Kubikfuß pro Stunde"
+        ],
+        [
+            "2L",
+            "Kubikfuß pro Minute"
+        ],
+        [
+            "2M",
+            "Zentimeter pro Sekunde"
+        ],
+        [
+            "2N",
+            "Dezibel"
+        ],
+        [
+            "2P",
+            "Kilobyte"
+        ],
+        [
+            "2Q",
+            "Kilobecquerel"
+        ],
+        [
+            "2R",
+            "Kilocurie"
+        ],
+        [
+            "2U",
+            "Megagramm"
+        ],
+        [
+            "2X",
+            "Meter pro Minute"
+        ],
+        [
+            "2Y",
+            "Milliröntgen"
+        ],
+        [
+            "2Z",
+            "Millivolt"
+        ],
+        [
+            "3B",
+            "Megajoule"
+        ],
+        [
+            "3C",
+            "Personenmonat"
+        ],
+        [
+            "4C",
+            "Centistokes"
+        ],
+        [
+            "4G",
+            "Mikroliter"
+        ],
+        [
+            "4H",
+            "Mikrometer (Mikron)"
+        ],
+        [
+            "4K",
+            "Milliampere"
+        ],
+        [
+            "4L",
+            "Megabyte"
+        ],
+        [
+            "4M",
+            "Milligramm pro Stunde"
+        ],
+        [
+            "4N",
+            "Megabecquerel"
+        ],
+        [
+            "4O",
+            "Mikrofarad"
+        ],
+        [
+            "4P",
+            "Newton pro Meter"
+        ],
+        [
+            "4Q",
+            "Unze Zoll"
+        ],
+        [
+            "4R",
+            "Unze Fuß"
+        ],
+        [
+            "4T",
+            "Pikofarad"
+        ],
+        [
+            "4U",
+            "Pfund pro Stunde"
+        ],
+        [
+            "4W",
+            "Tonne (US) pro Stunde"
+        ],
+        [
+            "4X",
+            "Kiloliter pro Stunde"
+        ],
+        [
+            "5A",
+            "Barrel (US) pro Minute"
+        ],
+        [
+            "5B",
+            "Charge"
+        ],
+        [
+            "5E",
+            "Millionen Standardkubikfuß pro Tag (MMSCF/Tag)"
+        ],
+        [
+            "5J",
+            "hydraulische Pferdestärke"
+        ],
+        [
+            "A10",
+            "Ampere Quadratmeter pro Joule Sekunde"
+        ],
+        [
+            "A11",
+            "Ångström"
+        ],
+        [
+            "A12",
+            "Astronomische Einheit"
+        ],
+        [
+            "A13",
+            "Attojoule"
+        ],
+        [
+            "A14",
+            "Barn"
+        ],
+        [
+            "A15",
+            "Barn pro Elektronvolt"
+        ],
+        [
+            "A16",
+            "Barn pro Steradiant Elektronvolt"
+        ],
+        [
+            "A17",
+            "Barn pro Steradiant"
+        ],
+        [
+            "A18",
+            "Becquerel pro Kilogramm"
+        ],
+        [
+            "A19",
+            "Becquerel pro Kubikmeter"
+        ],
+        [
+            "A2",
+            "Ampere pro Zentimeter"
+        ],
+        [
+            "A20",
+            "British Thermal Unit (international) pro Sekunde Quadratfuß Grad Rankine"
+        ],
+        [
+            "A21",
+            "British Thermal Unit (international) pro Pfund Grad Rankine"
+        ],
+        [
+            "A22",
+            "British Thermal Unit (international) pro Sekunde Fuß Grad Rankine"
+        ],
+        [
+            "A23",
+            "British Thermal Unit (international) pro Stunde Quadratfuß Grad Rankine"
+        ],
+        [
+            "A24",
+            "Candela pro Quadratmeter"
+        ],
+        [
+            "A26",
+            "Coulomb Meter"
+        ],
+        [
+            "A27",
+            "Coulomb Quadratmeter pro Volt"
+        ],
+        [
+            "A28",
+            "Coulomb pro Kubikzentimeter"
+        ],
+        [
+            "A29",
+            "Coulomb pro Kubikmeter"
+        ],
+        [
+            "A3",
+            "Ampere pro Millimeter"
+        ],
+        [
+            "A30",
+            "Coulomb pro Kubikmillimeter"
+        ],
+        [
+            "A31",
+            "Coulomb pro Kilogramm Sekunde"
+        ],
+        [
+            "A32",
+            "Coulomb pro Mol"
+        ],
+        [
+            "A33",
+            "Coulomb pro Quadratzentimeter"
+        ],
+        [
+            "A34",
+            "Coulomb pro Quadratmeter"
+        ],
+        [
+            "A35",
+            "Coulomb pro Quadratmillimeter"
+        ],
+        [
+            "A36",
+            "Kubikzentimeter pro Mol"
+        ],
+        [
+            "A37",
+            "Kubikdezimeter pro Mol"
+        ],
+        [
+            "A38",
+            "Kubikmeter pro Coulomb"
+        ],
+        [
+            "A39",
+            "Kubikmeter pro Kilogramm"
+        ],
+        [
+            "A4",
+            "Ampere pro Quadratzentimeter"
+        ],
+        [
+            "A40",
+            "Kubikmeter pro Mol"
+        ],
+        [
+            "A41",
+            "Ampere pro Quadratmeter"
+        ],
+        [
+            "A42",
+            "Curie pro Kilogramm"
+        ],
+        [
+            "A43",
+            "Tragfähigkeit (Deadweight)"
+        ],
+        [
+            "A44",
+            "Dekaliter"
+        ],
+        [
+            "A45",
+            "Dekameter"
+        ],
+        [
+            "A47",
+            "Dezitex"
+        ],
+        [
+            "A48",
+            "Grad Rankine"
+        ],
+        [
+            "A49",
+            "Denier"
+        ],
+        [
+            "A5",
+            "Ampere Quadratmeter"
+        ],
+        [
+            "A53",
+            "Elektronvolt"
+        ],
+        [
+            "A54",
+            "Elektronvolt pro Meter"
+        ],
+        [
+            "A55",
+            "Elektronvolt Quadratmeter"
+        ],
+        [
+            "A56",
+            "Elektronvolt Quadratmeter pro Kilogramm"
+        ],
+        [
+            "A59",
+            "Bewölkung in Achteln"
+        ],
+        [
+            "A6",
+            "Ampere pro Quadratmeter Quadratkelvin"
+        ],
+        [
+            "A68",
+            "Exajoule"
+        ],
+        [
+            "A69",
+            "Farad pro Meter"
+        ],
+        [
+            "A7",
+            "Ampere pro Quadratmillimeter"
+        ],
+        [
+            "A70",
+            "Femtojoule"
+        ],
+        [
+            "A71",
+            "Femtometer"
+        ],
+        [
+            "A73",
+            "Fuß pro Quadratsekunde"
+        ],
+        [
+            "A74",
+            "Foot-Pound-Force pro Sekunde"
+        ],
+        [
+            "A75",
+            "Frachttonne"
+        ],
+        [
+            "A76",
+            "Gal"
+        ],
+        [
+            "A8",
+            "Amperesekunde"
+        ],
+        [
+            "A84",
+            "Gigacoulomb pro Kubikmeter"
+        ],
+        [
+            "A85",
+            "Gigaelektronvolt"
+        ],
+        [
+            "A86",
+            "Gigahertz"
+        ],
+        [
+            "A87",
+            "Gigaohm"
+        ],
+        [
+            "A88",
+            "Gigaohm Meter"
+        ],
+        [
+            "A89",
+            "Gigapascal"
+        ],
+        [
+            "A9",
+            "Tarif"
+        ],
+        [
+            "A90",
+            "Gigawatt"
+        ],
+        [
+            "A91",
+            "Gon"
+        ],
+        [
+            "A93",
+            "Gramm pro Kubikmeter"
+        ],
+        [
+            "A94",
+            "Gramm pro Mol"
+        ],
+        [
+            "A95",
+            "Gray"
+        ],
+        [
+            "A96",
+            "Gray pro Sekunde"
+        ],
+        [
+            "A97",
+            "Hektopascal"
+        ],
+        [
+            "A98",
+            "Henry pro Meter"
+        ],
+        [
+            "A99",
+            "Bit"
+        ],
+        [
+            "AA",
+            "Ballen"
+        ],
+        [
+            "AB",
+            "Großpackung"
+        ],
+        [
+            "ACR",
+            "Acre"
+        ],
+        [
+            "ACT",
+            "Aktivität"
+        ],
+        [
+            "AD",
+            "Byte"
+        ],
+        [
+            "AE",
+            "Ampere pro Meter"
+        ],
+        [
+            "AH",
+            "zusätzliche Minute"
+        ],
+        [
+            "AI",
+            "durchschnittliche Minute pro Anruf"
+        ],
+        [
+            "AK",
+            "Faden"
+        ],
+        [
+            "AL",
+            "Anschlussleitung"
+        ],
+        [
+            "AMH",
+            "Amperestunde"
+        ],
+        [
+            "AMP",
+            "Ampere"
+        ],
+        [
+            "ANN",
+            "Jahr"
+        ],
+        [
+            "APZ",
+            "Troy-Unze oder Apothekerunze"
+        ],
+        [
+            "AQ",
+            "Einheit Antihämophiler Faktor (AHF)"
+        ],
+        [
+            "AS",
+            "Sortiment"
+        ],
+        [
+            "ASM",
+            "Alkoholgehalt in Massenprozent"
+        ],
+        [
+            "ASU",
+            "Alkoholgehalt in Volumenprozent"
+        ],
+        [
+            "ATM",
+            "physikalische Atmosphäre"
+        ],
+        [
+            "AWG",
+            "American Wire Gauge"
+        ],
+        [
+            "AY",
+            "Baugruppe"
+        ],
+        [
+            "AZ",
+            "British Thermal Unit (international) pro Pfund"
+        ],
+        [
+            "B1",
+            "Barrel (US) pro Tag"
+        ],
+        [
+            "B10",
+            "Bit pro Sekunde"
+        ],
+        [
+            "B11",
+            "Joule pro Kilogramm Kelvin"
+        ],
+        [
+            "B12",
+            "Joule pro Meter"
+        ],
+        [
+            "B13",
+            "Joule pro Quadratmeter"
+        ],
+        [
+            "B14",
+            "Joule pro Meter hoch vier"
+        ],
+        [
+            "B15",
+            "Joule pro Mol"
+        ],
+        [
+            "B16",
+            "Joule pro Mol Kelvin"
+        ],
+        [
+            "B17",
+            "Gutschrift"
+        ],
+        [
+            "B18",
+            "Joulesekunde"
+        ],
+        [
+            "B19",
+            "Ziffer"
+        ],
+        [
+            "B20",
+            "Joule Quadratmeter pro Kilogramm"
+        ],
+        [
+            "B21",
+            "Kelvin pro Watt"
+        ],
+        [
+            "B22",
+            "Kiloampere"
+        ],
+        [
+            "B23",
+            "Kiloampere pro Quadratmeter"
+        ],
+        [
+            "B24",
+            "Kiloampere pro Meter"
+        ],
+        [
+            "B25",
+            "Kilobecquerel pro Kilogramm"
+        ],
+        [
+            "B26",
+            "Kilocoulomb"
+        ],
+        [
+            "B27",
+            "Kilocoulomb pro Kubikmeter"
+        ],
+        [
+            "B28",
+            "Kilocoulomb pro Quadratmeter"
+        ],
+        [
+            "B29",
+            "Kiloelektronvolt"
+        ],
+        [
+            "B3",
+            "Batting-Pfund"
+        ],
+        [
+            "B30",
+            "Gibibit"
+        ],
+        [
+            "B31",
+            "Kilogramm Meter pro Sekunde"
+        ],
+        [
+            "B32",
+            "Kilogramm Quadratmeter"
+        ],
+        [
+            "B33",
+            "Kilogramm Quadratmeter pro Sekunde"
+        ],
+        [
+            "B34",
+            "Kilogramm pro Kubikdezimeter"
+        ],
+        [
+            "B35",
+            "Kilogramm pro Liter"
+        ],
+        [
+            "B4",
+            "Barrel (britisch)"
+        ],
+        [
+            "B41",
+            "Kilojoule pro Kelvin"
+        ],
+        [
+            "B42",
+            "Kilojoule pro Kilogramm"
+        ],
+        [
+            "B43",
+            "Kilojoule pro Kilogramm Kelvin"
+        ],
+        [
+            "B44",
+            "Kilojoule pro Mol"
+        ],
+        [
+            "B45",
+            "Kilomol"
+        ],
+        [
+            "B46",
+            "Kilomol pro Kubikmeter"
+        ],
+        [
+            "B47",
+            "Kilonewton"
+        ],
+        [
+            "B48",
+            "Kilonewtonmeter"
+        ],
+        [
+            "B49",
+            "Kiloohm"
+        ],
+        [
+            "B50",
+            "Kiloohm Meter"
+        ],
+        [
+            "B52",
+            "Kilosekunde"
+        ],
+        [
+            "B53",
+            "Kilosiemens"
+        ],
+        [
+            "B54",
+            "Kilosiemens pro Meter"
+        ],
+        [
+            "B55",
+            "Kilovolt pro Meter"
+        ],
+        [
+            "B56",
+            "Kiloweber pro Meter"
+        ],
+        [
+            "B57",
+            "Lichtjahr"
+        ],
+        [
+            "B58",
+            "Liter pro Mol"
+        ],
+        [
+            "B59",
+            "Lumenstunde"
+        ],
+        [
+            "B60",
+            "Lumen pro Quadratmeter"
+        ],
+        [
+            "B61",
+            "Lumen pro Watt"
+        ],
+        [
+            "B62",
+            "Lumensekunde"
+        ],
+        [
+            "B63",
+            "Luxstunde"
+        ],
+        [
+            "B64",
+            "Luxsekunde"
+        ],
+        [
+            "B66",
+            "Megaampere pro Quadratmeter"
+        ],
+        [
+            "B67",
+            "Megabecquerel pro Kilogramm"
+        ],
+        [
+            "B68",
+            "Gigabit"
+        ],
+        [
+            "B69",
+            "Megacoulomb pro Kubikmeter"
+        ],
+        [
+            "B7",
+            "Zyklus"
+        ],
+        [
+            "B70",
+            "Megacoulomb pro Quadratmeter"
+        ],
+        [
+            "B71",
+            "Megaelektronvolt"
+        ],
+        [
+            "B72",
+            "Megagramm pro Kubikmeter"
+        ],
+        [
+            "B73",
+            "Meganewton"
+        ],
+        [
+            "B74",
+            "Meganewtonmeter"
+        ],
+        [
+            "B75",
+            "Megaohm"
+        ],
+        [
+            "B76",
+            "Megaohm Meter"
+        ],
+        [
+            "B77",
+            "Megasiemens pro Meter"
+        ],
+        [
+            "B78",
+            "Megavolt"
+        ],
+        [
+            "B79",
+            "Megavolt pro Meter"
+        ],
+        [
+            "B8",
+            "Joule pro Kubikmeter"
+        ],
+        [
+            "B80",
+            "Gigabit pro Sekunde"
+        ],
+        [
+            "B81",
+            "reziproker Quadratmeter reziproke Sekunde"
+        ],
+        [
+            "B82",
+            "Zoll pro laufendem Fuß"
+        ],
+        [
+            "B83",
+            "Meter hoch vier"
+        ],
+        [
+            "B84",
+            "Mikroampere"
+        ],
+        [
+            "B85",
+            "Mikrobar"
+        ],
+        [
+            "B86",
+            "Mikrocoulomb"
+        ],
+        [
+            "B87",
+            "Mikrocoulomb pro Kubikmeter"
+        ],
+        [
+            "B88",
+            "Mikrocoulomb pro Quadratmeter"
+        ],
+        [
+            "B89",
+            "Mikrofarad pro Meter"
+        ],
+        [
+            "B90",
+            "Mikrohenry"
+        ],
+        [
+            "B91",
+            "Mikrohenry pro Meter"
+        ],
+        [
+            "B92",
+            "Mikronewton"
+        ],
+        [
+            "B93",
+            "Mikronewtonmeter"
+        ],
+        [
+            "B94",
+            "Mikroohm"
+        ],
+        [
+            "B95",
+            "Mikroohm Meter"
+        ],
+        [
+            "B96",
+            "Mikropascal"
+        ],
+        [
+            "B97",
+            "Mikroradiant"
+        ],
+        [
+            "B98",
+            "Mikrosekunde"
+        ],
+        [
+            "B99",
+            "Mikrosiemens"
+        ],
+        [
+            "BAR",
+            "Bar [Druckeinheit]"
+        ],
+        [
+            "BB",
+            "Base Box"
+        ],
+        [
+            "BFT",
+            "Board Foot"
+        ],
+        [
+            "BHP",
+            "Bremsleistung in PS (BHP)"
+        ],
+        [
+            "BIL",
+            "Billion (EUR)"
+        ],
+        [
+            "BLD",
+            "Trockenbarrel (US)"
+        ],
+        [
+            "BLL",
+            "Barrel (US)"
+        ],
+        [
+            "BP",
+            "hundert Board Foot"
+        ],
+        [
+            "BPM",
+            "Schläge pro Minute"
+        ],
+        [
+            "BQL",
+            "Becquerel"
+        ],
+        [
+            "BTU",
+            "British Thermal Unit (international)"
+        ],
+        [
+            "BUA",
+            "Bushel (US)"
+        ],
+        [
+            "BUI",
+            "Bushel (britisch)"
+        ],
+        [
+            "C0",
+            "Anruf"
+        ],
+        [
+            "C10",
+            "Millifarad"
+        ],
+        [
+            "C11",
+            "Milligal"
+        ],
+        [
+            "C12",
+            "Milligramm pro Meter"
+        ],
+        [
+            "C13",
+            "Milligray"
+        ],
+        [
+            "C14",
+            "Millihenry"
+        ],
+        [
+            "C15",
+            "Millijoule"
+        ],
+        [
+            "C16",
+            "Millimeter pro Sekunde"
+        ],
+        [
+            "C17",
+            "Quadratmillimeter pro Sekunde"
+        ],
+        [
+            "C18",
+            "Millimol"
+        ],
+        [
+            "C19",
+            "Mol pro Kilogramm"
+        ],
+        [
+            "C20",
+            "Millinewton"
+        ],
+        [
+            "C21",
+            "Kibibit"
+        ],
+        [
+            "C22",
+            "Millinewton pro Meter"
+        ],
+        [
+            "C23",
+            "Milliohm Meter"
+        ],
+        [
+            "C24",
+            "Millipascalsekunde"
+        ],
+        [
+            "C25",
+            "Milliradiant"
+        ],
+        [
+            "C26",
+            "Millisekunde"
+        ],
+        [
+            "C27",
+            "Millisiemens"
+        ],
+        [
+            "C28",
+            "Millisievert"
+        ],
+        [
+            "C29",
+            "Millitesla"
+        ],
+        [
+            "C3",
+            "Mikrovolt pro Meter"
+        ],
+        [
+            "C30",
+            "Millivolt pro Meter"
+        ],
+        [
+            "C31",
+            "Milliwatt"
+        ],
+        [
+            "C32",
+            "Milliwatt pro Quadratmeter"
+        ],
+        [
+            "C33",
+            "Milliweber"
+        ],
+        [
+            "C34",
+            "Mol"
+        ],
+        [
+            "C35",
+            "Mol pro Kubikdezimeter"
+        ],
+        [
+            "C36",
+            "Mol pro Kubikmeter"
+        ],
+        [
+            "C37",
+            "Kilobit"
+        ],
+        [
+            "C38",
+            "Mol pro Liter"
+        ],
+        [
+            "C39",
+            "Nanoampere"
+        ],
+        [
+            "C40",
+            "Nanocoulomb"
+        ],
+        [
+            "C41",
+            "Nanofarad"
+        ],
+        [
+            "C42",
+            "Nanofarad pro Meter"
+        ],
+        [
+            "C43",
+            "Nanohenry"
+        ],
+        [
+            "C44",
+            "Nanohenry pro Meter"
+        ],
+        [
+            "C45",
+            "Nanometer"
+        ],
+        [
+            "C46",
+            "Nanoohm Meter"
+        ],
+        [
+            "C47",
+            "Nanosekunde"
+        ],
+        [
+            "C48",
+            "Nanotesla"
+        ],
+        [
+            "C49",
+            "Nanowatt"
+        ],
+        [
+            "C50",
+            "Neper"
+        ],
+        [
+            "C51",
+            "Neper pro Sekunde"
+        ],
+        [
+            "C52",
+            "Pikometer"
+        ],
+        [
+            "C53",
+            "Newtonmeter Sekunde"
+        ],
+        [
+            "C54",
+            "Newton Quadratmeter pro Quadratkilogramm"
+        ],
+        [
+            "C55",
+            "Newton pro Quadratmeter"
+        ],
+        [
+            "C56",
+            "Newton pro Quadratmillimeter"
+        ],
+        [
+            "C57",
+            "Newtonsekunde"
+        ],
+        [
+            "C58",
+            "Newtonsekunde pro Meter"
+        ],
+        [
+            "C59",
+            "Oktave"
+        ],
+        [
+            "C60",
+            "Ohm Zentimeter"
+        ],
+        [
+            "C61",
+            "Ohm Meter"
+        ],
+        [
+            "C62",
+            "Eins (Stück)"
+        ],
+        [
+            "C63",
+            "Parsec"
+        ],
+        [
+            "C64",
+            "Pascal pro Kelvin"
+        ],
+        [
+            "C65",
+            "Pascalsekunde"
+        ],
+        [
+            "C66",
+            "Pascalsekunde pro Kubikmeter"
+        ],
+        [
+            "C67",
+            "Pascalsekunde pro Meter"
+        ],
+        [
+            "C68",
+            "Petajoule"
+        ],
+        [
+            "C69",
+            "Phon"
+        ],
+        [
+            "C7",
+            "Zentipoise"
+        ],
+        [
+            "C70",
+            "Pikoampere"
+        ],
+        [
+            "C71",
+            "Pikocoulomb"
+        ],
+        [
+            "C72",
+            "Pikofarad pro Meter"
+        ],
+        [
+            "C73",
+            "Pikohenry"
+        ],
+        [
+            "C74",
+            "Kilobit pro Sekunde"
+        ],
+        [
+            "C75",
+            "Pikowatt"
+        ],
+        [
+            "C76",
+            "Pikowatt pro Quadratmeter"
+        ],
+        [
+            "C78",
+            "Pound-Force"
+        ],
+        [
+            "C79",
+            "Kilovoltamperestunde"
+        ],
+        [
+            "C8",
+            "Millicoulomb pro Kilogramm"
+        ],
+        [
+            "C80",
+            "Rad"
+        ],
+        [
+            "C81",
+            "Radiant"
+        ],
+        [
+            "C82",
+            "Radiant Quadratmeter pro Mol"
+        ],
+        [
+            "C83",
+            "Radiant Quadratmeter pro Kilogramm"
+        ],
+        [
+            "C84",
+            "Radiant pro Meter"
+        ],
+        [
+            "C85",
+            "reziprokes Ångström"
+        ],
+        [
+            "C86",
+            "reziproker Kubikmeter"
+        ],
+        [
+            "C87",
+            "reziproker Kubikmeter pro Sekunde"
+        ],
+        [
+            "C88",
+            "reziprokes Elektronvolt pro Kubikmeter"
+        ],
+        [
+            "C89",
+            "reziprokes Henry"
+        ],
+        [
+            "C9",
+            "Spulengruppe"
+        ],
+        [
+            "C90",
+            "reziprokes Joule pro Kubikmeter"
+        ],
+        [
+            "C91",
+            "reziprokes Kelvin oder Kelvin hoch minus eins"
+        ],
+        [
+            "C92",
+            "reziproker Meter"
+        ],
+        [
+            "C93",
+            "reziproker Quadratmeter"
+        ],
+        [
+            "C94",
+            "reziproke Minute"
+        ],
+        [
+            "C95",
+            "reziprokes Mol"
+        ],
+        [
+            "C96",
+            "reziprokes Pascal oder Pascal hoch minus eins"
+        ],
+        [
+            "C97",
+            "reziproke Sekunde"
+        ],
+        [
+            "C99",
+            "reziproke Sekunde pro Quadratmeter"
+        ],
+        [
+            "CCT",
+            "Tragfähigkeit in metrischen Tonnen"
+        ],
+        [
+            "CDL",
+            "Candela"
+        ],
+        [
+            "CEL",
+            "Grad Celsius"
+        ],
+        [
+            "CEN",
+            "Hundert"
+        ],
+        [
+            "CG",
+            "Karte"
+        ],
+        [
+            "CGM",
+            "Zentigramm"
+        ],
+        [
+            "CKG",
+            "Coulomb pro Kilogramm"
+        ],
+        [
+            "CLF",
+            "hundert Blatt"
+        ],
+        [
+            "CLT",
+            "Zentiliter"
+        ],
+        [
+            "CMK",
+            "Quadratzentimeter"
+        ],
+        [
+            "CMQ",
+            "Kubikzentimeter"
+        ],
+        [
+            "CMT",
+            "Zentimeter"
+        ],
+        [
+            "CNP",
+            "hundert Packungen"
+        ],
+        [
+            "CNT",
+            "Cental (britisch)"
+        ],
+        [
+            "COU",
+            "Coulomb"
+        ],
+        [
+            "CTG",
+            "Gramm Inhalt"
+        ],
+        [
+            "CTM",
+            "metrisches Karat"
+        ],
+        [
+            "CTN",
+            "Tonne Inhalt (metrisch)"
+        ],
+        [
+            "CUR",
+            "Curie"
+        ],
+        [
+            "CWA",
+            "Zentner (US, hundredweight)"
+        ],
+        [
+            "CWI",
+            "Zentner (britisch, hundredweight)"
+        ],
+        [
+            "D03",
+            "Kilowattstunde pro Stunde"
+        ],
+        [
+            "D04",
+            "Lot [Gewichtseinheit]"
+        ],
+        [
+            "D1",
+            "reziproke Sekunde pro Steradiant"
+        ],
+        [
+            "D10",
+            "Siemens pro Meter"
+        ],
+        [
+            "D11",
+            "Mebibit"
+        ],
+        [
+            "D12",
+            "Siemens Quadratmeter pro Mol"
+        ],
+        [
+            "D13",
+            "Sievert"
+        ],
+        [
+            "D15",
+            "Sone"
+        ],
+        [
+            "D16",
+            "Quadratzentimeter pro Erg"
+        ],
+        [
+            "D17",
+            "Quadratzentimeter pro Steradiant Erg"
+        ],
+        [
+            "D18",
+            "Meter Kelvin"
+        ],
+        [
+            "D19",
+            "Quadratmeter Kelvin pro Watt"
+        ],
+        [
+            "D2",
+            "reziproke Sekunde pro Steradiant Quadratmeter"
+        ],
+        [
+            "D20",
+            "Quadratmeter pro Joule"
+        ],
+        [
+            "D21",
+            "Quadratmeter pro Kilogramm"
+        ],
+        [
+            "D22",
+            "Quadratmeter pro Mol"
+        ],
+        [
+            "D23",
+            "Pen-Gramm (Protein)"
+        ],
+        [
+            "D24",
+            "Quadratmeter pro Steradiant"
+        ],
+        [
+            "D25",
+            "Quadratmeter pro Steradiant Joule"
+        ],
+        [
+            "D26",
+            "Quadratmeter pro Voltsekunde"
+        ],
+        [
+            "D27",
+            "Steradiant"
+        ],
+        [
+            "D29",
+            "Terahertz"
+        ],
+        [
+            "D30",
+            "Terajoule"
+        ],
+        [
+            "D31",
+            "Terawatt"
+        ],
+        [
+            "D32",
+            "Terawattstunde"
+        ],
+        [
+            "D33",
+            "Tesla"
+        ],
+        [
+            "D34",
+            "Tex"
+        ],
+        [
+            "D36",
+            "Megabit"
+        ],
+        [
+            "D41",
+            "Tonne pro Kubikmeter"
+        ],
+        [
+            "D42",
+            "tropisches Jahr"
+        ],
+        [
+            "D43",
+            "atomare Masseneinheit"
+        ],
+        [
+            "D44",
+            "Var"
+        ],
+        [
+            "D45",
+            "Quadratvolt pro Quadratkelvin"
+        ],
+        [
+            "D46",
+            "Voltampere"
+        ],
+        [
+            "D47",
+            "Volt pro Zentimeter"
+        ],
+        [
+            "D48",
+            "Volt pro Kelvin"
+        ],
+        [
+            "D49",
+            "Millivolt pro Kelvin"
+        ],
+        [
+            "D5",
+            "Kilogramm pro Quadratzentimeter"
+        ],
+        [
+            "D50",
+            "Volt pro Meter"
+        ],
+        [
+            "D51",
+            "Volt pro Millimeter"
+        ],
+        [
+            "D52",
+            "Watt pro Kelvin"
+        ],
+        [
+            "D53",
+            "Watt pro Meter Kelvin"
+        ],
+        [
+            "D54",
+            "Watt pro Quadratmeter"
+        ],
+        [
+            "D55",
+            "Watt pro Quadratmeter Kelvin"
+        ],
+        [
+            "D56",
+            "Watt pro Quadratmeter Kelvin hoch vier"
+        ],
+        [
+            "D57",
+            "Watt pro Steradiant"
+        ],
+        [
+            "D58",
+            "Watt pro Steradiant Quadratmeter"
+        ],
+        [
+            "D59",
+            "Weber pro Meter"
+        ],
+        [
+            "D6",
+            "Röntgen pro Sekunde"
+        ],
+        [
+            "D60",
+            "Weber pro Millimeter"
+        ],
+        [
+            "D61",
+            "Minute [Winkeleinheit]"
+        ],
+        [
+            "D62",
+            "Sekunde [Winkeleinheit]"
+        ],
+        [
+            "D63",
+            "Buch"
+        ],
+        [
+            "D65",
+            "Runde"
+        ],
+        [
+            "D68",
+            "Anzahl Wörter"
+        ],
+        [
+            "D69",
+            "Zoll hoch vier"
+        ],
+        [
+            "D73",
+            "Joule Quadratmeter"
+        ],
+        [
+            "D74",
+            "Kilogramm pro Mol"
+        ],
+        [
+            "D77",
+            "Megacoulomb"
+        ],
+        [
+            "D78",
+            "Megajoule pro Sekunde"
+        ],
+        [
+            "D80",
+            "Mikrowatt"
+        ],
+        [
+            "D81",
+            "Mikrotesla"
+        ],
+        [
+            "D82",
+            "Mikrovolt"
+        ],
+        [
+            "D83",
+            "Millinewtonmeter"
+        ],
+        [
+            "D85",
+            "Mikrowatt pro Quadratmeter"
+        ],
+        [
+            "D86",
+            "Millicoulomb"
+        ],
+        [
+            "D87",
+            "Millimol pro Kilogramm"
+        ],
+        [
+            "D88",
+            "Millicoulomb pro Kubikmeter"
+        ],
+        [
+            "D89",
+            "Millicoulomb pro Quadratmeter"
+        ],
+        [
+            "D91",
+            "Rem"
+        ],
+        [
+            "D93",
+            "Sekunde pro Kubikmeter"
+        ],
+        [
+            "D94",
+            "Sekunde pro Kubikmeter Radiant"
+        ],
+        [
+            "D95",
+            "Joule pro Gramm"
+        ],
+        [
+            "DAA",
+            "Dekar"
+        ],
+        [
+            "DAD",
+            "zehn Tage"
+        ],
+        [
+            "DAY",
+            "Tag"
+        ],
+        [
+            "DB",
+            "Trockenpfund"
+        ],
+        [
+            "DBM",
+            "Dezibel Milliwatt"
+        ],
+        [
+            "DBW",
+            "Dezibel Watt"
+        ],
+        [
+            "DD",
+            "Grad [Winkeleinheit]"
+        ],
+        [
+            "DEC",
+            "Jahrzehnt"
+        ],
+        [
+            "DG",
+            "Dezigramm"
+        ],
+        [
+            "DJ",
+            "Dekagramm"
+        ],
+        [
+            "DLT",
+            "Deziliter"
+        ],
+        [
+            "DMA",
+            "Kubikdekameter"
+        ],
+        [
+            "DMK",
+            "Quadratdezimeter"
+        ],
+        [
+            "DMO",
+            "Standardkiloliter"
+        ],
+        [
+            "DMQ",
+            "Kubikdezimeter"
+        ],
+        [
+            "DMT",
+            "Dezimeter"
+        ],
+        [
+            "DN",
+            "Dezinewtonmeter"
+        ],
+        [
+            "DPC",
+            "Dutzend Stück"
+        ],
+        [
+            "DPR",
+            "Dutzend Paar"
+        ],
+        [
+            "DPT",
+            "Verdrängungstonnage"
+        ],
+        [
+            "DRA",
+            "Dram (US)"
+        ],
+        [
+            "DRI",
+            "Dram (britisch)"
+        ],
+        [
+            "DRL",
+            "Dutzend Rollen"
+        ],
+        [
+            "DT",
+            "Trockentonne"
+        ],
+        [
+            "DTN",
+            "Dezitonne"
+        ],
+        [
+            "DWT",
+            "Pennyweight"
+        ],
+        [
+            "DZN",
+            "Dutzend"
+        ],
+        [
+            "DZP",
+            "Dutzend Packungen"
+        ],
+        [
+            "E01",
+            "Newton pro Quadratzentimeter"
+        ],
+        [
+            "E07",
+            "Megawattstunde pro Stunde"
+        ],
+        [
+            "E08",
+            "Megawatt pro Hertz"
+        ],
+        [
+            "E09",
+            "Milliamperestunde"
+        ],
+        [
+            "E10",
+            "Gradtag"
+        ],
+        [
+            "E12",
+            "Tausend"
+        ],
+        [
+            "E14",
+            "Kilokalorie (international)"
+        ],
+        [
+            "E15",
+            "Kilokalorie (thermochemisch) pro Stunde"
+        ],
+        [
+            "E16",
+            "Million BTU (international) pro Stunde"
+        ],
+        [
+            "E17",
+            "Kubikfuß pro Sekunde"
+        ],
+        [
+            "E18",
+            "Tonne pro Stunde"
+        ],
+        [
+            "E19",
+            "Ping"
+        ],
+        [
+            "E20",
+            "Megabit pro Sekunde"
+        ],
+        [
+            "E21",
+            "Aktien"
+        ],
+        [
+            "E22",
+            "TEU"
+        ],
+        [
+            "E23",
+            "Reifen"
+        ],
+        [
+            "E25",
+            "aktive Einheit"
+        ],
+        [
+            "E27",
+            "Dosis"
+        ],
+        [
+            "E28",
+            "Tonne lufttrocken"
+        ],
+        [
+            "E30",
+            "Strang"
+        ],
+        [
+            "E31",
+            "Quadratmeter pro Liter"
+        ],
+        [
+            "E32",
+            "Liter pro Stunde"
+        ],
+        [
+            "E33",
+            "Fuß pro Tausend"
+        ],
+        [
+            "E34",
+            "Gigabyte"
+        ],
+        [
+            "E35",
+            "Terabyte"
+        ],
+        [
+            "E36",
+            "Petabyte"
+        ],
+        [
+            "E37",
+            "Pixel"
+        ],
+        [
+            "E38",
+            "Megapixel"
+        ],
+        [
+            "E39",
+            "Punkte pro Zoll (dpi)"
+        ],
+        [
+            "E4",
+            "Kilogramm brutto"
+        ],
+        [
+            "E40",
+            "Teile pro hunderttausend"
+        ],
+        [
+            "E41",
+            "Kilopond pro Quadratmillimeter"
+        ],
+        [
+            "E42",
+            "Kilopond pro Quadratzentimeter"
+        ],
+        [
+            "E43",
+            "Joule pro Quadratzentimeter"
+        ],
+        [
+            "E44",
+            "Kilopondmeter pro Quadratzentimeter"
+        ],
+        [
+            "E45",
+            "Milliohm"
+        ],
+        [
+            "E46",
+            "Kilowattstunde pro Kubikmeter"
+        ],
+        [
+            "E47",
+            "Kilowattstunde pro Kelvin"
+        ],
+        [
+            "E48",
+            "Serviceeinheit"
+        ],
+        [
+            "E49",
+            "Arbeitstag"
+        ],
+        [
+            "E50",
+            "Rechnungseinheit"
+        ],
+        [
+            "E51",
+            "Auftrag"
+        ],
+        [
+            "E52",
+            "laufender Fuß"
+        ],
+        [
+            "E53",
+            "Test"
+        ],
+        [
+            "E54",
+            "Fahrt"
+        ],
+        [
+            "E55",
+            "Nutzung"
+        ],
+        [
+            "E56",
+            "Bohrloch"
+        ],
+        [
+            "E57",
+            "Zone"
+        ],
+        [
+            "E58",
+            "Exabit pro Sekunde"
+        ],
+        [
+            "E59",
+            "Exbibyte"
+        ],
+        [
+            "E60",
+            "Pebibyte"
+        ],
+        [
+            "E61",
+            "Tebibyte"
+        ],
+        [
+            "E62",
+            "Gibibyte"
+        ],
+        [
+            "E63",
+            "Mebibyte"
+        ],
+        [
+            "E64",
+            "Kibibyte"
+        ],
+        [
+            "E65",
+            "Exbibit pro Meter"
+        ],
+        [
+            "E66",
+            "Exbibit pro Quadratmeter"
+        ],
+        [
+            "E67",
+            "Exbibit pro Kubikmeter"
+        ],
+        [
+            "E68",
+            "Gigabyte pro Sekunde"
+        ],
+        [
+            "E69",
+            "Gibibit pro Meter"
+        ],
+        [
+            "E70",
+            "Gibibit pro Quadratmeter"
+        ],
+        [
+            "E71",
+            "Gibibit pro Kubikmeter"
+        ],
+        [
+            "E72",
+            "Kibibit pro Meter"
+        ],
+        [
+            "E73",
+            "Kibibit pro Quadratmeter"
+        ],
+        [
+            "E74",
+            "Kibibit pro Kubikmeter"
+        ],
+        [
+            "E75",
+            "Mebibit pro Meter"
+        ],
+        [
+            "E76",
+            "Mebibit pro Quadratmeter"
+        ],
+        [
+            "E77",
+            "Mebibit pro Kubikmeter"
+        ],
+        [
+            "E78",
+            "Petabit"
+        ],
+        [
+            "E79",
+            "Petabit pro Sekunde"
+        ],
+        [
+            "E80",
+            "Pebibit pro Meter"
+        ],
+        [
+            "E81",
+            "Pebibit pro Quadratmeter"
+        ],
+        [
+            "E82",
+            "Pebibit pro Kubikmeter"
+        ],
+        [
+            "E83",
+            "Terabit"
+        ],
+        [
+            "E84",
+            "Terabit pro Sekunde"
+        ],
+        [
+            "E85",
+            "Tebibit pro Meter"
+        ],
+        [
+            "E86",
+            "Tebibit pro Kubikmeter"
+        ],
+        [
+            "E87",
+            "Tebibit pro Quadratmeter"
+        ],
+        [
+            "E88",
+            "Bit pro Meter"
+        ],
+        [
+            "E89",
+            "Bit pro Quadratmeter"
+        ],
+        [
+            "E90",
+            "reziproker Zentimeter"
+        ],
+        [
+            "E91",
+            "reziproker Tag"
+        ],
+        [
+            "E92",
+            "Kubikdezimeter pro Stunde"
+        ],
+        [
+            "E93",
+            "Kilogramm pro Stunde"
+        ],
+        [
+            "E94",
+            "Kilomol pro Sekunde"
+        ],
+        [
+            "E95",
+            "Mol pro Sekunde"
+        ],
+        [
+            "E96",
+            "Grad pro Sekunde"
+        ],
+        [
+            "E97",
+            "Millimeter pro Grad Celsius Meter"
+        ],
+        [
+            "E98",
+            "Grad Celsius pro Kelvin"
+        ],
+        [
+            "E99",
+            "Hektopascal pro Bar"
+        ],
+        [
+            "EA",
+            "Stück (je)"
+        ],
+        [
+            "EB",
+            "E-Mail-Postfach"
+        ],
+        [
+            "EQ",
+            "Äquivalentgallone"
+        ],
+        [
+            "F01",
+            "Bit pro Kubikmeter"
+        ],
+        [
+            "F02",
+            "Kelvin pro Kelvin"
+        ],
+        [
+            "F03",
+            "Kilopascal pro Bar"
+        ],
+        [
+            "F04",
+            "Millibar pro Bar"
+        ],
+        [
+            "F05",
+            "Megapascal pro Bar"
+        ],
+        [
+            "F06",
+            "Poise pro Bar"
+        ],
+        [
+            "F07",
+            "Pascal pro Bar"
+        ],
+        [
+            "F08",
+            "Milliampere pro Zoll"
+        ],
+        [
+            "F10",
+            "Kelvin pro Stunde"
+        ],
+        [
+            "F11",
+            "Kelvin pro Minute"
+        ],
+        [
+            "F12",
+            "Kelvin pro Sekunde"
+        ],
+        [
+            "F13",
+            "Slug"
+        ],
+        [
+            "F14",
+            "Gramm pro Kelvin"
+        ],
+        [
+            "F15",
+            "Kilogramm pro Kelvin"
+        ],
+        [
+            "F16",
+            "Milligramm pro Kelvin"
+        ],
+        [
+            "F17",
+            "Pound-Force pro Fuß"
+        ],
+        [
+            "F18",
+            "Kilogramm Quadratzentimeter"
+        ],
+        [
+            "F19",
+            "Kilogramm Quadratmillimeter"
+        ],
+        [
+            "F20",
+            "Pfund Quadratzoll"
+        ],
+        [
+            "F21",
+            "Pound-Force Zoll"
+        ],
+        [
+            "F22",
+            "Pound-Force Fuß pro Ampere"
+        ],
+        [
+            "F23",
+            "Gramm pro Kubikdezimeter"
+        ],
+        [
+            "F24",
+            "Kilogramm pro Kilomol"
+        ],
+        [
+            "F25",
+            "Gramm pro Hertz"
+        ],
+        [
+            "F26",
+            "Gramm pro Tag"
+        ],
+        [
+            "F27",
+            "Gramm pro Stunde"
+        ],
+        [
+            "F28",
+            "Gramm pro Minute"
+        ],
+        [
+            "F29",
+            "Gramm pro Sekunde"
+        ],
+        [
+            "F30",
+            "Kilogramm pro Tag"
+        ],
+        [
+            "F31",
+            "Kilogramm pro Minute"
+        ],
+        [
+            "F32",
+            "Milligramm pro Tag"
+        ],
+        [
+            "F33",
+            "Milligramm pro Minute"
+        ],
+        [
+            "F34",
+            "Milligramm pro Sekunde"
+        ],
+        [
+            "F35",
+            "Gramm pro Tag Kelvin"
+        ],
+        [
+            "F36",
+            "Gramm pro Stunde Kelvin"
+        ],
+        [
+            "F37",
+            "Gramm pro Minute Kelvin"
+        ],
+        [
+            "F38",
+            "Gramm pro Sekunde Kelvin"
+        ],
+        [
+            "F39",
+            "Kilogramm pro Tag Kelvin"
+        ],
+        [
+            "F40",
+            "Kilogramm pro Stunde Kelvin"
+        ],
+        [
+            "F41",
+            "Kilogramm pro Minute Kelvin"
+        ],
+        [
+            "F42",
+            "Kilogramm pro Sekunde Kelvin"
+        ],
+        [
+            "F43",
+            "Milligramm pro Tag Kelvin"
+        ],
+        [
+            "F44",
+            "Milligramm pro Stunde Kelvin"
+        ],
+        [
+            "F45",
+            "Milligramm pro Minute Kelvin"
+        ],
+        [
+            "F46",
+            "Milligramm pro Sekunde Kelvin"
+        ],
+        [
+            "F47",
+            "Newton pro Millimeter"
+        ],
+        [
+            "F48",
+            "Pound-Force pro Zoll"
+        ],
+        [
+            "F49",
+            "Rute [Längeneinheit]"
+        ],
+        [
+            "F50",
+            "Mikrometer pro Kelvin"
+        ],
+        [
+            "F51",
+            "Zentimeter pro Kelvin"
+        ],
+        [
+            "F52",
+            "Meter pro Kelvin"
+        ],
+        [
+            "F53",
+            "Millimeter pro Kelvin"
+        ],
+        [
+            "F54",
+            "Milliohm pro Meter"
+        ],
+        [
+            "F55",
+            "Ohm pro Meile (Landmeile)"
+        ],
+        [
+            "F56",
+            "Ohm pro Kilometer"
+        ],
+        [
+            "F57",
+            "Milliampere pro Pound-Force pro Quadratzoll"
+        ],
+        [
+            "F58",
+            "reziprokes Bar"
+        ],
+        [
+            "F59",
+            "Milliampere pro Bar"
+        ],
+        [
+            "F60",
+            "Grad Celsius pro Bar"
+        ],
+        [
+            "F61",
+            "Kelvin pro Bar"
+        ],
+        [
+            "F62",
+            "Gramm pro Tag Bar"
+        ],
+        [
+            "F63",
+            "Gramm pro Stunde Bar"
+        ],
+        [
+            "F64",
+            "Gramm pro Minute Bar"
+        ],
+        [
+            "F65",
+            "Gramm pro Sekunde Bar"
+        ],
+        [
+            "F66",
+            "Kilogramm pro Tag Bar"
+        ],
+        [
+            "F67",
+            "Kilogramm pro Stunde Bar"
+        ],
+        [
+            "F68",
+            "Kilogramm pro Minute Bar"
+        ],
+        [
+            "F69",
+            "Kilogramm pro Sekunde Bar"
+        ],
+        [
+            "F70",
+            "Milligramm pro Tag Bar"
+        ],
+        [
+            "F71",
+            "Milligramm pro Stunde Bar"
+        ],
+        [
+            "F72",
+            "Milligramm pro Minute Bar"
+        ],
+        [
+            "F73",
+            "Milligramm pro Sekunde Bar"
+        ],
+        [
+            "F74",
+            "Gramm pro Bar"
+        ],
+        [
+            "F75",
+            "Milligramm pro Bar"
+        ],
+        [
+            "F76",
+            "Milliampere pro Millimeter"
+        ],
+        [
+            "F77",
+            "Pascalsekunde pro Kelvin"
+        ],
+        [
+            "F78",
+            "Zoll Wassersäule"
+        ],
+        [
+            "F79",
+            "Zoll Quecksilbersäule"
+        ],
+        [
+            "F80",
+            "Wasser-Pferdestärke"
+        ],
+        [
+            "F81",
+            "Bar pro Kelvin"
+        ],
+        [
+            "F82",
+            "Hektopascal pro Kelvin"
+        ],
+        [
+            "F83",
+            "Kilopascal pro Kelvin"
+        ],
+        [
+            "F84",
+            "Millibar pro Kelvin"
+        ],
+        [
+            "F85",
+            "Megapascal pro Kelvin"
+        ],
+        [
+            "F86",
+            "Poise pro Kelvin"
+        ],
+        [
+            "F87",
+            "Volt pro Liter Minute"
+        ],
+        [
+            "F88",
+            "Newtonzentimeter"
+        ],
+        [
+            "F89",
+            "Newtonmeter pro Grad"
+        ],
+        [
+            "F90",
+            "Newtonmeter pro Ampere"
+        ],
+        [
+            "F91",
+            "Bar Liter pro Sekunde"
+        ],
+        [
+            "F92",
+            "Bar Kubikmeter pro Sekunde"
+        ],
+        [
+            "F93",
+            "Hektopascal Liter pro Sekunde"
+        ],
+        [
+            "F94",
+            "Hektopascal Kubikmeter pro Sekunde"
+        ],
+        [
+            "F95",
+            "Millibar Liter pro Sekunde"
+        ],
+        [
+            "F96",
+            "Millibar Kubikmeter pro Sekunde"
+        ],
+        [
+            "F97",
+            "Megapascal Liter pro Sekunde"
+        ],
+        [
+            "F98",
+            "Megapascal Kubikmeter pro Sekunde"
+        ],
+        [
+            "F99",
+            "Pascal Liter pro Sekunde"
+        ],
+        [
+            "FAH",
+            "Grad Fahrenheit"
+        ],
+        [
+            "FAR",
+            "Farad"
+        ],
+        [
+            "FBM",
+            "Fasermeter"
+        ],
+        [
+            "FC",
+            "tausend Kubikfuß"
+        ],
+        [
+            "FF",
+            "hundert Kubikmeter"
+        ],
+        [
+            "FH",
+            "Mikromol"
+        ],
+        [
+            "FIT",
+            "Ausfälle pro Zeit (FIT)"
+        ],
+        [
+            "FL",
+            "Flake-Tonne"
+        ],
+        [
+            "FNU",
+            "Formazin-Nephelometrie-Einheit (FNU)"
+        ],
+        [
+            "FOT",
+            "Fuß"
+        ],
+        [
+            "FP",
+            "Pfund pro Quadratfuß"
+        ],
+        [
+            "FR",
+            "Fuß pro Minute"
+        ],
+        [
+            "FS",
+            "Fuß pro Sekunde"
+        ],
+        [
+            "FTK",
+            "Quadratfuß"
+        ],
+        [
+            "FTQ",
+            "Kubikfuß"
+        ],
+        [
+            "G01",
+            "Pascal Kubikmeter pro Sekunde"
+        ],
+        [
+            "G04",
+            "Zentimeter pro Bar"
+        ],
+        [
+            "G05",
+            "Meter pro Bar"
+        ],
+        [
+            "G06",
+            "Millimeter pro Bar"
+        ],
+        [
+            "G08",
+            "Quadratzoll pro Sekunde"
+        ],
+        [
+            "G09",
+            "Quadratmeter pro Sekunde Kelvin"
+        ],
+        [
+            "G10",
+            "Stokes pro Kelvin"
+        ],
+        [
+            "G11",
+            "Gramm pro Kubikzentimeter Bar"
+        ],
+        [
+            "G12",
+            "Gramm pro Kubikdezimeter Bar"
+        ],
+        [
+            "G13",
+            "Gramm pro Liter Bar"
+        ],
+        [
+            "G14",
+            "Gramm pro Kubikmeter Bar"
+        ],
+        [
+            "G15",
+            "Gramm pro Milliliter Bar"
+        ],
+        [
+            "G16",
+            "Kilogramm pro Kubikzentimeter Bar"
+        ],
+        [
+            "G17",
+            "Kilogramm pro Liter Bar"
+        ],
+        [
+            "G18",
+            "Kilogramm pro Kubikmeter Bar"
+        ],
+        [
+            "G19",
+            "Newtonmeter pro Kilogramm"
+        ],
+        [
+            "G2",
+            "US-Gallone pro Minute"
+        ],
+        [
+            "G20",
+            "Pound-Force Fuß pro Pfund"
+        ],
+        [
+            "G21",
+            "Tasse [Volumeneinheit]"
+        ],
+        [
+            "G23",
+            "Peck"
+        ],
+        [
+            "G24",
+            "Esslöffel (US)"
+        ],
+        [
+            "G25",
+            "Teelöffel (US)"
+        ],
+        [
+            "G26",
+            "Ster"
+        ],
+        [
+            "G27",
+            "Kubikzentimeter pro Kelvin"
+        ],
+        [
+            "G28",
+            "Liter pro Kelvin"
+        ],
+        [
+            "G29",
+            "Kubikmeter pro Kelvin"
+        ],
+        [
+            "G3",
+            "britische Gallone pro Minute"
+        ],
+        [
+            "G30",
+            "Milliliter pro Kelvin"
+        ],
+        [
+            "G31",
+            "Kilogramm pro Kubikzentimeter"
+        ],
+        [
+            "G32",
+            "Unze (Avoirdupois) pro Kubikyard"
+        ],
+        [
+            "G33",
+            "Gramm pro Kubikzentimeter Kelvin"
+        ],
+        [
+            "G34",
+            "Gramm pro Kubikdezimeter Kelvin"
+        ],
+        [
+            "G35",
+            "Gramm pro Liter Kelvin"
+        ],
+        [
+            "G36",
+            "Gramm pro Kubikmeter Kelvin"
+        ],
+        [
+            "G37",
+            "Gramm pro Milliliter Kelvin"
+        ],
+        [
+            "G38",
+            "Kilogramm pro Kubikzentimeter Kelvin"
+        ],
+        [
+            "G39",
+            "Kilogramm pro Liter Kelvin"
+        ],
+        [
+            "G40",
+            "Kilogramm pro Kubikmeter Kelvin"
+        ],
+        [
+            "G41",
+            "Quadratmeter pro Sekunde Bar"
+        ],
+        [
+            "G42",
+            "Mikrosiemens pro Zentimeter"
+        ],
+        [
+            "G43",
+            "Mikrosiemens pro Meter"
+        ],
+        [
+            "G44",
+            "Nanosiemens pro Zentimeter"
+        ],
+        [
+            "G45",
+            "Nanosiemens pro Meter"
+        ],
+        [
+            "G46",
+            "Stokes pro Bar"
+        ],
+        [
+            "G47",
+            "Kubikzentimeter pro Tag"
+        ],
+        [
+            "G48",
+            "Kubikzentimeter pro Stunde"
+        ],
+        [
+            "G49",
+            "Kubikzentimeter pro Minute"
+        ],
+        [
+            "G50",
+            "Gallone (US) pro Stunde"
+        ],
+        [
+            "G51",
+            "Liter pro Sekunde"
+        ],
+        [
+            "G52",
+            "Kubikmeter pro Tag"
+        ],
+        [
+            "G53",
+            "Kubikmeter pro Minute"
+        ],
+        [
+            "G54",
+            "Milliliter pro Tag"
+        ],
+        [
+            "G55",
+            "Milliliter pro Stunde"
+        ],
+        [
+            "G56",
+            "Kubikzoll pro Stunde"
+        ],
+        [
+            "G57",
+            "Kubikzoll pro Minute"
+        ],
+        [
+            "G58",
+            "Kubikzoll pro Sekunde"
+        ],
+        [
+            "G59",
+            "Milliampere pro Liter Minute"
+        ],
+        [
+            "G60",
+            "Volt pro Bar"
+        ],
+        [
+            "G61",
+            "Kubikzentimeter pro Tag Kelvin"
+        ],
+        [
+            "G62",
+            "Kubikzentimeter pro Stunde Kelvin"
+        ],
+        [
+            "G63",
+            "Kubikzentimeter pro Minute Kelvin"
+        ],
+        [
+            "G64",
+            "Kubikzentimeter pro Sekunde Kelvin"
+        ],
+        [
+            "G65",
+            "Liter pro Tag Kelvin"
+        ],
+        [
+            "G66",
+            "Liter pro Stunde Kelvin"
+        ],
+        [
+            "G67",
+            "Liter pro Minute Kelvin"
+        ],
+        [
+            "G68",
+            "Liter pro Sekunde Kelvin"
+        ],
+        [
+            "G69",
+            "Kubikmeter pro Tag Kelvin"
+        ],
+        [
+            "G70",
+            "Kubikmeter pro Stunde Kelvin"
+        ],
+        [
+            "G71",
+            "Kubikmeter pro Minute Kelvin"
+        ],
+        [
+            "G72",
+            "Kubikmeter pro Sekunde Kelvin"
+        ],
+        [
+            "G73",
+            "Milliliter pro Tag Kelvin"
+        ],
+        [
+            "G74",
+            "Milliliter pro Stunde Kelvin"
+        ],
+        [
+            "G75",
+            "Milliliter pro Minute Kelvin"
+        ],
+        [
+            "G76",
+            "Milliliter pro Sekunde Kelvin"
+        ],
+        [
+            "G77",
+            "Millimeter hoch vier"
+        ],
+        [
+            "G78",
+            "Kubikzentimeter pro Tag Bar"
+        ],
+        [
+            "G79",
+            "Kubikzentimeter pro Stunde Bar"
+        ],
+        [
+            "G80",
+            "Kubikzentimeter pro Minute Bar"
+        ],
+        [
+            "G81",
+            "Kubikzentimeter pro Sekunde Bar"
+        ],
+        [
+            "G82",
+            "Liter pro Tag Bar"
+        ],
+        [
+            "G83",
+            "Liter pro Stunde Bar"
+        ],
+        [
+            "G84",
+            "Liter pro Minute Bar"
+        ],
+        [
+            "G85",
+            "Liter pro Sekunde Bar"
+        ],
+        [
+            "G86",
+            "Kubikmeter pro Tag Bar"
+        ],
+        [
+            "G87",
+            "Kubikmeter pro Stunde Bar"
+        ],
+        [
+            "G88",
+            "Kubikmeter pro Minute Bar"
+        ],
+        [
+            "G89",
+            "Kubikmeter pro Sekunde Bar"
+        ],
+        [
+            "G90",
+            "Milliliter pro Tag Bar"
+        ],
+        [
+            "G91",
+            "Milliliter pro Stunde Bar"
+        ],
+        [
+            "G92",
+            "Milliliter pro Minute Bar"
+        ],
+        [
+            "G93",
+            "Milliliter pro Sekunde Bar"
+        ],
+        [
+            "G94",
+            "Kubikzentimeter pro Bar"
+        ],
+        [
+            "G95",
+            "Liter pro Bar"
+        ],
+        [
+            "G96",
+            "Kubikmeter pro Bar"
+        ],
+        [
+            "G97",
+            "Milliliter pro Bar"
+        ],
+        [
+            "G98",
+            "Mikrohenry pro Kiloohm"
+        ],
+        [
+            "G99",
+            "Mikrohenry pro Ohm"
+        ],
+        [
+            "GB",
+            "Gallone (US) pro Tag"
+        ],
+        [
+            "GBQ",
+            "Gigabecquerel"
+        ],
+        [
+            "GDW",
+            "Gramm Trockengewicht"
+        ],
+        [
+            "GE",
+            "Pfund pro Gallone (US)"
+        ],
+        [
+            "GF",
+            "Gramm pro Meter (Gramm pro 100 Zentimeter)"
+        ],
+        [
+            "GFI",
+            "Gramm spaltbares Isotop"
+        ],
+        [
+            "GGR",
+            "Großgros"
+        ],
+        [
+            "GIA",
+            "Gill (US)"
+        ],
+        [
+            "GIC",
+            "Gramm einschließlich Behälter"
+        ],
+        [
+            "GII",
+            "Gill (britisch)"
+        ],
+        [
+            "GIP",
+            "Gramm einschließlich Innenverpackung"
+        ],
+        [
+            "GJ",
+            "Gramm pro Milliliter"
+        ],
+        [
+            "GL",
+            "Gramm pro Liter"
+        ],
+        [
+            "GLD",
+            "Trockengallone (US)"
+        ],
+        [
+            "GLI",
+            "Gallone (britisch)"
+        ],
+        [
+            "GLL",
+            "Gallone (US)"
+        ],
+        [
+            "GM",
+            "Gramm pro Quadratmeter"
+        ],
+        [
+            "GO",
+            "Milligramm pro Quadratmeter"
+        ],
+        [
+            "GP",
+            "Milligramm pro Kubikmeter"
+        ],
+        [
+            "GQ",
+            "Mikrogramm pro Kubikmeter"
+        ],
+        [
+            "GRM",
+            "Gramm"
+        ],
+        [
+            "GRN",
+            "Grain"
+        ],
+        [
+            "GRO",
+            "Gros"
+        ],
+        [
+            "GV",
+            "Gigajoule"
+        ],
+        [
+            "GWH",
+            "Gigawattstunde"
+        ],
+        [
+            "H03",
+            "Henry pro Kiloohm"
+        ],
+        [
+            "H04",
+            "Henry pro Ohm"
+        ],
+        [
+            "H05",
+            "Millihenry pro Kiloohm"
+        ],
+        [
+            "H06",
+            "Millihenry pro Ohm"
+        ],
+        [
+            "H07",
+            "Pascalsekunde pro Bar"
+        ],
+        [
+            "H08",
+            "Mikrobecquerel"
+        ],
+        [
+            "H09",
+            "reziprokes Jahr"
+        ],
+        [
+            "H10",
+            "reziproke Stunde"
+        ],
+        [
+            "H11",
+            "reziproker Monat"
+        ],
+        [
+            "H12",
+            "Grad Celsius pro Stunde"
+        ],
+        [
+            "H13",
+            "Grad Celsius pro Minute"
+        ],
+        [
+            "H14",
+            "Grad Celsius pro Sekunde"
+        ],
+        [
+            "H15",
+            "Quadratzentimeter pro Gramm"
+        ],
+        [
+            "H16",
+            "Quadratdekameter"
+        ],
+        [
+            "H18",
+            "Quadrathektometer"
+        ],
+        [
+            "H19",
+            "Kubikhektometer"
+        ],
+        [
+            "H20",
+            "Kubikkilometer"
+        ],
+        [
+            "H21",
+            "Rohling"
+        ],
+        [
+            "H22",
+            "Volt Quadratzoll pro Pound-Force"
+        ],
+        [
+            "H23",
+            "Volt pro Zoll"
+        ],
+        [
+            "H24",
+            "Volt pro Mikrosekunde"
+        ],
+        [
+            "H25",
+            "Prozent pro Kelvin"
+        ],
+        [
+            "H26",
+            "Ohm pro Meter"
+        ],
+        [
+            "H27",
+            "Grad pro Meter"
+        ],
+        [
+            "H28",
+            "Mikrofarad pro Kilometer"
+        ],
+        [
+            "H29",
+            "Mikrogramm pro Liter"
+        ],
+        [
+            "H30",
+            "Quadratmikrometer (Quadratmikron)"
+        ],
+        [
+            "H31",
+            "Ampere pro Kilogramm"
+        ],
+        [
+            "H32",
+            "Quadratampere Sekunde"
+        ],
+        [
+            "H33",
+            "Farad pro Kilometer"
+        ],
+        [
+            "H34",
+            "Hertz Meter"
+        ],
+        [
+            "H35",
+            "Kelvin Meter pro Watt"
+        ],
+        [
+            "H36",
+            "Megaohm pro Kilometer"
+        ],
+        [
+            "H37",
+            "Megaohm pro Meter"
+        ],
+        [
+            "H38",
+            "Megaampere"
+        ],
+        [
+            "H39",
+            "Megahertz Kilometer"
+        ],
+        [
+            "H40",
+            "Newton pro Ampere"
+        ],
+        [
+            "H41",
+            "Newtonmeter Watt hoch minus 0,5"
+        ],
+        [
+            "H42",
+            "Pascal pro Meter"
+        ],
+        [
+            "H43",
+            "Siemens pro Zentimeter"
+        ],
+        [
+            "H44",
+            "Teraohm"
+        ],
+        [
+            "H45",
+            "Voltsekunde pro Meter"
+        ],
+        [
+            "H46",
+            "Volt pro Sekunde"
+        ],
+        [
+            "H47",
+            "Watt pro Kubikmeter"
+        ],
+        [
+            "H48",
+            "Attofarad"
+        ],
+        [
+            "H49",
+            "Zentimeter pro Stunde"
+        ],
+        [
+            "H50",
+            "reziproker Kubikzentimeter"
+        ],
+        [
+            "H51",
+            "Dezibel pro Kilometer"
+        ],
+        [
+            "H52",
+            "Dezibel pro Meter"
+        ],
+        [
+            "H53",
+            "Kilogramm pro Bar"
+        ],
+        [
+            "H54",
+            "Kilogramm pro Kubikdezimeter Kelvin"
+        ],
+        [
+            "H55",
+            "Kilogramm pro Kubikdezimeter Bar"
+        ],
+        [
+            "H56",
+            "Kilogramm pro Quadratmeter Sekunde"
+        ],
+        [
+            "H57",
+            "Zoll pro 2π Radiant"
+        ],
+        [
+            "H58",
+            "Meter pro Voltsekunde"
+        ],
+        [
+            "H59",
+            "Quadratmeter pro Newton"
+        ],
+        [
+            "H60",
+            "Kubikmeter pro Kubikmeter"
+        ],
+        [
+            "H61",
+            "Millisiemens pro Zentimeter"
+        ],
+        [
+            "H62",
+            "Millivolt pro Minute"
+        ],
+        [
+            "H63",
+            "Milligramm pro Quadratzentimeter"
+        ],
+        [
+            "H64",
+            "Milligramm pro Gramm"
+        ],
+        [
+            "H65",
+            "Milliliter pro Kubikmeter"
+        ],
+        [
+            "H66",
+            "Millimeter pro Jahr"
+        ],
+        [
+            "H67",
+            "Millimeter pro Stunde"
+        ],
+        [
+            "H68",
+            "Millimol pro Gramm"
+        ],
+        [
+            "H69",
+            "Pikopascal pro Kilometer"
+        ],
+        [
+            "H70",
+            "Pikosekunde"
+        ],
+        [
+            "H71",
+            "Prozent pro Monat"
+        ],
+        [
+            "H72",
+            "Prozent pro Hektobar"
+        ],
+        [
+            "H73",
+            "Prozent pro Dekakelvin"
+        ],
+        [
+            "H74",
+            "Watt pro Meter"
+        ],
+        [
+            "H75",
+            "Dekapascal"
+        ],
+        [
+            "H76",
+            "Gramm pro Millimeter"
+        ],
+        [
+            "H77",
+            "Modulbreite"
+        ],
+        [
+            "H79",
+            "French (Charrière)"
+        ],
+        [
+            "H80",
+            "Höheneinheit (Rack Unit)"
+        ],
+        [
+            "H81",
+            "Millimeter pro Minute"
+        ],
+        [
+            "H82",
+            "Big Point"
+        ],
+        [
+            "H83",
+            "Liter pro Kilogramm"
+        ],
+        [
+            "H84",
+            "Grammmillimeter"
+        ],
+        [
+            "H85",
+            "reziproke Woche"
+        ],
+        [
+            "H87",
+            "Stück"
+        ],
+        [
+            "H88",
+            "Megaohm Kilometer"
+        ],
+        [
+            "H89",
+            "Prozent pro Ohm"
+        ],
+        [
+            "H90",
+            "Prozent pro Grad"
+        ],
+        [
+            "H91",
+            "Prozent pro zehntausend"
+        ],
+        [
+            "H92",
+            "Prozent pro hunderttausend"
+        ],
+        [
+            "H93",
+            "Prozent pro hundert"
+        ],
+        [
+            "H94",
+            "Prozent pro tausend"
+        ],
+        [
+            "H95",
+            "Prozent pro Volt"
+        ],
+        [
+            "H96",
+            "Prozent pro Bar"
+        ],
+        [
+            "H98",
+            "Prozent pro Zoll"
+        ],
+        [
+            "H99",
+            "Prozent pro Meter"
+        ],
+        [
+            "HA",
+            "Strähne"
+        ],
+        [
+            "HAD",
+            "Stück pro Tag"
+        ],
+        [
+            "HBA",
+            "Hektobar"
+        ],
+        [
+            "HBX",
+            "hundert Kisten"
+        ],
+        [
+            "HC",
+            "hundert Stück"
+        ],
+        [
+            "HDW",
+            "hundert Kilogramm Trockengewicht"
+        ],
+        [
+            "HEA",
+            "Kopf"
+        ],
+        [
+            "HGM",
+            "Hektogramm"
+        ],
+        [
+            "HH",
+            "hundert Kubikfuß"
+        ],
+        [
+            "HIU",
+            "hundert internationale Einheiten"
+        ],
+        [
+            "HKM",
+            "hundert Kilogramm Nettomasse"
+        ],
+        [
+            "HLT",
+            "Hektoliter"
+        ],
+        [
+            "HM",
+            "Meile pro Stunde (Landmeile)"
+        ],
+        [
+            "HMO",
+            "Stück pro Monat"
+        ],
+        [
+            "HMQ",
+            "Million Kubikmeter"
+        ],
+        [
+            "HMT",
+            "Hektometer"
+        ],
+        [
+            "HPA",
+            "Hektoliter reiner Alkohol"
+        ],
+        [
+            "HTZ",
+            "Hertz"
+        ],
+        [
+            "HUR",
+            "Stunde"
+        ],
+        [
+            "HWE",
+            "Stück pro Woche"
+        ],
+        [
+            "IA",
+            "Zoll-Pfund (Pfund-Zoll)"
+        ],
+        [
+            "IE",
+            "Person"
+        ],
+        [
+            "INH",
+            "Zoll"
+        ],
+        [
+            "INK",
+            "Quadratzoll"
+        ],
+        [
+            "INQ",
+            "Kubikzoll"
+        ],
+        [
+            "ISD",
+            "internationaler Zuckergrad"
+        ],
+        [
+            "IU",
+            "Zoll pro Sekunde"
+        ],
+        [
+            "IUG",
+            "internationale Einheit pro Gramm"
+        ],
+        [
+            "IV",
+            "Zoll pro Quadratsekunde"
+        ],
+        [
+            "J10",
+            "Prozent pro Millimeter"
+        ],
+        [
+            "J12",
+            "Promille pro psi"
+        ],
+        [
+            "J13",
+            "Grad API"
+        ],
+        [
+            "J14",
+            "Grad Baumé (Ursprungsskala)"
+        ],
+        [
+            "J15",
+            "Grad Baumé (US, schwer)"
+        ],
+        [
+            "J16",
+            "Grad Baumé (US, leicht)"
+        ],
+        [
+            "J17",
+            "Grad Balling"
+        ],
+        [
+            "J18",
+            "Grad Brix"
+        ],
+        [
+            "J19",
+            "Grad Fahrenheit Stunde Quadratfuß pro British Thermal Unit (thermochemisch)"
+        ],
+        [
+            "J2",
+            "Joule pro Kilogramm"
+        ],
+        [
+            "J20",
+            "Grad Fahrenheit pro Kelvin"
+        ],
+        [
+            "J21",
+            "Grad Fahrenheit pro Bar"
+        ],
+        [
+            "J22",
+            "Grad Fahrenheit Stunde Quadratfuß pro British Thermal Unit (international)"
+        ],
+        [
+            "J23",
+            "Grad Fahrenheit pro Stunde"
+        ],
+        [
+            "J24",
+            "Grad Fahrenheit pro Minute"
+        ],
+        [
+            "J25",
+            "Grad Fahrenheit pro Sekunde"
+        ],
+        [
+            "J26",
+            "reziprokes Grad Fahrenheit"
+        ],
+        [
+            "J27",
+            "Grad Oechsle"
+        ],
+        [
+            "J28",
+            "Grad Rankine pro Stunde"
+        ],
+        [
+            "J29",
+            "Grad Rankine pro Minute"
+        ],
+        [
+            "J30",
+            "Grad Rankine pro Sekunde"
+        ],
+        [
+            "J31",
+            "Grad Twaddell"
+        ],
+        [
+            "J32",
+            "Mikropoise"
+        ],
+        [
+            "J33",
+            "Mikrogramm pro Kilogramm"
+        ],
+        [
+            "J34",
+            "Mikrogramm pro Kubikmeter Kelvin"
+        ],
+        [
+            "J35",
+            "Mikrogramm pro Kubikmeter Bar"
+        ],
+        [
+            "J36",
+            "Mikroliter pro Liter"
+        ],
+        [
+            "J38",
+            "Baud"
+        ],
+        [
+            "J39",
+            "British Thermal Unit (Mittelwert)"
+        ],
+        [
+            "J40",
+            "British Thermal Unit (international) Fuß pro Stunde Quadratfuß Grad Fahrenheit"
+        ],
+        [
+            "J41",
+            "British Thermal Unit (international) Zoll pro Stunde Quadratfuß Grad Fahrenheit"
+        ],
+        [
+            "J42",
+            "British Thermal Unit (international) Zoll pro Sekunde Quadratfuß Grad Fahrenheit"
+        ],
+        [
+            "J43",
+            "British Thermal Unit (international) pro Pfund Grad Fahrenheit"
+        ],
+        [
+            "J44",
+            "British Thermal Unit (international) pro Minute"
+        ],
+        [
+            "J45",
+            "British Thermal Unit (international) pro Sekunde"
+        ],
+        [
+            "J46",
+            "British Thermal Unit (thermochemisch) Fuß pro Stunde Quadratfuß Grad Fahrenheit"
+        ],
+        [
+            "J47",
+            "British Thermal Unit (thermochemisch) pro Stunde"
+        ],
+        [
+            "J48",
+            "British Thermal Unit (thermochemisch) Zoll pro Stunde Quadratfuß Grad Fahrenheit"
+        ],
+        [
+            "J49",
+            "British Thermal Unit (thermochemisch) Zoll pro Sekunde Quadratfuß Grad Fahrenheit"
+        ],
+        [
+            "J50",
+            "British Thermal Unit (thermochemisch) pro Pfund Grad Fahrenheit"
+        ],
+        [
+            "J51",
+            "British Thermal Unit (thermochemisch) pro Minute"
+        ],
+        [
+            "J52",
+            "British Thermal Unit (thermochemisch) pro Sekunde"
+        ],
+        [
+            "J53",
+            "Coulomb Quadratmeter pro Kilogramm"
+        ],
+        [
+            "J54",
+            "Megabaud"
+        ],
+        [
+            "J55",
+            "Wattsekunde"
+        ],
+        [
+            "J56",
+            "Bar pro Bar"
+        ],
+        [
+            "J57",
+            "Barrel (britisch, Erdöl)"
+        ],
+        [
+            "J58",
+            "Barrel (britisch, Erdöl) pro Minute"
+        ],
+        [
+            "J59",
+            "Barrel (britisch, Erdöl) pro Tag"
+        ],
+        [
+            "J60",
+            "Barrel (britisch, Erdöl) pro Stunde"
+        ],
+        [
+            "J61",
+            "Barrel (britisch, Erdöl) pro Sekunde"
+        ],
+        [
+            "J62",
+            "Barrel (US, Erdöl) pro Stunde"
+        ],
+        [
+            "J63",
+            "Barrel (US, Erdöl) pro Sekunde"
+        ],
+        [
+            "J64",
+            "Bushel (britisch) pro Tag"
+        ],
+        [
+            "J65",
+            "Bushel (britisch) pro Stunde"
+        ],
+        [
+            "J66",
+            "Bushel (britisch) pro Minute"
+        ],
+        [
+            "J67",
+            "Bushel (britisch) pro Sekunde"
+        ],
+        [
+            "J68",
+            "Bushel (US, trocken) pro Tag"
+        ],
+        [
+            "J69",
+            "Bushel (US, trocken) pro Stunde"
+        ],
+        [
+            "J70",
+            "Bushel (US, trocken) pro Minute"
+        ],
+        [
+            "J71",
+            "Bushel (US, trocken) pro Sekunde"
+        ],
+        [
+            "J72",
+            "Zentinewtonmeter"
+        ],
+        [
+            "J73",
+            "Zentipoise pro Kelvin"
+        ],
+        [
+            "J74",
+            "Zentipoise pro Bar"
+        ],
+        [
+            "J75",
+            "Kalorie (Mittelwert)"
+        ],
+        [
+            "J76",
+            "Kalorie (international) pro Gramm Grad Celsius"
+        ],
+        [
+            "J78",
+            "Kalorie (thermochemisch) pro Zentimeter Sekunde Grad Celsius"
+        ],
+        [
+            "J79",
+            "Kalorie (thermochemisch) pro Gramm Grad Celsius"
+        ],
+        [
+            "J81",
+            "Kalorie (thermochemisch) pro Minute"
+        ],
+        [
+            "J82",
+            "Kalorie (thermochemisch) pro Sekunde"
+        ],
+        [
+            "J83",
+            "Clo"
+        ],
+        [
+            "J84",
+            "Zentimeter pro Sekunde Kelvin"
+        ],
+        [
+            "J85",
+            "Zentimeter pro Sekunde Bar"
+        ],
+        [
+            "J87",
+            "Kubikzentimeter pro Kubikmeter"
+        ],
+        [
+            "J90",
+            "Kubikdezimeter pro Tag"
+        ],
+        [
+            "J91",
+            "Kubikdezimeter pro Kubikmeter"
+        ],
+        [
+            "J92",
+            "Kubikdezimeter pro Minute"
+        ],
+        [
+            "J93",
+            "Kubikdezimeter pro Sekunde"
+        ],
+        [
+            "J95",
+            "Flüssigunze (britisch) pro Tag"
+        ],
+        [
+            "J96",
+            "Flüssigunze (britisch) pro Stunde"
+        ],
+        [
+            "J97",
+            "Flüssigunze (britisch) pro Minute"
+        ],
+        [
+            "J98",
+            "Flüssigunze (britisch) pro Sekunde"
+        ],
+        [
+            "J99",
+            "Flüssigunze (US) pro Tag"
+        ],
+        [
+            "JE",
+            "Joule pro Kelvin"
+        ],
+        [
+            "JK",
+            "Megajoule pro Kilogramm"
+        ],
+        [
+            "JM",
+            "Megajoule pro Kubikmeter"
+        ],
+        [
+            "JNT",
+            "Rohrleitungsverbindung"
+        ],
+        [
+            "JOU",
+            "Joule"
+        ],
+        [
+            "JPS",
+            "hundert Meter"
+        ],
+        [
+            "JWL",
+            "Anzahl Steine (Uhrwerk)"
+        ],
+        [
+            "K1",
+            "Kilowatt Leistungsbedarf"
+        ],
+        [
+            "K10",
+            "Flüssigunze (US) pro Stunde"
+        ],
+        [
+            "K11",
+            "Flüssigunze (US) pro Minute"
+        ],
+        [
+            "K12",
+            "Flüssigunze (US) pro Sekunde"
+        ],
+        [
+            "K13",
+            "Fuß pro Grad Fahrenheit"
+        ],
+        [
+            "K14",
+            "Fuß pro Stunde"
+        ],
+        [
+            "K15",
+            "Foot-Pound-Force pro Stunde"
+        ],
+        [
+            "K16",
+            "Foot-Pound-Force pro Minute"
+        ],
+        [
+            "K17",
+            "Fuß pro psi"
+        ],
+        [
+            "K18",
+            "Fuß pro Sekunde Grad Fahrenheit"
+        ],
+        [
+            "K19",
+            "Fuß pro Sekunde psi"
+        ],
+        [
+            "K2",
+            "Kilovoltampere Blindleistungsbedarf"
+        ],
+        [
+            "K20",
+            "reziproker Kubikfuß"
+        ],
+        [
+            "K21",
+            "Kubikfuß pro Grad Fahrenheit"
+        ],
+        [
+            "K22",
+            "Kubikfuß pro Tag"
+        ],
+        [
+            "K23",
+            "Kubikfuß pro psi"
+        ],
+        [
+            "K26",
+            "Gallone (britisch) pro Tag"
+        ],
+        [
+            "K27",
+            "Gallone (britisch) pro Stunde"
+        ],
+        [
+            "K28",
+            "Gallone (britisch) pro Sekunde"
+        ],
+        [
+            "K3",
+            "Kilovoltampere-Blindstunde"
+        ],
+        [
+            "K30",
+            "Gallone (US, flüssig) pro Sekunde"
+        ],
+        [
+            "K31",
+            "Pond pro Quadratzentimeter"
+        ],
+        [
+            "K32",
+            "Gill (britisch) pro Tag"
+        ],
+        [
+            "K33",
+            "Gill (britisch) pro Stunde"
+        ],
+        [
+            "K34",
+            "Gill (britisch) pro Minute"
+        ],
+        [
+            "K35",
+            "Gill (britisch) pro Sekunde"
+        ],
+        [
+            "K36",
+            "Gill (US) pro Tag"
+        ],
+        [
+            "K37",
+            "Gill (US) pro Stunde"
+        ],
+        [
+            "K38",
+            "Gill (US) pro Minute"
+        ],
+        [
+            "K39",
+            "Gill (US) pro Sekunde"
+        ],
+        [
+            "K40",
+            "Normfallbeschleunigung"
+        ],
+        [
+            "K41",
+            "Grain pro Gallone (US)"
+        ],
+        [
+            "K42",
+            "Pferdestärke (Kessel)"
+        ],
+        [
+            "K43",
+            "Pferdestärke (elektrisch)"
+        ],
+        [
+            "K45",
+            "Zoll pro Grad Fahrenheit"
+        ],
+        [
+            "K46",
+            "Zoll pro psi"
+        ],
+        [
+            "K47",
+            "Zoll pro Sekunde Grad Fahrenheit"
+        ],
+        [
+            "K48",
+            "Zoll pro Sekunde psi"
+        ],
+        [
+            "K49",
+            "reziproker Kubikzoll"
+        ],
+        [
+            "K50",
+            "Kilobaud"
+        ],
+        [
+            "K51",
+            "Kilokalorie (Mittelwert)"
+        ],
+        [
+            "K52",
+            "Kilokalorie (international) pro Stunde Meter Grad Celsius"
+        ],
+        [
+            "K53",
+            "Kilokalorie (thermochemisch)"
+        ],
+        [
+            "K54",
+            "Kilokalorie (thermochemisch) pro Minute"
+        ],
+        [
+            "K55",
+            "Kilokalorie (thermochemisch) pro Sekunde"
+        ],
+        [
+            "K58",
+            "Kilomol pro Stunde"
+        ],
+        [
+            "K59",
+            "Kilomol pro Kubikmeter Kelvin"
+        ],
+        [
+            "K6",
+            "Kiloliter"
+        ],
+        [
+            "K60",
+            "Kilomol pro Kubikmeter Bar"
+        ],
+        [
+            "K61",
+            "Kilomol pro Minute"
+        ],
+        [
+            "K62",
+            "Liter pro Liter"
+        ],
+        [
+            "K63",
+            "reziproker Liter"
+        ],
+        [
+            "K64",
+            "Pfund (Avoirdupois) pro Grad Fahrenheit"
+        ],
+        [
+            "K65",
+            "Pfund (Avoirdupois) Quadratfuß"
+        ],
+        [
+            "K66",
+            "Pfund (Avoirdupois) pro Tag"
+        ],
+        [
+            "K67",
+            "Pfund pro Fuß Stunde"
+        ],
+        [
+            "K68",
+            "Pfund pro Fuß Sekunde"
+        ],
+        [
+            "K69",
+            "Pfund (Avoirdupois) pro Kubikfuß Grad Fahrenheit"
+        ],
+        [
+            "K70",
+            "Pfund (Avoirdupois) pro Kubikfuß psi"
+        ],
+        [
+            "K71",
+            "Pfund (Avoirdupois) pro Gallone (britisch)"
+        ],
+        [
+            "K73",
+            "Pfund (Avoirdupois) pro Stunde Grad Fahrenheit"
+        ],
+        [
+            "K74",
+            "Pfund (Avoirdupois) pro Stunde psi"
+        ],
+        [
+            "K75",
+            "Pfund (Avoirdupois) pro Kubikzoll Grad Fahrenheit"
+        ],
+        [
+            "K76",
+            "Pfund (Avoirdupois) pro Kubikzoll psi"
+        ],
+        [
+            "K77",
+            "Pfund (Avoirdupois) pro psi"
+        ],
+        [
+            "K78",
+            "Pfund (Avoirdupois) pro Minute"
+        ],
+        [
+            "K79",
+            "Pfund (Avoirdupois) pro Minute Grad Fahrenheit"
+        ],
+        [
+            "K80",
+            "Pfund (Avoirdupois) pro Minute psi"
+        ],
+        [
+            "K81",
+            "Pfund (Avoirdupois) pro Sekunde"
+        ],
+        [
+            "K82",
+            "Pfund (Avoirdupois) pro Sekunde Grad Fahrenheit"
+        ],
+        [
+            "K83",
+            "Pfund (Avoirdupois) pro Sekunde psi"
+        ],
+        [
+            "K84",
+            "Pfund pro Kubikyard"
+        ],
+        [
+            "K85",
+            "Pound-Force pro Quadratfuß"
+        ],
+        [
+            "K86",
+            "Pound-Force pro Quadratzoll Grad Fahrenheit"
+        ],
+        [
+            "K87",
+            "psi Kubikzoll pro Sekunde"
+        ],
+        [
+            "K88",
+            "psi Liter pro Sekunde"
+        ],
+        [
+            "K89",
+            "psi Kubikmeter pro Sekunde"
+        ],
+        [
+            "K90",
+            "psi Kubikyard pro Sekunde"
+        ],
+        [
+            "K91",
+            "Pound-Force Sekunde pro Quadratfuß"
+        ],
+        [
+            "K92",
+            "Pound-Force Sekunde pro Quadratzoll"
+        ],
+        [
+            "K93",
+            "reziprokes psi"
+        ],
+        [
+            "K94",
+            "Quart (britisch, flüssig) pro Tag"
+        ],
+        [
+            "K95",
+            "Quart (britisch, flüssig) pro Stunde"
+        ],
+        [
+            "K96",
+            "Quart (britisch, flüssig) pro Minute"
+        ],
+        [
+            "K97",
+            "Quart (britisch, flüssig) pro Sekunde"
+        ],
+        [
+            "K98",
+            "Quart (US, flüssig) pro Tag"
+        ],
+        [
+            "K99",
+            "Quart (US, flüssig) pro Stunde"
+        ],
+        [
+            "KA",
+            "Kuchen"
+        ],
+        [
+            "KAT",
+            "Katal"
+        ],
+        [
+            "KB",
+            "Kilozeichen"
+        ],
+        [
+            "KBA",
+            "Kilobar"
+        ],
+        [
+            "KCC",
+            "Kilogramm Cholinchlorid"
+        ],
+        [
+            "KDW",
+            "Kilogramm Abtropfgewicht"
+        ],
+        [
+            "KEL",
+            "Kelvin"
+        ],
+        [
+            "KGM",
+            "Kilogramm"
+        ],
+        [
+            "KGS",
+            "Kilogramm pro Sekunde"
+        ],
+        [
+            "KHY",
+            "Kilogramm Wasserstoffperoxid"
+        ],
+        [
+            "KHZ",
+            "Kilohertz"
+        ],
+        [
+            "KI",
+            "Kilogramm pro Millimeter Breite"
+        ],
+        [
+            "KIC",
+            "Kilogramm einschließlich Behälter"
+        ],
+        [
+            "KIP",
+            "Kilogramm einschließlich Innenverpackung"
+        ],
+        [
+            "KJ",
+            "Kilosegment"
+        ],
+        [
+            "KJO",
+            "Kilojoule"
+        ],
+        [
+            "KL",
+            "Kilogramm pro Meter"
+        ],
+        [
+            "KLK",
+            "Milchtrockenmasse in Prozent"
+        ],
+        [
+            "KLX",
+            "Kilolux"
+        ],
+        [
+            "KMA",
+            "Kilogramm Methylamin"
+        ],
+        [
+            "KMH",
+            "Kilometer pro Stunde"
+        ],
+        [
+            "KMK",
+            "Quadratkilometer"
+        ],
+        [
+            "KMQ",
+            "Kilogramm pro Kubikmeter"
+        ],
+        [
+            "KMT",
+            "Kilometer"
+        ],
+        [
+            "KNI",
+            "Kilogramm Stickstoff"
+        ],
+        [
+            "KNM",
+            "Kilonewton pro Quadratmeter"
+        ],
+        [
+            "KNS",
+            "Kilogramm benannte Substanz"
+        ],
+        [
+            "KNT",
+            "Knoten"
+        ],
+        [
+            "KO",
+            "Milliäquivalent Kalilauge pro Gramm Produkt"
+        ],
+        [
+            "KPA",
+            "Kilopascal"
+        ],
+        [
+            "KPH",
+            "Kilogramm Kaliumhydroxid (Ätzkali)"
+        ],
+        [
+            "KPO",
+            "Kilogramm Kaliumoxid"
+        ],
+        [
+            "KPP",
+            "Kilogramm Phosphorpentoxid (Phosphorsäureanhydrid)"
+        ],
+        [
+            "KR",
+            "Kiloröntgen"
+        ],
+        [
+            "KSD",
+            "Kilogramm Substanz 90 % trocken"
+        ],
+        [
+            "KSH",
+            "Kilogramm Natriumhydroxid (Ätznatron)"
+        ],
+        [
+            "KT",
+            "Bausatz"
+        ],
+        [
+            "KTN",
+            "Kilotonne"
+        ],
+        [
+            "KUR",
+            "Kilogramm Uran"
+        ],
+        [
+            "KVA",
+            "Kilovoltampere"
+        ],
+        [
+            "KVR",
+            "Kilovar"
+        ],
+        [
+            "KVT",
+            "Kilovolt"
+        ],
+        [
+            "KW",
+            "Kilogramm pro Millimeter"
+        ],
+        [
+            "KWH",
+            "Kilowattstunde"
+        ],
+        [
+            "KWN",
+            "Kilowattstunde pro Normkubikmeter"
+        ],
+        [
+            "KWO",
+            "Kilogramm Wolframtrioxid"
+        ],
+        [
+            "KWS",
+            "Kilowattstunde pro Standardkubikmeter"
+        ],
+        [
+            "KWT",
+            "Kilowatt"
+        ],
+        [
+            "KWY",
+            "Kilowattjahr"
+        ],
+        [
+            "KX",
+            "Milliliter pro Kilogramm"
+        ],
+        [
+            "L10",
+            "Quart (US, flüssig) pro Minute"
+        ],
+        [
+            "L11",
+            "Quart (US, flüssig) pro Sekunde"
+        ],
+        [
+            "L12",
+            "Meter pro Sekunde Kelvin"
+        ],
+        [
+            "L13",
+            "Meter pro Sekunde Bar"
+        ],
+        [
+            "L14",
+            "Quadratmeter Stunde Grad Celsius pro Kilokalorie (international)"
+        ],
+        [
+            "L15",
+            "Millipascalsekunde pro Kelvin"
+        ],
+        [
+            "L16",
+            "Millipascalsekunde pro Bar"
+        ],
+        [
+            "L17",
+            "Milligramm pro Kubikmeter Kelvin"
+        ],
+        [
+            "L18",
+            "Milligramm pro Kubikmeter Bar"
+        ],
+        [
+            "L19",
+            "Milliliter pro Liter"
+        ],
+        [
+            "L2",
+            "Liter pro Minute"
+        ],
+        [
+            "L20",
+            "reziproker Kubikmillimeter"
+        ],
+        [
+            "L21",
+            "Kubikmillimeter pro Kubikmeter"
+        ],
+        [
+            "L23",
+            "Mol pro Stunde"
+        ],
+        [
+            "L24",
+            "Mol pro Kilogramm Kelvin"
+        ],
+        [
+            "L25",
+            "Mol pro Kilogramm Bar"
+        ],
+        [
+            "L26",
+            "Mol pro Liter Kelvin"
+        ],
+        [
+            "L27",
+            "Mol pro Liter Bar"
+        ],
+        [
+            "L28",
+            "Mol pro Kubikmeter Kelvin"
+        ],
+        [
+            "L29",
+            "Mol pro Kubikmeter Bar"
+        ],
+        [
+            "L30",
+            "Mol pro Minute"
+        ],
+        [
+            "L31",
+            "Milliröntgen-Äquivalent Mensch (mrem)"
+        ],
+        [
+            "L32",
+            "Nanogramm pro Kilogramm"
+        ],
+        [
+            "L33",
+            "Unze (Avoirdupois) pro Tag"
+        ],
+        [
+            "L34",
+            "Unze (Avoirdupois) pro Stunde"
+        ],
+        [
+            "L35",
+            "Unze (Avoirdupois) pro Minute"
+        ],
+        [
+            "L36",
+            "Unze (Avoirdupois) pro Sekunde"
+        ],
+        [
+            "L37",
+            "Unze (Avoirdupois) pro Gallone (britisch)"
+        ],
+        [
+            "L38",
+            "Unze (Avoirdupois) pro Gallone (US)"
+        ],
+        [
+            "L39",
+            "Unze (Avoirdupois) pro Kubikzoll"
+        ],
+        [
+            "L40",
+            "Ounce-Force (Avoirdupois)"
+        ],
+        [
+            "L41",
+            "Ounce-Force (Avoirdupois) Zoll"
+        ],
+        [
+            "L42",
+            "Pikosiemens pro Meter"
+        ],
+        [
+            "L43",
+            "Peck (britisch)"
+        ],
+        [
+            "L44",
+            "Peck (britisch) pro Tag"
+        ],
+        [
+            "L45",
+            "Peck (britisch) pro Stunde"
+        ],
+        [
+            "L46",
+            "Peck (britisch) pro Minute"
+        ],
+        [
+            "L47",
+            "Peck (britisch) pro Sekunde"
+        ],
+        [
+            "L48",
+            "Peck (US, trocken) pro Tag"
+        ],
+        [
+            "L49",
+            "Peck (US, trocken) pro Stunde"
+        ],
+        [
+            "L50",
+            "Peck (US, trocken) pro Minute"
+        ],
+        [
+            "L51",
+            "Peck (US, trocken) pro Sekunde"
+        ],
+        [
+            "L52",
+            "psi pro psi"
+        ],
+        [
+            "L53",
+            "Pint (britisch) pro Tag"
+        ],
+        [
+            "L54",
+            "Pint (britisch) pro Stunde"
+        ],
+        [
+            "L55",
+            "Pint (britisch) pro Minute"
+        ],
+        [
+            "L56",
+            "Pint (britisch) pro Sekunde"
+        ],
+        [
+            "L57",
+            "Pint (US, flüssig) pro Tag"
+        ],
+        [
+            "L58",
+            "Pint (US, flüssig) pro Stunde"
+        ],
+        [
+            "L59",
+            "Pint (US, flüssig) pro Minute"
+        ],
+        [
+            "L60",
+            "Pint (US, flüssig) pro Sekunde"
+        ],
+        [
+            "L63",
+            "Slug pro Tag"
+        ],
+        [
+            "L64",
+            "Slug pro Fuß Sekunde"
+        ],
+        [
+            "L65",
+            "Slug pro Kubikfuß"
+        ],
+        [
+            "L66",
+            "Slug pro Stunde"
+        ],
+        [
+            "L67",
+            "Slug pro Minute"
+        ],
+        [
+            "L68",
+            "Slug pro Sekunde"
+        ],
+        [
+            "L69",
+            "Tonne pro Kelvin"
+        ],
+        [
+            "L70",
+            "Tonne pro Bar"
+        ],
+        [
+            "L71",
+            "Tonne pro Tag"
+        ],
+        [
+            "L72",
+            "Tonne pro Tag Kelvin"
+        ],
+        [
+            "L73",
+            "Tonne pro Tag Bar"
+        ],
+        [
+            "L74",
+            "Tonne pro Stunde Kelvin"
+        ],
+        [
+            "L75",
+            "Tonne pro Stunde Bar"
+        ],
+        [
+            "L76",
+            "Tonne pro Kubikmeter Kelvin"
+        ],
+        [
+            "L77",
+            "Tonne pro Kubikmeter Bar"
+        ],
+        [
+            "L78",
+            "Tonne pro Minute"
+        ],
+        [
+            "L79",
+            "Tonne pro Minute Kelvin"
+        ],
+        [
+            "L80",
+            "Tonne pro Minute Bar"
+        ],
+        [
+            "L81",
+            "Tonne pro Sekunde"
+        ],
+        [
+            "L82",
+            "Tonne pro Sekunde Kelvin"
+        ],
+        [
+            "L83",
+            "Tonne pro Sekunde Bar"
+        ],
+        [
+            "L84",
+            "Frachttonne (britisch)"
+        ],
+        [
+            "L85",
+            "Long Ton pro Tag"
+        ],
+        [
+            "L86",
+            "Frachttonne (US)"
+        ],
+        [
+            "L87",
+            "Short Ton pro Grad Fahrenheit"
+        ],
+        [
+            "L88",
+            "Short Ton pro Tag"
+        ],
+        [
+            "L89",
+            "Short Ton pro Stunde Grad Fahrenheit"
+        ],
+        [
+            "L90",
+            "Short Ton pro Stunde psi"
+        ],
+        [
+            "L91",
+            "Short Ton pro psi"
+        ],
+        [
+            "L92",
+            "Long Ton (britisch) pro Kubikyard"
+        ],
+        [
+            "L93",
+            "Short Ton (US) pro Kubikyard"
+        ],
+        [
+            "L94",
+            "Ton-Force (US, short)"
+        ],
+        [
+            "L95",
+            "Gemeinjahr"
+        ],
+        [
+            "L96",
+            "Sternjahr"
+        ],
+        [
+            "L98",
+            "Yard pro Grad Fahrenheit"
+        ],
+        [
+            "L99",
+            "Yard pro psi"
+        ],
+        [
+            "LA",
+            "Pfund pro Kubikzoll"
+        ],
+        [
+            "LAC",
+            "Laktoseüberschuss in Prozent"
+        ],
+        [
+            "LBR",
+            "Pfund"
+        ],
+        [
+            "LBT",
+            "Troy-Pfund (US)"
+        ],
+        [
+            "LD",
+            "Liter pro Tag"
+        ],
+        [
+            "LEF",
+            "Blatt"
+        ],
+        [
+            "LF",
+            "laufender Fuß"
+        ],
+        [
+            "LH",
+            "Arbeitsstunde"
+        ],
+        [
+            "LK",
+            "Glied"
+        ],
+        [
+            "LM",
+            "laufender Meter"
+        ],
+        [
+            "LN",
+            "Länge"
+        ],
+        [
+            "LO",
+            "Los [Beschaffungseinheit]"
+        ],
+        [
+            "LP",
+            "Flüssigpfund"
+        ],
+        [
+            "LPA",
+            "Liter reiner Alkohol"
+        ],
+        [
+            "LR",
+            "Lage"
+        ],
+        [
+            "LS",
+            "Pauschale"
+        ],
+        [
+            "LTN",
+            "Tonne (britisch) oder Long Ton (US)"
+        ],
+        [
+            "LTR",
+            "Liter"
+        ],
+        [
+            "LUB",
+            "metrische Tonne Schmieröl"
+        ],
+        [
+            "LUM",
+            "Lumen"
+        ],
+        [
+            "LUX",
+            "Lux"
+        ],
+        [
+            "LY",
+            "laufender Yard"
+        ],
+        [
+            "M1",
+            "Milligramm pro Liter"
+        ],
+        [
+            "M10",
+            "reziproker Kubikyard"
+        ],
+        [
+            "M11",
+            "Kubikyard pro Grad Fahrenheit"
+        ],
+        [
+            "M12",
+            "Kubikyard pro Tag"
+        ],
+        [
+            "M13",
+            "Kubikyard pro Stunde"
+        ],
+        [
+            "M14",
+            "Kubikyard pro psi"
+        ],
+        [
+            "M15",
+            "Kubikyard pro Minute"
+        ],
+        [
+            "M16",
+            "Kubikyard pro Sekunde"
+        ],
+        [
+            "M17",
+            "Kilohertz Meter"
+        ],
+        [
+            "M18",
+            "Gigahertz Meter"
+        ],
+        [
+            "M19",
+            "Beaufort"
+        ],
+        [
+            "M20",
+            "reziprokes Megakelvin oder Megakelvin hoch minus eins"
+        ],
+        [
+            "M21",
+            "reziprokes Kilovoltampere reziproke Stunde"
+        ],
+        [
+            "M22",
+            "Milliliter pro Quadratzentimeter Minute"
+        ],
+        [
+            "M23",
+            "Newton pro Zentimeter"
+        ],
+        [
+            "M24",
+            "Ohm Kilometer"
+        ],
+        [
+            "M25",
+            "Prozent pro Grad Celsius"
+        ],
+        [
+            "M26",
+            "Gigaohm pro Meter"
+        ],
+        [
+            "M27",
+            "Megahertz Meter"
+        ],
+        [
+            "M29",
+            "Kilogramm pro Kilogramm"
+        ],
+        [
+            "M30",
+            "reziprokes Voltampere reziproke Sekunde"
+        ],
+        [
+            "M31",
+            "Kilogramm pro Kilometer"
+        ],
+        [
+            "M32",
+            "Pascalsekunde pro Liter"
+        ],
+        [
+            "M33",
+            "Millimol pro Liter"
+        ],
+        [
+            "M34",
+            "Newtonmeter pro Quadratmeter"
+        ],
+        [
+            "M35",
+            "Millivoltampere"
+        ],
+        [
+            "M36",
+            "30-Tage-Monat"
+        ],
+        [
+            "M37",
+            "actual/360"
+        ],
+        [
+            "M38",
+            "Kilometer pro Quadratsekunde"
+        ],
+        [
+            "M39",
+            "Zentimeter pro Quadratsekunde"
+        ],
+        [
+            "M4",
+            "Geldwert"
+        ],
+        [
+            "M40",
+            "Yard pro Quadratsekunde"
+        ],
+        [
+            "M41",
+            "Millimeter pro Quadratsekunde"
+        ],
+        [
+            "M42",
+            "Meile (Landmeile) pro Quadratsekunde"
+        ],
+        [
+            "M43",
+            "Mil"
+        ],
+        [
+            "M44",
+            "Umdrehung"
+        ],
+        [
+            "M45",
+            "Grad [Winkeleinheit] pro Quadratsekunde"
+        ],
+        [
+            "M46",
+            "Umdrehungen pro Minute"
+        ],
+        [
+            "M47",
+            "Circular Mil"
+        ],
+        [
+            "M48",
+            "Quadratmeile (US Survey Foot)"
+        ],
+        [
+            "M49",
+            "Chain (US Survey Foot)"
+        ],
+        [
+            "M5",
+            "Mikrocurie"
+        ],
+        [
+            "M50",
+            "Furlong"
+        ],
+        [
+            "M51",
+            "Fuß (US Survey)"
+        ],
+        [
+            "M52",
+            "Meile (US Survey Foot)"
+        ],
+        [
+            "M53",
+            "Meter pro Pascal"
+        ],
+        [
+            "M55",
+            "Meter pro Radiant"
+        ],
+        [
+            "M56",
+            "Shake"
+        ],
+        [
+            "M57",
+            "Meile pro Minute"
+        ],
+        [
+            "M58",
+            "Meile pro Sekunde"
+        ],
+        [
+            "M59",
+            "Meter pro Sekunde Pascal"
+        ],
+        [
+            "M60",
+            "Meter pro Stunde"
+        ],
+        [
+            "M61",
+            "Zoll pro Jahr"
+        ],
+        [
+            "M62",
+            "Kilometer pro Sekunde"
+        ],
+        [
+            "M63",
+            "Zoll pro Minute"
+        ],
+        [
+            "M64",
+            "Yard pro Sekunde"
+        ],
+        [
+            "M65",
+            "Yard pro Minute"
+        ],
+        [
+            "M66",
+            "Yard pro Stunde"
+        ],
+        [
+            "M67",
+            "Acre-Foot (US Survey Foot)"
+        ],
+        [
+            "M68",
+            "Cord (128 ft³)"
+        ],
+        [
+            "M69",
+            "Kubikmeile (britische Landmeile)"
+        ],
+        [
+            "M7",
+            "Mikrozoll"
+        ],
+        [
+            "M70",
+            "Registertonne"
+        ],
+        [
+            "M71",
+            "Kubikmeter pro Pascal"
+        ],
+        [
+            "M72",
+            "Bel"
+        ],
+        [
+            "M73",
+            "Kilogramm pro Kubikmeter Pascal"
+        ],
+        [
+            "M74",
+            "Kilogramm pro Pascal"
+        ],
+        [
+            "M75",
+            "Kilopound-Force"
+        ],
+        [
+            "M76",
+            "Poundal"
+        ],
+        [
+            "M77",
+            "Kilogramm Meter pro Quadratsekunde"
+        ],
+        [
+            "M78",
+            "Pond"
+        ],
+        [
+            "M79",
+            "Quadratfuß pro Stunde"
+        ],
+        [
+            "M80",
+            "Stokes pro Pascal"
+        ],
+        [
+            "M81",
+            "Quadratzentimeter pro Sekunde"
+        ],
+        [
+            "M82",
+            "Quadratmeter pro Sekunde Pascal"
+        ],
+        [
+            "M83",
+            "Denier"
+        ],
+        [
+            "M84",
+            "Pfund pro Yard"
+        ],
+        [
+            "M85",
+            "Probiertonne"
+        ],
+        [
+            "M86",
+            "Pfund (deutsch)"
+        ],
+        [
+            "M87",
+            "Kilogramm pro Sekunde Pascal"
+        ],
+        [
+            "M88",
+            "Tonne pro Monat"
+        ],
+        [
+            "M89",
+            "Tonne pro Jahr"
+        ],
+        [
+            "M9",
+            "Million BTU pro 1000 Kubikfuß"
+        ],
+        [
+            "M90",
+            "Kilopfund pro Stunde"
+        ],
+        [
+            "M91",
+            "Pfund pro Pfund"
+        ],
+        [
+            "M92",
+            "Pound-Force Fuß"
+        ],
+        [
+            "M93",
+            "Newtonmeter pro Radiant"
+        ],
+        [
+            "M94",
+            "Kilogrammmeter"
+        ],
+        [
+            "M95",
+            "Poundal Fuß"
+        ],
+        [
+            "M96",
+            "Poundal Zoll"
+        ],
+        [
+            "M97",
+            "Dyn Meter"
+        ],
+        [
+            "M98",
+            "Kilogramm Zentimeter pro Sekunde"
+        ],
+        [
+            "M99",
+            "Gramm Zentimeter pro Sekunde"
+        ],
+        [
+            "MAH",
+            "Megavoltampere-Blindstunde"
+        ],
+        [
+            "MAL",
+            "Megaliter"
+        ],
+        [
+            "MAM",
+            "Megameter"
+        ],
+        [
+            "MAR",
+            "Megavar"
+        ],
+        [
+            "MAW",
+            "Megawatt"
+        ],
+        [
+            "MBE",
+            "tausend Standardziegel-Äquivalent"
+        ],
+        [
+            "MBF",
+            "tausend Board Foot"
+        ],
+        [
+            "MBR",
+            "Millibar"
+        ],
+        [
+            "MC",
+            "Mikrogramm"
+        ],
+        [
+            "MCU",
+            "Millicurie"
+        ],
+        [
+            "MD",
+            "metrische Tonne lufttrocken"
+        ],
+        [
+            "MGM",
+            "Milligramm"
+        ],
+        [
+            "MHZ",
+            "Megahertz"
+        ],
+        [
+            "MIK",
+            "Quadratmeile (Landmeile)"
+        ],
+        [
+            "MIL",
+            "Tausend"
+        ],
+        [
+            "MIN",
+            "Minute [Zeiteinheit]"
+        ],
+        [
+            "MIO",
+            "Million"
+        ],
+        [
+            "MIU",
+            "Million internationale Einheiten"
+        ],
+        [
+            "MKD",
+            "Quadratmeter pro Tag"
+        ],
+        [
+            "MKM",
+            "Quadratmeter pro Monat"
+        ],
+        [
+            "MKW",
+            "Quadratmeter pro Woche"
+        ],
+        [
+            "MLD",
+            "Milliarde"
+        ],
+        [
+            "MLT",
+            "Milliliter"
+        ],
+        [
+            "MMK",
+            "Quadratmillimeter"
+        ],
+        [
+            "MMQ",
+            "Kubikmillimeter"
+        ],
+        [
+            "MMT",
+            "Millimeter"
+        ],
+        [
+            "MND",
+            "Kilogramm Trockengewicht"
+        ],
+        [
+            "MNJ",
+            "Megajoule pro Normkubikmeter"
+        ],
+        [
+            "MON",
+            "Monat"
+        ],
+        [
+            "MPA",
+            "Megapascal"
+        ],
+        [
+            "MQD",
+            "Kubikmeter pro Tag (Mietdauer)"
+        ],
+        [
+            "MQH",
+            "Kubikmeter pro Stunde"
+        ],
+        [
+            "MQM",
+            "Kubikmeter pro Monat"
+        ],
+        [
+            "MQS",
+            "Kubikmeter pro Sekunde"
+        ],
+        [
+            "MQW",
+            "Kubikmeter pro Woche"
+        ],
+        [
+            "MRD",
+            "Meter pro Tag (Mietdauer)"
+        ],
+        [
+            "MRM",
+            "Meter pro Monat"
+        ],
+        [
+            "MRW",
+            "Meter pro Woche"
+        ],
+        [
+            "MSK",
+            "Meter pro Quadratsekunde"
+        ],
+        [
+            "MTK",
+            "Quadratmeter"
+        ],
+        [
+            "MTQ",
+            "Kubikmeter"
+        ],
+        [
+            "MTR",
+            "Meter"
+        ],
+        [
+            "MTS",
+            "Meter pro Sekunde"
+        ],
+        [
+            "MTZ",
+            "Millihertz"
+        ],
+        [
+            "MVA",
+            "Megavoltampere"
+        ],
+        [
+            "MWH",
+            "Megawattstunde (1000 kWh)"
+        ],
+        [
+            "N1",
+            "Pen-Kalorie"
+        ],
+        [
+            "N10",
+            "Pfund Fuß pro Sekunde"
+        ],
+        [
+            "N11",
+            "Pfund Zoll pro Sekunde"
+        ],
+        [
+            "N12",
+            "Pferdestärke"
+        ],
+        [
+            "N13",
+            "Zentimeter Quecksilbersäule (0 °C)"
+        ],
+        [
+            "N14",
+            "Zentimeter Wassersäule (4 °C)"
+        ],
+        [
+            "N15",
+            "Fuß Wassersäule (39,2 °F)"
+        ],
+        [
+            "N16",
+            "Zoll Quecksilbersäule (32 °F)"
+        ],
+        [
+            "N17",
+            "Zoll Quecksilbersäule (60 °F)"
+        ],
+        [
+            "N18",
+            "Zoll Wassersäule (39,2 °F)"
+        ],
+        [
+            "N19",
+            "Zoll Wassersäule (60 °F)"
+        ],
+        [
+            "N20",
+            "Kip pro Quadratzoll"
+        ],
+        [
+            "N21",
+            "Poundal pro Quadratfuß"
+        ],
+        [
+            "N22",
+            "Unze (Avoirdupois) pro Quadratzoll"
+        ],
+        [
+            "N23",
+            "konventioneller Meter Wassersäule"
+        ],
+        [
+            "N24",
+            "Gramm pro Quadratmillimeter"
+        ],
+        [
+            "N25",
+            "Pfund pro Quadratyard"
+        ],
+        [
+            "N26",
+            "Poundal pro Quadratzoll"
+        ],
+        [
+            "N27",
+            "Fuß hoch vier"
+        ],
+        [
+            "N28",
+            "Kubikdezimeter pro Kilogramm"
+        ],
+        [
+            "N29",
+            "Kubikfuß pro Pfund"
+        ],
+        [
+            "N3",
+            "typografischer Punkt"
+        ],
+        [
+            "N30",
+            "Kubikzoll pro Pfund"
+        ],
+        [
+            "N31",
+            "Kilonewton pro Meter"
+        ],
+        [
+            "N32",
+            "Poundal pro Zoll"
+        ],
+        [
+            "N33",
+            "Pound-Force pro Yard"
+        ],
+        [
+            "N34",
+            "Poundal Sekunde pro Quadratfuß"
+        ],
+        [
+            "N35",
+            "Poise pro Pascal"
+        ],
+        [
+            "N36",
+            "Newtonsekunde pro Quadratmeter"
+        ],
+        [
+            "N37",
+            "Kilogramm pro Meter Sekunde"
+        ],
+        [
+            "N38",
+            "Kilogramm pro Meter Minute"
+        ],
+        [
+            "N39",
+            "Kilogramm pro Meter Tag"
+        ],
+        [
+            "N40",
+            "Kilogramm pro Meter Stunde"
+        ],
+        [
+            "N41",
+            "Gramm pro Zentimeter Sekunde"
+        ],
+        [
+            "N42",
+            "Poundal Sekunde pro Quadratzoll"
+        ],
+        [
+            "N43",
+            "Pfund pro Fuß Minute"
+        ],
+        [
+            "N44",
+            "Pfund pro Fuß Tag"
+        ],
+        [
+            "N45",
+            "Kubikmeter pro Sekunde Pascal"
+        ],
+        [
+            "N46",
+            "Foot-Poundal"
+        ],
+        [
+            "N47",
+            "Inch-Poundal"
+        ],
+        [
+            "N48",
+            "Watt pro Quadratzentimeter"
+        ],
+        [
+            "N49",
+            "Watt pro Quadratzoll"
+        ],
+        [
+            "N50",
+            "British Thermal Unit (international) pro Quadratfuß Stunde"
+        ],
+        [
+            "N51",
+            "British Thermal Unit (thermochemisch) pro Quadratfuß Stunde"
+        ],
+        [
+            "N52",
+            "British Thermal Unit (thermochemisch) pro Quadratfuß Minute"
+        ],
+        [
+            "N53",
+            "British Thermal Unit (international) pro Quadratfuß Sekunde"
+        ],
+        [
+            "N54",
+            "British Thermal Unit (thermochemisch) pro Quadratfuß Sekunde"
+        ],
+        [
+            "N55",
+            "British Thermal Unit (international) pro Quadratzoll Sekunde"
+        ],
+        [
+            "N56",
+            "Kalorie (thermochemisch) pro Quadratzentimeter Minute"
+        ],
+        [
+            "N57",
+            "Kalorie (thermochemisch) pro Quadratzentimeter Sekunde"
+        ],
+        [
+            "N58",
+            "British Thermal Unit (international) pro Kubikfuß"
+        ],
+        [
+            "N59",
+            "British Thermal Unit (thermochemisch) pro Kubikfuß"
+        ],
+        [
+            "N60",
+            "British Thermal Unit (international) pro Grad Fahrenheit"
+        ],
+        [
+            "N61",
+            "British Thermal Unit (thermochemisch) pro Grad Fahrenheit"
+        ],
+        [
+            "N62",
+            "British Thermal Unit (international) pro Grad Rankine"
+        ],
+        [
+            "N63",
+            "British Thermal Unit (thermochemisch) pro Grad Rankine"
+        ],
+        [
+            "N64",
+            "British Thermal Unit (thermochemisch) pro Pfund Grad Rankine"
+        ],
+        [
+            "N65",
+            "Kilokalorie (international) pro Gramm Kelvin"
+        ],
+        [
+            "N66",
+            "British Thermal Unit (39 °F)"
+        ],
+        [
+            "N67",
+            "British Thermal Unit (59 °F)"
+        ],
+        [
+            "N68",
+            "British Thermal Unit (60 °F)"
+        ],
+        [
+            "N69",
+            "Kalorie (20 °C)"
+        ],
+        [
+            "N70",
+            "Quad (10^15 BTU international)"
+        ],
+        [
+            "N71",
+            "Therm (EG)"
+        ],
+        [
+            "N72",
+            "Therm (US)"
+        ],
+        [
+            "N73",
+            "British Thermal Unit (thermochemisch) pro Pfund"
+        ],
+        [
+            "N74",
+            "British Thermal Unit (international) pro Stunde Quadratfuß Grad Fahrenheit"
+        ],
+        [
+            "N75",
+            "British Thermal Unit (thermochemisch) pro Stunde Quadratfuß Grad Fahrenheit"
+        ],
+        [
+            "N76",
+            "British Thermal Unit (international) pro Sekunde Quadratfuß Grad Fahrenheit"
+        ],
+        [
+            "N77",
+            "British Thermal Unit (thermochemisch) pro Sekunde Quadratfuß Grad Fahrenheit"
+        ],
+        [
+            "N78",
+            "Kilowatt pro Quadratmeter Kelvin"
+        ],
+        [
+            "N79",
+            "Kelvin pro Pascal"
+        ],
+        [
+            "N80",
+            "Watt pro Meter Grad Celsius"
+        ],
+        [
+            "N81",
+            "Kilowatt pro Meter Kelvin"
+        ],
+        [
+            "N82",
+            "Kilowatt pro Meter Grad Celsius"
+        ],
+        [
+            "N83",
+            "Meter pro Grad Celsius Meter"
+        ],
+        [
+            "N84",
+            "Grad Fahrenheit Stunde pro British Thermal Unit (international)"
+        ],
+        [
+            "N85",
+            "Grad Fahrenheit Stunde pro British Thermal Unit (thermochemisch)"
+        ],
+        [
+            "N86",
+            "Grad Fahrenheit Sekunde pro British Thermal Unit (international)"
+        ],
+        [
+            "N87",
+            "Grad Fahrenheit Sekunde pro British Thermal Unit (thermochemisch)"
+        ],
+        [
+            "N88",
+            "Grad Fahrenheit Stunde Quadratfuß pro British Thermal Unit (international) Zoll"
+        ],
+        [
+            "N89",
+            "Grad Fahrenheit Stunde Quadratfuß pro British Thermal Unit (thermochemisch) Zoll"
+        ],
+        [
+            "N90",
+            "Kilofarad"
+        ],
+        [
+            "N91",
+            "reziprokes Joule"
+        ],
+        [
+            "N92",
+            "Pikosiemens"
+        ],
+        [
+            "N93",
+            "Ampere pro Pascal"
+        ],
+        [
+            "N94",
+            "Franklin"
+        ],
+        [
+            "N95",
+            "Amperminute"
+        ],
+        [
+            "N96",
+            "Biot"
+        ],
+        [
+            "N97",
+            "Gilbert"
+        ],
+        [
+            "N98",
+            "Volt pro Pascal"
+        ],
+        [
+            "N99",
+            "Pikovolt"
+        ],
+        [
+            "NA",
+            "Milligramm pro Kilogramm"
+        ],
+        [
+            "NAR",
+            "Anzahl Artikel"
+        ],
+        [
+            "NCL",
+            "Anzahl Zellen"
+        ],
+        [
+            "NEW",
+            "Newton"
+        ],
+        [
+            "NF",
+            "Nachricht"
+        ],
+        [
+            "NIL",
+            "null"
+        ],
+        [
+            "NIU",
+            "Anzahl internationale Einheiten"
+        ],
+        [
+            "NL",
+            "Ladung"
+        ],
+        [
+            "NM3",
+            "Normkubikmeter"
+        ],
+        [
+            "NMI",
+            "Seemeile"
+        ],
+        [
+            "NMP",
+            "Anzahl Packungen"
+        ],
+        [
+            "NPT",
+            "Anzahl Teile"
+        ],
+        [
+            "NT",
+            "Nettotonne"
+        ],
+        [
+            "NTU",
+            "nephelometrische Trübungseinheit (NTU)"
+        ],
+        [
+            "NU",
+            "Newtonmeter"
+        ],
+        [
+            "NX",
+            "Promille"
+        ],
+        [
+            "OA",
+            "Paneel"
+        ],
+        [
+            "ODE",
+            "Ozonabbau-Äquivalent"
+        ],
+        [
+            "ODG",
+            "ODS-Gramm"
+        ],
+        [
+            "ODK",
+            "ODS-Kilogramm"
+        ],
+        [
+            "ODM",
+            "ODS-Milligramm"
+        ],
+        [
+            "OHM",
+            "Ohm"
+        ],
+        [
+            "ON",
+            "Unze pro Quadratyard"
+        ],
+        [
+            "ONZ",
+            "Unze (Avoirdupois)"
+        ],
+        [
+            "OPM",
+            "Schwingungen pro Minute"
+        ],
+        [
+            "OT",
+            "Überstunde"
+        ],
+        [
+            "OZA",
+            "Flüssigunze (US)"
+        ],
+        [
+            "OZI",
+            "Flüssigunze (britisch)"
+        ],
+        [
+            "P1",
+            "Prozent"
+        ],
+        [
+            "P10",
+            "Coulomb pro Meter"
+        ],
+        [
+            "P11",
+            "Kiloweber"
+        ],
+        [
+            "P12",
+            "Gamma"
+        ],
+        [
+            "P13",
+            "Kilotesla"
+        ],
+        [
+            "P14",
+            "Joule pro Sekunde"
+        ],
+        [
+            "P15",
+            "Joule pro Minute"
+        ],
+        [
+            "P16",
+            "Joule pro Stunde"
+        ],
+        [
+            "P17",
+            "Joule pro Tag"
+        ],
+        [
+            "P18",
+            "Kilojoule pro Sekunde"
+        ],
+        [
+            "P19",
+            "Kilojoule pro Minute"
+        ],
+        [
+            "P2",
+            "Pfund pro Fuß"
+        ],
+        [
+            "P20",
+            "Kilojoule pro Stunde"
+        ],
+        [
+            "P21",
+            "Kilojoule pro Tag"
+        ],
+        [
+            "P22",
+            "Nanoohm"
+        ],
+        [
+            "P23",
+            "Ohm Circular Mil pro Fuß"
+        ],
+        [
+            "P24",
+            "Kilohenry"
+        ],
+        [
+            "P25",
+            "Lumen pro Quadratfuß"
+        ],
+        [
+            "P26",
+            "Phot"
+        ],
+        [
+            "P27",
+            "Footcandle"
+        ],
+        [
+            "P28",
+            "Candela pro Quadratzoll"
+        ],
+        [
+            "P29",
+            "Footlambert"
+        ],
+        [
+            "P30",
+            "Lambert"
+        ],
+        [
+            "P31",
+            "Stilb"
+        ],
+        [
+            "P32",
+            "Candela pro Quadratfuß"
+        ],
+        [
+            "P33",
+            "Kilocandela"
+        ],
+        [
+            "P34",
+            "Millicandela"
+        ],
+        [
+            "P35",
+            "Hefnerkerze"
+        ],
+        [
+            "P36",
+            "internationale Kerze"
+        ],
+        [
+            "P37",
+            "British Thermal Unit (international) pro Quadratfuß"
+        ],
+        [
+            "P38",
+            "British Thermal Unit (thermochemisch) pro Quadratfuß"
+        ],
+        [
+            "P39",
+            "Kalorie (thermochemisch) pro Quadratzentimeter"
+        ],
+        [
+            "P40",
+            "Langley"
+        ],
+        [
+            "P41",
+            "Dekade (logarithmisch)"
+        ],
+        [
+            "P42",
+            "Quadratpascal Sekunde"
+        ],
+        [
+            "P43",
+            "Bel pro Meter"
+        ],
+        [
+            "P44",
+            "Pfund-Mol"
+        ],
+        [
+            "P45",
+            "Pfund-Mol pro Sekunde"
+        ],
+        [
+            "P46",
+            "Pfund-Mol pro Minute"
+        ],
+        [
+            "P47",
+            "Kilomol pro Kilogramm"
+        ],
+        [
+            "P48",
+            "Pfund-Mol pro Pfund"
+        ],
+        [
+            "P49",
+            "Newton Quadratmeter pro Ampere"
+        ],
+        [
+            "P5",
+            "Fünferpack"
+        ],
+        [
+            "P50",
+            "Weber Meter"
+        ],
+        [
+            "P51",
+            "Mol pro Kilogramm Pascal"
+        ],
+        [
+            "P52",
+            "Mol pro Kubikmeter Pascal"
+        ],
+        [
+            "P53",
+            "Einheitspol"
+        ],
+        [
+            "P54",
+            "Milligray pro Sekunde"
+        ],
+        [
+            "P55",
+            "Mikrogray pro Sekunde"
+        ],
+        [
+            "P56",
+            "Nanogray pro Sekunde"
+        ],
+        [
+            "P57",
+            "Gray pro Minute"
+        ],
+        [
+            "P58",
+            "Milligray pro Minute"
+        ],
+        [
+            "P59",
+            "Mikrogray pro Minute"
+        ],
+        [
+            "P60",
+            "Nanogray pro Minute"
+        ],
+        [
+            "P61",
+            "Gray pro Stunde"
+        ],
+        [
+            "P62",
+            "Milligray pro Stunde"
+        ],
+        [
+            "P63",
+            "Mikrogray pro Stunde"
+        ],
+        [
+            "P64",
+            "Nanogray pro Stunde"
+        ],
+        [
+            "P65",
+            "Sievert pro Sekunde"
+        ],
+        [
+            "P66",
+            "Millisievert pro Sekunde"
+        ],
+        [
+            "P67",
+            "Mikrosievert pro Sekunde"
+        ],
+        [
+            "P68",
+            "Nanosievert pro Sekunde"
+        ],
+        [
+            "P69",
+            "Rem pro Sekunde"
+        ],
+        [
+            "P70",
+            "Sievert pro Stunde"
+        ],
+        [
+            "P71",
+            "Millisievert pro Stunde"
+        ],
+        [
+            "P72",
+            "Mikrosievert pro Stunde"
+        ],
+        [
+            "P73",
+            "Nanosievert pro Stunde"
+        ],
+        [
+            "P74",
+            "Sievert pro Minute"
+        ],
+        [
+            "P75",
+            "Millisievert pro Minute"
+        ],
+        [
+            "P76",
+            "Mikrosievert pro Minute"
+        ],
+        [
+            "P77",
+            "Nanosievert pro Minute"
+        ],
+        [
+            "P78",
+            "reziproker Quadratzoll"
+        ],
+        [
+            "P79",
+            "Pascal Quadratmeter pro Kilogramm"
+        ],
+        [
+            "P80",
+            "Millipascal pro Meter"
+        ],
+        [
+            "P81",
+            "Kilopascal pro Meter"
+        ],
+        [
+            "P82",
+            "Hektopascal pro Meter"
+        ],
+        [
+            "P83",
+            "physikalische Atmosphäre pro Meter"
+        ],
+        [
+            "P84",
+            "technische Atmosphäre pro Meter"
+        ],
+        [
+            "P85",
+            "Torr pro Meter"
+        ],
+        [
+            "P86",
+            "psi pro Zoll"
+        ],
+        [
+            "P87",
+            "Kubikmeter pro Sekunde Quadratmeter"
+        ],
+        [
+            "P88",
+            "Rhe"
+        ],
+        [
+            "P89",
+            "Pound-Force Fuß pro Zoll"
+        ],
+        [
+            "P90",
+            "Pound-Force Zoll pro Zoll"
+        ],
+        [
+            "P91",
+            "Perm (0 °C)"
+        ],
+        [
+            "P92",
+            "Perm (23 °C)"
+        ],
+        [
+            "P93",
+            "Byte pro Sekunde"
+        ],
+        [
+            "P94",
+            "Kilobyte pro Sekunde"
+        ],
+        [
+            "P95",
+            "Megabyte pro Sekunde"
+        ],
+        [
+            "P96",
+            "reziprokes Volt"
+        ],
+        [
+            "P97",
+            "reziproker Radiant"
+        ],
+        [
+            "P98",
+            "Pascal hoch Summe der stöchiometrischen Zahlen"
+        ],
+        [
+            "P99",
+            "Mol pro Kubikmeter hoch Summe der stöchiometrischen Zahlen"
+        ],
+        [
+            "PAL",
+            "Pascal"
+        ],
+        [
+            "PD",
+            "Block"
+        ],
+        [
+            "PFL",
+            "Proof-Liter"
+        ],
+        [
+            "PGL",
+            "Proof-Gallone"
+        ],
+        [
+            "PI",
+            "Teilung"
+        ],
+        [
+            "PLA",
+            "Grad Plato"
+        ],
+        [
+            "PO",
+            "Pfund pro Zoll Länge"
+        ],
+        [
+            "PQ",
+            "Seiten pro Zoll"
+        ],
+        [
+            "PR",
+            "Paar"
+        ],
+        [
+            "PS",
+            "Pound-Force pro Quadratzoll (psi)"
+        ],
+        [
+            "PTD",
+            "Trockenpint (US)"
+        ],
+        [
+            "PTI",
+            "Pint (britisch)"
+        ],
+        [
+            "PTL",
+            "Flüssigpint (US)"
+        ],
+        [
+            "PTN",
+            "Portion"
+        ],
+        [
+            "Q10",
+            "Joule pro Tesla"
+        ],
+        [
+            "Q11",
+            "Erlang"
+        ],
+        [
+            "Q12",
+            "Oktett"
+        ],
+        [
+            "Q13",
+            "Oktett pro Sekunde"
+        ],
+        [
+            "Q14",
+            "Shannon"
+        ],
+        [
+            "Q15",
+            "Hartley"
+        ],
+        [
+            "Q16",
+            "natürliche Informationseinheit (nat)"
+        ],
+        [
+            "Q17",
+            "Shannon pro Sekunde"
+        ],
+        [
+            "Q18",
+            "Hartley pro Sekunde"
+        ],
+        [
+            "Q19",
+            "natürliche Informationseinheit pro Sekunde"
+        ],
+        [
+            "Q20",
+            "Sekunde pro Kilogramm"
+        ],
+        [
+            "Q21",
+            "Watt Quadratmeter"
+        ],
+        [
+            "Q22",
+            "Sekunde pro Radiant Kubikmeter"
+        ],
+        [
+            "Q23",
+            "Weber hoch minus eins"
+        ],
+        [
+            "Q24",
+            "reziproker Zoll"
+        ],
+        [
+            "Q25",
+            "Dioptrie"
+        ],
+        [
+            "Q26",
+            "eins pro eins"
+        ],
+        [
+            "Q27",
+            "Newtonmeter pro Meter"
+        ],
+        [
+            "Q28",
+            "Kilogramm pro Quadratmeter Pascal Sekunde"
+        ],
+        [
+            "Q29",
+            "Mikrogramm pro Hektogramm"
+        ],
+        [
+            "Q3",
+            "Mahlzeit"
+        ],
+        [
+            "Q30",
+            "pH-Wert"
+        ],
+        [
+            "Q31",
+            "Kilojoule pro Gramm"
+        ],
+        [
+            "Q32",
+            "Femtoliter"
+        ],
+        [
+            "Q33",
+            "Pikoliter"
+        ],
+        [
+            "Q34",
+            "Nanoliter"
+        ],
+        [
+            "Q35",
+            "Megawatt pro Minute"
+        ],
+        [
+            "Q36",
+            "Quadratmeter pro Kubikmeter"
+        ],
+        [
+            "Q37",
+            "Standardkubikmeter pro Tag"
+        ],
+        [
+            "Q38",
+            "Standardkubikmeter pro Stunde"
+        ],
+        [
+            "Q39",
+            "Normkubikmeter pro Tag"
+        ],
+        [
+            "Q40",
+            "Normkubikmeter pro Stunde"
+        ],
+        [
+            "Q41",
+            "Joule pro Normkubikmeter"
+        ],
+        [
+            "Q42",
+            "Joule pro Standardkubikmeter"
+        ],
+        [
+            "QA",
+            "Seite - Fax"
+        ],
+        [
+            "QAN",
+            "Quartal"
+        ],
+        [
+            "QB",
+            "Seite - Ausdruck"
+        ],
+        [
+            "QR",
+            "Buch (Papier, 24/25 Bogen)"
+        ],
+        [
+            "QTD",
+            "Trockenquart (US)"
+        ],
+        [
+            "QTI",
+            "Quart (britisch)"
+        ],
+        [
+            "QTL",
+            "Flüssigquart (US)"
+        ],
+        [
+            "QTR",
+            "Quarter (britisch)"
+        ],
+        [
+            "R1",
+            "Pica"
+        ],
+        [
+            "R9",
+            "tausend Kubikmeter"
+        ],
+        [
+            "RH",
+            "Betriebsstunde"
+        ],
+        [
+            "RM",
+            "Ries"
+        ],
+        [
+            "ROM",
+            "Raum"
+        ],
+        [
+            "RP",
+            "Pfund pro Ries"
+        ],
+        [
+            "RPM",
+            "Umdrehungen pro Minute"
+        ],
+        [
+            "RPS",
+            "Umdrehungen pro Sekunde"
+        ],
+        [
+            "RT",
+            "Tonnenmeile (Umsatz)"
+        ],
+        [
+            "S3",
+            "Quadratfuß pro Sekunde"
+        ],
+        [
+            "S4",
+            "Quadratmeter pro Sekunde"
+        ],
+        [
+            "SAN",
+            "Halbjahr (6 Monate)"
+        ],
+        [
+            "SCO",
+            "Stiege (20 Stück)"
+        ],
+        [
+            "SCR",
+            "Skrupel"
+        ],
+        [
+            "SEC",
+            "Sekunde [Zeiteinheit]"
+        ],
+        [
+            "SET",
+            "Satz"
+        ],
+        [
+            "SG",
+            "Segment"
+        ],
+        [
+            "SIE",
+            "Siemens"
+        ],
+        [
+            "SM3",
+            "Standardkubikmeter"
+        ],
+        [
+            "SMI",
+            "Meile (Landmeile)"
+        ],
+        [
+            "SQ",
+            "Quadrat"
+        ],
+        [
+            "SQR",
+            "Quadrat (Dachdeckung)"
+        ],
+        [
+            "SR",
+            "Streifen"
+        ],
+        [
+            "STC",
+            "Stab"
+        ],
+        [
+            "STI",
+            "Stone (britisch)"
+        ],
+        [
+            "STK",
+            "Stange (Zigaretten)"
+        ],
+        [
+            "STL",
+            "Standardliter"
+        ],
+        [
+            "STN",
+            "Tonne (US) oder Short Ton (britisch/US)"
+        ],
+        [
+            "STW",
+            "Trinkhalm"
+        ],
+        [
+            "SW",
+            "Docke"
+        ],
+        [
+            "SX",
+            "Sendung"
+        ],
+        [
+            "SYR",
+            "Spritze"
+        ],
+        [
+            "T0",
+            "Telekommunikationsleitung in Betrieb"
+        ],
+        [
+            "T3",
+            "tausend Stück"
+        ],
+        [
+            "TAH",
+            "Kiloamperestunde (tausend Amperestunden)"
+        ],
+        [
+            "TAN",
+            "Gesamtsäurezahl"
+        ],
+        [
+            "TI",
+            "tausend Quadratzoll"
+        ],
+        [
+            "TIC",
+            "metrische Tonne einschließlich Behälter"
+        ],
+        [
+            "TIP",
+            "metrische Tonne einschließlich Innenverpackung"
+        ],
+        [
+            "TKM",
+            "Tonnenkilometer"
+        ],
+        [
+            "TMS",
+            "Kilogramm importiertes Fleisch ohne Innereien"
+        ],
+        [
+            "TNE",
+            "Tonne (metrische Tonne)"
+        ],
+        [
+            "TP",
+            "Zehnerpack"
+        ],
+        [
+            "TPI",
+            "Zähne pro Zoll"
+        ],
+        [
+            "TPR",
+            "zehn Paar"
+        ],
+        [
+            "TQD",
+            "tausend Kubikmeter pro Tag"
+        ],
+        [
+            "TRL",
+            "Billion (EUR)"
+        ],
+        [
+            "TST",
+            "zehn Sätze"
+        ],
+        [
+            "TTS",
+            "zehntausend Stück (Zigaretten)"
+        ],
+        [
+            "U1",
+            "Behandlung"
+        ],
+        [
+            "U2",
+            "Tablette"
+        ],
+        [
+            "UB",
+            "Telekommunikationsleitung in Betrieb (Durchschnitt)"
+        ],
+        [
+            "UC",
+            "Telekommunikationsanschluss"
+        ],
+        [
+            "VA",
+            "Voltampere pro Kilogramm"
+        ],
+        [
+            "VLT",
+            "Volt"
+        ],
+        [
+            "VP",
+            "Volumenprozent"
+        ],
+        [
+            "W2",
+            "Nasskilo"
+        ],
+        [
+            "WA",
+            "Watt pro Kilogramm"
+        ],
+        [
+            "WB",
+            "Nasspfund"
+        ],
+        [
+            "WCD",
+            "Cord"
+        ],
+        [
+            "WE",
+            "Nasstonne"
+        ],
+        [
+            "WEB",
+            "Weber"
+        ],
+        [
+            "WEE",
+            "Woche"
+        ],
+        [
+            "WG",
+            "Weingallone"
+        ],
+        [
+            "WHR",
+            "Wattstunde"
+        ],
+        [
+            "WM",
+            "Arbeitsmonat"
+        ],
+        [
+            "WSD",
+            "Standard"
+        ],
+        [
+            "WTT",
+            "Watt"
+        ],
+        [
+            "X1",
+            "Gunter-Kette"
+        ],
+        [
+            "YDK",
+            "Quadratyard"
+        ],
+        [
+            "YDQ",
+            "Kubikyard"
+        ],
+        [
+            "YRD",
+            "Yard"
+        ],
+        [
+            "Z11",
+            "Hängecontainer"
+        ],
+        [
+            "Z9",
+            "Nanomol"
+        ],
+        [
+            "ZP",
+            "Seite"
+        ],
+        [
+            "ZZ",
+            "gegenseitig vereinbart"
+        ]
+    ]
+}

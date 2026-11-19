@@ -290,6 +290,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
 
         $subProductIds = [];
+        $pieceUnitId = Sales_Controller_EDocument_UnitOfMeasure::getInstance()->getByCode('H87')?->getId();
 
         foreach($products as $key => $product) {
             $subProductIds[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
@@ -298,7 +299,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $products = [
             [
                 Sales_Model_Product::FLD_SHORTCUT => 'cable-set',
-                Sales_Model_Product::FLD_UNIT => Sales_Model_Product::UNIT_PIECE,
+                Sales_Model_Product::FLD_UNIT => $pieceUnitId,
                 'name' => [[ $l => 'en', $t => 'Cable-set'], [$l => 'de', $t => 'Kabelsatz']],
                 'description' => [[ $l => 'en', $t => 'colorful networkcable set'], [$l => 'de', $t => 'Farbiges Netzwerkkabelset']],
                 'salesprice' => 38.99,
@@ -324,7 +325,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 ]
             ], [
                 Sales_Model_Product::FLD_SHORTCUT => 'net-starter',
-                Sales_Model_Product::FLD_UNIT => Sales_Model_Product::UNIT_PIECE,
+                Sales_Model_Product::FLD_UNIT => $pieceUnitId,
                 'name' => [[ $l => 'en', $t => 'Net-Starter'], [$l => 'de', $t => 'Netzstarter']],
                 'description' => [[ $l => 'en', $t => 'network starter bundle'], [$l => 'de', $t => 'Netzwerk Starter']],
                 'salesprice' => 99.99,
@@ -394,7 +395,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 Sales_Model_Product::FLD_SHORTCUT => 'vm-small',
                 Sales_Model_Product::FLD_DEFAULT_GROUPING => 'Periocical costs',
                 Sales_Model_Product::FLD_DEFAULT_SORTING => 50000,
-                Sales_Model_Product::FLD_UNIT => Sales_Model_Product::UNIT_PIECE,
+                Sales_Model_Product::FLD_UNIT => $pieceUnitId,
                 'name' => self::$_en ? 'VM small' : 'VM klein',
                 'description' => self::$_en ? 'small, general purpose VM with {vcpu.quantity} vCPUs and {vram.quantity}GB RAM' : 'kleine, general purpose VM mit {vcpu.quantity} vCPUs und {vram.quantity}GB RAM',
                 'salesprice' => 9.99,
@@ -416,7 +417,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ], [
                 Sales_Model_Product::FLD_SHORTCUT => 'vm-middle',
                 Sales_Model_Product::FLD_DEFAULT_GROUPING => 'Periocical costs',
-                Sales_Model_Product::FLD_UNIT => Sales_Model_Product::UNIT_PIECE,
+                Sales_Model_Product::FLD_UNIT => $pieceUnitId,
                 'name' => self::$_en ? 'VM middle' : 'VM mittel',
                 'description' => self::$_en ? 'middle, general purpose VM with {vcpu.quantity} vCPUs and {vram.quantity}GB RAM' : 'mittlere, general purpose VM mit {vcpu.quantity} vCPUs und {vram.quantity}GB RAM',
                 'salesprice' => 19.99,

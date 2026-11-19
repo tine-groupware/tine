@@ -40,12 +40,10 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
     public const FLD_SHORTCUT = 'shortcut';
     public const FLD_SUBPRODUCTS = 'subproducts'; // -> recordset of Sales_Model_SubProduct dependent records
     public const FLD_UNFOLD_TYPE = 'unfold_type'; // -> keyfield (Bundle, Set, leer)
-    public const FLD_UNIT = 'unit'; // -> keyfield
+    public const FLD_UNIT = 'unit'; // -> Sales_Model_EDocument_UnitOfMeasure
 
     public const UNFOLD_TYPE_BUNDLE = 'BUNDLE';
     public const UNFOLD_TYPE_SET = 'SET';
-
-    public const UNIT_PIECE = 'PIECE';
 
     public const MODEL_NAME_PART = 'Product';
     public const TABLE_NAME = 'sales_products';
@@ -56,7 +54,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 8,
+        self::VERSION => 9,
         self::MODLOG_ACTIVE => true,
 
         self::APP_NAME => Sales_Config::APP_NAME,
@@ -79,12 +77,16 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_UNIT => [
+                    Tinebase_Record_Expander::EXPANDER_FULL => true,
+                ],
                 self::FLD_SUBPRODUCTS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Sales_Model_SubProductMapping::FLD_PRODUCT_ID  => [
                             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                                 self::FLD_NAME => [],
                                 self::FLD_DESCRIPTION => [],
+                                self::FLD_UNIT => [Tinebase_Record_Expander::EXPANDER_FULL => true],
                             ]
                         ],
                     ],
@@ -185,10 +187,13 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
             ],
             self::FLD_UNIT => [
                 self::LABEL => 'Unit', // _('Unit')
-                self::TYPE => self::TYPE_KEY_FIELD,
+                self::TYPE => self::TYPE_RECORD,
+                self::LENGTH => 40,
                 self::NULLABLE => true,
-                self::NAME => Sales_Config::PRODUCT_UNIT,
-                self::DEFAULT_VAL => Sales_Model_Product::UNIT_PIECE,
+                self::CONFIG => [
+                    self::APP_NAME => Sales_Config::APP_NAME,
+                    self::MODEL_NAME => Sales_Model_EDocument_UnitOfMeasure::MODEL_NAME_PART,
+                ],
             ],
             self::FLD_PURCHASEPRICE => [
                 self::TYPE => self::TYPE_MONEY,
