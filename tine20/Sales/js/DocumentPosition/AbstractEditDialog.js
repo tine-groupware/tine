@@ -36,11 +36,16 @@ Tine.Sales.AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.getForm().findField('product_id').allowBlank = !isProductType;
         this.getForm().items.items.forEach((field) => {
-            const isGenericField = ['type', 'title', 'grouping'].concat(type === 'TEXT' ? 'description' : []).indexOf(field.name) >= 0;
-            
+            // tags belong to every position type
+            const isGenericField = ['type', 'title', 'grouping', 'tags'].concat(type === 'TEXT' ? 'description' : []).indexOf(field.name) >= 0;
+
             // manage type relevant fields
             const isTypeField = isProductType || isGenericField;
-            field[!isTypeField ? 'hide' : 'show']();
+            // the tags field is a hidden field of the tags panel, it only carries the value - showing it renders an empty
+            // input in the tags panel
+            if (!(field instanceof Tine.widgets.tags.TagFormField)) {
+                field[!isTypeField ? 'hide' : 'show']();
+            }
             if (!isTypeField) {
                 field.setValue(null);
                 if (field.clearValue) field.clearValue();
