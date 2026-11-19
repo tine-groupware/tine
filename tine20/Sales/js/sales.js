@@ -33,7 +33,7 @@ import './Document/CreateFollowUpAction';
 import './Document/CreatePaperSlipAction';
 import './Document/DispatchDocumentAction';
 // import './Document/AttachedDocument/ShowDispatchHistory';
-// import './Document/AttachedDocument/ManageAttachmentAction';
+import './Document/AttachedDocument/ManageAttachmentAction';
 import './Document/TrackAction';
 import './Document/SendToDatevAction';
 import './DocumentPosition/customerColumn';

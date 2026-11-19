@@ -1288,4 +1288,203 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_delete($ids, Sales_Controller_Offer::getInstance());
     }
+
+    /**
+     * names of new uploads (temp files) the client marked as supporting documents in the current save, their node
+     * ids exist only after the save (see _save)
+     *
+     * @var string[]
+     */
+    protected array $_pendingSupportingDocAttachmentNames = [];
+
+    /**
+     * supporting documents of new uploads: the client marks them with the id of their temp file, the attached
+     * documents are added after the save created their nodes
+     */
+    protected function _save(
+        $_recordData,
+        Tinebase_Controller_Record_Interface $_controller,
+        $_modelName,
+        $_identifier = 'id',
+        $_additionalArguments = array()
+    ) {
+        $modelClass = preg_match('/_Model_/', $_modelName) ? $_modelName :
+            $this->_applicationName . '_Model_' . $_modelName;
+        if (!is_a($modelClass, Sales_Model_Document_Abstract::class, true)) {
+            return parent::_save($_recordData, $_controller, $_modelName, $_identifier, $_additionalArguments);
+        }
+
+        $this->_pendingSupportingDocAttachmentNames = [];
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        $result = parent::_save($_recordData, $_controller, $_modelName, $_identifier, $_additionalArguments);
+
+        if ($names = $this->_pendingSupportingDocAttachmentNames) {
+            $this->_pendingSupportingDocAttachmentNames = [];
+            /** @var Sales_Model_Document_Abstract $document */
+            $document = $_controller->get($result['id']);
+            Tinebase_Record_Expander::expandRecord($document);
+            $attachedDocs = $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS};
+            if (!$attachedDocs instanceof Tinebase_Record_RecordSet) {
+                $attachedDocs = new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class);
+                $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS} = $attachedDocs;
+            }
+            $changed = false;
+            foreach (array_unique($names) as $name) {
+                $node = $document->attachments?->find('name', $name);
+                if (!$node || $attachedDocs->find(Sales_Model_Document_AttachedDocument::FLD_NODE_ID, $node->getId())) {
+                    continue;
+                }
+                $attachedDocs->addRecord(new Sales_Model_Document_AttachedDocument([
+                    Sales_Model_Document_AttachedDocument::FLD_TYPE =>
+                        Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT,
+                    Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $node->getId(),
+                    Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ =>
+                        (int) $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ},
+                ], true));
+                $changed = true;
+            }
+            if ($changed) {
+                $result = $this->_recordToJson($_controller->update($document));
+            }
+        }
+
+        $transaction->release();
+        return $result;
+    }
+
+    /**
+     * @param Tinebase_Record_Interface $record
+     */
+    protected function _dependentRecordsFromJson(&$record)
+    {
+        parent::_dependentRecordsFromJson($record);
+
+        if ($record instanceof Sales_Model_Document_Abstract) {
+            $this->_sanitizeAttachedDocumentsFromJson($record);
+        }
+    }
+
+    /**
+     * the client may only mark / unmark attachments of the document as supporting documents. Paperslips and
+     * eDocuments are managed by the server: they are taken from the stored document, whatever the client sends.
+     * New uploads are marked with the id of their temp file (node_id), see _save.
+     *
+     * @param Sales_Model_Document_Abstract $record
+     */
+    protected function _sanitizeAttachedDocumentsFromJson(Sales_Model_Document_Abstract $record): void
+    {
+        $fld = Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS;
+        $currentRecord = null;
+        if ($record->getId()) {
+            try {
+                $currentRecord = $record::getConfiguration()->getControllerInstance()->get($record->getId());
+                Tinebase_Record_Expander::expandRecord($currentRecord);
+            } catch (Tinebase_Exception_NotFound) {
+            }
+        }
+
+        $currentAttachedDocs = $currentRecord?->{$fld} instanceof Tinebase_Record_RecordSet ? $currentRecord->{$fld} :
+            new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class);
+        $isSupportingDoc = fn (Sales_Model_Document_AttachedDocument $attachedDoc) =>
+            Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT ===
+                $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_TYPE};
+        $currentSupportingDocs = $currentAttachedDocs->filter($isSupportingDoc);
+
+        // server managed attached documents: unchanged from the stored document
+        $result = $currentAttachedDocs->filter(fn ($attachedDoc) => !$isSupportingDoc($attachedDoc));
+        $serverManagedNodeIds = $result->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID};
+
+        // supporting documents requested by the client (no attached_documents sent: keep the stored ones)
+        if (null === $record->{$fld}) {
+            $requestedDocs = $currentAttachedDocs;
+        } elseif ($record->{$fld} instanceof Tinebase_Record_RecordSet) {
+            $requestedDocs = $record->{$fld};
+        } else {
+            $requestedDocs = new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class);
+        }
+        $requestedNodeIds = array_unique($requestedDocs->filter($isSupportingDoc)
+            ->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});
+
+        // only stored attachments the document keeps can be supporting documents
+        $attachmentIds = $this->_getAttachmentIds($currentRecord?->attachments);
+        if (null !== $record->attachments) {
+            $attachmentIds = array_intersect($attachmentIds, $this->_getAttachmentIds($record->attachments));
+        }
+
+        // new uploads sent with this save: temp file id => name
+        $tempFileNames = $this->_getTempFileAttachmentNames($record->attachments);
+
+        foreach ($requestedNodeIds as $nodeId) {
+            if (!$nodeId || in_array($nodeId, $serverManagedNodeIds)) {
+                continue;
+            }
+            if (isset($tempFileNames[$nodeId])) {
+                $this->_pendingSupportingDocAttachmentNames[] = $tempFileNames[$nodeId];
+                continue;
+            }
+            if (!in_array($nodeId, $attachmentIds)) {
+                continue;
+            }
+            $attachedDoc = $currentSupportingDocs->find(Sales_Model_Document_AttachedDocument::FLD_NODE_ID, $nodeId);
+            if (!$attachedDoc) {
+                $attachedDoc = new Sales_Model_Document_AttachedDocument([
+                    Sales_Model_Document_AttachedDocument::FLD_TYPE =>
+                        Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT,
+                    Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $nodeId,
+                    Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ =>
+                        (int) $currentRecord->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ},
+                ], true);
+            }
+            $result->addRecord($attachedDoc);
+        }
+
+        $record->{$fld} = $result;
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet|array|null $attachments
+     * @return array<string, string> temp file id => name of the new uploads
+     */
+    protected function _getTempFileAttachmentNames($attachments): array
+    {
+        $names = [];
+        foreach ($attachments ?? [] as $attachment) {
+            if ($attachment instanceof Tinebase_Record_Interface) {
+                $tempFile = $attachment->tempFile;
+                $name = $attachment->name;
+            } else {
+                $tempFile = $attachment['tempFile'] ?? null;
+                $name = $attachment['name'] ?? null;
+            }
+            if ($tempFile instanceof Tinebase_Record_Interface) {
+                $tempFileId = $tempFile->getId();
+                $name = $name ?: $tempFile->name;
+            } elseif (is_array($tempFile)) {
+                $tempFileId = $tempFile['id'] ?? null;
+                $name = $name ?: ($tempFile['name'] ?? null);
+            } else {
+                $tempFileId = $tempFile;
+            }
+            if ($tempFileId && is_string($tempFileId) && $name && is_string($name)) {
+                $names[$tempFileId] = $name;
+            }
+        }
+        return $names;
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet|array|null $attachments
+     * @return array ids of the stored attachments (new uploads have no id yet)
+     */
+    protected function _getAttachmentIds($attachments): array
+    {
+        $ids = [];
+        foreach ($attachments ?? [] as $attachment) {
+            $id = $attachment instanceof Tinebase_Record_Interface ? $attachment->getId() : ($attachment['id'] ?? null);
+            if ($id && is_string($id)) {
+                $ids[] = $id;
+            }
+        }
+        return $ids;
+    }
 }

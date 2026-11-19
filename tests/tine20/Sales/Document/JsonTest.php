@@ -158,6 +158,160 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         }
     }
 
+    public function testSupportingDocumentsFromClient(): void
+    {
+        $document = $this->_instance->saveDocument_Offer((new SMDOffer([
+            SMDOffer::FLD_CUSTOMER_ID => $this->_createCustomer()->toArray(),
+            SMDOffer::FLD_OFFER_STATUS => SMDOffer::STATUS_DRAFT
+        ]))->toArray(true));
+
+        // two attachments, the first one is a paperslip (created by the server)
+        $docCtrl = Sales_Controller_Document_Offer::getInstance();
+        $offer = $docCtrl->get($document['id']);
+        $offer->attachments = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, array_map(function ($name) {
+            file_put_contents($path = Tinebase_TempFile::getTempPath(), $name);
+            return ['name' => $name, 'tempFile' => Tinebase_TempFile::getInstance()->createTempFile($path)];
+        }, ['paperslip.pdf', 'supporting.pdf']), true);
+        $offer = $docCtrl->update($offer);
+        $paperslipNodeId = $offer->attachments->find('name', 'paperslip.pdf')->getId();
+        $supportingNodeId = $offer->attachments->find('name', 'supporting.pdf')->getId();
+        $offer->{SMDOffer::FLD_ATTACHED_DOCUMENTS} = new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class, [[
+            Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP,
+            Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $paperslipNodeId,
+            Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $offer->{SMDOffer::FLD_DOCUMENT_SEQ} + 1,
+        ]], true);
+        $docCtrl->update($offer);
+        $document = $this->_instance->getDocument_Offer($document['id']);
+        $paperslip = $document[SMDOffer::FLD_ATTACHED_DOCUMENTS][0];
+
+        $assertAttachedDocs = function (array $document, array $expected, string $msg) use ($paperslip) {
+            $actual = [];
+            foreach ($document[SMDOffer::FLD_ATTACHED_DOCUMENTS] as $attachedDoc) {
+                $actual[$attachedDoc[Sales_Model_Document_AttachedDocument::FLD_NODE_ID]] = $attachedDoc[Sales_Model_Document_AttachedDocument::FLD_TYPE];
+                if ($attachedDoc['id'] === $paperslip['id']) {
+                    $this->assertSame($paperslip[Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ],
+                        $attachedDoc[Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ], $msg . ': paperslip changed');
+                }
+            }
+            ksort($actual);
+            ksort($expected);
+            $this->assertSame($expected, $actual, $msg);
+        };
+
+        // the client tries to change the paperslip, to add an edocument and a supporting doc of an unknown node
+        $document[SMDOffer::FLD_ATTACHED_DOCUMENTS] = [
+            array_merge($paperslip, [
+                Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT,
+                Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => 99,
+            ]), [
+                Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT,
+                Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $supportingNodeId,
+                Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => 1,
+            ], [
+                Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT,
+                Sales_Model_Document_AttachedDocument::FLD_NODE_ID => Tinebase_Record_Abstract::generateUID(),
+                Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => 1,
+            ],
+        ];
+        $document = $this->_instance->saveDocument_Offer($document);
+        $assertAttachedDocs($document, [$paperslipNodeId => Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP],
+            'only the paperslip expected');
+
+        // mark as supporting document, the paperslip is not sent
+        $document[SMDOffer::FLD_ATTACHED_DOCUMENTS] = [[
+            'id' => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT,
+            Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $supportingNodeId,
+            Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => 0,
+        ]];
+        $document = $this->_instance->saveDocument_Offer($document);
+        $assertAttachedDocs($document, [
+            $paperslipNodeId => Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP,
+            $supportingNodeId => Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT,
+        ], 'supporting document expected');
+        $supportingDocId = array_values(array_filter($document[SMDOffer::FLD_ATTACHED_DOCUMENTS], fn($ad) =>
+            $ad[Sales_Model_Document_AttachedDocument::FLD_NODE_ID] === $supportingNodeId))[0]['id'];
+
+        // supporting documents stay current when the document changes
+        $document[SMDOffer::FLD_DOCUMENT_TITLE] = 'changed title';
+        $document = $this->_instance->saveDocument_Offer($document);
+        $this->assertSame($supportingDocId, array_values(array_filter($document[SMDOffer::FLD_ATTACHED_DOCUMENTS], fn($ad) =>
+            $ad[Sales_Model_Document_AttachedDocument::FLD_NODE_ID] === $supportingNodeId))[0]['id'], 'supporting doc not kept');
+        $offer = $docCtrl->get($document['id']);
+        Tinebase_Record_Expander::expandRecord($offer);
+        $this->assertSame([$supportingNodeId], array_values($offer->getCurrentAttachedDocuments()
+            ->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID}), 'only the supporting doc is current');
+
+        // unmark
+        $document[SMDOffer::FLD_ATTACHED_DOCUMENTS] = [];
+        $document = $this->_instance->saveDocument_Offer($document);
+        $assertAttachedDocs($document, [$paperslipNodeId => Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP],
+            'supporting document not removed');
+
+        // mark and remove the attachment in the same save
+        $document[SMDOffer::FLD_ATTACHED_DOCUMENTS] = [[
+            Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT,
+            Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $supportingNodeId,
+            Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => 0,
+        ]];
+        $document['attachments'] = array_values(array_filter($document['attachments'], fn($node) => $node['id'] !== $supportingNodeId));
+        $document = $this->_instance->saveDocument_Offer($document);
+        $assertAttachedDocs($document, [$paperslipNodeId => Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP],
+            'supporting document of a removed attachment');
+    }
+
+    public function testSupportingDocumentsFromClientNewUploads(): void
+    {
+        $createTempFile = function (string $name): array {
+            file_put_contents($path = Tinebase_TempFile::getTempPath(), $name);
+            return Tinebase_TempFile::getInstance()->createTempFile($path, $name)->toArray();
+        };
+        $supportingDoc = fn (string $nodeId) => [
+            Sales_Model_Document_AttachedDocument::FLD_TYPE => Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT,
+            Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $nodeId,
+            Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => 0,
+        ];
+        $supportingNames = function (array $document): array {
+            $names = [];
+            foreach ($document[SMDOffer::FLD_ATTACHED_DOCUMENTS] as $attachedDoc) {
+                $this->assertSame(Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT,
+                    $attachedDoc[Sales_Model_Document_AttachedDocument::FLD_TYPE]);
+                $node = array_values(array_filter($document['attachments'], fn ($node) =>
+                    $node['id'] === $attachedDoc[Sales_Model_Document_AttachedDocument::FLD_NODE_ID]));
+                $this->assertCount(1, $node, 'attached document of an unknown node');
+                $names[] = $node[0]['name'];
+            }
+            sort($names);
+            return $names;
+        };
+
+        // new document: upload and mark in the same save, a temp file id that is no upload of this save is ignored
+        $marked = $createTempFile('marked.txt');
+        $foreign = $createTempFile('foreign.txt');
+        $document = $this->_instance->saveDocument_Offer(array_merge((new SMDOffer([
+            SMDOffer::FLD_CUSTOMER_ID => $this->_createCustomer()->toArray(),
+            SMDOffer::FLD_OFFER_STATUS => SMDOffer::STATUS_DRAFT
+        ]))->toArray(true), [
+            'attachments' => [
+                ['name' => 'marked.txt', 'tempFile' => $marked],
+                ['name' => 'unmarked.txt', 'tempFile' => $createTempFile('unmarked.txt')],
+            ],
+            SMDOffer::FLD_ATTACHED_DOCUMENTS => [$supportingDoc($marked['id']), $supportingDoc($foreign['id'])],
+        ]));
+        $this->assertCount(2, $document['attachments']);
+        $this->assertSame(['marked.txt'], $supportingNames($document), 'new document');
+
+        // existing document: another upload marked, the stored supporting document is kept
+        $second = $createTempFile('second.txt');
+        $document['attachments'][] = ['name' => 'second.txt', 'tempFile' => $second];
+        $document[SMDOffer::FLD_ATTACHED_DOCUMENTS][] = $supportingDoc($second['id']);
+        $document = $this->_instance->saveDocument_Offer($document);
+        $this->assertCount(3, $document['attachments']);
+        $this->assertSame(['marked.txt', 'second.txt'], $supportingNames($document), 'existing document');
+        $document = $this->_instance->getDocument_Offer($document['id']);
+        $this->assertSame(['marked.txt', 'second.txt'], $supportingNames($document), 'stored');
+    }
+
     public function testOfferBoilerplates()
     {
         $customer = $this->_createCustomer();

@@ -15,6 +15,7 @@ import EvaluationDimensionForm from "../../../Tinebase/js/widgets/form/Evaluatio
 import PaymentMeansField from './PaymentMeansField'
 import TaxByRateField from "./TaxByRateField";
 import Record from "../../../Tinebase/js/data/Record";
+import { decorateAttachmentsGrid } from './AttachedDocument/ManageAttachmentAction'
 
 Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 1240,
@@ -36,6 +37,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 
         // status handling
         this.fields[this.statusFieldName].on('beforeselect', this.onBeforeStatusSelect, this)
+
+        decorateAttachmentsGrid(this)
     },
 
     async onBeforeStatusSelect(statusField, status, idx) {

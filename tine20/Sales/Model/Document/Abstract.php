@@ -1392,8 +1392,16 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $this->isValid();
     }
 
+    /**
+     * paperslips and edocuments created for the current document seq and all supporting documents (they are marked
+     * by the user and stay valid when the document changes)
+     */
     public function getCurrentAttachedDocuments(): Tinebase_Record_RecordSet
     {
-        return $this->{self::FLD_ATTACHED_DOCUMENTS}->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $this->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ});
+        return $this->{self::FLD_ATTACHED_DOCUMENTS}->filter(fn (Sales_Model_Document_AttachedDocument $attachedDoc) =>
+            Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT ===
+                $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_TYPE}
+            || (int) $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} ===
+                (int) $this->{self::FLD_DOCUMENT_SEQ});
     }
 }
