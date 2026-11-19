@@ -147,6 +147,16 @@
     white-space: normal;
 }
 
+// inline editor of the description (DocumentPosition/AbstractGridPanel.js): same metrics as the description, so the
+// row doesn't jump when the editor starts
+.sales-document-positiongrid-description-editor textarea.x-form-field {
+    font-size: 11px;
+    line-height: 13px;
+    padding: 1px 2px 0;
+    min-height: 0;
+    resize: none;
+}
+
 .SalesTracExpandPositions {
     background-image:url(../../images/icon-set/icon_list_unselect.svg) !important;
 }

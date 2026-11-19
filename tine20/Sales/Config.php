@@ -152,8 +152,6 @@ class Sales_Config extends Tinebase_Config_Abstract
 
     const PRODUCT_UNFOLDTYPE = 'productUnfoldType';
 
-    const PRODUCT_UNIT = 'productUnit';
-
     const LANGUAGES_AVAILABLE = 'languagesAvailable';
 
     const VARIABLE_POSITION_FLAG = 'subProductPositionFlag';
@@ -1395,20 +1393,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                 self::RECORDS               => [
                     ['id' => Sales_Model_Product::UNFOLD_TYPE_BUNDLE, 'value' => 'Bundle', 'system' => true], // _('Shared')
                     ['id' => Sales_Model_Product::UNFOLD_TYPE_SET, 'value' => 'Set', 'system' => true], // _('Own')
-                ],
-            ],
-        ],
-        self::PRODUCT_UNIT => [
-            self::LABEL                 => 'Product Unit', //_('Product Unit')
-            self::DESCRIPTION           => 'Product Unit', //_('Product Unit')
-            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
-            /*self::OPTIONS               => [
-                self::RECORD_MODEL          => ....
-            ],*/
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::DEFAULT_STR           => [
-                self::RECORDS               => [
-                    ['id' => Sales_Model_Product::UNIT_PIECE, 'value' => 'Piece', 'system' => true], // _('Piece')
                 ],
             ],
         ],

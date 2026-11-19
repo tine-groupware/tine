@@ -168,8 +168,9 @@ textarea {
 }
 
 // NOTE: fields positioned by a box layout (hbox/vbox item) get their width from the layout,
-//       fields in toolbars from their config or css (e.g. the paging toolbar's page number)
-.x-form-field.form-control:not(.x-box-item):not(.x-toolbar .x-form-field) {
+//       fields in toolbars from their config or css (e.g. the paging toolbar's page number),
+//       fields of an inline editor (grid / tree) from the editor (autoSize: the width of the cell)
+.x-form-field.form-control:not(.x-box-item):not(.x-toolbar .x-form-field):not(.x-editor .x-form-field) {
   @include form-sizing;
 }
 

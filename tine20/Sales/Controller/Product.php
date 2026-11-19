@@ -92,7 +92,13 @@ class Sales_Controller_Product extends Sales_Controller_NumberableAbstract
             $this->_checkNumberUniqueness($_record, false);
         }
         $this->_checkNumberType($_record);
-        
+
+        // the unit of a product is a unit of measure record now - the default (formerly 'PIECE') is piece (H87)
+        if (! $_record->{Sales_Model_Product::FLD_UNIT}) {
+            $_record->{Sales_Model_Product::FLD_UNIT} = Sales_Controller_EDocument_UnitOfMeasure::getInstance()
+                ->getByCode('H87')?->getId();
+        }
+
         return parent::create($_record, $_duplicateCheck);
     }
     

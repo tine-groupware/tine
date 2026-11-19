@@ -61,6 +61,12 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
         this.on('beforeedit', this.onBeforeEditPosition, this);
         this.on('afteredit', this.onAfterEditPosition, this);
+        // a double click opens the position dialog instead of the (delayed) inline editor
+        this.on('celldblclick', this.cancelDelayedEditing, this);
+        this.on('destroy', () => {
+            this.cancelDelayedEditing();
+            this.descriptionEditor?.destroy();
+        });
         this.on('update', this.onUpdatePosition, this);
         this.on('beforeaddrecord', this.onNewProduct, this);
         this.on('beforeeditrecord', (r) => { return r !== this.quickaddRecord}, this);
@@ -102,7 +108,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 // manual position
                 if(position.get('type') === 'PRODUCT') {
                     position.set('quantity', 1)
-                    position.set('unit', 'PIECE')
+                    position.set('unit', await this.getDefaultUnit())
                     position.set('unit_price', 0)
                     position.set('position_price', 0)
                     position.set('position_discount_type', 'SUM')
@@ -159,6 +165,15 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                     positions.push(subposition);
                 });
             }
+
+            // NOTE: the unit of a position is a record, products still have a keyfield unit (e.g. 'PIECE') which
+            //       setFromProduct copies - no valid unit of a position (record with id = PIECE not found)
+            const defaultUnit = await this.getDefaultUnit();
+            positions.forEach((pos) => {
+                if (pos.get('unit') && !Ext.isObject(pos.get('unit'))) {
+                    pos.set('unit', defaultUnit);
+                }
+            });
 
             // add sorted positions
             // shall we ignore sorting of own group?
@@ -219,6 +234,21 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         return false;
     },
 
+    /**
+     * unit of a manual product position: piece (H87)
+     *
+     * NOTE: the unit is a record (UN/ECE Recommendation N°20, Sales_Model_EDocument_UnitOfMeasure) - the former
+     *       string 'PIECE' isn't a valid unit anymore (record with id = PIECE not found)
+     */
+    getDefaultUnit() {
+        if (!this.defaultUnitPromise) {
+            this.defaultUnitPromise = Tine.Sales.searchEDocument_UnitOfMeasures([
+                { field: 'code', operator: 'equals', value: 'H87' }
+            ], {}).then((result) => result?.results?.[0] || null).catch(() => null);
+        }
+        return this.defaultUnitPromise;
+    },
+
     onAfterManualSort() {
         this.applyNumbering();
     },
@@ -275,15 +305,94 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             e.cancel = true;
         }
 
-        if (e.field === 'title' && Ext.fly(Ext.EventObject.getTarget()).hasClass('sales-document-positiongrid-description')) {
-            e.cancel = true;
-            // const target = Ext.EventObject.getTarget();
-            _.defer(() => {
-                // @TODO start a textarea editor
-                // NOTE: inline might become hard as we need enter key for newlines
-                // what about tab key, shouldn't it switch to description?
-            })
+    },
+
+    // NOTE: clicksToEdit 1 starts the editor with the first click - the second click of a double click then lands in
+    //       the editor and the position dialog (celldblclick) doesn't open. so the editor is started delayed and a
+    //       double click cancels it
+    editDelay: 300,
+
+    onCellDblClick(grid, row, col, e) {
+        // NOTE: Ext.EventObject is reused, remember the clicked element (title or description) now
+        const target = e?.getTarget?.();
+        this.cancelDelayedEditing();
+        this.delayedEditing = setTimeout(() => {
+            this.delayedEditing = null;
+            if (target && Ext.fly(target).hasClass('sales-document-positiongrid-description')) {
+                this.startDescriptionEditing(row, target);
+            } else {
+                this.startEditing(row, col);
+            }
+        }, this.editDelay);
+    },
+
+    cancelDelayedEditing() {
+        clearTimeout(this.delayedEditing);
+        this.delayedEditing = null;
+    },
+
+    /**
+     * the description is shown below the title in the title cell - it gets an own textarea editor on top of it
+     * (enter: new line, ctrl/cmd + enter or leaving the field: done, esc: cancel)
+     */
+    startDescriptionEditing(row, el) {
+        const record = this.store.getAt(row);
+        if (!record) return;
+        const e = {
+            grid: this,
+            record,
+            field: 'description',
+            value: record.get('description'),
+            row,
+            column: this.colModel.findColumnIndex('title'),
+            cancel: false
+        };
+        // same rules as for the cell editors (read only grid, position type, ...)
+        if (this.fireEvent('beforeedit', e) === false || e.cancel) return;
+
+        this.stopEditing();
+        const editor = this.getDescriptionEditor();
+        editor.editingRecord = record;
+        editor.editingEvent = e;
+        editor.startEdit(el, record.get('description') || '');
+        editor.field.autoSize();
+    },
+
+    getDescriptionEditor() {
+        if (!this.descriptionEditor) {
+            // as high as its text, no extra line
+            const field = new Ext.form.TextArea({ grow: true, growMin: 0, growMax: 600, growAppend: '' });
+            const editor = this.descriptionEditor = new Ext.Editor(field, {
+                autoSize: 'width',
+                // on top of the description (below the title), not centered on it
+                alignment: 'tl-tl',
+                ignoreNoChange: true,
+                shadow: false,
+                cls: 'sales-document-positiongrid-description-editor',
+                parentEl: this.getView().getEditorParent(),
+                listeners: {
+                    scope: this,
+                    complete: (editor, value, startValue) => {
+                        const record = editor.editingRecord;
+                        record.set('description', value);
+                        this.fireEvent('afteredit', Object.assign(editor.editingEvent, { value, originalValue: startValue }));
+                    },
+                    // saved, unchanged or cancelled
+                    hide: (editor) => {
+                        editor.boundEl?.setStyle('min-height', '');
+                    }
+                }
+            });
+            // the row grows with the editor: the (hidden) description keeps the height of the textarea
+            field.on('autosize', (field, height) => {
+                if (editor.editing && editor.boundEl) {
+                    // NOTE: min-height doesn't include the padding of the description
+                    editor.boundEl.setStyle('min-height', `${height - editor.boundEl.getPadding('tb')}px`);
+                    editor.realign();
+                }
+            });
         }
+        return this.descriptionEditor;
     },
 
     // inline edit
@@ -421,7 +530,16 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     checkState(editDialog, record) {
         if (!this.editDialog) {
             this.editDialog = editDialog
-            this.getProductPicker().localizedLangPicker = this.editDialog.getForm().findField('document_language')
+            const documentLanguage = this.editDialog.getForm().findField('document_language')
+            this.getProductPicker().localizedLangPicker = documentLanguage
+            // the record pickers of the inline editors (e.g. the unit) search / show localized records in the document
+            // language as well, they don't find the dialog's picker themselves (an editor field has no ownerCt)
+            this.colModel.config.forEach((col) => {
+                const field = col.editor?.field || col.editor
+                if (field instanceof Tine.Tinebase.widgets.form.RecordPickerComboBox) {
+                    field.localizedLangPicker = documentLanguage
+                }
+            })
             Object.assign(this.editDialogConfig, {
                 documentEditDialog: editDialog,
                 localizedLangPicker: editDialog.fields.document_language,

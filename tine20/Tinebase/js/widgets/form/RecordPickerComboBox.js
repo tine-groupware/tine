@@ -424,9 +424,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      */
     onSpecialkey: function (combo, event) {
         if (event.getKey() === event.ENTER) {
-            var id = combo.getValue();
-            var record = this.store.getById(id);
-            this.onSelect(record);
+            // NOTE: in an editor (grid) getValue() returns the data of the selected record, not its id
+            const value = combo.getValue();
+            const record = this.store.getById(Ext.isObject(value) ? value[this.valueField] : value);
+            // NOTE: onSelect(undefined) would drop the selected record (e.g. the editor completing with enter)
+            if (record) {
+                this.onSelect(record);
+            }
         }
     },
 
