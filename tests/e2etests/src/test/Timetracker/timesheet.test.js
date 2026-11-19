@@ -61,19 +61,52 @@ describe('Create and delete time sheet', () => {
         // Click on entry and press Delete key.
         await lib.clickOnElementWithLabel(global.page, '.t-app-timetracker div.x-grid3-col-description', testDescription);
         await global.page.waitForSelector('.t-app-timetracker .x-grid3-row-selected', { visible: true, timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE') });
+        // The delete action is disabled while the grid (re)loads (GridPanel.onStoreBeforeload), the row still looks
+        // selected then and the Delete key does nothing. Like a user, press it when the delete button is enabled.
+        await waitForDeleteButtonEnabled();
         await global.page.keyboard.press('Delete');
 
-        // TODO: This test always fails in CI. Fix it and re-enable.
-        // await verifyGridPanelDeleteRecordsWorks();
+        await verifyGridPanelDeleteRecordsWorks();
 
         // Wait for modal confirmation dialog to appear, click on "Ja" and wait until the dialog disappears.
-        await lib.answerMessageBox(global.page, 'yes');
+        try {
+            await lib.answerMessageBox(global.page, 'yes');
+        } catch (err) {
+            // tell why the Delete key did nothing (CI only failures)
+            err.message += ` - grid state: ${JSON.stringify(await getDeleteState())}`;
+            throw err;
+        }
 
         // Refresh grid and check for absence of the entry.
         await lib.refreshGridAndWaitForReady(global.page, '.t-app-timetracker');
         await expectPuppeteer(global.page).not.toMatchElement('.t-app-timetracker div.x-grid3-col-description', {text: testDescription});
     });
 });
+
+const deleteButtonSelector = '.t-app-timetracker .tine-mainscreen-centerpanel-north .x-btn-image.action_delete';
+
+function getDeleteState() {
+    return global.page.evaluate((selector) => {
+        const button = document.querySelector(selector);
+        return {
+            deleteButton: button ? !button.closest('.x-item-disabled') : 'not found',
+            selectedRows: document.querySelectorAll('.t-app-timetracker .x-grid3-row-selected').length,
+            focus: document.activeElement ? `${document.activeElement.tagName}.${document.activeElement.className}` : null,
+        };
+    }, deleteButtonSelector);
+}
+
+async function waitForDeleteButtonEnabled() {
+    try {
+        await global.page.waitForFunction((selector) => {
+            const button = document.querySelector(selector);
+            return button && !button.closest('.x-item-disabled');
+        }, {timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')}, deleteButtonSelector);
+    } catch (err) {
+        err.message = `delete button not enabled - grid state: ${JSON.stringify(await getDeleteState())}`;
+        throw err;
+    }
+}
 
 async function verifyGridPanelDeleteRecordsWorks() {
     // Wait for the confirmation modal to open (ensures the selected records are captured before the reload below).
