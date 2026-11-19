@@ -19,25 +19,31 @@ COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/jammy.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
 RUN apt-mirror activate \
  && apt-get update \
+ && apt-get -y install lsb-release ca-certificates curl \
+ && curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
+ && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
+ && sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list' \
+ && apt-mirror activate \
+ && apt-get update \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
-    php \
-    php-apcu \
-    php-bcmath \
-    php-curl \
-    php-fpm \
-    php-gd \
-    php-igbinary \
-    php-imagick \
-    php-intl \
-    php-ldap \
-    php-mbstring \
-    php-mysql \
-    php-phpdbg \
-    php-redis \
-    php-soap \
-    php-xml \
-    php-yaml \
-    php-zip \
+    php8.1 \
+    php8.1-apcu \
+    php8.1-bcmath \
+    php8.1-curl \
+    php8.1-fpm \
+    php8.1-gd \
+    php8.1-igbinary \
+    php8.1-imagick \
+    php8.1-intl \
+    php8.1-ldap \
+    php8.1-mbstring \
+    php8.1-mysql \
+    php8.1-phpdbg \
+    php8.1-redis \
+    php8.1-soap \
+    php8.1-xml \
+    php8.1-yaml \
+    php8.1-zip \
     tzdata \
  && rm -rf /var/lib/apt/lists/* \
  && apt-mirror deactivate \
@@ -95,25 +101,31 @@ COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/noble.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
 RUN apt-mirror activate \
  && apt-get update \
+ && apt-get -y install lsb-release ca-certificates curl \
+ && curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
+ && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
+ && sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list' \
+ && apt-mirror activate \
+ && apt-get update \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
-    php \
-    php-apcu \
-    php-bcmath \
-    php-curl \
-    php-fpm \
-    php-gd \
-    php-igbinary \
-    php-imagick \
-    php-intl \
-    php-ldap \
-    php-mbstring \
-    php-mysql \
-    php-phpdbg \
-    php-redis \
-    php-soap \
-    php-xml \
-    php-yaml \
-    php-zip \
+    php8.3 \
+    php8.3-apcu \
+    php8.3-bcmath \
+    php8.3-curl \
+    php8.3-fpm \
+    php8.3-gd \
+    php8.3-igbinary \
+    php8.3-imagick \
+    php8.3-intl \
+    php8.3-ldap \
+    php8.3-mbstring \
+    php8.3-mysql \
+    php8.3-phpdbg \
+    php8.3-redis \
+    php8.3-soap \
+    php8.3-xml \
+    php8.3-yaml \
+    php8.3-zip \
     tzdata-legacy \
  && rm -rf /var/lib/apt/lists/* \
  && apt-mirror deactivate \
