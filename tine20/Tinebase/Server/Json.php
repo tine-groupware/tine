@@ -390,11 +390,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             return $response;
             
         } catch (Throwable $exception) {
-            if ($retries < 2 && $exception instanceof Zend_Db_Statement_Exception && str_contains($exception->getMessage(),
-                    'Deadlock found')) {
+            if ($retries < 2 && Tinebase_Exception::isDbTransactionRetryable($exception)) {
+                // NOTE: changes outside of the database (e.g. LDAP, IMAP) of the failed try are not rolled back
                 Tinebase_TransactionManager::getInstance()->rollBack();
                 Tinebase_Exception::log($exception);
-                Tinebase_Exception::log(new Tinebase_Exception_Backend('Deadlock found, retrying: ' . $retries));
+                Tinebase_Exception::log(new Tinebase_Exception_Backend('Retryable database error'
+                    . ' (deadlock / snapshot conflict), retrying: ' . $retries));
                 return $this->_handle($request, $retries + 1);
             }
             return $this->_handleException($request, $exception);
