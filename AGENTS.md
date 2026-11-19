@@ -142,6 +142,8 @@ Read `CONTRIBUTING.md` before opening PRs.
   - Link issues: `See #1234`, close with `Closes #1234`
   - Doc follow-ups: `@usermanual`, `@releasenotes`
 - **Tests:** add PHPUnit tests for PHP changes (`tests/tine20/`); add Karma/Jest tests for JS where applicable.
+- **Workflow:** target branch, local tests, merge requests and failed pipelines: skill `contributing`
+  (`.agents/skills/contributing`); reviews: skill `review`.
 
 ## Documentation map (for agents)
 
