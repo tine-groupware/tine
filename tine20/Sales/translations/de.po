@@ -132,7 +132,7 @@ msgid "eDocument"
 msgstr "eDokument"
 
 msgid "Supporting Document"
-msgstr "Unterstützendes Dokument"
+msgstr "Rechnungsbegründende Unterlage"
 
 msgid "Start"
 msgstr "Start"
@@ -980,11 +980,14 @@ msgid_plural "Boilerplates"
 msgstr[0] "Textbaustein"
 msgstr[1] "Textbausteine"
 
-msgid "Include to Dispatch Document"
-msgstr "In Belegversandt aufnehmen"
+msgid "Mark as Supporting Document"
+msgstr "Als rechnungsbegründende Unterlage markieren"
 
-msgid "Exclude from Dispatch Document"
-msgstr "Vom Belegversandt ausschließen"
+msgid "Unmark as Supporting Document"
+msgstr "Markierung als rechnungsbegründende Unterlage entfernen"
+
+msgid "Dispatched with the document if its dispatch configuration contains supporting documents."
+msgstr "Wird mit dem Beleg versendet, wenn dessen Versandkonfiguration rechnungsbegründende Unterlagen enthält."
 
 msgid "Show Dispatch History"
 msgstr "Zeige Belegversandt Historie"

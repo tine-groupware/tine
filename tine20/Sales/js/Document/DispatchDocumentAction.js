@@ -181,7 +181,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         { name: 'edocument', text: app.formatMessage('eDocument ({ filename })', {filename: edocument ? edocument.name : app.formatMessage('Generated when dispatched')}), file: edocument, checked: documentTypes.indexOf('edocument') >=0 }
                     ], _.reduce(record.get('attachments'), (docs, attachment) => {
                         const attachedDocument = _.find(record.get('attached_documents'), { node_id: attachment.id })
-                        if (! attachedDocument || attachedDocument.type === 'supporting_document') {
+                        if (! attachedDocument || attachedDocument.type === 'supportingDoc') {
                             // NOTE: MultiOptionsDialog renders texts starting with '<' as html
                             docs.push({ name: attachment.id, text: `<span>${Ext.util.Format.htmlEncode(attachment.name)}</span>`, file: attachment, checked: !!attachedDocument})
                         }

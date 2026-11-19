@@ -20,9 +20,11 @@ class Sales_Model_Document_AttachedDocument extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'Document_AttachedDocument';
     public const TABLE_NAME = 'sales_document_attached_document';
 
-    public const TYPE_PAPERSLIP = 'paperslip';
-    public const TYPE_EDOCUMENT = 'edocument';
-    public const TYPE_SUPPORTING_DOCUMENT = 'supporting_document';
+    // the types are the ids of the keyfield Sales_Config::ATTACHED_DOCUMENT_TYPES (dispatch config)
+    // paperslip and edocument are managed by the server only, supporting documents are marked by the user
+    public const TYPE_PAPERSLIP = Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP;
+    public const TYPE_EDOCUMENT = Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT;
+    public const TYPE_SUPPORTING_DOCUMENT = Sales_Config::ATTACHED_DOCUMENT_TYPES_SUPPORTING_DOC;
 
 
     public const FLD_DOCUMENT_ID = 'document_id';
