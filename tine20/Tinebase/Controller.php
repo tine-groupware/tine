@@ -1306,7 +1306,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         });
     }
 
-    public function publicPrivacyPolicy($path = null)
+    public function publicPrivacyPolicy(?string $path = null): \Psr\Http\Message\ResponseInterface
     {
         $locale = Tinebase_Core::getLocale();
         $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Tinebase";
@@ -1323,10 +1323,18 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         // Check if it's a static page
         if (isset($allowedPages[$path])) {
             $template = $allowedPages[$path];
-            return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase', "$template.html.twig", context: $context);
+            return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles,
+                Tinebase_Config::APP_NAME,
+                "$template.html.twig", context: $context);
         }
 
-        return new \Laminas\Diactoros\Response(json_encode(['error' => 'Not found']), 404, ['Content-Type' => 'application/json']);
+        $response = new \Laminas\Diactoros\Response(status: 404, headers: [
+            'Content-Type' => 'application/json',
+        ]);
+        $response->getBody()->write(json_encode([
+            'error' => 'Not found'
+        ]));
+        return $response;
     }
 
     public function publicStatusPhpApi(): \Psr\Http\Message\ResponseInterface
@@ -1340,7 +1348,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             'versionstring' => '10.0.10',
             'maintenance'   => false,
             'edition'       => '',
-            'productname'   => 'Tine 2.0' // lets try it ;-)
+            'productname'   => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE}
         ]));
         return $response;
     }
