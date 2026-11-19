@@ -17,6 +17,8 @@ use Sales_Model_DocumentPosition_Invoice as SMDPI;
  */
 class Sales_Document_UblTest extends Sales_Document_Abstract
 {
+    protected const SUPPORTING_DOC_NAME = 'supporting-document.pdf';
+
     protected $oldEDocSvc = null;
 
     public function setUp(): void
@@ -487,6 +489,164 @@ EOSTR;
         $pdf = (new Sales_EDocument_Service_Convert)->embedZugPferd(Tinebase_FileSystem::getInstance()->getNodeContents($invoice->attachments->find(fn($rec) => str_ends_with($rec->name, '.pdf'), null)->getId()), $cii);
 
         $this->assertNotNull(Sales_EDocument_ZUGFeRD::isStringZugFeRD($pdf));
+    }
+
+    public function testUblSupportingDocument(): void
+    {
+        $invoice = $this->_createBookedInvoiceWithSupportingDocument();
+
+        // creates the UBL attachment, the edocument validation service checks it
+        $salesTax = Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX};
+        $xml = $this->_assertUblXml($invoice, 10, round(10 * (1 + $salesTax / 100), 2));
+
+        $this->assertCount(1, $docRefIds = $xml->xpath('/ubl:Invoice/cac:AdditionalDocumentReference/cbc:ID'));
+        $this->assertSame(self::SUPPORTING_DOC_NAME, (string)$docRefIds[0]);
+        $this->assertCount(1, $binaryObjects = $xml->xpath('/ubl:Invoice/cac:AdditionalDocumentReference'
+            . '/cac:Attachment/cbc:EmbeddedDocumentBinaryObject'));
+        $this->_assertEmbeddedSupportingDocument($binaryObjects[0]);
+
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $validationResult = (new Sales_EDocument_Service_Validate())->validateXRechnungContent(
+            $this->_getAttachedDocumentContent($invoice, Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT)
+        );
+        $this->assertSame([], $validationResult['errors'], $validationResult['html']);
+    }
+
+    public function testZugpferdSupportingDocument(): void
+    {
+        $invoice = $this->_createBookedInvoiceWithSupportingDocument();
+        Sales_Controller_Document_Invoice::getInstance()->createEDocument($invoice->getId());
+        $this->_createPaperSlip($invoice);
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(3, $invoice->attachments->count());
+
+        $convertSvc = new Sales_EDocument_Service_Convert();
+        $cii = $convertSvc->convertUblToCii(
+            $this->_getAttachedDocumentContent($invoice, Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT)
+        );
+        $this->_assertCiiSupportingDocument($cii);
+
+        $pdf = $convertSvc->embedZugPferd(
+            $this->_getAttachedDocumentContent($invoice, Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP),
+            $cii
+        );
+        $this->assertNotNull($zugPferd = Sales_EDocument_ZUGFeRD::isStringZugFeRD($pdf), 'result is not a ZUGFeRD pdf');
+        $this->_assertCiiSupportingDocument($zugPferd->getXml());
+
+        $validationResult = (new Sales_EDocument_Service_Validate())->validateXRechnungContent($pdf);
+        $this->assertSame([], $validationResult['errors'], $validationResult['html']);
+    }
+
+    protected function _getSupportingDocumentPath(): string
+    {
+        return dirname(__DIR__, 2) . '/Tinebase/files/multipage-text.pdf';
+    }
+
+    /**
+     * creates a booked invoice with one pdf attachment that is marked as supporting document
+     */
+    protected function _createBookedInvoiceWithSupportingDocument(): SMDI
+    {
+        $product = $this->_createProduct();
+        $invoice = $this->_createUblInvoice([
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 10,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
+            ], true),
+        ]);
+
+        $fh = fopen($this->_getSupportingDocumentPath(), 'r');
+        $node = Tinebase_FileSystem_RecordAttachments::getInstance()
+            ->addRecordAttachment($invoice, self::SUPPORTING_DOC_NAME, $fh);
+        fclose($fh);
+        $this->assertSame('application/pdf', $node->contenttype);
+
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        if (!$invoice->{SMDI::FLD_ATTACHED_DOCUMENTS} instanceof Tinebase_Record_RecordSet) {
+            $invoice->{SMDI::FLD_ATTACHED_DOCUMENTS} =
+                new Tinebase_Record_RecordSet(Sales_Model_Document_AttachedDocument::class, []);
+        }
+        $invoice->{SMDI::FLD_ATTACHED_DOCUMENTS}->addRecord(new Sales_Model_Document_AttachedDocument([
+            Sales_Model_Document_AttachedDocument::FLD_TYPE =>
+                Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT,
+            Sales_Model_Document_AttachedDocument::FLD_NODE_ID => $node->getId(),
+            Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $invoice->{SMDI::FLD_DOCUMENT_SEQ},
+        ], true));
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $this->assertNotNull($invoice->{SMDI::FLD_ATTACHED_DOCUMENTS}->find(
+            Sales_Model_Document_AttachedDocument::FLD_TYPE,
+            Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT
+        ));
+
+        return $invoice;
+    }
+
+    protected function _createPaperSlip(SMDI $invoice): void
+    {
+        $app = Tinebase_Application::getInstance()->getApplicationByName(OnlyOfficeIntegrator_Config::APP_NAME);
+        $app->status = Tinebase_Application::DISABLED;
+        Tinebase_Application::getInstance()->updateApplication($app);
+
+        $fsConfig = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
+        $oldFsCfg = $fsConfig->toArray();
+        $fsCfgRaii = new Tinebase_RAII(
+            fn() => Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $oldFsCfg
+        );
+        $fsConfig->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL} = 'https://dsp.test-dsp.se.mwk8s.net/convert/';
+        $fsConfig->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_VERSION} = 2;
+
+        (new Sales_Frontend_Json())->createPaperSlip(Sales_Model_Document_Invoice::class, $invoice->getId());
+        unset($fsCfgRaii);
+    }
+
+    protected function _getAttachedDocumentContent(SMDI $invoice, string $type): string
+    {
+        $this->assertNotNull(
+            $attachedDoc = $invoice->{SMDI::FLD_ATTACHED_DOCUMENTS}
+                ->find(Sales_Model_Document_AttachedDocument::FLD_TYPE, $type),
+            'no attached document of type ' . $type
+        );
+        return Tinebase_FileSystem::getInstance()->getNodeContents(
+            $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID}
+        );
+    }
+
+    protected function _assertCiiSupportingDocument(string $cii): void
+    {
+        $xml = new SimpleXMLElement($cii);
+        $xml->registerXPathNamespace('rsm', 'urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100');
+        $xml->registerXPathNamespace(
+            'ram',
+            'urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100'
+        );
+
+        $this->assertCount(1, $binaryObjects = $xml->xpath('/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction'
+            . '/ram:ApplicableHeaderTradeAgreement/ram:AdditionalReferencedDocument[ram:IssuerAssignedID="'
+            . self::SUPPORTING_DOC_NAME . '"]/ram:AttachmentBinaryObject'), 'supporting document missing in CII');
+        $this->_assertEmbeddedSupportingDocument($binaryObjects[0]);
+    }
+
+    /**
+     * checks mime code, file name and content of an embedded binary object (UBL or CII)
+     */
+    protected function _assertEmbeddedSupportingDocument(SimpleXMLElement $binaryObject): void
+    {
+        $this->assertSame('application/pdf', (string)$binaryObject['mimeCode']);
+        $this->assertSame(self::SUPPORTING_DOC_NAME, (string)$binaryObject['filename']);
+        $this->assertNotFalse($content = base64_decode(preg_replace('/\s+/', '', (string)$binaryObject), true));
+        $this->assertSame(md5_file($this->_getSupportingDocumentPath()), md5($content), 'embedded content differs');
     }
 
     public function testPositionNetDiscount(): void

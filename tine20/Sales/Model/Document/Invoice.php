@@ -12,7 +12,16 @@
 use GoetasWebservices\Xsd\XsdToPhpRuntime\Jms\Handler\BaseTypesHandler;
 use GoetasWebservices\Xsd\XsdToPhpRuntime\Jms\Handler\XmlSchemaDateHandler;
 use JMS\Serializer\Handler\HandlerRegistryInterface;
+use Symfony\Component\HttpClient\HttpClient;
 use Tinebase_Model_Filter_Abstract as TMFA;
+
+use Symfony\AI\Platform\Bridge\Generic\CompletionsModel;
+use Symfony\AI\Platform\Bridge\Generic\Factory;
+use Symfony\AI\Platform\Bridge\Generic\ModelCatalog;
+use Symfony\AI\Platform\Capability;
+use Symfony\AI\Platform\Message\Message;
+use Symfony\AI\Platform\Message\MessageBag;
+use Symfony\AI\Platform\PlatformOptions;
 
 /**
  * Invoice Document Model
@@ -78,7 +87,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 self::CONFIG                        => [
                     self::NO_AUTO_TRANSITION            => true,
                 ],
-            ]
+            ],
         ]);
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::NULLABLE] = true;
@@ -127,7 +136,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 ],
             ],
             self::UI_CONFIG         => [
-                'xtype'                 => 'wdgt.pickergrid-layercombo'
+                'xtype'                 => 'wdgt.pickergrid-layercombo',
             ],
         ];
 
@@ -340,7 +349,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [],
                     ],
                 ],
-            ]
+            ],
         ]))->expand(new Tinebase_Record_RecordSet(self::class, [$this]));
 
         if (null !== $this->{self::FLD_POSITIONS}->find(Sales_Model_DocumentPosition_Abstract::FLD_REVERSAL, 1)) {
@@ -370,7 +379,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             ->setInvoicePeriod($this->{self::FLD_SERVICE_PERIOD_START} && $this->{self::FLD_SERVICE_PERIOD_END} ?
                 [(new \UBL21\Common\CommonAggregateComponents\InvoicePeriod())
                     ->setStartDate($this->{self::FLD_SERVICE_PERIOD_START})
-                    ->setEndDate($this->{self::FLD_SERVICE_PERIOD_END})
+                    ->setEndDate($this->{self::FLD_SERVICE_PERIOD_END}),
                 ] : []
             )
 
@@ -406,7 +415,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         : null
                     )
                     ->setPartyLegalEntity([(new \UBL21\Common\CommonAggregateComponents\PartyLegalEntity())
-                        ->setRegistrationName(new \UBL21\Common\CommonBasicComponents\RegistrationName($division->{Sales_Model_Division::FLD_NAME}))
+                        ->setRegistrationName(new \UBL21\Common\CommonBasicComponents\RegistrationName($division->{Sales_Model_Division::FLD_NAME})),
                     ])
                     ->setPostalAddress((new \UBL21\Common\CommonAggregateComponents\PostalAddress())
                         ->setStreetName(new \UBL21\Common\CommonBasicComponents\StreetName($division->{Sales_Model_Division::FLD_ADDR_PREFIX1}))
@@ -436,7 +445,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                     ->setPartyName(trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX1}) ? [(new \UBL21\Common\CommonAggregateComponents\PartyName)->setName(new \UBL21\Common\CommonBasicComponents\Name(trim((string)$billingAddress->{Sales_Model_Address::FLD_PREFIX1})))] : [])
                     ->setPartyLegalEntity([(new \UBL21\Common\CommonAggregateComponents\PartyLegalEntity())
-                        ->setRegistrationName(new \UBL21\Common\CommonBasicComponents\RegistrationName(trim((string)$billingAddress->{Sales_Model_Address::FLD_NAME}) ?: $this->{self::FLD_CUSTOMER_ID}->name))
+                        ->setRegistrationName(new \UBL21\Common\CommonBasicComponents\RegistrationName(trim((string)$billingAddress->{Sales_Model_Address::FLD_NAME}) ?: $this->{self::FLD_CUSTOMER_ID}->name)),
                     ])
                     ->setPostalAddress((new \UBL21\Common\CommonAggregateComponents\PostalAddress())
                         ->setStreetName(
@@ -526,19 +535,19 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         if (trim((string)$this->{self::FLD_PROJECT_REFERENCE})) {
             $ublInvoice->setProjectReference([
                 (new \UBL21\Common\CommonAggregateComponents\ProjectReference())
-                    ->setID(new \UBL21\Common\CommonBasicComponents\ID(trim((string)$this->{self::FLD_PROJECT_REFERENCE})))
+                    ->setID(new \UBL21\Common\CommonBasicComponents\ID(trim((string)$this->{self::FLD_PROJECT_REFERENCE}))),
             ]);
         }
         // BT-12: Contract reference
         if ($this->{self::FLD_CONTRACT_ID} instanceof Sales_Model_Contract) {
             $ublInvoice->setContractDocumentReference([
                 (new \UBL21\Common\CommonAggregateComponents\ContractDocumentReference)
-                    ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_CONTRACT_ID}->number))
+                    ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_CONTRACT_ID}->number)),
             ]);
         } elseif ($this->{self::FLD_CONTRACT_NUMBER}) {
             $ublInvoice->setContractDocumentReference([
                 (new \UBL21\Common\CommonAggregateComponents\ContractDocumentReference)
-                    ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_CONTRACT_NUMBER}))
+                    ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_CONTRACT_NUMBER})),
             ]);
         }
         // BT-13: Purchase order reference
@@ -628,7 +637,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                                 round(($position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_PRICE} * 100) / (100 + (float)$position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE}) - $position->{Sales_Model_DocumentPosition_Invoice::FLD_NET_PRICE}, 2)
                                 : $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_DISCOUNT_SUM})))
                                 ->setCurrencyID('EUR')
-                            )
+                            ),
                     ] : null
                 )
                 ->setItem((new \UBL21\Common\CommonAggregateComponents\Item)
@@ -732,7 +741,193 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             }
         }
 
+        $fs = Tinebase_FileSystem::getInstance();
+        /** @var Sales_Model_Document_AttachedDocument $attachedDoc */
+        foreach ($this->{self::FLD_ATTACHED_DOCUMENTS} ?? [] as $attachedDoc) {
+            $attachedDocType = $attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_TYPE};
+            if (Sales_Model_Document_AttachedDocument::TYPE_SUPPORTING_DOCUMENT !== $attachedDocType) {
+                continue;
+            }
+            $node = $fs->get($attachedDoc->{Sales_Model_Document_AttachedDocument::FLD_NODE_ID});
+            // BG-24: Additional supporting documents
+            $ublInvoice->addToAdditionalDocumentReference((new \UBL21\Common\CommonAggregateComponents\AdditionalDocumentReference())
+                // BT-122: Supporting document reference
+                ->setID(new \UBL21\Common\CommonBasicComponents\ID($node->name))
+                // BT-125: Attached document
+                ->setAttachment((new \UBL21\Common\CommonAggregateComponents\Attachment())
+                    ->setEmbeddedDocumentBinaryObject((new \UBL21\Common\CommonBasicComponents\EmbeddedDocumentBinaryObject($fs->getNodeContents($node->getId())))
+                        // BT-125-1: Attached document Mime code
+                        ->setMimeCode($node->contenttype)
+                        // BT-125-2: Attached document Filename
+                        ->setFilename($node->name)
+                    )
+                )
+            );
+        }
+
         $xml = $serializer->serialize($ublInvoice, 'xml');
         return $xml;
+    }
+
+    public static function createPositionsFromFileLocation(Tinebase_Model_FileLocation $fileLocation): self
+    {
+        $mdContent = null;
+        if ($doclingUrl = Tinebase_Config::getInstance()->{Tinebase_Config::DOCLING_SERVE_URL}) {
+            $doclingClient = Tinebase_Core::getHttpClient($doclingUrl . '/v1/convert/file', [
+                'timeout' => 120,
+            ]);
+            if ($apiKey = Tinebase_Config::getInstance()->{Tinebase_Config::DOCLING_SERVE_API_KEY}) {
+                $doclingClient->setHeaders([
+                    'Authorization' => 'Bearer ' . $apiKey,
+                ]);
+            }
+            $doclingClient->setMethod(Zend_Http_Client::POST);
+            $doclingClient->setFileUpload($fileLocation->getName(), 'files', $fileLocation->getContent(), 'application/pdf');
+            $doclingClient->setParameterPost([
+                'force_ocr' => false,
+                'image_export_mode' => 'placeholder',
+                'do_pdf_heading_hierarchy' => 'true',
+//                'pipeline' => 'vlm',
+//                // Enum: "smoldocling" "smoldocling_vllm" "granite_vision" "granite_vision_vllm" "granite_vision_ollama" "got_ocr_2" "granite_docling" "granite_docling_vllm" "deepseekocr_ollama"
+//                'vlm_pipeline_model' => 'granite_docling',
+//                'ocr_engine' => 'tesseract',
+//                'orc_lang' => 'deu,eng'
+            ]);
+
+            try {
+                $doclingResponse = $doclingClient->request();
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $doclingResponse->getStatus() . ' ' .
+                    $doclingResponse->getMessage() . PHP_EOL . $doclingResponse->getBody());
+                if ($doclingResponse->getStatus() === 200) {
+                    $mdContent = json_decode($doclingResponse->getBody(), true)['document']['md_content'];
+                } else {
+                    throw new Exception('failed docling request: ' . $doclingResponse->getRawBody());
+                }
+
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' unsuccessful dockling request: ' . $e->getMessage());
+            }
+        }
+
+        if ($mdContent && $llmUrl = Tinebase_Config::getInstance()->{Tinebase_Config::LLM_API_URL}) {
+
+            $modelCatalog = new ModelCatalog([
+                Sales_Config::getInstance()->{Sales_Config::UNSTRUCTURED_DOCUMENT_PARSER_LLM} => [
+                    'class' => CompletionsModel::class,
+                    'capabilities' => [
+                        Capability::INPUT_MESSAGES,
+                        Capability::OUTPUT_TEXT,
+                        Capability::OUTPUT_STREAMING,
+                        Capability::OUTPUT_STRUCTURED,
+                        Capability::INPUT_IMAGE,
+                        Capability::TOOL_CALLING,
+                    ],
+                ],
+            ]);
+
+            $platform = Factory::createPlatform(
+                $llmUrl,
+                Tinebase_Config::getInstance()->{Tinebase_Config::LLM_API_KEY},
+                HttpClient::create(['max_duration' => 600, 'timeout' => 600]),
+                $modelCatalog
+                //completionsPath: '/v1/chat/completions',
+            );
+
+            $messages = new MessageBag(
+                Message::forSystem(<<<EOT
+You are a professional accounting data extraction system.
+
+The document may be German or English.
+
+Your task:
+Extract invoice title and positions strictly from the provided text.
+
+CRITICAL RULES:
+- Return ONLY valid JSON.
+- Do NOT include markdown.
+- Do NOT include explanations.
+- Do NOT calculate missing values.
+- Do NOT infer values that are not explicitly written.
+- Do NOT use None as value, use null instead.
+- If a value is not explicitly present, return null.
+- Numbers must be JSON numbers (not strings).
+- Use dot as decimal separator.
+- Dates must be ISO format YYYY-MM-DD.
+- Currency must be a 3-letter ISO 4217 code (e.g. EUR, USD).
+- Do NOT wrap the JSON in markdown.
+- Do NOT use ```json code blocks.
+- Fields with enumerated values must match exactly one of the allowed values.
+- Only include data explicitly present in the document.
+- Title must not be longer than 255 characters. Longer text belongs into description.
+- The provided text may contain date formats like MM/YYYY which means from first to last day of that month.
+- The provided text may contain date formats like MM/YYYY - MM/YYYY which means from first day of the first month to last day of last month.
+- Do not ignore text positions.
+- The invoice title follows the word "Rechnung" or "Invoice", it may not be present, leave it null in that case.
+- Units should be one of 'null', 'piece', 'hour', 'week', 'month', 'year', 'gigabyte'. Null is always null, if a value is present and in doubt fallback is 'piece'. If the unit contains more than one unit, for example 'piece / month': always use the unit other than 'piece' - in this case: 'month'
+
+
+Return ONLY valid JSON in this exact structure:
+
+{
+  "title": string | null,
+  "positions": [
+    {
+      "pos_number": string | null,
+      "title": string | null,
+      "description": string | null,
+      "quantity": number | null,
+      "unit": string | null,
+      "unit_price": number | null,
+      "position_price": number | null,
+      "service_period_start": "YYYY-MM-DD" | null
+      "service_period_end": "YYYY-MM-DD" | null
+    }
+  ],
+}
+EOT
+                ),
+                Message::ofUser($mdContent),
+            );
+            $result = $platform->invoke(Sales_Config::getInstance()->{Sales_Config::UNSTRUCTURED_DOCUMENT_PARSER_LLM} ,
+                $messages, [
+                    PlatformOptions::MAX_OUTPUT_TOKENS => 32768,
+                    'temperature' => 1,
+                    'top_p'              => 0.95,
+                    'reasoning_effort'   => 'medium',
+                ]);
+
+            $resultText = $result->asText();
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' ' . (empty($resultText) ? print_r($result->getRawResult()->getData(), true) : $resultText));
+
+            if (!($result = json_decode($resultText, true)) || !is_array($result[Sales_Model_Document_Invoice::FLD_POSITIONS] ?? null)) {
+                throw new Tinebase_Exception('bad llm response');
+            }
+
+            $units = Sales_Controller_EDocument_UnitOfMeasure::getInstance()->getAll();
+            Tinebase_Record_Expander::expandRecords($units);
+            $piece = $units->find(Sales_Model_EDocument_UnitOfMeasure::FLD_CODE, 'H87');
+            foreach ($result[Sales_Model_Document_Invoice::FLD_POSITIONS] as $offset => &$position) {
+                $position[Sales_Model_DocumentPosition_Invoice::FLD_SORTING] = ($offset + 1) * 10000;
+                if ($unit = ($position[Sales_Model_DocumentPosition_Invoice::FLD_UNIT] ?? false)) {
+                    if ('piece' === $unit) {
+                        $position[Sales_Model_DocumentPosition_Invoice::FLD_UNIT] = $piece->getId();
+                    } else {
+                        $position[Sales_Model_DocumentPosition_Invoice::FLD_UNIT] = ($units->find(
+                            fn($unit) => $unit->{Sales_Model_EDocument_UnitOfMeasure::FLD_NAME}->find(
+                                Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_TEXT,
+                                $position[Sales_Model_DocumentPosition_Invoice::FLD_UNIT]
+                            ),
+                            null
+                        ) ?? $piece)->getId();
+                    }
+                }
+            }
+
+            return new self($result, true);
+        }
+
+        throw new Tinebase_Exception('config not properly configured');
     }
 }

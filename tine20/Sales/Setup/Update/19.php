@@ -265,7 +265,7 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
                 $db->update(SQL_TABLE_PREFIX . $table, ['unit' => $new->getId()], $db->quoteInto('unit = ?', $old));
             }
         }
-
+        
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '19.8', self::RELEASE019_UPDATE008);
     }
 }

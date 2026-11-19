@@ -947,6 +947,79 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_recordToJson($purchaseInvoice);
     }
 
+    public function importFromPreviousInvoicePdf(string $invoiceId): array
+    {
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoiceId);
+        $prevInvoice = Sales_Controller_Document_Invoice::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Invoice::class, [
+            [TMFA::FIELD => Sales_Model_Document_Invoice::FLD_CONTRACT_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $invoice->getIdFromProperty(Sales_Model_Document_Invoice::FLD_CONTRACT_ID)],
+            [TMFA::FIELD => Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE, TMFA::OPERATOR => 'before', TMFA::VALUE => $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE}],
+        ]), new Tinebase_Model_Pagination([
+            Tinebase_Model_Pagination::FLD_SORT => Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE,
+            Tinebase_Model_Pagination::FLD_DIR => 'DESC',
+            Tinebase_Model_Pagination::FLD_LIMIT => 1,
+        ]))->getFirstRecord();
+
+        if (null === $prevInvoice) {
+            throw new Tinebase_Exception_NotFound('previous invoice not found');
+        }
+
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($prevInvoice);
+        $attachment = null;
+        foreach ($prevInvoice->attachments as $tmp) {
+            if (str_ends_with($tmp->name, '.pdf')) {
+                $attachment = $tmp;
+                break;
+            }
+        }
+
+        if (null === $attachment) {
+            throw new Tinebase_Exception_NotFound('previous invoice attachment not found');
+        }
+        //try {
+            foreach ($positions = Sales_Model_Document_Invoice::createPositionsFromFileLocation(
+                new Tinebase_Model_FileLocation([
+                    Tinebase_Model_FileLocation::FLD_LOCATION => new Tinebase_Model_FileLocation_RecordAttachment(
+                        [
+                            Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $prevInvoice->getId(),
+                            Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Sales_Model_Document_Invoice::class,
+                            Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => $attachment->name,
+                        ]
+                    ),
+                    Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class
+                ])
+            )->{Sales_Model_Document_Invoice::FLD_POSITIONS} as $position) {
+                if (null !== $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_PRICE}) {
+                    $position->{Sales_Model_DocumentPosition_Invoice::FLD_TYPE} = Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT;
+                }
+                $position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE} =
+                    Sales_Config::VAT_PROCEDURE_STANDARD === $prevInvoice->{Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE} ? 19 : 0;
+                if (mb_strlen($position->title) > 255) {
+                    $position->title = mb_substr($position->title, 0, 252) . '...';
+                }
+                if ($position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_END} && $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_START}) {
+                    $months = round(($position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_END}->getTimestamp() - $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_START}->getTimestamp()) / (30 * 24 * 60 * 60));
+                    $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_START}->addMonth($months);
+                    $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_END} = $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_START}->getClone()->addMonth($months)->subDay(1);
+                }
+            }
+
+        /*} catch (Exception $e) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' reading positions from previous invoice pdf failed: ' . $e->getMessage());
+            Tinebase_Exception::log($e);
+        }*/
+
+        $invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS} = $positions;
+        return $this->_recordToJson(Sales_Controller_Document_Invoice::getInstance()->update($invoice));
+    }
+
+    public function createInvoiceFromFileLocation(array $fileLocation): array
+    {
+        $fileLocation = $this->_jsonToRecord($fileLocation, Tinebase_Model_FileLocation::class);
+        /** @var Tinebase_Model_FileLocation $fileLocation */
+        $invoice = Sales_Model_Document_Invoice::createPositionsFromFileLocation($fileLocation);
+        return $this->_recordToJson($invoice);
+    }
+
     /**
      * @apiTimeout 60
      * @param string $model

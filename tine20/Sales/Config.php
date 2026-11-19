@@ -62,6 +62,8 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const PRODUCT_NUMBER_GENERATION_AUTO = 'auto';
     public const PRODUCT_NUMBER_GENERATION_MANUAL = 'manual';
 
+    const UNSTRUCTURED_DOCUMENT_PARSER_LLM = 'unstructuredDocumentParserLLM';
+
     public const EDOCUMENT = 'edocument';
     public const EDOCUMENT_SVC_BASE_URL = 'svc_base_url';
     public const VALIDATION_SVC = 'validation_svc';
@@ -1488,6 +1490,15 @@ class Sales_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => '5'
         ),
+        self::UNSTRUCTURED_DOCUMENT_PARSER_LLM => [
+            self::LABEL                 => 'unstructured document parser LLM',
+            self::DESCRIPTION           => 'unstructured document parser LLM',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => 'qwen3.8-27b',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false
+        ],
         self::DEBITOR_DEFAULT_PAYMENT_MEANS => [
             self::LABEL                 => 'Debitor Default Payment Means', //_('Debitor Default Payment Means')
             self::DESCRIPTION           => 'Debitor Default Payment Means', //_('Debitor Default Payment Means')

@@ -1034,7 +1034,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     public const MUNICIPALITYKEY_DUP_FIELDS = 'municipalityKeyDupFields';
-    
+
+    public const DOCLING_SERVE_URL = 'doclingServeUrl';
+    public const DOCLING_SERVE_API_KEY = 'docLingServeApiKey';
+
+    public const LLM_API_URL = 'llmApiUrl';
+    public const LLM_API_KEY = 'llmApiKey';
 
     /**
      * action log types
@@ -3638,6 +3643,42 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             ),
             self::DEFAULT_STR => array(),
         ),
+        self::DOCLING_SERVE_URL => [
+            self::LABEL                 => 'docling-serve url',
+            self::DESCRIPTION           => 'docling-serve url',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false
+        ],
+        self::DOCLING_SERVE_API_KEY => [
+            self::LABEL                 => 'docling-serve api key',
+            self::DESCRIPTION           => 'docling-serve api key',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false
+        ],
+        self::LLM_API_URL => [
+            self::LABEL                 => 'llm api url',
+            self::DESCRIPTION           => 'llm api url',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false
+        ],
+        self::LLM_API_KEY => [
+            self::LABEL                 => 'llm api key',
+            self::DESCRIPTION           => 'llm api key',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false
+        ],
         self::FILTER_SYNC_TOKEN => [
             //_('Filter sync token settings')
             self::LABEL                 => 'Filter sync token settings',
