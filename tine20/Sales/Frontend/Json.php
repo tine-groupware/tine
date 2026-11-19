@@ -155,6 +155,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $sharedContainer->resolveGrantsAndPath();
         return array(
             'defaultContractContainer' => $sharedContainer->toArray(),
+            // e.g. "invoice from pdf" (Sales_Model_Document_Invoice::createPositionsFromFileLocation)
+            'canParseUnstructuredDocuments' => Sales_Model_Document_Invoice::canParseUnstructuredDocuments(),
         );
     }
 
@@ -947,71 +949,65 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_recordToJson($purchaseInvoice);
     }
 
+    /**
+     * reads the positions of an (auto) invoice again from the pdf of the previous invoice of the contract and saves
+     * the invoice - its positions are replaced
+     *
+     * @apiTimeout 780
+     * @param string $invoiceId
+     * @return array
+     */
     public function importFromPreviousInvoicePdf(string $invoiceId): array
     {
+        /** @var Sales_Model_Document_Invoice $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoiceId);
-        $prevInvoice = Sales_Controller_Document_Invoice::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Invoice::class, [
-            [TMFA::FIELD => Sales_Model_Document_Invoice::FLD_CONTRACT_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $invoice->getIdFromProperty(Sales_Model_Document_Invoice::FLD_CONTRACT_ID)],
-            [TMFA::FIELD => Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE, TMFA::OPERATOR => 'before', TMFA::VALUE => $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE}],
-        ]), new Tinebase_Model_Pagination([
-            Tinebase_Model_Pagination::FLD_SORT => Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE,
-            Tinebase_Model_Pagination::FLD_DIR => 'DESC',
-            Tinebase_Model_Pagination::FLD_LIMIT => 1,
-        ]))->getFirstRecord();
+        if (empty($invoice->xprops()[Sales_Model_Document_Invoice::XPROP_POSITIONS_FROM_PREVIOUS_INVOICE_PDF])) {
+            throw new Tinebase_Exception_SystemGeneric(
+                'the invoice was not created from the pdf of a previous invoice'
+            );
+        }
+        if ($invoice->isBooked()) {
+            throw new Tinebase_Exception_SystemGeneric('the invoice is booked');
+        }
 
+        // NOTE: the previous invoice is searched again, it might have been reversed and replaced by a new one
+        $prevInvoice = ($contractId = $invoice->getIdFromProperty(Sales_Model_Document_Invoice::FLD_CONTRACT_ID)) ?
+            Sales_Model_Document_Invoice::findPreviousInvoice($contractId, $invoice->getId()) : null;
         if (null === $prevInvoice) {
             throw new Tinebase_Exception_NotFound('previous invoice not found');
         }
-
-        Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($prevInvoice);
-        $attachment = null;
-        foreach ($prevInvoice->attachments as $tmp) {
-            if (str_ends_with($tmp->name, '.pdf')) {
-                $attachment = $tmp;
-                break;
-            }
+        if (!Sales_Model_Document_Invoice::isPositionsInPdf($prevInvoice)) {
+            throw new Tinebase_Exception_NotFound('the positions of the previous invoice are not in its pdf');
         }
-
-        if (null === $attachment) {
-            throw new Tinebase_Exception_NotFound('previous invoice attachment not found');
+        if (null === ($attachment = Sales_Model_Document_Invoice::getPdfAttachment($prevInvoice))) {
+            throw new Tinebase_Exception_NotFound('the previous invoice has no pdf');
         }
-        //try {
-            foreach ($positions = Sales_Model_Document_Invoice::createPositionsFromFileLocation(
-                new Tinebase_Model_FileLocation([
-                    Tinebase_Model_FileLocation::FLD_LOCATION => new Tinebase_Model_FileLocation_RecordAttachment(
-                        [
-                            Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $prevInvoice->getId(),
-                            Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Sales_Model_Document_Invoice::class,
-                            Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => $attachment->name,
-                        ]
-                    ),
-                    Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class
-                ])
-            )->{Sales_Model_Document_Invoice::FLD_POSITIONS} as $position) {
-                if (null !== $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_PRICE}) {
-                    $position->{Sales_Model_DocumentPosition_Invoice::FLD_TYPE} = Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT;
-                }
-                $position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE} =
-                    Sales_Config::VAT_PROCEDURE_STANDARD === $prevInvoice->{Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE} ? 19 : 0;
-                if (mb_strlen($position->title) > 255) {
-                    $position->title = mb_substr($position->title, 0, 252) . '...';
-                }
-                if ($position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_END} && $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_START}) {
-                    $months = round(($position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_END}->getTimestamp() - $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_START}->getTimestamp()) / (30 * 24 * 60 * 60));
-                    $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_START}->addMonth($months);
-                    $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_END} = $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_START}->getClone()->addMonth($months)->subDay(1);
-                }
-            }
-
-        /*} catch (Exception $e) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' reading positions from previous invoice pdf failed: ' . $e->getMessage());
-            Tinebase_Exception::log($e);
-        }*/
+        $positions = Sales_Model_Document_Invoice::createPositionsFromFileLocation(
+            new Tinebase_Model_FileLocation([
+                Tinebase_Model_FileLocation::FLD_LOCATION => new Tinebase_Model_FileLocation_RecordAttachment(
+                    [
+                        Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $prevInvoice->getId(),
+                        Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Sales_Model_Document_Invoice::class,
+                        Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => $attachment->name,
+                    ]
+                ),
+                Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class
+            ])
+        )->{Sales_Model_Document_Invoice::FLD_POSITIONS};
+        // NOTE: like the auto invoicing (Sales_Controller_Invoice), without the check tag of the billing period
+        Sales_Model_Document_Invoice::preparePositionsFromPreviousInvoicePdf($positions, $prevInvoice);
 
         $invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS} = $positions;
         return $this->_recordToJson(Sales_Controller_Document_Invoice::getInstance()->update($invoice));
     }
 
+    /**
+     * reads an invoice from a file (docling + llm), the invoice is not saved
+     *
+     * @apiTimeout 780
+     * @param array $fileLocation
+     * @return array
+     */
     public function createInvoiceFromFileLocation(array $fileLocation): array
     {
         $fileLocation = $this->_jsonToRecord($fileLocation, Tinebase_Model_FileLocation::class);

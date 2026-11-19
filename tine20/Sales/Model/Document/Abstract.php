@@ -151,6 +151,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         self::COPY_RELATIONS => false,
         self::HAS_TAGS => true,
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
+        self::HAS_XPROPS => true,
 
         self::CONTAINER_PROPERTY        => null,
         self::DELEGATED_ACL_FIELD       => self::FLD_DEBITOR_ID,
@@ -961,6 +962,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 $this->{$property} = $sourceDocument->{$property};
             }
         }
+        $this->_removeXpropsNotToCopy();
 
         $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
             new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
@@ -1375,6 +1377,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $this->{self::FLD_REVERSED_STATUS} = null;
         $this->{self::FLD_DISPATCH_HISTORY} = null;
         $this->{self::FLD_DOCUMENT_SEQ} = 1;
+        $this->_removeXpropsNotToCopy();
 
         parent::prepareForCopy();
 
@@ -1390,6 +1393,15 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         }
 
         $this->isValid();
+    }
+
+    /**
+     * xprops which describe how this document was created, they don't apply to copies / follow-up documents
+     */
+    protected function _removeXpropsNotToCopy(): void
+    {
+        $xprops = &$this->xprops();
+        unset($xprops[Sales_Model_Document_Invoice::XPROP_POSITIONS_FROM_PREVIOUS_INVOICE_PDF]);
     }
 
     /**

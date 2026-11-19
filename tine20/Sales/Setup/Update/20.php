@@ -15,8 +15,15 @@ class Sales_Setup_Update_20 extends Setup_Update_Abstract
 {
     protected const RELEASE020_UPDATE000 = __CLASS__ . '::update000';
     protected const RELEASE020_UPDATE001 = __CLASS__ . '::update001';
+    protected const RELEASE020_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
+        self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE020_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
+            ],
+        ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE020_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
@@ -49,5 +56,21 @@ class Sales_Setup_Update_20 extends Setup_Update_Abstract
             $this->getDb()->quoteInto(Sales_Model_Document_AttachedDocument::FLD_TYPE . ' = ?', 'supporting_document')
         );
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '20.1', self::RELEASE020_UPDATE001);
+    }
+
+    /**
+     * documents have xprops
+     */
+    public function update002(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Credit::class,
+            Sales_Model_Document_Delivery::class,
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+            Sales_Model_Document_PurchaseInvoice::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '20.2', self::RELEASE020_UPDATE002);
     }
 }
