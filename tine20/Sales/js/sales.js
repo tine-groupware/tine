@@ -29,6 +29,8 @@ import './Document/InvoiceEditDialog';
 import './Document/CreditEditDialog';
 import './Document/BookDocumentAction';
 import './Document/CopyDocumentAction';
+import './Document/CreateInvoiceFromFileAction';
+import './Document/ImportFromPreviousInvoicePdfAction';
 import './Document/CreateFollowUpAction';
 import './Document/CreatePaperSlipAction';
 import './Document/DispatchDocumentAction';

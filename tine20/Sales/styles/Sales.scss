@@ -208,3 +208,8 @@
     vertical-align: middle;
     white-space: nowrap;
 }
+
+// "invoice from file" in the add menu of the invoice grid (Document/CreateInvoiceFromFileAction.js)
+.SalesInvoiceFromFile {
+    background-image:url(../../Tinebase/js/node_modules/@tabler/icons/icons/outline/file-import.svg) !important;
+}

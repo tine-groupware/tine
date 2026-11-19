@@ -2721,6 +2721,33 @@ msgstr "Der eDokument Typ wird nicht unterstützt"
 msgid "Service disruption of view service"
 msgstr "Störung des anzeige Services"
 
+msgid "Create Invoice from PDF"
+msgstr "Rechnung aus PDF erstellen"
+
+msgid "Reads a PDF, e.g. an invoice of another program, an offer, an order or a delivery note, and proposes a new invoice from it. The data is recognized automatically (AI): please check it before saving."
+msgstr "Liest ein PDF ein, z. B. eine Rechnung aus einem anderen Programm, ein Angebot, einen Auftrag oder einen Lieferschein, und schlägt daraus eine neue Rechnung vor. Die Daten werden automatisch (KI) erkannt: bitte prüfen, bevor Sie speichern."
+
+msgid "Reading the invoice from the file. This may take a few minutes..."
+msgstr "Die Rechnung wird aus der Datei gelesen. Das kann einige Minuten dauern ..."
+
+msgid "Reading the invoice from the file failed"
+msgstr "Die Rechnung konnte nicht aus der Datei gelesen werden"
+
+msgid "Uploading the file..."
+msgstr "Die Datei wird hochgeladen ..."
+
+msgid "Read Positions Again"
+msgstr "Positionen neu einlesen"
+
+msgid "Read Positions Again?"
+msgstr "Positionen neu einlesen?"
+
+msgid "Reads the positions again from the PDF of the previous invoice of the contract."
+msgstr "Liest die Positionen neu aus dem PDF der vorherigen Rechnung des Vertrags ein."
+
+msgid "The positions are read again from the PDF of the previous invoice and replace the current ones. Your own changes to this invoice are lost."
+msgstr "Die Positionen werden neu aus dem PDF der vorherigen Rechnung eingelesen und ersetzen die aktuellen. Ihre eigenen Änderungen an dieser Rechnung gehen verloren."
+
 #~ msgid "Document lines"
 #~ msgstr "Belegpositionen"
 

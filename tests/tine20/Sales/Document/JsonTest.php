@@ -312,6 +312,230 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertSame(['marked.txt', 'second.txt'], $supportingNames($document), 'stored');
     }
 
+    protected function _createContractInvoice(
+        Sales_Model_Customer $customer,
+        string $contractId,
+        string $positionTitle,
+        bool $withPdf,
+        bool $positionsFromPreviousInvoicePdf = false,
+        ?string $documentDate = null
+    ): Sales_Model_Document_Invoice {
+        $invoice = new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Invoice::FLD_CONTRACT_ID => $contractId,
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE => new Tinebase_DateTime($documentDate ?? 'now'),
+            Sales_Model_Document_Invoice::FLD_POSITIONS => new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_Invoice::class, [
+                new Sales_Model_DocumentPosition_Invoice([
+                    Sales_Model_DocumentPosition_Invoice::FLD_TITLE => $positionTitle,
+                    Sales_Model_DocumentPosition_Invoice::FLD_TYPE => Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT,
+                    Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
+                ], true),
+            ]),
+        ], true);
+        if ($withPdf) {
+            file_put_contents($path = Tinebase_TempFile::getTempPath(), '%PDF-1.4 test');
+            $invoice->attachments = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, [
+                ['name' => 'invoice.pdf', 'tempFile' => Tinebase_TempFile::getInstance()->createTempFile($path)],
+            ], true);
+        }
+        if ($positionsFromPreviousInvoicePdf) {
+            $invoice->xprops()[Sales_Model_Document_Invoice::XPROP_POSITIONS_FROM_PREVIOUS_INVOICE_PDF] = true;
+        }
+        return Sales_Controller_Document_Invoice::getInstance()->create($invoice);
+    }
+
+    public function testPositionsFromPreviousInvoicePdfXpropNotCopied(): void
+    {
+        $contract = Sales_Controller_Contract::getInstance()->create(new Sales_Model_Contract(['title' => 'xprop'], true));
+        $invoice = $this->_createContractInvoice($this->_createCustomer(), $contract->getId(), 'pos 1', false, true);
+
+        // the client gets the xprop (button in the invoice dialog)
+        $json = $this->_instance->getDocument_Invoice($invoice->getId());
+        $this->assertTrue(
+            $json['xprops'][Sales_Model_Document_Invoice::XPROP_POSITIONS_FROM_PREVIOUS_INVOICE_PDF] ?? false,
+            'xprop not in json: ' . print_r($json['xprops'] ?? null, true)
+        );
+
+        $copy = Sales_Controller_Document_Invoice::getInstance()->copy($invoice->getId(), persist: true);
+        $this->assertArrayNotHasKey(
+            Sales_Model_Document_Invoice::XPROP_POSITIONS_FROM_PREVIOUS_INVOICE_PDF,
+            Sales_Controller_Document_Invoice::getInstance()->get($copy->getId())->xprops()
+        );
+    }
+
+    public function testFindPreviousInvoiceSkipsReversed(): void
+    {
+        $customer = $this->_createCustomer();
+        $contractId = Sales_Controller_Contract::getInstance()->create(
+            new Sales_Model_Contract(['title' => 'prev'], true)
+        )->getId();
+        $pdfTitle = Sales_Model_Document_Invoice::POSITIONS_IN_PDF_TITLE;
+        $current = $this->_createContractInvoice($customer, $contractId, 'pos 1', false, true, '2026-05-01');
+        $older = $this->_createContractInvoice($customer, $contractId, $pdfTitle, true, false, '2026-03-01');
+
+        // the latest invoice is reversed: the one before is the previous invoice
+        $reversed = $this->_createContractInvoice($customer, $contractId, $pdfTitle, true, false, '2026-04-01');
+        Sales_Controller_Document_Invoice::getInstance()->getBackend()->updateMultiple([$reversed->getId()], [
+            Sales_Model_Document_Invoice::FLD_REVERSED_STATUS => Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED,
+        ]);
+        $this->assertSame(
+            $older->getId(),
+            Sales_Model_Document_Invoice::findPreviousInvoice($contractId, $current->getId())?->getId()
+        );
+
+        // the new invoice replacing the reversed one is found
+        $replacement = $this->_createContractInvoice($customer, $contractId, $pdfTitle, true, false, '2026-04-02');
+        $this->assertSame(
+            $replacement->getId(),
+            Sales_Model_Document_Invoice::findPreviousInvoice($contractId, $current->getId())?->getId()
+        );
+        // without excluding it, the current invoice is the latest
+        $this->assertSame(
+            $current->getId(),
+            Sales_Model_Document_Invoice::findPreviousInvoice($contractId)?->getId()
+        );
+
+        // a newer previous invoice without the positions in its pdf is not skipped: nothing to read again
+        $this->_createContractInvoice($customer, $contractId, 'pos 1', false, false, '2026-04-03');
+        $this->expectException(Tinebase_Exception_NotFound::class);
+        $this->_instance->importFromPreviousInvoicePdf($current->getId());
+    }
+
+    public function testPreparePositionsFromPreviousInvoicePdf(): void
+    {
+        $sdpi = Sales_Model_DocumentPosition_Invoice::class;
+        $positions = new Tinebase_Record_RecordSet($sdpi, [
+            new $sdpi([
+                $sdpi::FLD_TITLE => 'quarterly fee',
+                $sdpi::FLD_POSITION_PRICE => 300,
+                $sdpi::FLD_SERVICE_PERIOD_START => new Tinebase_DateTime('2026-01-01'),
+                $sdpi::FLD_SERVICE_PERIOD_END => new Tinebase_DateTime('2026-03-31'),
+            ], true),
+            new $sdpi([
+                $sdpi::FLD_TITLE => 'yearly fee ' . str_repeat('x', 300),
+                $sdpi::FLD_POSITION_PRICE => 1200,
+                $sdpi::FLD_SERVICE_PERIOD_START => new Tinebase_DateTime('2025-04-01'),
+                $sdpi::FLD_SERVICE_PERIOD_END => new Tinebase_DateTime('2026-03-31'),
+            ], true),
+            new $sdpi([
+                $sdpi::FLD_TITLE => 'Services',
+                $sdpi::FLD_SERVICE_PERIOD_START => new Tinebase_DateTime('2026-01-01'),
+                $sdpi::FLD_SERVICE_PERIOD_END => new Tinebase_DateTime('2026-03-31'),
+            ], true),
+            new $sdpi([
+                $sdpi::FLD_TITLE => 'note',
+                $sdpi::FLD_DESCRIPTION => 'some text',
+            ], true),
+        ]);
+        $prevInvoice = new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_STANDARD,
+        ], true);
+        $checkTag = new Tinebase_Model_Tag(
+            ['name' => 'kontrollieren', 'type' => Tinebase_Model_Tag::TYPE_SHARED],
+            true
+        );
+
+        Sales_Model_Document_Invoice::preparePositionsFromPreviousInvoicePdf(
+            $positions,
+            $prevInvoice,
+            new Tinebase_DateTime('2026-04-01'),
+            new Tinebase_DateTime('2026-06-30'),
+            $checkTag
+        );
+
+        [$quarterly, $yearly, $heading, $text] = $positions->asArray();
+        $this->assertSame(Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT, $quarterly->{$sdpi::FLD_TYPE});
+        $this->assertEquals(19, $quarterly->{$sdpi::FLD_SALES_TAX_RATE});
+        $this->assertSame('2026-04-01', $quarterly->{$sdpi::FLD_SERVICE_PERIOD_START}->format('Y-m-d'));
+        $this->assertSame('2026-06-30', $quarterly->{$sdpi::FLD_SERVICE_PERIOD_END}->format('Y-m-d'));
+        $this->assertEmpty($quarterly->tags, 'inside the billing period');
+
+        $this->assertSame('2027-03-31', $yearly->{$sdpi::FLD_SERVICE_PERIOD_END}->format('Y-m-d'));
+        $this->assertSame(['kontrollieren'], $yearly->tags->name, 'outside the billing period');
+        $this->assertSame(255, mb_strlen($yearly->title));
+
+        $this->assertSame(Sales_Model_DocumentPosition_Abstract::POS_TYPE_HEADING, $heading->{$sdpi::FLD_TYPE});
+        $this->assertNull($heading->{$sdpi::FLD_SERVICE_PERIOD_START});
+        $this->assertSame(Sales_Model_DocumentPosition_Abstract::POS_TYPE_TEXT, $text->{$sdpi::FLD_TYPE});
+
+        // without billing period (reading the positions again from the invoice dialog): no check tag
+        $positions = new Tinebase_Record_RecordSet($sdpi, [new $sdpi([
+            $sdpi::FLD_TITLE => 'yearly fee',
+            $sdpi::FLD_POSITION_PRICE => 1200,
+            $sdpi::FLD_SERVICE_PERIOD_START => new Tinebase_DateTime('2025-04-01'),
+            $sdpi::FLD_SERVICE_PERIOD_END => new Tinebase_DateTime('2026-03-31'),
+        ], true)]);
+        $prevInvoice->{Sales_Model_Document_Invoice::FLD_VAT_PROCEDURE} = Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE;
+        Sales_Model_Document_Invoice::preparePositionsFromPreviousInvoicePdf($positions, $prevInvoice);
+        $this->assertEmpty($positions->getFirstRecord()->tags);
+        $this->assertEquals(0, $positions->getFirstRecord()->{$sdpi::FLD_SALES_TAX_RATE});
+    }
+
+    public function testImportFromPreviousInvoicePdfNeedsXprop(): void
+    {
+        $customer = $this->_createCustomer();
+        $contractId = Sales_Controller_Contract::getInstance()->create(new Sales_Model_Contract(['title' => 'import'], true))->getId();
+
+        $invoice = $this->_createContractInvoice($customer, $contractId, 'pos 1', false);
+        try {
+            $this->_instance->importFromPreviousInvoicePdf($invoice->getId());
+            $this->fail('import without xprop');
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            $this->assertStringContainsString('not created from the pdf', $e->getMessage());
+        }
+
+        $invoice = $this->_createContractInvoice($customer, $contractId, 'pos 1', false, true);
+        $this->expectException(Tinebase_Exception_NotFound::class);
+        $this->_instance->importFromPreviousInvoicePdf($invoice->getId());
+    }
+
+    public function testCanParseUnstructuredDocumentsRegistry(): void
+    {
+        $configs = [
+            [Tinebase_Config::getInstance(), Tinebase_Config::DOCLING_SERVE_URL],
+            [Tinebase_Config::getInstance(), Tinebase_Config::LLM_API_URL],
+            [Sales_Config::getInstance(), Sales_Config::UNSTRUCTURED_DOCUMENT_PARSER_LLM],
+        ];
+        $old = array_map(fn ($c) => $c[0]->{$c[1]}, $configs);
+        $restore = new Tinebase_RAII(function () use ($configs, $old) {
+            foreach ($configs as $i => [$config, $name]) {
+                $config->setInMemory($name, $old[$i]);
+            }
+        });
+
+        // the first call may have side effects (e.g. create the shared contracts container and save its config)
+        // which must not interfere with the in memory configs below
+        $this->_instance->getRegistryData();
+
+        // values as seen by Sales_Model_Document_Invoice::canParseUnstructuredDocuments() - for the failure message
+        $current = fn () => json_encode([
+            Tinebase_Config::DOCLING_SERVE_URL =>
+                Tinebase_Config::getInstance()->{Tinebase_Config::DOCLING_SERVE_URL},
+            Tinebase_Config::LLM_API_URL => Tinebase_Config::getInstance()->{Tinebase_Config::LLM_API_URL},
+            Sales_Config::UNSTRUCTURED_DOCUMENT_PARSER_LLM =>
+                Sales_Config::getInstance()->{Sales_Config::UNSTRUCTURED_DOCUMENT_PARSER_LLM},
+        ]);
+
+        foreach ($configs as [$config, $name]) {
+            $config->setInMemory($name, 'https://configured.test');
+        }
+        $this->assertTrue($this->_instance->getRegistryData()['canParseUnstructuredDocuments'],
+            'all configured: ' . $current());
+
+        foreach ($configs as $i => [$config, $name]) {
+            $config->setInMemory($name, '');
+            $this->assertFalse($this->_instance->getRegistryData()['canParseUnstructuredDocuments'],
+                $name . ' empty: ' . $current());
+            $config->setInMemory($name, 'https://configured.test');
+        }
+        unset($restore);
+    }
+
     public function testOfferBoilerplates()
     {
         $customer = $this->_createCustomer();

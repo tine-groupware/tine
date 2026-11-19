@@ -52,6 +52,17 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
     public const STATUS_BOOKED = 'BOOKED';
     public const STATUS_PAID = 'PAID';
 
+    /**
+     * xprop: the positions were read from the pdf of the previous invoice of the contract (auto invoices), they can
+     * be read again (Sales_Frontend_Json::importFromPreviousInvoicePdf). Not taken into copies / follow-up documents.
+     */
+    public const XPROP_POSITIONS_FROM_PREVIOUS_INVOICE_PDF = 'positionsFromPreviousInvoicePdf';
+
+    /**
+     * title of the only position of an invoice whose positions are in its pdf attachment
+     */
+    public const POSITIONS_IN_PDF_TITLE = 'Gesamtbetrag gem. Anlage';
+
 
     /**
      * @param array $_definition
@@ -64,7 +75,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Invoice'; // gettext('GENDER_Invoice')
         $_definition[self::RECORDS_NAME] = 'Invoices'; // ngettext('Invoice', 'Invoices', n)
 
-        $_definition[self::VERSION] = 6;
+        $_definition[self::VERSION] = 7;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
 
@@ -767,6 +778,124 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
         $xml = $serializer->serialize($ublInvoice, 'xml');
         return $xml;
+    }
+
+    /**
+     * latest invoice of the contract that is not reversed (a reversed invoice is replaced by a new one)
+     *
+     * @param string|null $excludeId e.g. the invoice the previous one is searched for
+     */
+    public static function findPreviousInvoice(string $contractId, ?string $excludeId = null): ?self
+    {
+        $filter = [
+            ['field' => self::FLD_CONTRACT_ID, 'operator' => 'equals', 'value' => $contractId],
+            // NOTE: not includes NULL
+            [
+                'field' => self::FLD_REVERSED_STATUS,
+                'operator' => 'not',
+                'value' => Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED,
+            ],
+        ];
+        if ($excludeId) {
+            $filter[] = ['field' => 'id', 'operator' => 'not', 'value' => $excludeId];
+        }
+        return Sales_Controller_Document_Invoice::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(self::class, $filter),
+            new Tinebase_Model_Pagination([
+                Tinebase_Model_Pagination::FLD_SORT => [self::FLD_DOCUMENT_DATE, 'creation_time'],
+                Tinebase_Model_Pagination::FLD_DIR => ['DESC', 'DESC'],
+                Tinebase_Model_Pagination::FLD_LIMIT => 1,
+            ])
+        )->getFirstRecord();
+    }
+
+    /**
+     * the positions of the invoice are in its pdf attachment: only one position "Gesamtbetrag gem. Anlage"
+     */
+    public static function isPositionsInPdf(self $invoice): bool
+    {
+        if (!$invoice->{self::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet) {
+            (new Tinebase_Record_Expander(self::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [self::FLD_POSITIONS => []],
+            ]))->expand(new Tinebase_Record_RecordSet(self::class, [$invoice]));
+        }
+        return $invoice->{self::FLD_POSITIONS}->count() === 1 && self::POSITIONS_IN_PDF_TITLE ===
+            $invoice->{self::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_TITLE};
+    }
+
+    public static function getPdfAttachment(self $invoice): ?Tinebase_Model_Tree_Node
+    {
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice);
+        foreach ($invoice->attachments ?? [] as $attachment) {
+            if (str_ends_with($attachment->name, '.pdf')) {
+                return $attachment;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * prepares the positions read from the pdf of the previous invoice for the next invoice: positions with a price
+     * are products (sales tax rate of the previous invoice, service period moved on by its length), the others are
+     * headings (no description) or texts
+     *
+     * @param Tinebase_Record_RecordSet $positions Sales_Model_DocumentPosition_Invoice
+     * @param self $prevInvoice
+     * @param Tinebase_DateTime|null $periodStart service period of the new invoice: positions whose moved service
+     * @param Tinebase_DateTime|null $periodEnd   period is outside of it get $checkTag
+     * @param Tinebase_Model_Tag|null $checkTag
+     */
+    public static function preparePositionsFromPreviousInvoicePdf(
+        Tinebase_Record_RecordSet $positions,
+        self $prevInvoice,
+        ?Tinebase_DateTime $periodStart = null,
+        ?Tinebase_DateTime $periodEnd = null,
+        ?Tinebase_Model_Tag $checkTag = null
+    ): void {
+        /** @var Sales_Model_DocumentPosition_Invoice $position */
+        foreach ($positions as $position) {
+            if (null !== $position->{Sales_Model_DocumentPosition_Invoice::FLD_POSITION_PRICE}) {
+                $position->{Sales_Model_DocumentPosition_Invoice::FLD_TYPE} =
+                    Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT;
+                $position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE} =
+                    Sales_Config::VAT_PROCEDURE_STANDARD === $prevInvoice->{self::FLD_VAT_PROCEDURE} ? 19 : 0;
+                $start = $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_START};
+                $end = $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_END};
+                if ($start && $end) {
+                    $months = round(($end->getTimestamp() - $start->getTimestamp()) / (30 * 24 * 60 * 60));
+                    $start->addMonth($months);
+                    $end = $start->getClone()->addMonth($months)->subDay(1);
+                    $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_END} = $end;
+                    if (
+                        $checkTag && $periodStart && $periodEnd
+                        && ($start->isEarlier($periodStart) || $end->isLater($periodEnd))
+                    ) {
+                        $position->tags = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class, [clone $checkTag]);
+                    }
+                }
+            } else {
+                $position->{Sales_Model_DocumentPosition_Invoice::FLD_TYPE} =
+                    empty($position->{Sales_Model_DocumentPosition_Invoice::FLD_DESCRIPTION}) ?
+                        Sales_Model_DocumentPosition_Abstract::POS_TYPE_HEADING :
+                        Sales_Model_DocumentPosition_Abstract::POS_TYPE_TEXT;
+                $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_START} = null;
+                $position->{Sales_Model_DocumentPosition_Invoice::FLD_SERVICE_PERIOD_END} = null;
+            }
+
+            if (mb_strlen($position->title) > 255) {
+                $position->title = mb_substr($position->title, 0, 252) . '...';
+            }
+        }
+    }
+
+    /**
+     * the configs createPositionsFromFileLocation needs (docling-serve and llm), the api keys are optional
+     */
+    public static function canParseUnstructuredDocuments(): bool
+    {
+        return !empty(Tinebase_Config::getInstance()->{Tinebase_Config::DOCLING_SERVE_URL})
+            && !empty(Tinebase_Config::getInstance()->{Tinebase_Config::LLM_API_URL})
+            && !empty(Sales_Config::getInstance()->{Sales_Config::UNSTRUCTURED_DOCUMENT_PARSER_LLM});
     }
 
     public static function createPositionsFromFileLocation(Tinebase_Model_FileLocation $fileLocation): self

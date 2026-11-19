@@ -122,14 +122,31 @@ const closeMenu = async (page) => {
     await waitForMenu(page, false);
 };
 
-const chooseLevel = async (page, label) => {
+/**
+ * chooses a level (e.g. 'auto', 'small') in the column menu
+ * NOTE: the item is found by its itemId, not by its label: the label of the "Auto" item contains the current level,
+ *       which is checked in "Column menu offers the levels"
+ */
+const chooseLevel = async (page, mode) => {
     await openMenu(page);
-    await lib.clickOnElementWithLabel(page, '.x-menu-item-text', label);
+    let item;
+    try {
+        item = await page.waitForFunction((mode) => Array.from(document.querySelectorAll('.x-menu'))
+            .map((menuEl) => Ext.getCmp(menuEl.id))
+            .filter((menu) => menu?.isVisible())
+            .map((menu) => menu.items?.get(`responsivemode-${mode}`)?.el?.dom)
+            .find(Boolean) || null,
+        {timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE')}, mode);
+    } catch (err) {
+        const error = new Error(`chooseLevel: no menu item for level "${mode}" (shown items: ${
+            JSON.stringify(await getShownMenuItems(page).catch(() => null))}, state: ${
+            JSON.stringify(await getGridState(page).catch(() => null))})`);
+        error.cause = err;
+        throw error;
+    }
+    await item.asElement().click();
     await waitForMenu(page, false);
 };
-
-// "Auto" item shows the current level, e.g. "Auto (Large)"
-const getAutoLabel = (mode) => `Auto (${mode.charAt(0).toUpperCase()}${mode.slice(1)})`;
 
 /**
  * the chosen level is remembered for the user -> make sure tests start in auto mode
@@ -137,7 +154,7 @@ const getAutoLabel = (mode) => `Auto (${mode.charAt(0).toUpperCase()}${mode.slic
 const resetToAuto = async (page) => {
     const state = await getGridState(page);
     if (state.manualMode && state.manualMode !== 'auto') {
-        await chooseLevel(page, getAutoLabel(state.mode));
+        await chooseLevel(page, 'auto');
         await page.waitForFunction((gridSelector) => {
             const gridEl = document.querySelector(gridSelector);
             return Ext.getCmp(gridEl.id).getView().responsiveMode === 'auto';
@@ -191,7 +208,7 @@ describe('Delivery positions grid responsive levels', () => {
     });
 
     test('Manually chosen level overrides the popup size', async () => {
-        await chooseLevel(popupWindow, 'Small');
+        await chooseLevel(popupWindow, 'small');
         await waitForMode(popupWindow, 'small');
         expectLevelColumns(await getGridState(popupWindow), 'small');
 
@@ -204,7 +221,7 @@ describe('Delivery positions grid responsive levels', () => {
         expect(await getCheckedLevel(popupWindow)).toEqual(['Small']);
         await closeMenu(popupWindow);
 
-        await chooseLevel(popupWindow, 'Medium');
+        await chooseLevel(popupWindow, 'medium');
         await waitForMode(popupWindow, 'medium');
         expectLevelColumns(await getGridState(popupWindow), 'medium');
     });
@@ -222,7 +239,7 @@ describe('Delivery positions grid responsive levels', () => {
     });
 
     test('Auto follows the popup size again', async () => {
-        await chooseLevel(popupWindow, getAutoLabel('medium'));
+        await chooseLevel(popupWindow, 'auto');
         await waitForMode(popupWindow, 'large');
 
         await resizePopup(popupWindow, levelWidths.small);

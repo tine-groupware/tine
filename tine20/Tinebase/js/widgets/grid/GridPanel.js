@@ -2343,6 +2343,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                             menu: new Ext.menu.Menu({
                                 items: [],
                                 plugins: [{
+                                    // items for this model only, e.g. "invoice from file"
+                                    ptype: 'ux.itemregistry',
+                                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-AddButton'
+                                }, {
+                                    // separator after the items of this model, if any. The global items are added
+                                    // after them: they get registry positions >= 0
+                                    init: (menu) => {
+                                        if (! menu.items.getCount()) return;
+                                        menu.add('-');
+                                        menu.items.each((item) => { item.registerdItemPos = -1; });
+                                    }
+                                }, {
+                                    // global items ("new ..." of all apps)
                                     ptype: 'ux.itemregistry',
                                     key:   'Tine.widgets.grid.GridPanel.addButton'
                                 }]

@@ -38,7 +38,7 @@ class Sales_Model_Document_Credit extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Credit'; // gettext('GENDER_Credit')
         $_definition[self::RECORDS_NAME] = 'Credits'; // ngettext('Credit', 'Credits', n)
 
-        $_definition[self::VERSION] = 1;
+        $_definition[self::VERSION] = 2;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
 
