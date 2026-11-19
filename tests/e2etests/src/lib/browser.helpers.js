@@ -1228,9 +1228,34 @@ export default {
     refreshGridAndWaitForReady: async function (page, appSelector, timeout = this.getEnvInt('TEST_TIMEOUT_GRID_UPDATED')) {
         this.assertNotAborted('refreshGridAndWaitForReady');
 
+        // NOTE: the refresh button stays enabled while the store loads, so waiting for the button alone returns while
+        //       the load is still running - its response then re-renders the grid and clears the selection (e.g.
+        //       of a row selected right after). Wait for the load (or exception) event of the grid's store.
+        const loadId = await page.evaluate((sel) => {
+            const appEl = document.querySelector(sel);
+            const grid = window.Ext?.ComponentMgr.all.items.find((c) => c instanceof Tine.widgets.grid.GridPanel &&
+                c.rendered && c.store && appEl?.contains(c.getEl().dom) && c.getEl().isVisible(true));
+            if (!grid) return null;
+            const loadId = `e2eGridLoad${Date.now()}`;
+            const done = () => { window[loadId] = true; };
+            grid.store.on('load', done, null, {single: true});
+            grid.store.on('exception', done, null, {single: true});
+            return loadId;
+        }, appSelector);
+
         // Click on "refresh" button to update the grid.
         const buttonSelector = `${appSelector} .x-btn-image.x-tbar-loading`;
         await this.clickOnElement(page, buttonSelector);
+
+        if (loadId) {
+            try {
+                await page.waitForFunction((id) => window[id] === true, {timeout}, loadId);
+            } catch (err) {
+                const error = new Error(`refreshGridAndWaitForReady: timed out after ${timeout}ms waiting for the grid store of "${appSelector}" to load`);
+                error.cause = err;
+                throw error;
+            }
+        }
 
         // Wait until the refresh button is actionable again:
         // - The button doesn't contain the class "x-item-disabled".
