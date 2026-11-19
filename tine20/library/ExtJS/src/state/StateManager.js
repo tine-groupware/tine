@@ -54,8 +54,9 @@ Ext.state.Manager = function(){
          * Clears a value from the state
          * @param {String} name The key name
          */
-        clear : function(key){
-            provider.clear(key);
+        clear : async function(key){
+            // NOTE: like set - Tine.Tinebase.StateProvider clears persistent (async), callers may wait for it
+            await provider.clear(key);
         },
 
         /**
