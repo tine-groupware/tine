@@ -168,9 +168,11 @@ describe('shared tags', () => {
         let tagDialog = lib.getNewWindow();
         await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'internal', count: 2});
         tagDialog = await tagDialog;
-        await new Promise(r => setTimeout(r, 2000));
+        // NOTE: the dialog is masked until Admin.getTag returned (rights, context tree) - a click on the tab before
+        //       hits the mask, the tab isn't switched and the context tree stays hidden
+        await lib.waitForAppReady(tagDialog);
         await lib.makeScreenshot(tagDialog,{path: 'screenshots/Administration/22_admin_gemeinsame_tags_rechte.png'});
-        await expectPuppeteer(tagDialog).toClick('span', {text: 'Kontexte'});
+        await lib.clickOnElementWithLabel(tagDialog, '.x-tab-strip-text', 'Kontexte');
         // select an app in the tree and restrict the tag to a model of the app (not saved)
         const salesId = await tagDialog.evaluate(() => Tine.Tinebase.appMgr.get('Sales').id);
         await lib.clickOnElement(tagDialog, `#adminSharedTagsContextPanel [ext\\:tree-node-id="${salesId}"] .x-tree-node-anchor`);
