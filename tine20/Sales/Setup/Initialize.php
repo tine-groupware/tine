@@ -482,15 +482,79 @@ class Sales_Setup_Initialize extends Setup_Initialize
     {
         $active = ['piece', 'hour', 'week', 'month', 'year', 'gigabyte', 'gibibyte'];
         $uomData = json_decode(file_get_contents(__DIR__ . '/UN_ECE_Recommendation_N_20_3.json'), true);
+        $translations = static::_getEDocumentUnitOfMeasureTranslations();
         foreach ($uomData['daten'] as $uom) {
+            $names = [[
+                Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_LANGUAGE => 'en',
+                Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_TEXT => $uom[1],
+            ]];
+            foreach ($translations as $lang => $texts) {
+                if (isset($texts[$uom[0]])) {
+                    $names[] = [
+                        Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_LANGUAGE => $lang,
+                        Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_TEXT => $texts[$uom[0]],
+                    ];
+                }
+            }
             Sales_Controller_EDocument_UnitOfMeasure::getInstance()->create(new Sales_Model_EDocument_UnitOfMeasure([
                 Sales_Model_EDocument_UnitOfMeasure::FLD_CODE => $uom[0],
-                Sales_Model_EDocument_UnitOfMeasure::FLD_NAME => [[
-                    Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_LANGUAGE => 'en',
-                    Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_TEXT => $uom[1],
-                ]],
+                Sales_Model_EDocument_UnitOfMeasure::FLD_NAME => $names,
                 Sales_Model_EDocument_UnitOfMeasure::FLD_ACTIVE => in_array($uom[1], $active),
             ]));
+        }
+    }
+
+    /**
+     * names of the units of measure in other languages than english: [lang => [code => name]]
+     *
+     * NOTE: the KoSIT code list (UN/ECE Recommendation N°20) has english names only, the german names are an own
+     *       translation (UN_ECE_Recommendation_N_20_3_DE.json)
+     */
+    protected static function _getEDocumentUnitOfMeasureTranslations(): array
+    {
+        $deData = json_decode(file_get_contents(__DIR__ . '/UN_ECE_Recommendation_N_20_3_DE.json'), true);
+        return [
+            'de' => array_column($deData['daten'], 1, 0),
+        ];
+    }
+
+    /**
+     * adds / updates the translated names of the existing units of measure (see initializeEDocumentUnitOfMeasure)
+     */
+    public static function updateEDocumentUnitOfMeasureTranslations(): void
+    {
+        $uomCtrl = Sales_Controller_EDocument_UnitOfMeasure::getInstance();
+        $units = $uomCtrl->getAll();
+        (new Tinebase_Record_Expander(Sales_Model_EDocument_UnitOfMeasure::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_EDocument_UnitOfMeasure::FLD_NAME => [],
+            ],
+        ]))->expand($units);
+
+        $translations = static::_getEDocumentUnitOfMeasureTranslations();
+        /** @var Sales_Model_EDocument_UnitOfMeasure $unit */
+        foreach ($units as $unit) {
+            $changed = false;
+            foreach ($translations as $lang => $texts) {
+                if (null === ($text = $texts[$unit->{Sales_Model_EDocument_UnitOfMeasure::FLD_CODE}] ?? null)) {
+                    continue;
+                }
+                $names = $unit->{Sales_Model_EDocument_UnitOfMeasure::FLD_NAME};
+                $localization = $names->find(Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_LANGUAGE, $lang);
+                if (null === $localization) {
+                    $names->addRecord(new Sales_Model_EDocument_UnitOfMeasureLocalization([
+                        Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_LANGUAGE => $lang,
+                        Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_TEXT => $text,
+                    ], true));
+                    $changed = true;
+                } elseif ($localization->{Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_TEXT} !== $text) {
+                    $localization->{Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_TEXT} = $text;
+                    $changed = true;
+                }
+            }
+            if ($changed) {
+                $uomCtrl->update($unit);
+            }
         }
     }
 

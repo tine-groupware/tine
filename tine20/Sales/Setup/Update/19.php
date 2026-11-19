@@ -24,6 +24,9 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
     protected const RELEASE019_UPDATE006 = __CLASS__ . '::update006';
     protected const RELEASE019_UPDATE007 = __CLASS__ . '::update007';
     protected const RELEASE019_UPDATE008 = __CLASS__ . '::update008';
+    protected const RELEASE019_UPDATE009 = __CLASS__ . '::update009';
+    protected const RELEASE019_UPDATE010 = __CLASS__ . '::update010';
+    protected const RELEASE019_UPDATE011 = __CLASS__ . '::update011';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -49,6 +52,10 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update007',
             ],
+            self::RELEASE019_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE019_UPDATE000          => [
@@ -66,6 +73,14 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
             self::RELEASE019_UPDATE008          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update008',
+            ],
+            self::RELEASE019_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
+            ],
+            self::RELEASE019_UPDATE011          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update011',
             ],
         ],
     ];
@@ -267,5 +282,102 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '19.8', self::RELEASE019_UPDATE008);
+    }
+
+    /**
+     * german names of the units of measure (own translation, the KoSIT code list has english names only)
+     */
+    public function update009(): void
+    {
+        Sales_Setup_Initialize::updateEDocumentUnitOfMeasureTranslations();
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '19.9', self::RELEASE019_UPDATE009);
+    }
+
+    /**
+     * product unit: keyfield -> Sales_Model_EDocument_UnitOfMeasure (schema)
+     */
+    public function update010(): void
+    {
+        Setup_SchemaTool::updateSchema([Sales_Model_Product::class]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '19.10', self::RELEASE019_UPDATE010);
+    }
+
+    /**
+     * product unit: keyfield -> Sales_Model_EDocument_UnitOfMeasure (data), removes the keyfield config productUnit
+     */
+    public function update011(): void
+    {
+        $db = $this->getDb();
+        $uomCtrl = Sales_Controller_EDocument_UnitOfMeasure::getInstance();
+        $productTable = SQL_TABLE_PREFIX . Sales_Model_Product::TABLE_NAME;
+        $quotedProductTable = $db->quoteIdentifier($productTable);
+
+        // values of the (possibly customized) keyfield config productUnit, id => display value
+        $keyFieldValues = ['PIECE' => 'Piece'];
+        $salesAppId = Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME)->getId();
+        $configValue = $db->query($db->quoteInto('SELECT `value` FROM '
+            . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'config')
+            . ' WHERE `name` = \'productUnit\' AND `application_id` = ?', $salesAppId))->fetchColumn();
+        if ($configValue && is_array($config = json_decode($configValue, true))) {
+            foreach ($config['records'] ?? [] as $record) {
+                if (isset($record['id'])) {
+                    $keyFieldValues[$record['id']] = $record['value'] ?? $record['id'];
+                }
+            }
+        }
+
+        $unitMapping = [];
+        $unmapped = [];
+        $units = null;
+        $oldUnits = $db->query('SELECT DISTINCT `unit` FROM ' . $quotedProductTable
+            . ' WHERE `unit` IS NOT NULL AND `unit` <> \'\'')->fetchAll(Zend_Db::FETCH_COLUMN);
+        foreach ($oldUnits as $old) {
+            if ('PIECE' === $old) {
+                $unit = $uomCtrl->getByCode('H87');
+            } elseif (null === ($unit = $uomCtrl->getByCode($old))) {
+                try {
+                    // already migrated
+                    $uomCtrl->get($old);
+                    continue;
+                } catch (Tinebase_Exception_NotFound) {
+                    // custom keyfield value
+                }
+                // find unit by name (any language)
+                if (null === $units) {
+                    $units = $uomCtrl->getAll();
+                    (new Tinebase_Record_Expander(Sales_Model_EDocument_UnitOfMeasure::class, [
+                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                            Sales_Model_EDocument_UnitOfMeasure::FLD_NAME => [],
+                        ],
+                    ]))->expand($units);
+                }
+                $needles = array_map('mb_strtolower', array_unique([$old, $keyFieldValues[$old] ?? $old]));
+                $unit = $units->filter(function ($u) use ($needles) {
+                    $names = $u->{Sales_Model_EDocument_UnitOfMeasure::FLD_NAME};
+                    return (bool) $names->filter(function ($l) use ($needles) {
+                        $text = (string) $l->{Sales_Model_EDocument_UnitOfMeasureLocalization::FLD_TEXT};
+                        return in_array(mb_strtolower($text), $needles);
+                    })->count();
+                })->getFirstRecord();
+            }
+            if (null === $unit) {
+                $unmapped[] = $old;
+            } else {
+                $unitMapping[$old] = $unit->getId();
+            }
+        }
+        if ($unmapped) {
+            throw new Tinebase_Exception('found unmapped product units "' . implode('", "', $unmapped)
+                . '", adjust $unitMapping and rerun update');
+        }
+
+        $db->update($productTable, ['unit' => null], '`unit` = \'\'');
+        foreach ($unitMapping as $old => $new) {
+            $db->update($productTable, ['unit' => $new], $db->quoteInto('`unit` = ?', $old));
+        }
+
+        Sales_Config::getInstance()->delete('productUnit');
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '19.11', self::RELEASE019_UPDATE011);
     }
 }
