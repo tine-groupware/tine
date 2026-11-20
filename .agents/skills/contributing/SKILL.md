@@ -79,7 +79,12 @@ The CI runs the full suites on every merge request pipeline. Locally run only wh
 3. **Related or random?** A failure in code the merge request doesn't touch, which also fails or passes on other
    pipelines with the same code, is a random fail (flaky test or a race in the code).
 4. **Random fails are fixed, not retried:** find the cause - in tests typically fixed sleeps, clicks before a load
-   / mask finished, waiting for the wrong thing; or a race in the code - and fix it on an own branch of the oldest
-   major branch that has the test, with its own merge request (not in the merge request that happened to hit it).
+   / mask finished, waiting for the wrong thing; or a race in the code. Where the fix goes:
+   * **in the same merge request**, as an own commit, if that merge request is meant to be merged soon (not a
+     draft) and its target branch is the oldest major branch that has the test;
+   * otherwise on an own branch of the oldest major branch that has the test, with its own merge request; mention
+     it in the merge request that hit the failure.
+
    Reproduce the race if possible (e.g. delay the request via puppeteer request interception) and show it fails
-   before and passes after. Mention the fix in the original merge request.
+   before and passes after. If it can't be reproduced, make the test independent of the suspected timing and let
+   it report the actual state on failure (shown items, grid state, ...), so the next failure tells the cause.
