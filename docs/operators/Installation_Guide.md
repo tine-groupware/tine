@@ -206,6 +206,7 @@ Please note that the tine container needs to access the backup/dump files, so it
       - "conf.d:/etc/tine20/conf.d"
     #[...]
 ```
+Note: Only files ending with `.inc.php` or `.inc.json` will be considered.
 
 ## docker-compose.yml
 

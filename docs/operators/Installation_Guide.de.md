@@ -214,6 +214,8 @@ Wenn man möchte, kann man Custom-Configs (via conf.d) ebenfalls als eigenes Vol
     #[...]
 ```
 
+Hinweis: es werden für die Konfiguration nur Dateien mit den Endungen `.inc.php` bzw. `.inc.json` berücksichtigt.
+
 ## docker-compose.yml
 
 ``` yaml title="docker-compose.yml"
