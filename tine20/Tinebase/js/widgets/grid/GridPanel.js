@@ -1970,6 +1970,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (this.updateOnSelectionChange && this.detailsPanel) {
                 this.detailsPanel.onDetailsUpdate(sm);
             }
+
+            // roving tabindex: the selected row becomes the tab stop of the grid
+            this.focusSelectedRowOnSync = true;
+            this.scheduleRovingTabIndexSync();
         }, this);
 
         if (this.usePagingToolbar) {
@@ -2154,6 +2158,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             parentScope: this,
             view: this.createView(),
             recordClass: this.recordClass,
+            enableKeyNav: true,
             getDragDropText: this.getDragDropText.createDelegate(this)
         }));
 
@@ -2167,7 +2172,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.grid.on('rowdblclick', this.onRowDblClick, this, {buffer: Ext.isTouchDevice ? 300 : null }); // NOTE: we buffer to prevent duplicate events if touch device has a pointer too. 300ms is the default interval of hammerjs
         this.grid.on('newentry', this.onStoreNewEntry, this);
         this.grid.on('headerclick', this.onHeaderClick, this);
-
+        this.grid.on('viewready', this.initRovingTabIndex, this);
         this.grid.on('rowcontextmenu', this.onRowContextMenu, this);
         this.grid.on('cellclick', this.onCellClick, this);
     },
@@ -2206,6 +2211,147 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         } else if (this.detailsPanel && this.updateOnSelectionChange) {
             this.detailsPanel.onDetailsUpdate(this.grid.getSelectionModel());
         }
+    },
+
+    /**
+     * initializes the roving tabindex of the grid body: only one row is reachable by Tab, all other rows,
+     * cells and links are only focusable programmatically (arrow key navigation, see onKeyDown)
+     *
+     * GridView renders rows and cells with tabindex="0", so the tabindex has to be fixed up after every (re)render
+     *
+     * @param {Ext.grid.GridPanel} grid
+     * @return {void}
+     */
+    initRovingTabIndex: function(grid) {
+        const view = grid.getView();
+
+        this.rovingTabIndexTask = new Ext.util.DelayedTask(this.syncRovingTabIndex, this);
+        this.on('beforedestroy', () => this.rovingTabIndexTask.cancel());
+
+        ['refresh', 'rowsinserted', 'rowupdated', 'rowremoved'].forEach((eventName) => {
+            view.on(eventName, this.scheduleRovingTabIndexSync, this);
+        });
+        view.mainBody.on('focusin', this.onGridBodyFocusIn, this);
+        view.mainBody.on('focusout', this.onGridBodyFocusOut, this);
+
+        this.syncRovingTabIndex();
+    },
+
+    /**
+     * (re)renders of the grid view happen in bulk, so we sync the tabindex buffered
+     *
+     * @return {void}
+     */
+    scheduleRovingTabIndexSync: function() {
+        if (this.rovingTabIndexTask) {
+            this.rovingTabIndexTask.delay(10);
+        }
+    },
+
+    /**
+     * remembers which row/cell is focused, so focus can be restored if the row gets re-rendered
+     *
+     * @param {Ext.EventObject} e
+     * @param {HTMLElement} target
+     * @return {void}
+     */
+    onGridBodyFocusIn: function(e, target) {
+        const view = this.grid.getView();
+        const rowIndex = view.findRowIndex(target);
+        const record = rowIndex !== false ? this.store.getAt(rowIndex) : null;
+        if (!record) return;
+
+        const isCell = target.classList.contains('x-grid3-cell-inner');
+        const cellIndex = isCell ? view.findCellIndex(target) : false;
+        this.gridFocusState = {
+            recordId: record.id,
+            rowIndex: rowIndex,
+            col: cellIndex !== false ? cellIndex : -1
+        };
+
+        this.setRovingRow(view.getRow(rowIndex));
+    },
+
+    /**
+     * forgets the focus state if focus moves to an element outside the grid body
+     * NOTE: if the focused row is removed from the DOM there is no relatedTarget
+     * NOTE: dialogs (e.g. delete confirmation) keep the state, so focus can return to the grid after closing them
+     *
+     * @param {Ext.EventObject} e
+     * @return {void}
+     */
+    onGridBodyFocusOut: function(e) {
+        const relatedTarget = e.browserEvent.relatedTarget;
+        if (relatedTarget
+            && !this.grid.getView().mainBody.dom.contains(relatedTarget)
+            && !relatedTarget.closest('.x-window, .modal')
+        ) {
+            this.gridFocusState = null;
+        }
+    },
+
+    /**
+     * makes the given row the only row reachable by Tab
+     *
+     * @param {HTMLElement} rowEl
+     * @return {void}
+     */
+    setRovingRow: function(rowEl) {
+        if (!rowEl || rowEl.getAttribute('tabindex') === '0') return;
+
+        Ext.select('.x-grid3-row[tabindex="0"]', this.grid.getView().mainBody).set({tabindex: '-1'});
+        rowEl.setAttribute('tabindex', '0');
+    },
+
+    /**
+     * sets all rows, cells and links of the grid body to tabindex -1 except the tab stop row
+     * (selected row or first row) and restores the focus if it got lost by re-rendering
+     *
+     * @return {void}
+     */
+    syncRovingTabIndex: function() {
+        const view = this.grid?.getView();
+        if (this.isDestroyed || !view?.mainBody?.dom) return;
+
+        const focusSelectedRow = this.focusSelectedRowOnSync;
+        this.focusSelectedRowOnSync = false;
+
+        const rows = view.getRows();
+        if (!rows.length) return;
+
+        Ext.select('.x-grid3-row, .x-grid3-cell-inner, a', view.mainBody).set({tabindex: '-1'});
+
+        const selected = this.grid.getSelectionModel().getSelected?.();
+        const selectedIndex = selected ? this.store.indexOf(selected) : -1;
+        const rovingRow = view.getRow(selectedIndex) || rows[0];
+        rovingRow.setAttribute('tabindex', '0');
+
+        // focus got lost (e.g. focused row was re-rendered or removed)
+        const active = document.activeElement;
+        if (active && active !== document.body && active !== view.mainBody.dom) return;
+
+        const isKeyboardMode = document.documentElement.classList.contains('user-on-keyboard');
+        const state = isKeyboardMode ? this.gridFocusState : null;
+        if (!state && !focusSelectedRow) return;
+
+        let stateIndex = state ? this.store.indexOfId(state.recordId) : -1;
+        if (state && stateIndex < 0 && !selected) {
+            // focused record was removed -> focus the row which moved to its position
+            stateIndex = Math.min(state.rowIndex, rows.length - 1);
+            this.setRovingRow(view.getRow(stateIndex));
+            state.col = -1;
+        }
+        if (stateIndex >= 0 && state.col !== -1) {
+            const cellInner = view.getCell(stateIndex, state.col)?.querySelector('.x-grid3-cell-inner');
+            if (cellInner) {
+                view.activeCell = {cell: state.col};
+                cellInner.focus();
+                return;
+            }
+        }
+
+        view.activeCell = {cell: -1};
+        (view.getRow(stateIndex) || rovingRow).focus();
     },
 
     getDragDropText: function() {

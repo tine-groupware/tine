@@ -13,65 +13,6 @@
     margin: 0 0 0 0;
 }
 
-:where(*:not(html, body, .x-viewport, .x-body, .modal, input, textarea, .x-grid3-focus)):focus-visible {
-  outline: none !important;
-  clip-path: none !important;
-  position: relative !important;
-}
-
-.x-grid3-hd-btn:focus-visible {
-  position: absolute !important;
-}
-
-.user-on-keyboard :where(*:not(html, body, .x-viewport, .x-body, .modal, input, textarea, .x-grid3-focus)):focus::after {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  box-shadow: inset 0 0 0 3px #ff0000 !important;
-  border-radius: var(--bs-border-radius) !important;
-  z-index: 999999 !important;
-  pointer-events: none !important;
-}
-
-// thinner border for links
-.user-on-keyboard a:focus::after {
-  content: "" !important;
-  position: absolute !important;
-  inset: 0 !important;
-  box-shadow: inset 0 0 0 2px #ff0000 !important;
-  border-radius: 1px !important;
-  z-index: 999999 !important;
-  pointer-events: none !important;
-}
-
-:where(table, tbody, tr):focus-visible,
-:where(*)[style*="width: 0"],
-:where(*)[style*="height: 0"] {
-  box-shadow: none !important;
-}
-
-@media (forced-colors: active) {
-  *:focus-visible {
-    outline: 3px solid Highlight;
-    forced-color-adjust: none;
-  }
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
-
-.tine-application-menu.is-mouse .form-control:focus {
-  outline: none !important;
-}
-
 /* ---- text fields ---- */
 .x-form-text, textarea.x-form-field{
     padding:1px 3px;

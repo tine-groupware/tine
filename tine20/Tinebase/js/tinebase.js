@@ -57,6 +57,8 @@ require('../styles/ExtJS/structure/progress.scss');
 require('../styles/ExtJS/structure/list-view.scss');
 require('../styles/ExtJS/structure/slider.scss');
 require('../styles/ExtJS/structure/dialog.scss');
+require('../styles/ExtJS/structure/accessibility.scss');
+
 
 /* pkg: Ext Blue Theme (ExtJS/xtheme-blue.css)*/
 require('../styles/ExtJS/visual/core.scss');
@@ -462,9 +464,7 @@ module.exports = {
         if (!['Control', 'Alt', 'Shift', 'Meta'].includes(e.key)) {
             //for now: no focus when enter on login
             if (e.target && (
-                e.target.name === 'username' ||
-                e.target.name === 'password' ||
-                window.location.href.includes('login')
+                e.target.tagName === 'INPUT'
             )) {
                 return;
             }

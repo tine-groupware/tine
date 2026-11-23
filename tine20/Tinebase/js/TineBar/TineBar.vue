@@ -8,7 +8,7 @@
  */
 -->
 <template>
-  <header role="banner" :aria-label="window.i18n._('banner')">
+  <header id="banner" role="banner" :aria-label="window.i18n._('banner')">
   <div
     class="bootstrap-scope tine-bar"
     style="height: 100%; width: 100%"
