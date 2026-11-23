@@ -197,8 +197,55 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Update has_children = ' . $_hasChildren . ' for folder ' . $parentFolder->globalname);
             $parentFolder->has_children = $_hasChildren;
-            $this->_backend->update($parentFolder);
+            $this->_updateFolderFields($parentFolder, ['has_children']);
         }
+    }
+
+    /**
+     * update only the given fields of a folder in a short transaction
+     *
+     * - the folder row is read again with SELECT ... FOR UPDATE: the write lock is held from the start
+     * - only the given fields are copied: concurrent changes of other fields (cache_*) are kept
+     * - no write if no value changed
+     *
+     * @param Felamimail_Model_Folder $_folder
+     * @param array $_fields
+     * @return Felamimail_Model_Folder|null null if the folder is not in the cache anymore
+     */
+    protected function _updateFolderFields(Felamimail_Model_Folder $_folder, array $_fields): ?Felamimail_Model_Folder
+    {
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        $selectForUpdate = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
+
+        try {
+            /** @var Felamimail_Model_Folder $currentFolder */
+            $currentFolder = $this->_backend->get($_folder->getId());
+        } catch (Tinebase_Exception_NotFound) {
+            // folder was removed from cache concurrently
+            $transaction->release();
+            return null;
+        }
+        unset($selectForUpdate);
+
+        $changed = false;
+        foreach ($_fields as $field) {
+            if ($currentFolder->{$field} != $_folder->{$field}) {
+                $currentFolder->{$field} = $_folder->{$field};
+                $changed = true;
+            }
+        }
+
+        if ($changed) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Update folder ' . $currentFolder->globalname);
+            }
+            $currentFolder = $this->_backend->update($currentFolder);
+        }
+
+        $transaction->release();
+
+        return $currentFolder;
     }
     
     /**
@@ -217,7 +264,14 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' about to update folder ' . $folder->globalname);
-            $this->_backend->update($folder);
+            // $folder was read before the (slow) recursion -> only write the fields that come from IMAP
+            $this->_updateFolderFields($folder, [
+                'is_selectable',
+                'supports_condstore',
+                'imap_status',
+                'has_children',
+                'parent',
+            ]);
         }
     }
     
