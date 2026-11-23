@@ -680,8 +680,8 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
 
     /**
      * sets the main element everytime the app is changed, so it can be accessed by screenreader shortcuts
-     * redirects to first element in table (exceptions needed for apps with different layout like Calendar)
-     * setting main directly on a table is not allowed, so we have to redirect the focus
+     * redirects to the first element in the table (exceptions needed for apps with different layout like Calendar)
+     * setting main directly on a table is not allowed, so we have to redirect the focus from the panel to the table
      *
      * @param {Ext.Panel} item Panel
      */
