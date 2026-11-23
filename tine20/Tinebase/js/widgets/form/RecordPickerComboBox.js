@@ -155,6 +155,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 preserveJsonProps: 'original_id',
                 assertState: function(){
                     this.setQtip(!!this.field.selectedRecord ? window.i18n._('Edit copy or original') : 'Add new original')
+                    RecordEditFieldTriggerPlugin.prototype.assertState.call(this)
+                },
+                // NOTE: the dialog config is determined when the dialog is opened, from the selected record at that time -
+                //       assertState doesn't run on every change of the selected record (a stale config opens the copy
+                //       without the copy config)
+                editRecord: function() {
                     this.editDialogConfig = !!this.field.selectedRecord ? {
                         mode: 'local',
                         denormalizationRecordClass: me.denormalizationRecordClass,
@@ -167,7 +173,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                     } : {
                         mode: 'remote',
                     }
-                    RecordEditFieldTriggerPlugin.prototype.assertState.call(this)
+                    return RecordEditFieldTriggerPlugin.prototype.editRecord.apply(this, arguments)
                 }
             })));
             this.useEditPlugin = false;
