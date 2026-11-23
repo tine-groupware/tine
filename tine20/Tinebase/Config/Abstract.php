@@ -554,10 +554,20 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 $tmpArray = $this->_getConfdFileDataJson($confdFolder . DIRECTORY_SEPARATOR . $dirEntry);
             } elseif (strpos($dirEntry, '.inc.php') === (strlen($dirEntry) - 8)) {
                 $tmpArray = $this->_getConfdFileData($confdFolder . DIRECTORY_SEPARATOR . $dirEntry);
+            } elseif (strpos($dirEntry, '.php') === (strlen($dirEntry) - 4)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Ignoring PHP config file '
+                        . $dirEntry . ' because it does not match the config filename convention (xxx.inc.php)');
+                }
             }
 
             if (false !== $tmpArray && is_array($tmpArray)) {
-                self::$_configFileData = self::_array_merge_recursive_distinct(self::$_configFileData, $tmpArray);
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                    Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' Adding config file ' . $dirEntry);
+                }
+                self::$_configFileData = self::_array_merge_recursive_distinct(self::$_configFileData,
+                    $tmpArray);
             }
         }
 
@@ -579,8 +589,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
         self::$_configFileData['ttlstamp'] = time() + $ttl;
         if (null !== $ttlErrorMsg) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . $ttlErrorMsg);
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . $ttlErrorMsg);
+            }
         }
         
         $filenameTmp = $filename . uniqid('tine20', true);
