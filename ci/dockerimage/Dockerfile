@@ -49,7 +49,7 @@ RUN apt-mirror activate \
  && apt-mirror deactivate \
  && ln -s /etc/php/8.1 /etc/php/default \
  && ln -s /usr/sbin/php-fpm8.1 /usr/sbin/php-fpm \
- && echo "php" > /etc/php/container-php-package-name
+ && echo "php8.1" > /etc/php/container-php-package-name
 
 
 
@@ -131,7 +131,7 @@ RUN apt-mirror activate \
  && apt-mirror deactivate \
  && ln -s /etc/php/8.3 /etc/php/default \
  && ln -s /usr/sbin/php-fpm8.3 /usr/sbin/php-fpm \
- && echo "php" > /etc/php/container-php-package-name
+ && echo "php8.3" > /etc/php/container-php-package-name
 
 
 
