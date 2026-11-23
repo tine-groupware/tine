@@ -135,20 +135,28 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
      * @param string $lockId
      * @param string $id
      * @return Felamimail_Model_AttachmentCache
+     * @throws ErrorException
+     * @throws Throwable
+     * @throws Tinebase_Exception
      * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AreaLocked
      * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_Backend_Database
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Cache_Exception
      */
     protected function _handleTbException(Tinebase_Exception $te,
                                           Tinebase_RAII $transaction,
                                           string $lockId,
                                           string $id): Felamimail_Model_AttachmentCache
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+        }
 
         $transaction->release(); // avoid deadlocks -> release here, create has its own transaction handling
 
@@ -163,8 +171,10 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             Tinebase_Exception::log($te);
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' creating cache for ' . $id);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' creating cache for ' . $id);
+        }
         $record = new Felamimail_Model_AttachmentCache(['id' => $id, 'attachments' => []]);
         if (empty($record->{Felamimail_Model_AttachmentCache::FLD_SOURCE_ID})) {
             throw new Tinebase_Exception_NotFound('Could not find source record without ID');
@@ -186,6 +196,12 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
                 } finally {
                     fclose($stream);
                 }
+            } else if (Tinebase_Exception::isDbDuplicate($e)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' .
+                        __LINE__ . ' ' . $e->getMessage());
+                }
+                return $this->get($record->getId());
             } else {
                 throw $e;
             }
@@ -230,8 +246,10 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
                 $msg['attachments'][$_record->{Felamimail_Model_AttachmentCache::FLD_PART_ID}] : null;
 
             if ($attachment === null) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
-                    __LINE__ . ' Attachment not found');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' .
+                        __LINE__ . ' Attachment not found');
+                }
                 throw new Tinebase_Exception_UnexpectedValue('attachment not found for: ' .
                     print_r($_record->toArray(), true));
             }
