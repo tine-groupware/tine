@@ -80,9 +80,31 @@ const openEditMenu = async (invoiceDialog) => {
 const openSupplierCopy = async (invoiceDialog) => {
     await openEditMenu(invoiceDialog);
     const copyDialog = await openPopupBy(invoiceDialog, () => lib.clickOnElementWithLabel(invoiceDialog, MENU_ITEM, EDIT_COPY));
-    await copyDialog.waitForSelector('.alert a', {visible: true, timeout: lib.getEnvInt('TEST_TIMEOUT_CONTENT_READY')});
+    try {
+        await copyDialog.waitForSelector('.alert a', {visible: true, timeout: lib.getEnvInt('TEST_TIMEOUT_CONTENT_READY')});
+    } catch (e) {
+        // rare in the CI: the dialog opened without the notice of the copy - tell which dialog opened
+        throw new Error(`no copy dialog: ${JSON.stringify(await getCopyDiagnostics(invoiceDialog, copyDialog))}`, {cause: e});
+    }
     return copyDialog;
 };
+
+const getCopyDiagnostics = async (invoiceDialog, dialog) => ({
+    field: await invoiceDialog.evaluate(() => {
+        const copy = Ext.ComponentMgr.all.find((cmp) => cmp.name === 'supplier_id')?.selectedRecord;
+        return copy ? {id: copy.id, original_id: copy.get('original_id'), json_original_id: copy.json?.original_id} : null;
+    }).catch((e) => e.message),
+    dialog: await dialog.evaluate(() => {
+        const editDialog = Ext.ComponentMgr.all.find((cmp) => cmp instanceof Tine.widgets.dialog.EditDialog);
+        return editDialog ? {
+            title: document.title,
+            mode: editDialog.mode,
+            recordId: editDialog.record?.id,
+            original_id: editDialog.record?.json?.original_id,
+            denormalization: !!editDialog.denormalizationRecordClass,
+        } : {title: document.title};
+    }).catch((e) => e.message),
+});
 
 // edit the original supplier with the link in the notice of the copy dialog
 const editOriginalFromCopy = async (copyDialog) => {
