@@ -70,6 +70,11 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     },
                     onBeforeLoad(func, store, options) {
                         const result = func(store, options)
+                        if (!this.editDialog?.record) {
+                            // no (more) edit dialog, e.g. a buffered load after the dialog got closed: without the
+                            // context filter it would load all documents
+                            return false
+                        }
                         const filters = _.get(options.params.filter, '[0].filters[0].filters')
 
                         let ctxField = `${_.toLower(ctx)}_id`
