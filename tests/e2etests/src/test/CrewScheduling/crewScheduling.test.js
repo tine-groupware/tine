@@ -203,12 +203,28 @@ const cellTokenHandle = async (event, role) => {
 };
 
 /**
- * drags the given element onto the target element like a user does (Ext.dd needs some mouse moves)
+ * drags the element onto the target element like a user does (Ext.dd needs some mouse moves)
+ * NOTE: the elements are looked up again until both are shown - member tokens get rerendered (e.g. after the
+ *       selection changed), a handle looked up before can be detached already (no bounding box)
+ *
+ * @param {Function} getSource - async, returns the element handle to drag
+ * @param {Function} getTarget - async, returns the element handle to drop onto
  */
-const dragAndDrop = async (sourceHandle, targetHandle) => {
+const dragAndDrop = async (getSource, getTarget) => {
     const page = global.page;
-    const source = await sourceHandle.boundingBox();
-    const target = await targetHandle.boundingBox();
+    const timeout = lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE');
+    const deadline = Date.now() + timeout;
+    let source = null;
+    let target = null;
+    for (;;) {
+        source = await (await getSource())?.boundingBox();
+        target = await (await getTarget())?.boundingBox();
+        if (source && target) break;
+        if (Date.now() > deadline) {
+            throw new Error(`dragAndDrop: ${source ? 'target' : 'source'} not shown after ${timeout}ms`);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 100));
+    }
     const from = {x: source.x + source.width / 2, y: source.y + source.height / 2};
     const to = {x: target.x + target.width / 2, y: target.y + target.height / 2};
 
@@ -401,7 +417,7 @@ describe('Crew scheduling', () => {
     test('drag member into a cell', async () => {
         await waitForPanelCount(data.anna, 0);
 
-        await dragAndDrop(await panelTokenHandle(data.anna), await global.page.$(cellSelector(data.event1, data.roleA)));
+        await dragAndDrop(() => panelTokenHandle(data.anna), () => global.page.$(cellSelector(data.event1, data.roleA)));
         await waitForDragFinished();
 
         const cellToken = await cellTokenHandle(data.event1, data.roleA);
@@ -439,7 +455,7 @@ describe('Crew scheduling', () => {
     });
 
     test('cancel removing a member by closing the confirm dialog', async () => {
-        await dragAndDrop(await cellTokenHandle(data.event1, data.roleA), await global.page.$(PANEL));
+        await dragAndDrop(() => cellTokenHandle(data.event1, data.roleA), () => global.page.$(PANEL));
 
         await global.page.waitForSelector('.modal.vue-message-box.show', {visible: true});
         await lib.clickOnElement(global.page, '.modal.vue-message-box.show .btn-close');
@@ -455,7 +471,7 @@ describe('Crew scheduling', () => {
     });
 
     test('remove a member by dragging it back', async () => {
-        await dragAndDrop(await cellTokenHandle(data.event1, data.roleA), await global.page.$(PANEL));
+        await dragAndDrop(() => cellTokenHandle(data.event1, data.roleA), () => global.page.$(PANEL));
         await lib.answerMessageBox(global.page, 'yes');
         await waitForDragFinished();
 
