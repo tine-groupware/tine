@@ -1,0 +1,96 @@
+/*!
+ * Ext JS Library 3.1.1
+ * Copyright(c) 2006-2010 Ext JS, LLC
+ * licensing@extjs.com
+ * http://www.extjs.com/license
+ */
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+// no focus for grid borders
+.user-on-keyboard .x-grid3-focus:focus::after,
+.user-on-keyboard .x-grid-panel:focus::after,
+.user-on-keyboard .x-grid3:focus::after {
+  content: none !important;
+  box-shadow: none !important;
+}
+
+//stops row focus from jumping to the border
+.x-grid3-row {
+  position: relative !important;
+}
+
+//excludes elements from have a focus border
+:where(*:not(html, body, .x-viewport, .x-body, .modal, input, textarea, .x-grid3-focus)):focus-visible {
+  outline: none !important;
+  clip-path: none !important;
+  position: relative !important;
+}
+
+.x-grid3-hd-btn:focus-visible {
+  position: absolute !important;
+}
+
+//standard focus border
+.user-on-keyboard :where(*:not(html, body, .x-viewport, .x-body, .modal, input, textarea, .x-grid3-focus)):focus::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  box-shadow: inset 0 0 0 3px #0056b3 !important;
+  border-radius: var(--bs-border-radius) !important;
+  z-index: 999999 !important;
+  pointer-events: none !important;
+}
+
+// thinner focus for table rows and cells
+.user-on-keyboard .x-grid3-row:focus::after,
+.user-on-keyboard .x-grid3-cell-inner:focus::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  box-shadow: inset 0 0 0 1.5px #0056b3 !important;
+  border-radius: var(--bs-border-radius) !important;
+  z-index: 999999 !important;
+  pointer-events: none !important;
+}
+
+// thinner border for links
+.user-on-keyboard a:focus::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  box-shadow: inset 0 0 0 2px #0056b3 !important;
+  border-radius: 1px !important;
+  z-index: 999999 !important;
+  pointer-events: none !important;
+}
+
+// white border in banner
+.user-on-keyboard #banner *:focus::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  box-shadow: inset 0 0 0 3px #ffffff !important;
+  border-radius: var(--bs-border-radius) !important;
+  z-index: 999999 !important;
+  pointer-events: none !important;
+}
+
+:where(table, tbody, tr):focus-visible,
+:where(*)[style*="width: 0"],
+:where(*)[style*="height: 0"] {
+  box-shadow: none !important;
+}
+
+//forces color in high-contrast-mode
+@media (forced-colors: active) {
+  *:focus-visible {
+    outline: 3px solid Highlight;
+    forced-color-adjust: none;
+  }
+}
+
+.tine-application-menu.is-mouse .form-control:focus {
+  outline: none !important;
+}
