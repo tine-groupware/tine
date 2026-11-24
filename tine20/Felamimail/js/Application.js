@@ -972,23 +972,18 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         let accountRecord = Tine.Tinebase.data.Record.setFromJson(account, Tine.Felamimail.Model.Account);
         let existingAccount = this.accountStore.getById(account.id);
 
-        // filter out other user accounts / edit from admin module
-        if (_.get(account, 'user_id.accountId') === Tine.Tinebase.registry.get('currentAccount').accountId) {
-            if (e.topic.match(/\.create/)) {
+        if (e.topic.match(/\.create/)) {
+            if (_.get(account, 'user_id.accountId') === Tine.Tinebase.registry.get('currentAccount').accountId) {
                 this.accountStore.add([accountRecord]);
-            } else if (e.topic.match(/\.update/) && existingAccount) {
-                existingAccount.update(accountRecord);
-                existingAccount.commit();
-            } else if (e.topic.match(/\.delete/) && existingAccount) {
-                this.accountStore.remove(existingAccount);
             }
-
-            this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
         } else if (e.topic.match(/\.update/) && existingAccount) {
-            // handle shared account updates in felamimail
             existingAccount.update(accountRecord);
             existingAccount.commit();
+        } else if (e.topic.match(/\.delete/) && existingAccount) {
+            this.accountStore.remove(existingAccount);
         }
+
+        this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
     },
 
     /**
