@@ -74,7 +74,7 @@ class Tinebase_Controller_Instance extends Tinebase_Controller_Record_Abstract
                     } catch (Exception $e) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                             Tinebase_Core::getLogger()->warn(
-                                __METHOD__ . '::' . __LINE__ . ' Failed to load the flag icon from : ' . $url
+                                __METHOD__ . '::' . __LINE__ . ' Failed to load the flag icon from : ' . $imageUrl
                             );
                         }
                     }
