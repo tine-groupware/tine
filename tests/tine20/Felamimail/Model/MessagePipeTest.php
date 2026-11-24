@@ -344,7 +344,7 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
             'ham' => [
                 'strategy' => 'rewrite_subject',
                 'config' => [
-                    'pattern' => '/SPAM\? \(.+\) \*\*\* /',
+                    'pattern' => '/SPAM\? \(.+\) \*\*\*/',
                     'replacement' => '',
                 ]
             ]
@@ -440,7 +440,7 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
         $this->_setFeatureForTest(Felamimail_Config::getInstance(), Felamimail_Config::FEATURE_SPAM_SUSPICION_STRATEGY);
         Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY, 'subject');
         $config = [
-            'pattern' => '/SPAM\? \(.+\) \*\*\* /',
+            'pattern' => '/SPAM\? \(.+\) \*\*\*/',
         ];
         Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY_CONFIG, $config);
 
