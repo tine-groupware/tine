@@ -135,7 +135,7 @@ class Felamimail_Model_MessageTest extends \PHPUnit\Framework\TestCase
         Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY, 'subject');
 
         $config = [
-            'pattern' => '/SPAM\? \(.+\) \*\*\* /',
+            'pattern' => '/SPAM\? \(.+\) \*\*\*/',
         ];
 
         Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY_CONFIG, $config);
@@ -148,6 +148,15 @@ class Felamimail_Model_MessageTest extends \PHPUnit\Framework\TestCase
         $message->is_spam_suspicions = $strategy->apply($message);
 
         static::assertTrue($message->is_spam_suspicions, 'set the spam suspicion strategy failed');
+
+        $message = new Felamimail_Model_Message([
+            'subject' => 'SPAM? (Score = 14.53 / 15) ***',
+        ]);
+
+        $strategy = Felamimail_Spam_SuspicionStrategy_Factory::factory();
+        $message->is_spam_suspicions = $strategy->apply($message);
+
+        static::assertTrue($message->is_spam_suspicions, 'empty subject set the spam suspicion strategy failed');
 
         $message['subject'] = 'test non spam suspicion subject';
         $message->is_spam_suspicions = $strategy->apply($message);
