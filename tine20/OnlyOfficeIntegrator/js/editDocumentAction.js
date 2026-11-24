@@ -53,12 +53,6 @@ Promise.all([
 
         handler: async function () {
             let record = this.selections[0];
-            let recordData = record.toString();
-
-            const tempFile = record.get('tempFile');
-            if (tempFile) {
-                recordData = typeof tempFile === 'string' ? tempFile : typeof tempFile === 'object' ? JSON.stringify(tempFile) : tempFile;
-            }
 
             const templateFormats = {
                 dotx: 'docx',
@@ -109,11 +103,17 @@ Promise.all([
                     }
                 } catch (e) {/* USERABORT */ return }
             }
+
+            const tempFile = record.get('tempFile');
+            const recordData = !tempFile ? record.toString()
+                : typeof tempFile === 'object' ? JSON.stringify(tempFile)
+                : tempFile;
+
             Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
                 // always validate cachePromises to get the correct recordData
                 cachePromises: record?.cachePromises,
                 cache: record?.data?.cache,
-                recordData: record.toString(),
+                recordData: recordData,
                 id: record.id,
                 contentPanelConstructorInterceptor: record?.cachePromises ? this.emailInterceptor : null
             });
