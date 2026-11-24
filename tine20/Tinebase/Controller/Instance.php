@@ -53,9 +53,10 @@ class Tinebase_Controller_Instance extends Tinebase_Controller_Record_Abstract
 
             if (count($domains) > 0) {
                 $pattern = '(' . implode('|', array_map(fn($d) => preg_quote($d, '/'), $domains)) . ')';
-                $image = $instance[Tinebase_Model_Instance::FLD_FLAG_ICON_FILE];
-
+                $imageUrl = $instance[Tinebase_Model_Instance::FLD_FLAG_ICON_FILE];
+                $image = null;
                 $url = trim($instance[Tinebase_Model_Instance::FLD_URL]);
+
                 if (!str_contains($url, '://')) {
                     $url = 'https://' . $url;
                 }
@@ -63,18 +64,18 @@ class Tinebase_Controller_Instance extends Tinebase_Controller_Record_Abstract
                 $isValidUrl = in_array(strtolower($parts['scheme'] ?? ''), ['http', 'https'], true)
                     && !empty($parts['host']);
 
-                // no flag icon, or not an icon-set icon -> use the instance favicon
-                if (empty($image) || !str_contains($image, 'icon-set')) {
-                    $image = null;
-                    if ($isValidUrl) {
-                        try {
-                            $image = Tinebase_ImageHelper::getDataUrl(rtrim($url, '/') . '/favicon');
-                        } catch (Exception $e) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                                Tinebase_Core::getLogger()->warn(
-                                    __METHOD__ . '::' . __LINE__ . ' Failed to load the flag icon from : ' . $url
-                                );
-                            }
+                if (empty($imageUrl) && $isValidUrl) {
+                    $imageUrl = rtrim($url, '/') . '/favicon';
+                }
+
+                if ($imageUrl) {
+                    try {
+                        $image = Tinebase_ImageHelper::getDataUrl($imageUrl);
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                            Tinebase_Core::getLogger()->warn(
+                                __METHOD__ . '::' . __LINE__ . ' Failed to load the flag icon from : ' . $url
+                            );
                         }
                     }
                 }
